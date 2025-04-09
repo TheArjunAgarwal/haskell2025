@@ -7,8 +7,6 @@
 #import "@preview/codly:1.3.0": *
 #import "@preview/codly-languages:0.1.1": *
 
-
-
 #let fonts = (
   text: ("Libertinus Serif", "Noto Serif CJK TC", "Noto Color Emoji"),
   sans: ("Noto Sans", "Noto Sans CJK TC", "Noto Color Emoji"),
@@ -43,6 +41,23 @@
     indent: 2em,
   )
 }
+
+#let epigraph(quote, authors) = {
+  if type(authors) != array {
+    authors = (authors,)
+  }
+  align(right)[
+    #block(
+      width: 40%,
+      [
+        #align(left)[#quote]
+        #line(length: 100%)
+        #emph[#authors.join("\n")]
+      ]
+    )
+  ]
+}
+
 
 #let eqn(s) = {
   set math.equation(numbering: "(I)")
