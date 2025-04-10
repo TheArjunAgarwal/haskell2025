@@ -36,7 +36,7 @@ asked and possibly no one wanted: we wrote the damn textbook ourselves.
     Instead, he's co-authoring a textbook. His academic timeline is 
     nonlinear and possibly violates causality. He runs Linux, because of course 
     he does. Ask him a question and he’ll answer it in a shell script. 
-    Nobody knows his actual research interest. Possibly including him.
+    Nobody knows his actual research interests, including he himself.
 
 - Arjun Maneesh Agarwal, the    most overconfident student to walk CMI’s 
     hallowed halls. He’s under the delusion that he can overhaul a
