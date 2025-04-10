@@ -11,7 +11,7 @@
 
 ### 🛠 Chapter 2: Haskell Setup
 
-- **Topics**: Minimal setup following the KISS principle for different OS.
+- **Topics**: Minimal setup (hopefully using HaskellKISS) for different OS.
 - **Time**: 1 Parallel Tutorial  
 - **Authors**:  
   - **Windows**: R  
@@ -23,7 +23,7 @@
 ### 🔤 Chapter 3: Basic Datatypes
 
 - **Topics**:  
-  - `Bool`, `Int` vs `Integer`, `Char` (`ord`, `chr`)  
+  - `Bool`, `Int` vs `Integer` in extremely brief terms, `Char` (`ord`, `chr`)  
   - Use of `.` vs `"."`
 - **Time**: 1 Class + 1 Tutorial  
 - **Author**: A  
@@ -32,10 +32,10 @@
 
 ---
 
-### 🧮 Chapter 4: Tuples & Set Theory
+### 🧮 Chapter 4: Types as Sets
 
 - **Topics**:  
-  - Tuples, `Either`, `(->)` as `A^B`, `::` as `∈`  
+  - Tuples, `Either` as `U`, `(->)` as `A^B`, `::` as `∈`  
   - Currying (concept only), implicit parentheses  
   - Basic set theory concepts
 - **Time**: 1 Class + 1 Tutorial  
@@ -52,6 +52,7 @@
   - Merge sort, infinite lists  
   - Code Examples:
     ```haskell
+    l = 0 : l
     l n = n : l (n+1)
     l a b = a : l b (a+b)
     ```
@@ -79,8 +80,8 @@
 ### 🔃 Chapter 7: Advanced List Operations
 
 - **Topics**:  
-  - `map`, `filter`, Cartesian product  
-  - Quick sort  
+  - `map`, `filter`, Cartesian product, first through list comprehension, then explicitly defined
+  - Quick sort through list comprehension
   - `zip`, `zipWith`  
   - Folds, scans (with syntax tree understanding)  
   - Miller–Rabin primality test
@@ -137,3 +138,5 @@ Also, if you need to cite something, cite it at the end of your chapter as a com
 // citation 2
 ```
 I will at some point make a script to compile citations.
+OR
+We can use https://typst.app/docs/reference/model/cite/ and Hayagriva
