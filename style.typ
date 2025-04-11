@@ -7,6 +7,35 @@
 #import "@preview/codly:1.3.0": *
 #import "@preview/codly-languages:0.1.1": *
 
+#let haskell(codeText) = [
+
+  #show raw: it => [
+    #let colour = color.linear-rgb(30%,50%,10%)
+    #let fillColour = color.linear-rgb(30%,50%,10%,15%)
+    #box[
+      #circle(fill: fillColour,inset : 1pt)[
+        #set align(center + horizon) 
+        #text(fill : colour, "\u{03BB}")
+      ]
+    ]
+    #text(fill : colour, baseline : -2pt, "code")
+    #box(
+      fill: fillColour,
+      width : 100%,
+      inset: 8pt,
+      radius: 5pt,
+      text(font: "Fira Code",stylistic-set: (3,4,5,6,9), it)
+    )
+  ]
+  
+  #raw(
+    lang : "haskell",
+    theme: "theme.tmTheme",
+    codeText.text.trim(">", at : start).replace("\n>","\n")
+  )
+
+]
+
 #let fonts = (
   text: ("Libertinus Serif", "Noto Serif CJK TC", "Noto Color Emoji"),
   sans: ("Noto Sans", "Noto Sans CJK TC", "Noto Color Emoji"),
@@ -14,7 +43,6 @@
 )
 // Current: Evan Chen Defaults
 // Todo: Choose a "better" Serif(body), Sans(Headings) and Mono font
-
 
 #let colors = (
   title: eastern,
