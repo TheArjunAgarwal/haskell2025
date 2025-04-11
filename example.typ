@@ -25,13 +25,13 @@ def sieve_of_eratosthenes(n):
 ```
 On the other hand, a functional language, say Haskell solves it much more easily.
 
-```haskell
+#haskell[```
 sieveOfEratosthenes :: Integer -> [Integer]
 sieveOfEratosthenes n = sieve [2..n]
   where
     sieve [] = []
     sieve (p:xs) = p : sieve [x | x <- xs, x `mod` p /= 0]
-```
+```]
 
 While we need not understand the full details of the solution right now, notice that as Haskell is a functional language, we don't need to deal in states of the programme.
 
