@@ -13,21 +13,14 @@
 
 #pagebreak()
 
-#epigraph("Programs must be written for people to read, and only incidentally for machines to execute.", "Harold Abelson & Gerald Jay Sussman, Structure and Interpretation of Computer Programs")
-// We must(!) choose something else later. This is just a placeholder
-
-#pagebreak()
-
-#dedication("To cats and dogs")
-// We must(!) choose something else later. This is just a placeholder
-
-#copyright("Ryan Hota, Shubh Sharma, Arjun Maneesh Agarwal", "CC-by-SA-4.0", "arjuna.ug2024@cmi.ac.in")
 
 #toc
 
 #pagebreak()
 
-#include "extra-typ/preface.typ"
+// #include "extra-typ/preface.typ"
+// #pagebreak()
+#include "example.typ"
 #pagebreak()
 #include "chapters-typ/ch01_functions.typ"
 #pagebreak()

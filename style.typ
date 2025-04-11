@@ -7,6 +7,12 @@
 #import "@preview/codly:1.3.0": *
 #import "@preview/codly-languages:0.1.1": *
 
+#let fonts = (
+  text: ("Libertinus Serif", "Noto Serif CJK TC", "Noto Color Emoji"),
+  sans: ("Noto Sans", "Noto Sans CJK TC", "Noto Color Emoji"),
+  mono: ("Fira Code"),
+)
+
 #let haskell(codeText) = [
 
   #show raw: it => [
@@ -24,7 +30,7 @@
       width : 100%,
       inset: 8pt,
       radius: 5pt,
-      text(font: "Fira Code",stylistic-set: (3,4,5,6,9), it)
+      text(font:fonts.mono,stylistic-set: (3,4,5,6,9), it)
     )
   ]
   
@@ -36,11 +42,7 @@
 
 ]
 
-#let fonts = (
-  text: ("Libertinus Serif", "Noto Serif CJK TC", "Noto Color Emoji"),
-  sans: ("Noto Sans", "Noto Sans CJK TC", "Noto Color Emoji"),
-  mono: ("Inconsolata"),
-)
+
 // Current: Evan Chen Defaults
 // Todo: Choose a "better" Serif(body), Sans(Headings) and Mono font
 

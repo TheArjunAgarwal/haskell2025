@@ -2,7 +2,7 @@
 #show: codly-init.with()
 #codly(languages: codly-languages)
 
-= Introduction to Functional Programming and Haskell
+= Example of what a chapter looks like!
 
 == Motivation for Functional Programming
 Let’s start with a simple example to demonstrate the key differences between functional programming and imperative programming. 
