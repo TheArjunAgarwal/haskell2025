@@ -1,45 +1,61 @@
-#import "style.typ":*
-#show: codly-init.with()
-#codly(languages: codly-languages)
+#{
 
-#show: main.with(
-  title: [Introduction to Programming in Haskell],
-  subtitle: [Notes for CMI's CU1101 course in Winter 2025],
-  author: "Ryan Hota, Shubh Sharma, Arjun Maneesh Agarwal",
-  date: datetime.today(),
-  report-style: true,
+import "Book.typ"
+import "Box.typ"
+import "Chapter.typ"
+import "Code.typ"
+import "Contents.typ"
+import "Definition.typ" : *
+import "Prelude.typ"
+
+Box.settings({
+Code.settings({
+Contents.settings({
+Prelude.settings({
+
+let title = [Example Title]
+let author = [Example Author]
+
+Book.title_page(title:title,author:author)
+
+Book.settings(title:title,author:author,{
+
+set page(numbering: "i") ; counter(page).update(1)
+
+Book.copyright_declaration(title:title,author:author)
+
+Book.dedication([To someone])
+
+Contents.contents
+
+set page(numbering: "1") ; counter(page).update(1)
+
+let chapters = (
+  ( "example_chapter.typ" , [Example Chapter Title] , [Example Chapter Author] ) ,
 )
 
+for chapter_data in chapters {
 
-#pagebreak()
+  pagebreak()
+  
+  Chapter.title_page(
+    title: chapter_data.at(1) ,
+    author: chapter_data.at(2)
+  )
 
+  Chapter.settings(
+    title: chapter_data.at(1) ,
+    author: chapter_data.at(2) ,
+    include "chapters-typ//" + chapter_data.at(0)
+  )
 
-#toc
+}
+   
+})
 
-#pagebreak()
+})
+})
+})
+})
 
-// #include "extra-typ/preface.typ"
-// #pagebreak()
-#include "example.typ"
-#pagebreak()
-#include "chapters-typ/ch01_functions.typ"
-#pagebreak()
-#include "chapters-typ/ch02_setup_linux.typ"
-#include "chapters-typ/ch02_setup_mac.typ"
-#include "chapters-typ/ch02_setup_win.typ"
-#pagebreak()
-#include "chapters-typ/ch03_datatypes.typ"
-#pagebreak()
-#include "chapters-typ/ch04_tuples.typ"
-#pagebreak()
-#include "chapters-typ/ch05_lists.typ"
-#pagebreak()
-#include "chapters-typ/ch06_polymorphism.typ"
-#pagebreak()
-#include "chapters-typ/ch07_advanced_lists.typ"
-#pagebreak()
-#include "chapters-typ/ch08_computation.typ"
-#pagebreak()
-
-#part[Appendix]
-#include "extra-typ/appendix.typ"
+}
