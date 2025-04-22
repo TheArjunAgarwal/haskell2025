@@ -1,9 +1,8 @@
+// Solution file for week16.typ
 #import "../style.typ": *
 #show: codly-init.with()
 #codly(languages: codly-languages)
 
-= flightTest (feel free to change it)
+= Solution: week16
 
-// Assignment goes here
-
-
+// Solution content goes here

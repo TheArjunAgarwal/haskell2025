@@ -5,5 +5,3 @@
 = week2 (feel free to change it)
 
 // Assignment goes here
-
-

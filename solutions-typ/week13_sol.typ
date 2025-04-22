@@ -1,7 +1,8 @@
+// Solution file for week13.typ
 #import "../style.typ": *
 #show: codly-init.with()
 #codly(languages: codly-languages)
 
-= week1 (feel free to change it)
+= Solution: week13
 
-// Assignment goes here
+// Solution content goes here
