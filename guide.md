@@ -90,7 +90,16 @@
 
 ---
 
-### 🧵 Chapter 8: Computation as Reduction
+### Chapter 8: Precomp Data Structures
+- **Topics**:
+  - Define recursion in recursive data types
+  - Define whatever happened in the [[guide.md#🔤 Chapter 3: Basic Datatypes]] section.
+  - Define Nat, List, Tree
+  
+- **Time**:
+- **Author**: A
+
+### 🧵 Chapter 9: Computation as Reduction
 
 - **Topics**:  
   - Reduction-based computation (skip Big O)  
@@ -104,6 +113,48 @@
 - **Time**: 1 Class + 2 Tutorials  
 - **Author**: S  
 
+### Chapter 10: Complexity
+- **Topics**:
+  - Some Notion of complexity that is pretty theoretical
+  
+- **Time**:
+- **Author**: A
+
+### Chapter 11: Post Comp Data Types
+
+- **Topics**:
+  - Queue
+  - Segment Trees
+  - BST
+  - Set
+  - Map
+  
+- **Time**:
+- **Author**: A
+
+### Chapter 12: Typeclasses
+
+- **Topics**:
+  - Recall Polymorphism
+  - `deriving`
+  - Under the hood of `deriving`
+  - Custom Classes
+  
+- **Author**: R
+- **Time**:
+
+### Chapter 13: Monads
+- **Topics**:
+  - Functors
+  - Applicative Functors?
+  - Monads:
+	- Complexity Monad 
+	- Maybe Monad 
+	- IO
+	
+- **Author**: R
+- **Time**: 5 Classes + 5 Tutorials
+
 ---
 
 ## 🗂 Relevent File Structure
@@ -112,22 +163,43 @@ If you use a figure, please save it as a seperate .typ or .asy file in figures a
 
 ```bash
 haskell-course/
-├── README.md
-├── chapters-typ/
+├── Book.typ
+├── Box.typ
+├── Chapter.typ
+├── Code.typ
+├── Contents.typ
+├── Definition.typ
+├── Prelude.typ
+├── assignments-typ
+│   ├── week01.typ
+│   ├── ...
+│   └── week16.typ
+├── chapters-typ
 │   ├── ch01_functions.typ
-│   ├── ch02_setup_win.typ
 │   ├── ch02_setup_linux.typ
 │   ├── ch02_setup_mac.typ
+│   ├── ch02_setup_win.typ
 │   ├── ch03_datatypes.typ
 │   ├── ch04_tuples.typ
 │   ├── ch05_lists.typ
 │   ├── ch06_polymorphism.typ
 │   ├── ch07_advanced_lists.typ
-│   └── ch08_computation.typ
-├── tutorials-typ/
-├── assignments-typ/
-├── solutions-typ/
-└── figures/
+│   ├── ch08_precomp-datatypes.typ
+│   ├── ch09_computation.typ
+│   ├── ch10_complexity.typ
+│   ├── ch11_postcomp-datatypes.typ
+│   ├── ch12_typeclasses.typ
+│   ├── ch13_monad.typ
+│   └── example_chapter.typ
+├── example.typ
+├── extra-typ
+│   ├── appendix.typ
+│   └── preface.typ
+├── main.typ
+├── solutions-typ
+│   ├── week01_sol.typ
+│   ├── ...
+│   └── week16_sol.typ
 ```
 Tutorials, assignments and solutions refer to tutorial handouts(if needed), class and tutorial assignments and their solution files. Keep them as .typ/.tex files for now, the required .hs/.lhs files will be generated later.
 
