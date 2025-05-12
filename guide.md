@@ -90,10 +90,10 @@
 
 ---
 
-### Chapter 8: Precomp Data Structures
+### 📊 Chapter 8: Precomp Data Structures
 - **Topics**:
   - Define recursion in recursive data types
-  - Define whatever happened in the [[guide.md#🔤 Chapter 3: Basic Datatypes]] section.
+  - Define whatever happened in the basic datatypes section.
   - Define Nat, List, Tree
   
 - **Time**:
@@ -113,14 +113,14 @@
 - **Time**: 1 Class + 2 Tutorials  
 - **Author**: S  
 
-### Chapter 10: Complexity
+### ☣️ Chapter 10: Complexity
 - **Topics**:
   - Some Notion of complexity that is pretty theoretical
   
 - **Time**:
 - **Author**: A
 
-### Chapter 11: Post Comp Data Types
+### 📊 Chapter 11: Post Comp Data Types
 
 - **Topics**:
   - Queue
@@ -132,7 +132,7 @@
 - **Time**:
 - **Author**: A
 
-### Chapter 12: Typeclasses
+### 🏫 Chapter 12: Typeclasses
 
 - **Topics**:
   - Recall Polymorphism
@@ -143,13 +143,18 @@
 - **Author**: R
 - **Time**:
 
-### Chapter 13: Monads
+### ⏩ Chapter 13: Monads
 - **Topics**:
   - Functors
   - Applicative Functors?
   - Monads:
-	- Complexity Monad 
+    - Theory 
+	- Do notation
+	- Simple Writer - Cost 
 	- Maybe Monad 
+	- Simple Reader - `(->) x`
+	- Simple State - Light Switch
+	- Monoid Monad
 	- IO
 	
 - **Author**: R
