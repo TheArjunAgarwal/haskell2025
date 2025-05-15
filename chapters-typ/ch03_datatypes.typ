@@ -42,7 +42,7 @@ This chapter will deal (in varying amounts of details) with the types *`Bool`*, 
 #definition[
   *`Int`* and *`Integer`* are the types used to represent integers. 
 
-  `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least -2^29 to 2^29). Going outside this range may give weird results. /*why not us #ex*/ Ex. `product [1..52] :: Int` gives a negative number which cannot realistically be $52!$. On the other hand, `product [1..52] :: Integer` gives indeed the correct answer.
+  `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least -2^29 to 2^29). Going outside this range may give weird results. /*why not us #ex*/ Ex. /*Do we expect them to know `product at this point?`*/`product [1..52] :: Int` gives a negative number which cannot realistically be $52!$. On the other hand, `product [1..52] :: Integer` gives indeed the correct answer.
 
   The reason for `Int` existing despite its bounds and us not using `Integer` for everything is related to speed and memory. Using the former is faster and uses lesser memory.
 
@@ -102,7 +102,7 @@ Similer to many modern languages, In Haskell, String is just a synonym for a lis
   `["One","Two","Three"] :: [String]`
 ]
 
-== Logical Operations
+== Logical Operations //suggestion to add a definitio of `logical operator` for sanity purposes
 #example[
   Write Haskell code to simulate the following logical operators
   + NOT
