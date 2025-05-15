@@ -411,7 +411,7 @@ There is already an inbuilt way to express this notion of `Either () Rational` i
 - where `Either () Rational` has `Right r` (where `r` is any `Rational`), \ `Maybe Rational` instead has the value `Just r`.
 
 Which means that we can rewrite @code_of_reciprocal_using_either using `Maybe` instead -
-```
+```haskell
 -- reciprocal using maybe
 reciprocal :: Rational -> Maybe Rational
 reciprocal 0 = Nothing
@@ -427,7 +427,7 @@ There is already an inbuilt way to express the notion of `Either () T` in Haskel
 - where `Either () T` has `Right t` (where `t` is any value of type `T`), \ `Maybe T` instead has the value `Just t`.
 
 #metadata[
-```
+```haskell
 instance Finite t => Enum (Maybe t) where
 
     toEnum :: Finite t => Int -> Maybe t
