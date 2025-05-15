@@ -153,15 +153,6 @@ instance (Finite a , Finite b ) => Enum (a,b) where
     fromEnum ( a , b ) = fromEnum a * length ( listOfAllElements :: [ b ] ) + fromEnum b 
 
 instance ( Finite a , Finite b ) => Finite (a,b)
-
-instance ( Finite a , Finite b ) => Enum (Either a b) where
-
-    toEnum :: ( Finite a , Finite b ) => Int -> Either a b
-    toEnum = (!!) $ (++) ( Left <$> listOfAllElements ) ( Right <$> listOfAllElements )
-
-    fromEnum :: ( Finite a , Finite b ) => Either a b -> Int
-    fromEnum ( Left a ) = fromEnum a
-    fromEnum ( Right b ) = length ( listOfAllElements :: [ a ] ) + fromEnum b
 ```
 ]
 
@@ -287,6 +278,15 @@ Similarly, in `Either A B`, each element has to be
 
 #metadata[
 ```haskell
+instance ( Finite a , Finite b ) => Enum (Either a b) where
+
+    toEnum :: ( Finite a , Finite b ) => Int -> Either a b
+    toEnum = (!!) $ (++) ( Left <$> listOfAllElements ) ( Right <$> listOfAllElements )
+
+    fromEnum :: ( Finite a , Finite b ) => Either a b -> Int
+    fromEnum ( Left a ) = fromEnum a
+    fromEnum ( Right b ) = length ( listOfAllElements :: [ a ] ) + fromEnum b
+
 instance ( Finite a , Finite b ) => Bounded (Either a b) where
 
     minBound :: ( Finite a , Finite b ) => Either a b
