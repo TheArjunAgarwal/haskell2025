@@ -1,6 +1,9 @@
-#import "style.typ": *
-#show: codly-init.with()
-#codly(languages: codly-languages)
+#import "../Definition.typ" : def
+
+#let definition = def
+#let example = it => [For example - \ #it]
+#let exercise = it => [=== Exercise 
+#it]
 
 = Bool, Int, Integer and more (feel free to change it)
 
@@ -9,6 +12,8 @@ Haskell is a strictly typed language. This means, Haskell needs to strictly know
 
 But one would ask here, what is type? According to Cambridge dictionary, 
 #definition[*Type* is refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
+
+//suggest that we do not define type
 
 Haskell being strict implies that it needs to know the type of everything it deals with. For example,
 - The type of $e$ is *`Real`*.
@@ -20,21 +25,24 @@ Haskell being strict implies that it needs to know the type of everything it dea
 - We cannot write $(x |-> x + 2)(e)$, because the types don’t match. The function wants an input of type *`Int`* but $e$ is of type *`Real`*. We could define a new function $x |-> x+2$ of type *`Real -> Real`*, but it is a different function.
 - Functions can return functions. Think of $(+)$ as a function that takes an *`Int`*, like $3$, and returns a function like $x |-> x + 3$, which has type *`Int -> Int`* Concretely, $(+)$ is $x |-> (y |-> y + x)$. This has type *`Int -> (Int -> Int)`*.
 - We write $(+)(3)(4) = 7$. First, $(+)$ has type *`Int -> (Int -> Int)`*, so $(+)(3)$ has type *`Int -> Int`*. So, $(+)(3)(4)$ should have type *`Int`*.
-- The type of $x |-> 2*x$ is *`Int -> Int`* when it takes integers to integers. It can also be *`Real -> Real`* when it takes reals to reals. These are two different functions, because they have different types. But if we make a 'super type' or *typeclass* called *`Num`* is which is a property which both *`Int`* and *`Real`* have, then we can define $x |-> 2*x$ more generally as of type *`Num a => a -> a`* which reads, for a type *`a`* with property(belonging to) *`Num`*, the function $x |-> 2*x$ has type *`a -> a`*
+- The type of $x |-> 2*x$ is *`Int -> Int`* when it takes integers to integers. It can also be *`Real -> Real`* when it takes reals to reals. These are two different functions, because they have different types. But if we make a 'super type' or *typeclass* /*suggest that we not mention typeclass yet*/ called *`Num`* is which is a property which both *`Int`* and *`Real`* have, then we can define $x |-> 2*x$ more generally as of type *`Num a => a -> a`* which reads, for a type *`a`* with property(belonging to) *`Num`*, the function $x |-> 2*x$ has type *`a -> a`*
 - Similarly, one could define a generalized version of the other functions we described.
 
+//suggest that we not mention type theory
 A study of types and what we can infer from them(and how we can infer them) is called, rightfully so, *Type Theory*. It is deeply related to computational proof checking and formal verification. While we will not study about it in too much detail in this course, it is its own subject and is covered in detail in other courses.
 
 While we recommend, atleast for the early chapters, to declare the types of your functions explicitly ex. `(+) :: Int -> Int  -> Int`; Haskell has a type inference system#footnote[Damas–Hindley–Milner Type Inference is the one used in Haskell at time of writing.] which is quite accurate and tries to go for the most general type. This can be both a blessing and curse, as we will see in a few moments.
 
+//suggest that we not mention `Float` at all, since we don't go into any kind of explanation of floating point, so I don't think students can be expected to understand enough to justify mentioning it. I  would personally say that I don't like `Double` either as it is not perfectly a real number.
 This chapter will deal (in varying amounts of details) with the types *`Bool`*, *`Int`*, *`Integer`*, *`Float`*, *`Char`* and *`String`*.
 #definition[
   *`Bool`* is a type which has only two valid values, *`True`* and *`False`*. It most commonly used as output for indicator functions(indicate if something is true or not).
 ]
+// suggest that we don't explain `Int` so deeeply, move extra info to appendix
 #definition[
   *`Int`* and *`Integer`* are the types used to represent integers. 
 
-  `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least -2^29 to 2^29). Going outside this range may give weird results. Ex. `product [1..52] :: Int` gives a negative number which cannot realistically be $52!$. On the other hand, `product [1..52] :: Integer` gives indeed the correct answer.
+  `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least -2^29 to 2^29). Going outside this range may give weird results. /*why not us #ex*/ Ex. `product [1..52] :: Int` gives a negative number which cannot realistically be $52!$. On the other hand, `product [1..52] :: Integer` gives indeed the correct answer.
 
   The reason for `Int` existing despite its bounds and us not using `Integer` for everything is related to speed and memory. Using the former is faster and uses lesser memory.
 
@@ -54,6 +62,7 @@ An irrefutable fact is that computers are fundamentally limited by the amount of
 #definition[
   *`Rational`*, *`Float`* and *`Double`* are the types used to deal with non-integral numbers. The former is used for fractions or rationals while the latter for reals with varying amount of precision. Rationals are declared using `%` as the viniculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`.
 
+//suggest that we not mention `Float` at all
   `Float` or Floating point contains numbers with a decimal point with a fixed amount of memory being used for their storage. The term floating-point comes from the fact that the number of digits permitted after the decimal point depends upon the magnitude of the number. The same can be said for `Double` or Double Precision Floating Point which offers double the space beyond the point, at cost of more memory. For example
   ```
   ghci> sqrt 2 :: Float
@@ -67,7 +76,7 @@ An irrefutable fact is that computers are fundamentally limited by the amount of
   ghci> sqrt 999999999 :: Double
   31622.776585872405
   ```
-We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqrt(2)$. We will use `Float` for most of this book.
+We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqrt(2)$. We will use `Float` for most of this book. //please no
 ]
 
 
@@ -80,8 +89,9 @@ We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqr
 ]
 Similer to many modern languages, In Haskell, String is just a synonym for a list of characters that is `String` is same as `[Char]`. This allows string manipulation to be extremely easy in Haskell and is one of the reason why Pandoc, a universal document converter and one of the most used software in the world, is written in Haskell. We will try to make a mini version of this at the end of the chapter.
 
+// why define tuples here, when it'll be defined in chp4?
 #definition[
-  To recall, a tuple is a length immutable, ordered multi-typed data structure. This means we can store a fixed number of multiple types of data in an order using tuples. Ex.
+  To recall/*from where?*/, a tuple is a length immutable, ordered multi-typed data structure. This means we can store a fixed number of multiple types of data in an order using tuples. Ex.
   `(False , True ) :: (Bool, Bool)`
   `(False , 'a', True ) :: (Bool, Char, Bool)` 
   `("Yes", 5.21 , 'a') :: (String, Float, Char)`
@@ -171,6 +181,8 @@ Furthermore, as Haskell doesn't have an inbuilt nand operator, say I want to hav
 (@@) :: Bool -> Bool -> Bool
 (@@) = not.(&&)
 ```
+// is this definition correct?
+
 Finally, we need to make `xor`.  We will now replicate a classic example of 17 ways to define it and a quick reference for a lot of the syntax. 
 ```
 -- 17 Xors
@@ -262,7 +274,7 @@ xor15 b1 b2
   | otherwise = b2
 
 ```
-Finally, we can define use the `case .. of ..` syntax. While this syntax is rarer, and too verbose, for simple functions, we will see a lot of it later in [monads chapter]. In this syntax, the general form is
+Finally, we can define use the `case .. of ..` syntax. While this syntax is rarer, and too verbose, for simple functions, we will see a lot of it later in [monads chapter]/*how ?*/. In this syntax, the general form is
 ```
 case <expression> of
   <pattern1> -> <result1>
@@ -324,7 +336,7 @@ ghci> 45 * (-12)
 ghci> (-12) * (-11)
 132
 ```
-Now let's move to the slightly interesting ones. `recip` is a function with a rather interesting type signature. It is only defined on types with the `Fractional` typeclass. This refers to a lot of things, but the most common ones are `Rational, Float` and `Double`.  `recip`, as the name suggests, returns the reciprocal of the number taken as input. The type signature is `recip :: Fractional a => a -> a`
+Now let's move to the slightly interesting ones. `recip` is a function with a rather interesting type signature. It is only defined on types with the `Fractional` typeclass. /*suggest that we not mention typeclass yet*/ This refers to a lot of things, but the most common ones are `Rational, Float` and `Double`.  `recip`, as the name suggests, returns the reciprocal of the number taken as input. The type signature is `recip :: Fractional a => a -> a`
 ```
 ghci> recip 5
 0.2
@@ -334,11 +346,11 @@ ghci> recip k
 ```
 It is clear that in the above case, 5 was treated as a `Float` or `Double` and the expected output provided. In the following case, we specified the type to be `Int` and it caused a horrible error. This is because for something to be a fractional type, we literally need to define how to reciprocate it. 
 
-The type signature of `(\)` is as follows `Fractional a => a -> a -> a`. Here the `Fractional` typeclass is a property which defines real division over 
+The type signature of `(/)` is as follows - `Fractional a => a -> a -> a`. Here the `Fractional` typeclass is a property which defines real division over 
 
 
 
 
 // cite
 // Curry Howerd by Example - CJ Quines
-// Programming in Haskell - Grahm Hutton
+// Programming in Haskell - Grahm HuttonThis allows string manipulation to be extremely easy in Haskell and is one of the reason why Pandoc, a universal document converter and one of the most used software in the world, is written in Haskell. We will try to make a mini version of this at the end of the chapter.
