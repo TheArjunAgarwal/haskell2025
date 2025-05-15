@@ -1,6 +1,6 @@
 #metadata[
 ```haskell top
-module Ch04_tuples where
+module TypesAsSets where
 ```
 ]
 
@@ -411,7 +411,7 @@ There is already an inbuilt way to express this notion of `Either () Rational` i
 - where `Either () Rational` has `Right r` (where `r` is any `Rational`), \ `Maybe Rational` instead has the value `Just r`.
 
 Which means that we can rewrite @code_of_reciprocal_using_either using `Maybe` instead -
-```haskell
+```
 -- reciprocal using maybe
 reciprocal :: Rational -> Maybe Rational
 reciprocal 0 = Nothing
@@ -423,18 +423,36 @@ But we can also do this for any arbitrary type `T` in place of `Rational`. In th
 There is already an inbuilt way to express the notion of `Either () T` in Haskell, which is the type `Maybe T`. 
 
 `Maybe T` just names it elements a bit differently compared to `Either () T` -
-- where `Either () T` has `Left ()`, `Maybe Rational` instead has the value `Nothing`.
-- where `Either () T` has `Right t` (where `r` is any value of type `T`), \ `Maybe Rational` instead has the value `Just t`.
+- where `Either () T` has `Left ()`, `Maybe T` instead has the value `Nothing`.
+- where `Either () T` has `Right t` (where `t` is any value of type `T`), \ `Maybe T` instead has the value `Just t`.
 
 #metadata[
 ```
-instance Finite T => Finte ( Maybe ( Finite T ) )
+instance Finite t => Enum (Maybe t) where
+
+    toEnum :: Finite t => Int -> Maybe t
+    toEnum 0 = Nothing
+    toEnum n = Just $ toEnum ( n - 1 )
+
+    fromEnum :: Finite t => Maybe t -> Int
+    fromEnum Nothing = 0
+    fromEnum (Just t) = 1 + fromEnum t
+
+instance Finite t => Bounded (Maybe t) where
+
+    minBound :: Finite t => Maybe t
+    minBound = Nothing
+
+    maxBound :: Finite t => Maybe t
+    maxBound = Just maxBound
+
+instance Finite t => Finite ( Maybe t )
 ```
 ]
 
 If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` with elements `Y1` and `Y2`, we can use the author-defined function `listOfAllElements` to obtain a list of all elements of certain types -
 ```
--- elements of an either type
+-- elements of a maybe type
 >>> listOfAllElements :: [X]
 [X1,X2,X3]
 
