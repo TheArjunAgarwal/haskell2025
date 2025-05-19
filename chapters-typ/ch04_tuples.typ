@@ -380,7 +380,7 @@ reciprocal :: Rational -> Rational
 reciprocal x = 1/x
 ```
 But there is a small issue! What about $1/0$? \
-What is be the output of `reciprocal 0`?
+What should be the output of `reciprocal 0`?
 
 Unfortunately, it results in an error - 
 ```
@@ -389,7 +389,7 @@ Unfortunately, it results in an error -
 ```
 
 To fix this, we can do something like this -
-Let's add one _extra element_ to output type `Rational`, and then `reciprocal 0` can have this _extra element_ as its output!
+Let's add one _extra element_ to the output type `Rational`, and then `reciprocal 0` can have this _extra element_ as its output!
 
 So the new output type would look something like this - $({$_extra element_$}union.sq$`Rational`$)$
 
@@ -407,8 +407,8 @@ reciprocal x = Right (1/x)
 There is already an inbuilt way to express this notion of `Either () Rational` in Haskell, which is the type `Maybe Rational`. 
 
 `Maybe Rational` just names it elements a bit differently compared to `Either () Rational` -
-- where `Either () Rational` has `Left ()`, `Maybe Rational` instead has the value `Nothing`.
-- where `Either () Rational` has `Right r` (where `r` is any `Rational`), \ `Maybe Rational` instead has the value `Just r`.
+- where \ `Either () Rational` has `Left ()`, \ `Maybe Rational` instead has the value `Nothing`.
+- where \ `Either () Rational` has `Right r` (where `r` is any `Rational`), \ `Maybe Rational` instead has the value `Just r`.
 
 Which means that we can rewrite @code_of_reciprocal_using_either using `Maybe` instead -
 ```haskell
@@ -423,8 +423,8 @@ But we can also do this for any arbitrary type `T` in place of `Rational`. In th
 There is already an inbuilt way to express the notion of `Either () T` in Haskell, which is the type `Maybe T`. 
 
 `Maybe T` just names it elements a bit differently compared to `Either () T` -
-- where `Either () T` has `Left ()`, `Maybe T` instead has the value `Nothing`.
-- where `Either () T` has `Right t` (where `t` is any value of type `T`), \ `Maybe T` instead has the value `Just t`.
+- where \ `Either () T` has `Left ()`, \ `Maybe T` instead has the value `Nothing`.
+- where \ `Either () T` has `Right t` (where `t` is any value of type `T`), \ `Maybe T` instead has the value `Just t`.
 
 #metadata[
 ```haskell
@@ -478,4 +478,4 @@ The type `Void` has no elements at all.
 
 This also means that no actual value has type `Void`.
 
-Even though it is out-of-syllabus, an interesting exrcise is to try to define a function of type `( Bool -> Void ) -> Void`.
+Even though it is out-of-syllabus, an interesting exercise is to try to define a function of type `( Bool -> Void ) -> Void`.
