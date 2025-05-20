@@ -1,9 +1,7 @@
 #import "../Definition.typ" : def
+#import "../Exercise.typ" : exercise
 
-#let definition = def
 #let example = it => [For example - \ #it]
-#let exercise = it => [=== Exercise 
-#it]
 
 = Bool, Int, Integer and more (feel free to change it)
 
@@ -11,7 +9,7 @@
 Haskell is a strictly typed language. This means, Haskell needs to strictly know what the type of *anything* and everything is.
 
 But one would ask here, what is type? According to Cambridge dictionary, 
-#definition[*Type* is refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
+#def[*Type* is refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
 
 //suggest that we do not define type
 
@@ -35,11 +33,11 @@ While we recommend, atleast for the early chapters, to declare the types of your
 
 //suggest that we not mention `Float` at all, since we don't go into any kind of explanation of floating point, so I don't think students can be expected to understand enough to justify mentioning it. I  would personally say that I don't like `Double` either as it is not perfectly a real number.
 This chapter will deal (in varying amounts of details) with the types *`Bool`*, *`Int`*, *`Integer`*, *`Float`*, *`Char`* and *`String`*.
-#definition[
+#def[
   *`Bool`* is a type which has only two valid values, *`True`* and *`False`*. It most commonly used as output for indicator functions(indicate if something is true or not).
 ]
 // suggest that we don't explain `Int` so deeeply, move extra info to appendix
-#definition[
+#def[
   *`Int`* and *`Integer`* are the types used to represent integers. 
 
   `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least -2^29 to 2^29). Going outside this range may give weird results. /*why not us #ex*/ Ex. /*Do we expect them to know `product at this point?`*/`product [1..52] :: Int` gives a negative number which cannot realistically be $52!$. On the other hand, `product [1..52] :: Integer` gives indeed the correct answer.
@@ -59,7 +57,7 @@ This chapter will deal (in varying amounts of details) with the types *`Bool`*, 
 
 An irrefutable fact is that computers are fundamentally limited by the amount of data they can keep and humans are fundamentality limited by the amount of time they have. This implies that if, we can optimize for speed and space, we should do so. We will talk some more about this in [chapter 9], but the rule of thumb is that more we know about the input, the more we can optimize. Knowing that it will be between, say $-2^29$ to $2^29$, allows for some optimizations which can't be done with arbitrary length. We (may) see some of these optimizations later.
 
-#definition[
+#def[
   *`Rational`*, *`Float`* and *`Double`* are the types used to deal with non-integral numbers. The former is used for fractions or rationals while the latter for reals with varying amount of precision. Rationals are declared using `%` as the viniculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`.
 
 //suggest that we not mention `Float` at all
@@ -80,7 +78,7 @@ We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqr
 ]
 
 
-#definition[
+#def[
   *`Char`* are the types used to represent arbitrary Unicode characters. This includes all numbers, letters, white spaces(space, tab, newline etc) and other special characters.
 
   *`String`* is the type used to represent a bunch of characters chained together. Every word, sentence, paragraph is either a string or a collection of them.
@@ -90,7 +88,7 @@ We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqr
 Similer to many modern languages, In Haskell, String is just a synonym for a list of characters that is `String` is same as `[Char]`. This allows string manipulation to be extremely easy in Haskell and is one of the reason why Pandoc, a universal document converter and one of the most used software in the world, is written in Haskell. We will try to make a mini version of this at the end of the chapter.
 
 // why define tuples here, when it'll be defined in chp4?
-#definition[
+#def[
   To recall/*from where?*/, a tuple is a length immutable, ordered multi-typed data structure. This means we can store a fixed number of multiple types of data in an order using tuples. Ex.
   `(False , True ) :: (Bool, Bool)`
   `(False , 'a', True ) :: (Bool, Char, Bool)` 
