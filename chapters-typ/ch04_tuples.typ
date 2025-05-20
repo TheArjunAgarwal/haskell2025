@@ -4,6 +4,9 @@ module TypesAsSets where
 ```
 ]
 
+#import "../Definition.typ" : def
+#import "../Exercise.typ" : exercise
+
 #metadata[
 ```haskell
 class (Enum t, Bounded t) => Finite t
@@ -26,8 +29,6 @@ instance Finite ()
 instance Finite Int
 ```
 ]
-
-#import "../Definition.typ" : def
 
 = Sets
 
@@ -87,8 +88,9 @@ $
 We have enconutered a few types in the previous chapter, such as `Bool`, `Integer` and `Char`. For our limited purposes, we can think about each such *type* as the *set of all values of that type*.
 
 For example, 
-- `Bool` can be thought of as the *set of all bolean values*, which is {`False`, `True`}.
+- `Bool` can be thought of as the *set of all boolean values*, which is {`False`, `True`}.
 - `Integer` can be thought of as the *set of all integers*, which is {`0`, `1`, `-1`, `2`, `-2`, . . . },
+- `Char` can be thought of as the *set of all characters*, which is {`'\NUL'`,`'\SOH'`,`'\STX'`, . . . ,`'a'`,`'b'`,`'c'`, . . . ,`'A'`,`'B'`,`'C'`, . . . }
 
 If this analogy were to extend further, we might expect to see versions of the basic kinds of sets and the common set operations for types, as we can see in the following sections -
 
@@ -478,4 +480,7 @@ The type `Void` has no elements at all.
 
 This also means that no actual value has type `Void`.
 
-Even though it is out-of-syllabus, an interesting exercise is to try to define a function of type `( Bool -> Void ) -> Void`.
+Even though it is out-of-syllabus, an interesting exercise is to
+#exercise(subject:"void")[
+  try to define a function of type `( Bool -> Void ) -> Void`.
+]
