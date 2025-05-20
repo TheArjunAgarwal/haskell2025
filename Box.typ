@@ -1,6 +1,6 @@
 //---------------------functions--------------------
 
-#let light( colour ) = color.mix( (colour, 20%) , (white, 80%) )
+#let light( colour ) = color.mix( (colour, 25%) , white )
 
 #let inline_box( 
   colour , 
