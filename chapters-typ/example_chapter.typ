@@ -9,7 +9,7 @@ hello1 :: any -> String
 hello1     _  =  "world"
 ```
 
-// Refer to @code_of_hello1.
+Refer to @code_of_hello1.
 
 // hidden from contents
 ```haskell
@@ -24,7 +24,7 @@ hello3 :: any -> String
 hello3     _  =  "world"
 ```
 
-Refer to 
+Refer to @code_of_hello3
 
 // hidden from contents, typ
 #metadata[
