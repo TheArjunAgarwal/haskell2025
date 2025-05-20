@@ -23,7 +23,7 @@ show raw.where(
 
 show raw.where( block : true ) : code_display => {
 
-  let haddock_str = "-- "
+  let haddock_str = "-- | "
 
   let code_title_and_str = code_display.text
 
