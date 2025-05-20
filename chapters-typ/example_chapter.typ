@@ -50,6 +50,8 @@ hello6     _  =  "world"
 ```
 ]
 
+#pagebreak()
+
 = Definition 
 
 #import "../Definition.typ" : def
@@ -68,6 +70,26 @@ Refer to @definition_of_disjoint_union.
   which is not *$X union Y$* exactly.
 ]
 
+#pagebreak()
+
+= Exercise
+
+#import "../Exercise.typ": exercise
+
+An exercise can have a title...
+
+#exercise( subject : "doing that")[
+  do that
+]
+
+...or not, 
+
+#exercise[do that]
+
+but it cannot be inline.
+
+#pagebreak()
+
 = Trees
 
 #import "../Tree.typ": tree, far_away, dots
@@ -85,7 +107,7 @@ Trees can be spread horizontally . . .
   )
 ) 
 
-. . . or vertically -
+. . . or vertically,
 
 #tree( pad: 0.7 ,
   (`(:)`,
@@ -105,3 +127,20 @@ Trees can be spread horizontally . . .
     )
   )
 )
+
+or have a mixture of both.
+
+#tree(
+  ([A],
+    ([B],
+      [C],
+      [D]
+    ),
+    ([E],
+      [F],
+      [G]
+    )
+  )
+)
+
+Unfortunately, nodes with exactly one child are not supported yet.
