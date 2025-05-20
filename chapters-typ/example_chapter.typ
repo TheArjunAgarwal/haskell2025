@@ -60,7 +60,7 @@ hello6     _  =  "world"
   which is not *$X union Y$* exactly.
 ]
 
-Refer to @definition_of__disjoint_union.
+Refer to @definition_of_disjoint_union.
 
 // hidden from contents
 #def[ 
