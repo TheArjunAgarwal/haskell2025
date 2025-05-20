@@ -114,6 +114,10 @@ y :: Bool
 y = xor True False
 ``` This reads - "Let $y in$ {False, True}. Take the value of $y$ to be the $xor$ of True and False."
 
+#exercise( subject : "declaring a variable")[
+  Declare a variable of type `Char`.
+]
+
 == `A -> B` is analogous to $B^A$ or @definition_of_exponent
 
 As $B^A$ contains all functions from $A$ to $B$, \ so is each function `f` defined to take an input of type `A` and output of type `B` satisfy `f::A->B`.
@@ -131,6 +135,14 @@ succ x = x + 1
 even :: Integer -> Bool
 even n = if n `mod` 2 == 0 then True else False
 ```
+
+#exercise( subject : "basic function definition")[
+  Define a function of type `Bool -> Integer`.
+]
+
+#exercise( subject : " are function definitions declarations")[
+  Are function definitions different from declarations?
+]
 
 == `( A , B )` is analogous to $A crossmark B$ or @definition_of_cartesian_product
 
@@ -209,6 +221,10 @@ divMod :: Integer -> Integer -> ( Integer , Integer )
 divMod n m = ( n `div` m , n `mod` m )
 ```
 
+#exercise( subject : "size of a product type")[
+  If a type `T` has $n$ elements, and a type `T'` has $m$ elements, how many elements does `(T,T')` have?
+]
+
 == `()` is analogous to @definition_of_singleton_set
 
 `()`, pronounced Unit, is a type that contains exactly one element. \ That unique element is `()`.
@@ -224,17 +240,24 @@ On the other hand, other types might have multiple values of that type. (such as
 
 We can even check this using `listOfAllElements` - 
 ```
+-- | elements of the unit type
 >>> listOfAllElements :: [()]
 [()]
 ```
 This reads - "The list of all elements of the type `()` is a list containing exactly one value, which is the value `()`."
 
+#exercise( subject : "function from unit" )[
+  Define a function of type `() -> Bool`.
+]
+
+#exercise( subject : "function to unit" )[
+  Define a function of type `Bool -> ()`.
+]
+
 == No @definition_of_intersection of Types 
 
 We now need to discuss an important distinction between sets and types.
-While two different sets can have elements in common, like how both $RR$ and $NN$ have the element $10$ in common, on the other hand, two different types `T1` and `T2` cannot have any common elements.
-
-//todo explanation in appendix
+While two different sets can have elements in common, like how both $RR$ and $NN$ have the element $10$ in common, on the other hand, two different types `T1` and `T2` cannot have any common elements. //todo explanation in appendix
 
 For example, the types `Int` and `Integer` have no elements in common. We might think that they have the element `10` in common, however, the internal structures of `10::Int` and `10::Integer` are very different, and thus the two `10`s are quite different.
 
@@ -247,6 +270,10 @@ Therfore, no intersection operation is defined for types.
 Suppose the type `T1`$union$`T2` were an actual type. It would have elements in common with the type `T1`. As discussed just previously, this is undesirable and thus disallowed.
 
 But there is a promising alternative, for which we need to define the set-theoretic notion of *disjoint union*.
+
+#exercise( subject : "subtypes" )[
+  Can there be a analogue of the _subset_ relation or $subset.eq$ for types?
+]
 
 == Disjoint Union of Sets
 
@@ -371,6 +398,10 @@ representAsNumber' ( Left  True  ) = 1
 representAsNumber' ( Right char  ) = ord char
 ```
 
+#exercise( subject : "size of an either type")[
+  If a type `T` has $n$ elements, and a type `T'` has $m$ elements, how many elements does `Either T T'` have?
+]
+
 == The `Maybe` Type
 
 Consider the following problem : We are asked make a function `reciprocal` that reciprocates a rational number, i.e., $( x |-> 1/x ) : QQ -> QQ$.
@@ -414,7 +445,7 @@ There is already an inbuilt way to express this notion of `Either () Rational` i
 
 Which means that we can rewrite @code_of_reciprocal_using_either using `Maybe` instead -
 ```haskell
--- | reciprocal using maybe
+-- | function to a maybe type
 reciprocal :: Rational -> Maybe Rational
 reciprocal 0 = Nothing
 reciprocal x = Just (1/x)
@@ -474,6 +505,19 @@ If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` w
 [Nothing,Just '\NUL',Just '\SOH',Just '\STX',Just '\ETX', . . . ]
 ```
 
+We can also define functions from a `Maybe` type. \
+For example, we can make a function that is the _inverse_ of `reciprocal`, i.e., a function `inverseOfReciprocal` such that #align(center)[$forall$` x::Rational `,` inverseOfReciprocal ( reciprocal x ) == x `] in the following way - 
+```haskell
+-- | function from a maybe type
+inverseOfReciprocal :: Maybe Rational -> Rational
+inverseOfReciprocal Nothing  = 0
+inverseOfReciprocal (Just x) = (1/x)
+```
+
+#exercise( subject : "size of a maybe type")[
+  If a type `T` has $n$ elements, how many elements does `Maybe T` have?
+]
+
 == `Void` is analogous to ${}$ or @definition_of_empty_set
 
 The type `Void` has no elements at all.
@@ -481,6 +525,6 @@ The type `Void` has no elements at all.
 This also means that no actual value has type `Void`.
 
 Even though it is out-of-syllabus, an interesting exercise is to
-#exercise(subject:"void")[
+#exercise[
   try to define a function of type `( Bool -> Void ) -> Void`.
 ]
