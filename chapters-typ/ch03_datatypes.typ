@@ -185,7 +185,7 @@ Furthermore, as Haskell doesn't have an inbuilt nand operator, say I want to hav
 
 Finally, we need to make `xor`.  We will now replicate a classic example of 17 ways to define it and a quick reference for a lot of the syntax. 
 ```
--- 17 Xors
+-- | 17 Xors
 -- Notice, we can declare the type of a bunch of functions by comma seperating them.
 
 xor1, xor2, xor3, xor4, xor5 :: Bool -> Bool -> Bool
@@ -219,7 +219,7 @@ xor5 True b = not b
 All the above methods basically enumerate all possibilities using increasingly more concise manners. However, can we do better using logical operators?
 
 ```
--- 17 Xors contd.
+-- | 17 Xors contd.
 xor6, xor7, xor8, xor9 :: Bool -> Bool -> Bool
 -- Litrally just using the definition
 xor6 b1 b2 = (b1 && (not b2)) || ((not b1) && b2)
@@ -248,7 +248,7 @@ Or use the guard syntax. Similar to piecewise functions in math, we can define t
 We do this as follows
 
 ```
--- 17 Xors, cotd
+-- | 17 Xors, cotd
 xor12, xor13, xor14, xor15 :: Bool -> Bool -> Bool
 
 xor12 b1 b2
@@ -285,7 +285,7 @@ The case expression evaluates the `<expression>`, and matches it against each pa
 
 
 ```
--- 17 Xors, contd
+-- | 17 Xors, contd
 xor16, xor17 :: Bool -> Bool -> Bool
 
 -- We use a single case on the first input.
