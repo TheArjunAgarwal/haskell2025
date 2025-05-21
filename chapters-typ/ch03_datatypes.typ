@@ -11,7 +11,7 @@
 Haskell is a strictly typed language. This means, Haskell needs to strictly know what the type of *anything* and everything is.
 
 But one would ask here, what is type? According to Cambridge dictionary, 
-#definition[*Type* is refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
+#def[*Type* is refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
 
 //suggest that we do not define type
 
@@ -35,11 +35,11 @@ While we recommend, atleast for the early chapters, to declare the types of your
 
 //suggest that we not mention `Float` at all, since we don't go into any kind of explanation of floating point, so I don't think students can be expected to understand enough to justify mentioning it. I  would personally say that I don't like `Double` either as it is not perfectly a real number.
 This chapter will deal (in varying amounts of details) with the types *`Bool`*, *`Int`*, *`Integer`*, *`Float`*, *`Char`* and *`String`*.
-#definition[
+#def[
   *`Bool`* is a type which has only two valid values, *`True`* and *`False`*. It most commonly used as output for indicator functions(indicate if something is true or not).
 ]
 // suggest that we don't explain `Int` so deeeply, move extra info to appendix
-#definition[
+#def[
   *`Int`* and *`Integer`* are the types used to represent integers. 
 
   `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least -2^29 to 2^29). Going outside this range may give weird results. /*why not us #ex*/ Ex. /*Do we expect them to know `product at this point?`*/`product [1..52] :: Int` gives a negative number which cannot realistically be $52!$. On the other hand, `product [1..52] :: Integer` gives indeed the correct answer.
@@ -59,7 +59,7 @@ This chapter will deal (in varying amounts of details) with the types *`Bool`*, 
 
 An irrefutable fact is that computers are fundamentally limited by the amount of data they can keep and humans are fundamentality limited by the amount of time they have. This implies that if, we can optimize for speed and space, we should do so. We will talk some more about this in [chapter 9], but the rule of thumb is that more we know about the input, the more we can optimize. Knowing that it will be between, say $-2^29$ to $2^29$, allows for some optimizations which can't be done with arbitrary length. We (may) see some of these optimizations later.
 
-#definition[
+#def[
   *`Rational`*, *`Float`* and *`Double`* are the types used to deal with non-integral numbers. The former is used for fractions or rationals while the latter for reals with varying amount of precision. Rationals are declared using `%` as the viniculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`.
 
 //suggest that we not mention `Float` at all
@@ -80,7 +80,7 @@ We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqr
 ]
 
 
-#definition[
+#def[
   *`Char`* are the types used to represent arbitrary Unicode characters. This includes all numbers, letters, white spaces(space, tab, newline etc) and other special characters.
 
   *`String`* is the type used to represent a bunch of characters chained together. Every word, sentence, paragraph is either a string or a collection of them.
@@ -90,7 +90,7 @@ We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqr
 Similer to many modern languages, In Haskell, String is just a synonym for a list of characters that is `String` is same as `[Char]`. This allows string manipulation to be extremely easy in Haskell and is one of the reason why Pandoc, a universal document converter and one of the most used software in the world, is written in Haskell. We will try to make a mini version of this at the end of the chapter.
 
 // why define tuples here, when it'll be defined in chp4?
-#definition[
+#def[
   To recall/*from where?*/, a tuple is a length immutable, ordered multi-typed data structure. This means we can store a fixed number of multiple types of data in an order using tuples. Ex.
   `(False , True ) :: (Bool, Bool)`
   `(False , 'a', True ) :: (Bool, Char, Bool)` 
@@ -335,8 +335,21 @@ ghci> 45 * (-12)
 -540
 ghci> (-12) * (-11)
 132
+ghci> abs 10
+10
+ghci> abs (-10)
+10
 ```
-Now let's move to the slightly interesting ones. `recip` is a function with a rather interesting type signature. It is only defined on types with the `Fractional` typeclass. /*suggest that we not mention typeclass yet*/ This refers to a lot of things, but the most common ones are `Rational, Float` and `Double`.  `recip`, as the name suggests, returns the reciprocal of the number taken as input. The type signature is `recip :: Fractional a => a -> a`
+The internal definition of addition and subtraction is discussed in the appendix while we talk about some multiplication algorithms in the time complexity chapter. For our purposes, we want it to be clear and predictable what one expects to see when any of these operators are used. `Abs` is also implemented in a very simple fashion.
+```
+-- Implementation of abs function
+abs :: Num a => a -> a
+abs a = if a >= 0 then a else -a
+```
+=== Division, A Trilogy
+Now let's move to the more interesting operators and functions. 
+
+`recip` is a function which reciptocates a given numebr, but it has rather interesting type signature. It is only defined on types with the `Fractional` typeclass. /*suggest that we not mention typeclass yet*/ This refers to a lot of things, but the most common ones are `Rational, Float` and `Double`.  `recip`, as the name suggests, returns the reciprocal of the number taken as input. The type signature is `recip :: Fractional a => a -> a`
 ```
 ghci> recip 5
 0.2
@@ -344,13 +357,251 @@ ghci> k = 5 :: Int
 ghci> recip k
 <interactive>:47:1: error: [GHC-39999]...
 ```
-It is clear that in the above case, 5 was treated as a `Float` or `Double` and the expected output provided. In the following case, we specified the type to be `Int` and it caused a horrible error. This is because for something to be a fractional type, we literally need to define how to reciprocate it. 
+It is clear that in the above case, 5 was treated as a `Float` or `Double` and the expected output provided. In the following case, we specified the type to be `Int` and it caused a horrible error. This is because for something to be a fractional type, we literally need to define how to reciprocate it. We will talk about how exactly it is defined in < some later chapter probably 8 >. For now, once we have `recip` defined, division can be easily defined as
+```
+(/) :: Fractional a => a -> a -> a
+x / y = x * (recip y)
+```
+Again, notice the type signature of `(/)` is `Fractional a => a -> a -> a`. #footnote("It is worth pointing out that one could define `recip` using `(/)` as well given 1 is defined. While this is not standard, if `(/)` is defined for a data type, Haskell does autmoatically infer the reciprocation. So technically, for a datatype to be a memeber of the type class `Fractional` it needs to have either reciprocation or division defined, the other is infered.")
 
-The type signature of `(/)` is as follows - `Fractional a => a -> a -> a`. Here the `Fractional` typeclass is a property which defines real division over 
+However, this is not the only division we have access to. Say we want only the quotient, then we have `div` and `quot` functions. These functions are often coupled with `mod` and `rem` are the respective remainder functions. We can get the quotient and remainder at the same time using `divMod` and `quotRem` functions. A simple example of usage is
+```
+ghci> 100 `div` 7
+14
+ghci> 100 `mod` 7
+2
+ghci> 100 `divMod` 7
+(14,2)
+ghci> 100 `quot` 7
+14
+ghci> 100 `rem` 7
+2
+ghci> 100 `quotRem` 7
+(14,2)
+```
+One must wonder here that why would we have two functions doing the same thing? Well, they don't actually do the same thing.
 
+#exercise[
+  From the given example, what is the difference between `div` and `quot`?
+  ```
+ghci> 8 `div` 3
+2
+ghci> (-8) `div` 3
+-3
+ghci> (-8) `div` (-3)
+2
+ghci> 8 `div` (-3)
+-3
+ghci> 8 `quot` 3
+2
+ghci> (-8) `quot` 3
+-2
+ghci> (-8) `quot` (-3)
+2
+ghci> 8 `quot` (-3)
+-2
+```
+]
+
+#exercise()[
+  From the given example, what is the difference between `mod` and `rem`?
+  ```
+ghci> 8 `mod` 3
+2
+ghci> (-8) `mod` 3
+1
+ghci> (-8) `mod` (-3)
+-2
+ghci> 8 `mod` (-3)
+-1
+ghci> 8 `rem` 3
+2
+ghci> (-8) `rem` 3
+-2
+ghci> (-8) `rem` (-3)
+-2
+ghci> 8 `rem` (-3)
+2
+```
+]
+
+While the functions work similerly when the divisior and dividend are of the same sign, they seem to diverge when the signs don't match. The thing here is we ideally want our division algorithm to satisfy $d * q + r = n, |r| < |d|$ where $d$ is the divisior, $n$ the dividend, $q$ the quotient and `r` the remainder. The issue is for any $- d < r < 0 => 0 < r < d$. This means we need to choose the sign for the remainder. 
+
+In Haskell, `mod` takes the sign of the divisor(comes from floored division, same as Python's `%`), while `rem` takes the sign of the dividend (comes from truncated division, behaves the same way as Scheme's `remainder` or C's `%`.).
+
+Basically, `div` returns the floor of the true divison value(recall $floor(-3.56) = -4$) while `quot` returns the trunicated value of the true division(recall $op("trunicate")(-3.56) = -3$ as we are just trunicating the decimal point off). The reason we keep both of them in Haskell is to be comfertable for people who come from either of these languages. Also, The `div` function is often the more natural one to use, whereas the `quot` function corresponds to the machine instruction on modern machines, so it's somewhat more efficient(although not much, I had to go upto $10^100000$ to even get millisecond difference in the two).
+
+A simple excercise for us now would be implementing our very own integer division algorithm. We begin with a division algorithm for only positive integers.
+```
+-- A division algorithm on positive integers by repreated subtraction
+divide :: Integer -> Integer -> (Integer, Integer)
+divide n d = go 0 n where
+  go q r = if r >= d then go (q+1) (r-d) else (q,r)
+```
+Now, how do we extend it to negitives by a little bit of case handling.
+```
+divideComplete :: Integer -> Integer -> (Integer, Integer)
+divideComplete _ 0 = error "DivisionByZero"
+divideComplete n d
+  | d < 0     = let (q, r) = divideComplete n (-d) in (-q, r)
+  | n < 0     = let (q, r) = divideComplete (-n) d in if r == 0 then (-q, 0) else (-q - 1, d - r)
+  | otherwise = divideUnsigned n d
+
+divide :: Integer -> Integer -> (Integer, Integer)
+divide n d = go 0 n where
+  go q r = if r >= d then go (q+1) (r-d) else (q,r)
+```
+
+An excercise left for the reader is to figure out which kind of division is this, floored or trunicated, and implement the one we haven't yourself. Let's now tal
+
+=== Exponantion
+Haskell defines for us three exponation operators, namely `(^^), (^), (**)`. 
+
+#exercise[
+  What can we say about the three exponation operators?
+  ```
+<will make this example later>
+
+  ```
+]
+
+Unlike division, they have almost the same function. The difference here is in the type signature. While, infering the exact type signature was not expected, we can notice:
+- `^` is raising genral numbers to positive integral powers. This means it makes no assumptions about if the base can be reciprocated and just produces an error if the power is negative.
+- `^^` is raising fractional numbers to general integral powers. That is, it needs to be sure that the reciprocal of the base exists(negative powers) and doesn't throw an error if the power is negative.
+- `**` is raising numbers with floating point to powers with floating point. This makes it the most general exponation.
+
+The operators clearly get more and more general as we go down the list but they also get slower. However, they are also reducing in accurecy and may even output `Infinity` in some cases. The `...` means I am trunicating the output for readablity, ghci did give the compelete answer.
+
+```
+ghci> 2^1000
+10715086071862673209484250490600018105614048117055336074...
+ghci> 2 ^^ 1000
+1.0715086071862673e301
+ghci> 2^10000
+199506311688075838488374216268358508382...
+ghci> 2^^10000
+Infinity
+ghci> 2 ** 10000
+Infinity
+```
+
+The exact reasons for the inaccuracy comes from float conversions and approximation methods. We will talk very little about this specialist topic somewhat later. 
+
+However, something within our scope is implementing `(^)` ourselves.
+
+```
+-- A naive integer exponation algorithm
+exponation :: (Num a, Integral b) => a -> b -> a
+exponation a 0 = 1
+exponation a b = if b < 0 
+  then error "no negitve exponation" 
+  else a * (exponation a (b-1))
+```
+This algorithm, while the most naive way to do so, computes $2^100000$ in mearly $0.56$ seconds.
+
+However, we could do a bit better here. Notice, to evaluate $a^b$, we are making $b$ multiplications. A fact we mentioned before is that multiplication of big numbers is faster when it is balenced, that is the numbers being multiplied have similer number of digits.
+
+So to do better, we could simply compute $a^(b/2)$ and then square it, given $b$ is even, or compute $a^((b-1)/2)$ and then square it and multiply by $a$ otherwise. This can be done recusrsivly till we have the solution. 
+```
+-- A better exponentiation algorithm using divide and conquer
+exponation :: (Num a, Integral b) => a -> b -> a
+exponation a 0 = 1
+exponation a b 
+  | b < 0     = error "no negitve exponation"
+  | even b    = let half = exponation a (b `div` 2)
+                in half * half
+  | otherwise = let half = exponation a (b `div` 2)
+                in a * half * half
+```
+The idea is simple: instead of doing $b$ multiplications, we do far fewer by solving a smaller problem and reusing the result. While one might not notice it for smaller $b$'s, once we get into the hundreds or thousands, this method is dramatically faster.
+
+This algorithm brings the time to compute $2^100000$ down to $0.07$ seconds. 
+
+The idea is that we are now making atmost $3$ multiplications at each step and there are atmost $log(b)$ steps. This brings us down from $b$ multiplications to $3 log(b)$ multiplications. Furthermore, most of these multiplications are somewhat balenced and hence optimized.
+
+This kind of a stratergy is called divide and conquer. You take a big problem, slice it in half, solve the smaller version, and then stitch the results together. It’s a method/technique that appears a lot in Computer Science(in sorting to data search to even solving diffrential equations and training AI models) and we will see it again shortly.
+
+Finally, there’s one more minor optimization that’s worth pointing out. It's a small thing, and doesn't even help that much in this case, but if the multiplication were particularly costly, say as in matrices; our exponation method could be made slightlty better. Let's say we are dealing with say $2^255$. Our current algorithm would evaluate it as:
+$
+2^31 
+= (2^15)^2 * 2\
+= ((2^7)^2 * 2)^2 * 2\
+= (((2^3)^2 * 2)^2 * 2)^2 * 2\
+= ((((2^1)^2 * 2)^2 * 2)^2 * 2)^2 * 2\
+$
+This is a problem as the small $*2$ in every bracket are unbalenced. The exact way we deal with all this is by something called #link("en.wikipedia.org/wiki/Exponentiation_by_squaring#2k-ary_method")[2^k arry method]. Although, more often then not, most built in implementations use the divide and conquer exponentiation we studied.
+
+=== A short tour of number theoretic functions
+A very common function for number theoretic use cases is `gcd` and `lcm`. They are pre-defined as
+```
+ghci> :t gcd
+gcd :: Integral a => a -> a -> a
+ghci> :t lcm
+lcm :: Integral a => a -> a -> a
+ghci> gcd 12 30
+6
+ghci> lcm 12 30
+60
+```
+We will now try to define them ourselves. The idea here to use the Euclid's algorithm.
+
+
+
+
+=== Mathematical Functions
+We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this oppurtunity to talk (very briefly) about real exponation. To begin, Haskell has a lot of pre-defined functions.
+
+```
+ghci> pi
+3.141592653589793
+ghci> sin pi
+1.2246467991473532e-16
+ghci> cos pi
+-1.0
+ghci> tan pi
+-1.2246467991473532e-16
+ghci> asin 1
+1.5707963267948966
+ghci> asin 1/2
+0.7853981633974483
+ghci> acos 1
+0.0
+ghci> atan 1
+0.7853981633974483
+
+ghci> log (2.71818)
+0.9999625387017254
+ghci> log 4
+1.3862943611198906
+ghci> log 100
+4.605170185988092
+ghci> logBase 10 100
+2.0
+ghci> exp 1
+2.718281828459045
+ghci> exp 10
+22026.465794806718
+
+ghci> sqrt 81
+9.0
+```
+`pi` is a predefined variable inside haskell. It carries the value of $pi$ upto some decimal places based on what type it is forced in.
+```
+ghci> a = pi :: Float
+ghci> a
+3.1415927
+ghci> b = pi :: Double
+ghci> b
+3.141592653589793
+```
+All the fucntions above have the type signature `Fractional a => a -> a ` or for our purposes `Float -> Float`. Also, notice the functions are not giving exact answers in some cases and instead are giving approximations. These functions are quite unnatural for a computer, so we surely know that the computer isn't processing them. So what is happening under the hood? Well, for trignometric functions, we will need to introduce some more stuff but we will circle back to it. As for the roots and logithrms, we can do a lot of it rather easily.
+
+#def[
+  Newton–Raphson method is a method to find the roots of a function. 
+]
 
 
 
 // cite
 // Curry Howerd by Example - CJ Quines
-// Programming in Haskell - Grahm HuttonThis allows string manipulation to be extremely easy in Haskell and is one of the reason why Pandoc, a universal document converter and one of the most used software in the world, is written in Haskell. We will try to make a mini version of this at the end of the chapter.
+// Programming in Haskell - Grahm Hutton
