@@ -11,7 +11,7 @@
 Haskell is a strictly typed language. This means, Haskell needs to strictly know what the type of *anything* and everything is.
 
 But one would ask here, what is type? According to Cambridge dictionary, 
-#def[*Type* is refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
+#def[*Type* refers to a particular group of things that share similar characteristics and form a smaller division of a larger set]
 
 //suggest that we do not define type
 
@@ -531,7 +531,7 @@ $
 $
 This is a problem as the small $*2$ in every bracket are unbalenced. The exact way we deal with all this is by something called #link("en.wikipedia.org/wiki/Exponentiation_by_squaring#2k-ary_method")[2^k arry method]. Although, more often then not, most built in implementations use the divide and conquer exponentiation we studied.
 
-=== A short tour of number theoretic functions
+=== `gcd` and `lcm`
 A very common function for number theoretic use cases is `gcd` and `lcm`. They are pre-defined as
 ```
 ghci> :t gcd
@@ -543,15 +543,104 @@ ghci> gcd 12 30
 ghci> lcm 12 30
 60
 ```
-We will now try to define them ourselves. The idea here to use the Euclid's algorithm.
+We will now try to define these functions ourselves.
+
+A naive way to do so would be:
+```
+-- Naive GCD and LCM
+-- Uses a brute-force approach starting from the smaller number and counting down
+gcdNaive :: Integer -> Integer -> Integer
+gcdNaive a 0 = a
+gcdNaive a b = 
+    if b > a 
+        then gcdNaive b a  -- Ensure first argument is greater
+        else go a b b
+  where
+    -- Start checking from the smaller of the two numbers
+    go x y current =
+        if (x `mod` current == 0) && (y `mod` current == 0)
+            then current
+            else go x y (current - 1)
+
+-- Uses a brute-force approach starting from the larger number and counting up
+lcmNaive :: Integer -> Integer -> Integer
+lcmNaive a b = 
+    if b > a 
+        then lcmNaive b a  -- Ensure first argument is greater
+        else go a b a
+  where
+    -- Start checking from the larger of the two numbers
+    go x y current =
+        if current `mod` y == 0
+            then current
+            else go x y (current + x)
+```
+
+These both are quite slow for most practical uses. A lot of cryptography runs on computer's ability to find gcd and lcm fast enough. If this was the fastest, we would be cooked. So what do we do? Call some math.
+
+A simple optimization could be using $p*q = gcd(p,q) * lcm(p,q)$. This makes the speed of both the operations same, as once we have one, we almost already have the other.
+
+Let's say we want to find $g := gcd(p,q)$ and $p > q$. That would imply $p = d q + r$ for some $r < q$. This means $g | p, q => g | q, r$ and by the maximality of $g$, $gcd(p,q) = gcd(q,r)$. This helps us out a lot as we could eventually reduce our problem to a case where the larger term is a multiple of the smaller one and we could return the smaller term then and there. This can be implemented as:
+```
+-- Fast GCD and LCM
+gcdFast :: Integer -> Integer -> Integer
+gcdFast p 0 = p -- Using the fact that the moment we get q | p, we will reduce to this case and output the answer.
+gcdFast p q = gcdFast q (p `mod` q)
 
 
+lcmFast :: Integer -> Integer -> Integer
+lcmFast p q = (p * q) `div` (gcdFast p q)
+```
 
+We can see that this is much faster. The exact number of steps or time taken is a slightlty involved and not very related to what we cover. Intrested readers may find it and related citrations #link("https://en.wikipedia.org/wiki/Euclidean_algorithm#Algorithmic_efficiency")[here].
 
-=== Mathematical Functions
-We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this oppurtunity to talk (very briefly) about real exponation. To begin, Haskell has a lot of pre-defined functions.
+This algorithm predates computers by approximatly 2300 years. If was first decribed by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
+
+While we will see these class of algorithms, including checking if a number is prime or finding the prime factorization, these require some more weapons of attack we are yet to devlop.
+
+=== Recursive Functions
+A lot of mathematical functions are defined recusrsivly. We have already seen a lot of them in < chapter 1>. Factorial, binomials and fibbonacci are common examples. We will implement them here for the the sake of completness, although I don't think converting them from paper to code is hard, we will still do it.
+```
+-- Factorial, Binomial and Fibbonacci
+factorial :: Integer -> Integer
+factorial 0 = 1
+factorial n = n *  factorial (n-1)
+
+nCr :: Integer -> Integer -> Integer
+nCr _ 0 = 1
+nCr n r 
+  |r > n      = 0
+  |n == r     = 1
+  |otherwise  = (nCr (n-1) (r-1)) + (ncr (n-1) r)
+
+fibbonacci :: Integer -> Integer
+fibbonacci n = fst (go n) where
+  go 0 = (1,0)
+  go 1 = (1, 1)
+  go n = (a + b , a) where (a,b) = go (n-1)
+```
+You might remember that we don't directly translate the defination of fibbonacci as doing so would be extreamly inafficent, as we would be recomputing values left and right. A much simpler way is to carry the data we need. And that is what we do here.
+
+== Mathematical Functions
+We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this oppurtunity to talk about real exponation. To begin, Haskell has a lot of pre-defined functions.
 
 ```
+ghci> sqrt 81
+9.0
+
+ghci> log (2.71818)
+0.9999625387017254
+ghci> log 4
+1.3862943611198906
+ghci> log 100
+4.605170185988092
+ghci> logBase 10 100
+2.0
+ghci> exp 1
+2.718281828459045
+ghci> exp 10
+22026.465794806718
+
 ghci> pi
 3.141592653589793
 ghci> sin pi
@@ -568,22 +657,6 @@ ghci> acos 1
 0.0
 ghci> atan 1
 0.7853981633974483
-
-ghci> log (2.71818)
-0.9999625387017254
-ghci> log 4
-1.3862943611198906
-ghci> log 100
-4.605170185988092
-ghci> logBase 10 100
-2.0
-ghci> exp 1
-2.718281828459045
-ghci> exp 10
-22026.465794806718
-
-ghci> sqrt 81
-9.0
 ```
 `pi` is a predefined variable inside haskell. It carries the value of $pi$ upto some decimal places based on what type it is forced in.
 ```
@@ -594,13 +667,272 @@ ghci> b = pi :: Double
 ghci> b
 3.141592653589793
 ```
-All the fucntions above have the type signature `Fractional a => a -> a ` or for our purposes `Float -> Float`. Also, notice the functions are not giving exact answers in some cases and instead are giving approximations. These functions are quite unnatural for a computer, so we surely know that the computer isn't processing them. So what is happening under the hood? Well, for trignometric functions, we will need to introduce some more stuff but we will circle back to it. As for the roots and logithrms, we can do a lot of it rather easily.
+All the fucntions above have the type signature `Fractional a => a -> a ` or for our purposes `Float -> Float`. Also, notice the functions are not giving exact answers in some cases and instead are giving approximations. These functions are quite unnatural for a computer, so we surely know that the computer isn't processing them. So what is happening under the hood?
 
 #def[
-  Newton–Raphson method is a method to find the roots of a function. 
+  Imagine you’re playing a number guessing game with a friend.
+  
+  They are thinking of a number between 1 and 100, and every time you guess, they’ll say whether your guess is too high, too low, or correct.
+  
+  You don’t start at 1. You start at 50. Why? Because 50 cuts the range exactly in half. Depending on whether the answer is higher or lower, you can now ignore half the numbers.
+  
+  Next guess? Halfway through the remaining half. Then half of that. And so on.
+  
+  That’s binary search: each step cuts the list in half, so you zoom in on the answer quickly.
+  
+  Here’s how it works:
+  
+  - Start in the middle of a some ordered list.
+  - If the middle item is your target, you’re done.
+  - If it’s too big, repeat the search on the left half.
+  - If it’s too small, repeat on the right half.
+
+Keep halving until you find it - or realize it’s not there.
 ]
 
+While using a raw binery search for roots would be impossible as the exact answer is seldom rational and hence, the algorithm would never terminate. So instead of searching for the exact root, we look for an approximation by keeping some tolerence. Here is what it looks like:
+```
+-- Square root by binary search
+bsSqrt :: Float -> Float -> Float
+bsSqrt tolerance n
+  | n > 1     = binarySearch 1 n
+  | otherwise = binarySearch 0 1
+  where
+    binarySearch low high
+      | abs (guess * guess - n) <= tolerance        = guess
+      | guess * guess > n                           = binarySearch low guess
+      | otherwise                                   = binarySearch guess high
+      where
+        guess = (low + high) / 2
+```
+We leave it as an excercise to extend this to a cube root.
 
+The internal implementation sets the tolerance to some constant, defining, for example as `sqrt = bsSqrt 0.00001 `
+
+Furthermore, there is a faster method to compute square roots and cube roots(in general roots of polynomials), which uses a bit of analysis. You will find it defined and walked-through in the back excercise.
+
+However, this method won't work for `log` as we would need to do real exponation, which, as we will soon see, is defined using `log`. So what do we do? Taylor series and reduction.
+
+We know that $ln(1+x) = x - x^2/2 + x^3/3 - dots$. For small $x, ln(1+x) approx x$. So if we can create a scheme to make $x$ small enough, we could get the logithrm by simply multiplying. Well, $ln(x^2) = 2 ln(|x|)$. So, we could simply keep taking square roots of a number till it is within some error range of $1$ and then simply use the fact $ln(1+x) approx x$ for small $x$.
+```
+-- Log defined using Taylor Approximation
+logTay :: Float -> Float -> Float
+logTay tol n 
+  | n <= 0 = error "Negative log not defined"
+  | abs(n - 1) <= tol = n - 1  -- using log(1 + x) ≈ x
+  | otherwise = 2 * logTay tol (sqrt n)
+```
+This is a very efficient algorithm for approximating `log`. Doing better requires the use of either pre-computed lookup tables(which would make the programme heavier) or use more sophesticated mathematical methods which while more accurate would slow the programme down. There is an excercise in the back, where you will implement a state of the art algorithm to compute `log` accurately upto 400-1000 decimal places.
+
+Finally, now that we have `log = logTay 0.0001`, we can easily define some other functions.
+```
+logBase a b = log(b) / log(a)
+exp n = if n == 1 then 2.71828 else (exp 1) ** n
+(**) a b = exp (b * log(a))
+```
+
+We will use this same Taylor approximation scheme for `sin` and `cos`. The idea here is: $sin(x) approx x$ for small $x$ and $cos(x) = 1$ for small $x$. Furthermore, $sin(x+2pi) = sin(x)$, $cos(x + 2 pi) = cos(x)$ and $sin(2x) = 2 sin(x) cos(x)$ as well as $cos(2x) = cos^2(x) - sin^2(x)$.
+
+This can be encoded as
+```
+-- Sin and Cos using Taylor Approximation
+sinTay :: Float -> Float -> Float
+sinTay tol x
+  | abs(x) <= tol        = x  -- Base case: sin(x) ≈ x when x is small
+  | abs(x) >= 2 * pi     = if x > 0 
+                            then sinTay tol (x - 2 * pi) 
+                            else sinTay tol (x + 2 * pi)  -- Reduce x to [-2π, 2π]
+  | otherwise            = 2 * (sinTay tol (x/2)) * (cosTay tol (x/2))  -- sin(x) = 2 sin(x/2) cos(x/2)
+
+cosTay :: Float -> Float -> Float
+cosTay tol x
+  | abs(x) <= tol        = 1.0  -- Base case: cos(x) ≈ 1 when x is small
+  | abs(x) >= 2 * pi     = if x > 0 
+                            then cosTay tol (x - 2 * pi) 
+                            else cosTay tol (x + 2 * pi)  -- Reduce x to [-2π, 2π]
+  | otherwise            = (cosTay tol (x/2))**2 - (sinTay tol (x/2))**2  -- cos(x) = cos²(x/2) - sin²(x/2)
+```
+
+As one might notice, this approximation is somewhat poorer in accuracy than `log`. This is due to the fact that the taylor approximation is much less truer on `sin` and `cos` in the neighbourhood of `0` than for `log`. 
+
+We will see a better approximation once we start using lists, using the power of the full Taylor expansion. 
+
+Finally, similer to our above things, we could simply set the tolerance and get a function that takes an input and gives an output, name it `sin` and `cos` and define `tan x = (sin x) / (cos x)`.
+
+It is left as excercise to use taylor approximation to define inverse sin(`asin`), inverse cos(`acos`) and inverse tan(`atan`).
+
+== Basic String Operations
+We will now talk about string operations. As we mentioned in the start, strings are a list of characters. This autmoatically implies a lot of advanced string related operations would need to go through lists. Hence, we will only cover the basic ones here.
+```
+ghci> "hello" ++ " " ++ "world!"
+"hello world"
+ghci> 'h' : "ello world"
+"hello world"
+ghci> 'h' ++ "ello world"
+<interactive>:78:1: error: [GHC-83865]
+ghci> "hello" : " " : "world"
+<interactive>:79:17: error: [GHC-83865]
+ghci> length "hello"
+5
+ghci> reverse "hello"
+"olleh"
+ghci> take 3 "hello"
+"hel"
+ghci> drop 3 "hello"
+"lo"
+ghci> splitAt 3 "hello"
+("hel","lo")
+```
+We want you to observe and infer that `(++)` is used to concat two strings while `(:)` is used to append a character to a string. This distinction matters as doing it any other way creates a horrible error.
+
+`length` provides the length of the string, `reverse` reverses the string and `take` and `drop` allow us to either take the first few elements of a string or dispose of them. One could simply define `splitAt n str = (take n str, drop n str)`.
+
+Note, `(:)` is a primitive and is defined axiomatically. That is, we cannot breakdown it's implementation. It just exists and works. The exact working will become more clearer in chapter 9 and 11.
+
+Defining the other functions is just an excercise in recursion, and a very straightforward one at that. The only one with any cleverness will be  `reverse `, but alas we have already seen it in chapter 1.
+```
+(++) :: String -> String -> String
+[] ++ str = str
+(x:xs) ++ ys = x : (xs ++ ys)
+
+length :: String -> Int
+length "" = 0
+length (x:xs) = 1 + length xs
+
+take :: Int -> String -> Int
+take _ "" = ""
+take 0 str = str
+take n (x:xs) = x : (take (n-1) xs)
+
+drop :: Int -> String -> String
+drop _ "" = ""
+drop 0 str = str
+drop n (x:xs) = drop (n-1) xs
+
+naiveReverse :: String -> String
+naiveReverse "" = ""
+naiveReverse (x:xs) = (naiveReverse xs) ++ [x]
+
+betterReverse :: String -> String
+betterReverse (x:xs) = go (x:xs) [] where
+  go [] rev = rev
+  go (x:xs) rev = go xs (x:rev)
+```
+`naiveReverse` clearly uses some $(n(n+1))/2$ append operations where $n$ is the length of the list as we use concat unnecesarily and it is expensive. On the other hand, `betterReverse` usea only some `n` append operations. This makes it much faster and is indeed how `reverse` is defined.
+
+== Dealing with Characters
+We will now talk about characters. Haskell packs up all the functions relating to them in a module called `Data.Char`. We will explore some of the functions there.
+
+So if you are following along, feel free to enter `import Data.Char` in your ghci or add it to the top of your haskell file.
+
+The most basic and importent functions here are `ord` and `chr`. Characters, like the ones you are reading now, are represented inside a computer using numbers. These numbers are part of a standard called ASCII (American Standard Code for Information Interchange), or more generally, Unicode.
+
+In Haskell, the function `ord` takes a character and returns its corresponding numeric code (called its code point). The function `chr` does the reverse: it takes a number and returns the character it represents.
+```
+ghci> ord 'g'
+103
+ghci> ord 'G'
+71
+ghci> chr 71
+'G'
+ghci> chr '103
+'g'
+```
+The ASCII standard originally defined 128 characters, numbered from 0 to 127. These include English letters, digits, punctuation, and some control characters that do not represent symbols but serve technical purposes. For example, 
+
+- `'\SOH'` - start of heading
+- `'\EOT'` - end of transmission(used in sending data to denote if sending is over. If it is not recived, an error may be percived.)
+- `'\ETX'` - end of text
+- `'\a'` - alert(sometimes denoted as `'\BEL'`)
+- `\n` - new line(sometimes denored as `'\LF'`)
+- `'\t'` - horizontal tab(sometimes denored as `'\HT'`)
+- `'\SP'` - space(often denoted as `' '`)
+
+While `chr :: Char -> Int` is defined on all valid characters, `ord :: Int -> Char` is not defined on all integers for the reason that we don't have as many characters as integers.
+
+The first defined character, aka `ord 0`, is `\NUL`. It is a control character used to represents the null character or nothing. `ord (-1)` results in an error, as does any other negitive number.
+
+We have in total 34 such control characters. From $0-32$ and then at $127$(`'\DEL'`, used to log the use of delete. Not to be confused with `'\BS'` which is used to log backspaces).
+
+Although the ASCII range ends at 127, because it was designed for a 7-bit system, modern systems use Unicode, which extends this idea and assigns unique numbers to over a million characters - including symbols from nearly every language. As Haskell uses Unicode under the hood. That means ord and chr can go well beyond ASCII:
+```
+ghci> ord '☃'
+9731
+ghci> chr 9731
+'☃'
+```
+We will not go into how `ord` and `chr` are implemented, as that involves lower-level details. Just know that they work reliably and are part of the Haskell standard library.
+
+With this out of the way, we can look at some more char based functions.
+```
+ghci> isLower 'a'
+True
+ghci> isLower 'A'
+False
+ghci> isLower ','
+False
+ghci> isUpper 'a'
+False
+ghci> isUpper 'A'
+True
+ghci> isUpper ','
+False
+
+ghci> toLower 'a'
+'a'
+ghci> toLower 'A'
+'a'
+ghci> toLower ','
+,
+ghci> toUpper 'a'
+'A'
+ghci> toUpper 'A'
+'A'
+ghci> toUpper ','
+,
+```
+Simmiler functions are `isSpace, isDigit, isAlpha, isAlphaNum` for white spaces(space, tab, newline), digits, alphabets and alphanumerics(alphabets or number).
+
+This means one could simply turn a whole string lower case or filter out only the alphabnumeric characters using `map` and `filter`.
+```
+ghci> map toLower "HelLo WOrlD, I am Mixed uP"
+"hello world, i am mixed up"
+
+ghci> filter isAlphaNum "mix^@($ed &(u*(!p m&(!^#e)*!^ss"
+"mixedupmess"
+```
+
+< I will complete this section later. >
+// TO - DO
+// Rest of Characters
+// Cipher
+// Excercises
+// Editing
+
+
+
+
+// Back Excercise
+#exercise[
+#def[
+  Newton–Raphson method is a method to find the roots of a function via subsequent approximations.
+  
+  Given $f(x)$, we let $x_0$ be an inital guess. Then we get subsequent guesses using
+  $
+    x_(n+1) = x_n - f(x_n)/(f'(x_n))
+  $
+  As $n -> oo$, $f(x_n) -> 0$.
+
+  The intution for why this works is: imagine standing on a curve and wanting to know where it hits the x-axis. You draw the tangent line at your current location and walk down it to where it intersects the x-axis. That’s your next guess. Repeat. If the curve behaves nicely, you converge quickly to the root.
+  
+  Limitations of Newton–Raphson method are
+  - Requires derivative: The method needs the function to be differentiable and requires evaluation of the derivative at each step.
+  - Initial guess matters: A poor starting point can lead to divergence or convergence to the wrong root.
+  - Fails near inflection points or flat slopes: If $f'(x)$ is zero or near zero, the method can behave erratically.
+  - Not guaranteed to converge: Particularly for functions with multiple roots or discontinuities.
+]
+Considering, square root and cube root are well behaved, implement Newton–Raphson method.
+]
 
 // cite
 // Curry Howerd by Example - CJ Quines
