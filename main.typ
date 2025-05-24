@@ -9,10 +9,10 @@ import "Modules/Prelude.typ"
 
 let title = [Haskell for CMI]
 
-let R = "Ryan Hota"
-let S = "Shubh Sharma"
-let A = "Arjun Maneesh Agarwal"
-let author = R+", "+S+", "+A
+let R = [Ryan Hota]
+let S = [Shubh Sharma]
+let A = [Arjun Maneesh Agarwal]
+let author = R+[, ]+S+[, ]+A
 
 Book.settings(title:title,author:author,{
 Box.settings({

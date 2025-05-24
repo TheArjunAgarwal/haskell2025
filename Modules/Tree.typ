@@ -4,7 +4,7 @@
 #let len_of_proj_to_rect((x,y),rect) = {
   let w = rect.width/2cm
   let h = rect.height/2cm
-  let t = (w/x,h/y).sorted(key:it=>calc.abs(it)).at(0)
+  let t = (if x==0 {1} else {w/x},h/y).sorted(key:it=>calc.abs(it)).at(0)
   return calc.sqrt(((x*x)+(y*y))*t*t)
 }
 
@@ -101,7 +101,7 @@ Trees can be spread horizontally . . .
 
 . . . or vertically -
 
-#tree( pad : 2,
+#tree(
   (`(:)`,
     `x1`,
     (`(:)`,
