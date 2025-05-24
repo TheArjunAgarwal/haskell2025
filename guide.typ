@@ -172,43 +172,43 @@ If you use a figure, please save it as a seperate .typ or .asy file in figures a
 
 ```bash
 haskell-course/
-├── Book.typ
-├── Box.typ
-├── Chapter.typ
-├── Code.typ
-├── Contents.typ
-├── Definition.typ
-├── Prelude.typ
-├── assignments-typ
-│   ├── week01.typ
-│   ├── ...
-│   └── week16.typ
+├── Modules
+│   ├── Book.typ
+│   ├── Box.typ
+│   ├── Chapter.typ
+│   ├── Code.typ
+│   ├── Contents.typ
+│   ├── Definition.typ
+│   ├── Exercise.typ
+│   ├── Prelude.typ
+│   ├── Proof.typ
+│   ├── Tree.typ
+│   ├── style.typ
+│   ├── theme.tmTheme
+│   └── theorems.typ
 ├── chapters-typ
 │   ├── ch01_functions.typ
 │   ├── ch02_setup_linux.typ
 │   ├── ch02_setup_mac.typ
 │   ├── ch02_setup_win.typ
-│   ├── ch03_datatypes.typ
-│   ├── ch04_tuples.typ
-│   ├── ch05_lists.typ
-│   ├── ch06_polymorphism.typ
-│   ├── ch07_advanced_lists.typ
-│   ├── ch08_precomp-datatypes.typ
-│   ├── ch09_computation.typ
-│   ├── ch10_complexity.typ
-│   ├── ch11_postcomp-datatypes.typ
-│   ├── ch12_typeclasses.typ
+│   ├──...
 │   ├── ch13_monad.typ
 │   └── example_chapter.typ
-├── example.typ
+├── example.pdf
 ├── extra-typ
 │   ├── appendix.typ
 │   └── preface.typ
+├── figures
+├── generate.sh
+├── guide.md
+├── guide.pdf
+├── guide.typ
+├── licenses
+│   ├── code_license.txt
+│   └── text_license.txt
+├── main.pdf
 ├── main.typ
-├── solutions-typ
-│   ├── week01_sol.typ
-│   ├── ...
-│   └── week16_sol.typ
+└── tutorials-typ
 ```
 Tutorials, assignments and solutions refer to tutorial handouts(if needed), class and tutorial assignments and their solution files. Keep them as .typ/.tex files for now, the required .hs/.lhs files will be generated later.
 
