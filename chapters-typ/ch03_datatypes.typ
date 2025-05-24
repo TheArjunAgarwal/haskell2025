@@ -1,9 +1,8 @@
-#import "../Definition.typ" : def
+#import "../Modules/Definition.typ" : def
+#import "../Modules/Exercise.typ" : exercise
 
 #let definition = def
 #let example = it => [For example - \ #it]
-#let exercise = it => [=== Exercise 
-#it]
 
 = Bool, Int, Integer and more (feel free to change it)
 
@@ -47,10 +46,10 @@ This chapter will deal (in varying amounts of details) with the types *`Bool`*, 
   The reason for `Int` existing despite its bounds and us not using `Integer` for everything is related to speed and memory. Using the former is faster and uses lesser memory.
 
   ```
-  ghci> product [1..52] :: Int
+  >>> product [1..52] :: Int
   -8452693550620999680
   (0.02 secs, 87,896 bytes)
-  ghci> product [1..52] :: Integer
+  >>> product [1..52] :: Integer
   80658175170943878571660636856403766975289505440883277824000000000000
   (0.02 secs, 123,256 bytes)
   ```
@@ -65,15 +64,15 @@ An irrefutable fact is that computers are fundamentally limited by the amount of
 //suggest that we not mention `Float` at all
   `Float` or Floating point contains numbers with a decimal point with a fixed amount of memory being used for their storage. The term floating-point comes from the fact that the number of digits permitted after the decimal point depends upon the magnitude of the number. The same can be said for `Double` or Double Precision Floating Point which offers double the space beyond the point, at cost of more memory. For example
   ```
-  ghci> sqrt 2 :: Float
+  >>> sqrt 2 :: Float
   1.4142135
-  ghci> sqrt 99999 :: Float
+  >>> sqrt 99999 :: Float
   316.2262
-  ghci> sqrt 2 :: Double
+  >>> sqrt 2 :: Double
   1.4142135623730951
-  ghci> sqrt 99999 :: Double
+  >>> sqrt 99999 :: Double
   316.226184874055
-  ghci> sqrt 999999999 :: Double
+  >>> sqrt 999999999 :: Double
   31622.776585872405
   ```
 We can see that the prescission of $sqrt(99999)$ is much lower than that of $sqrt(2)$. We will use `Float` for most of this book. //please no
@@ -161,14 +160,14 @@ We could also define `negateSquare` in a more cumbersome `negateSquare x = negat
 
 An operator inside a bracket is a function and a function in backticks is an operator. For example
 ```
-ghci> True && False
+>>> True && False
 False
-ghci> (&&) True False
+>>> (&&) True False
 False
-ghci> f x y = x*y + x + y
-ghci> f 3 4
+>>> f x y = x*y + x + y
+>>> f 3 4
 19
-ghci> 3 `f` 4
+>>> 3 `f` 4
 19
 ```
 All this means, we could define `nand` simply as
@@ -185,7 +184,7 @@ Furthermore, as Haskell doesn't have an inbuilt nand operator, say I want to hav
 
 Finally, we need to make `xor`.  We will now replicate a classic example of 17 ways to define it and a quick reference for a lot of the syntax. 
 ```
--- 17 Xors
+-- | 17 Xors
 -- Notice, we can declare the type of a bunch of functions by comma seperating them.
 
 xor1, xor2, xor3, xor4, xor5 :: Bool -> Bool -> Bool
@@ -219,7 +218,7 @@ xor5 True b = not b
 All the above methods basically enumerate all possibilities using increasingly more concise manners. However, can we do better using logical operators?
 
 ```
--- 17 Xors contd.
+-- | 17 Xors contd.
 xor6, xor7, xor8, xor9 :: Bool -> Bool -> Bool
 -- Litrally just using the definition
 xor6 b1 b2 = (b1 && (not b2)) || ((not b1) && b2)
@@ -235,7 +234,7 @@ xor9 = (/=)
 ```
 We could also use `if..then..else` syntax. To jog your memory, the `if` keyword is followed by some condition, aka a function that returns `True` or `False`, this is followed by the `then` keyword and a function to excute if the condition is satisfied and the `else` keyword and a function to execute as a if the condition is not satisfied. For example
 ```
--- 17 Xors, contd.
+-- | 17 Xors, contd.
 xor10, xor11 :: Bool -> Bool -> Bool
 
 xor10 b1 b2 = if b1 == b2 then False else True
@@ -248,7 +247,7 @@ Or use the guard syntax. Similar to piecewise functions in math, we can define t
 We do this as follows
 
 ```
--- 17 Xors, cotd
+-- | 17 Xors, cotd
 xor12, xor13, xor14, xor15 :: Bool -> Bool -> Bool
 
 xor12 b1 b2
@@ -285,7 +284,7 @@ The case expression evaluates the `<expression>`, and matches it against each pa
 
 
 ```
--- 17 Xors, contd
+-- | 17 Xors, contd
 xor16, xor17 :: Bool -> Bool -> Bool
 
 -- We use a single case on the first input.
@@ -313,36 +312,36 @@ Now that we are done with this tiresome activity, and learned a lot of Haskell s
 == Numerical Functions
 A lot of numeric operators and functions come predefined in Haskell. Some natural ones are
 ```
-ghci> 7 + 3
+>>> 7 + 3
 10
-ghci> 3 + 8
+>>> 3 + 8
 11
-ghci> 97 + 32
+>>> 97 + 32
 129
-ghci> 3 - 7
+>>> 3 - 7
 -4
-ghci> 5 - (-6)
+>>> 5 - (-6)
 11
-ghci> 546 - 312
+>>> 546 - 312
 234
-ghci> 7 * 3
+>>> 7 * 3
 21
-ghci> 8*4
+>>> 8*4
 32
-ghci> 45 * 97
+>>> 45 * 97
 4365
-ghci> 45 * (-12)
+>>> 45 * (-12)
 -540
-ghci> (-12) * (-11)
+>>> (-12) * (-11)
 132
-ghci> abs 10
+>>> abs 10
 10
-ghci> abs (-10)
+>>> abs (-10)
 10
 ```
 The internal definition of addition and subtraction is discussed in the appendix while we talk about some multiplication algorithms in the time complexity chapter. For our purposes, we want it to be clear and predictable what one expects to see when any of these operators are used. `Abs` is also implemented in a very simple fashion.
 ```
--- Implementation of abs function
+-- | Implementation of abs function
 abs :: Num a => a -> a
 abs a = if a >= 0 then a else -a
 ```
@@ -351,10 +350,10 @@ Now let's move to the more interesting operators and functions.
 
 `recip` is a function which reciptocates a given numebr, but it has rather interesting type signature. It is only defined on types with the `Fractional` typeclass. /*suggest that we not mention typeclass yet*/ This refers to a lot of things, but the most common ones are `Rational, Float` and `Double`.  `recip`, as the name suggests, returns the reciprocal of the number taken as input. The type signature is `recip :: Fractional a => a -> a`
 ```
-ghci> recip 5
+>>> recip 5
 0.2
-ghci> k = 5 :: Int
-ghci> recip k
+>>> k = 5 :: Int
+>>> recip k
 <interactive>:47:1: error: [GHC-39999]...
 ```
 It is clear that in the above case, 5 was treated as a `Float` or `Double` and the expected output provided. In the following case, we specified the type to be `Int` and it caused a horrible error. This is because for something to be a fractional type, we literally need to define how to reciprocate it. We will talk about how exactly it is defined in < some later chapter probably 8 >. For now, once we have `recip` defined, division can be easily defined as
@@ -366,17 +365,17 @@ Again, notice the type signature of `(/)` is `Fractional a => a -> a -> a`. #foo
 
 However, this is not the only division we have access to. Say we want only the quotient, then we have `div` and `quot` functions. These functions are often coupled with `mod` and `rem` are the respective remainder functions. We can get the quotient and remainder at the same time using `divMod` and `quotRem` functions. A simple example of usage is
 ```
-ghci> 100 `div` 7
+>>> 100 `div` 7
 14
-ghci> 100 `mod` 7
+>>> 100 `mod` 7
 2
-ghci> 100 `divMod` 7
+>>> 100 `divMod` 7
 (14,2)
-ghci> 100 `quot` 7
+>>> 100 `quot` 7
 14
-ghci> 100 `rem` 7
+>>> 100 `rem` 7
 2
-ghci> 100 `quotRem` 7
+>>> 100 `quotRem` 7
 (14,2)
 ```
 One must wonder here that why would we have two functions doing the same thing? Well, they don't actually do the same thing.
@@ -384,21 +383,21 @@ One must wonder here that why would we have two functions doing the same thing? 
 #exercise[
   From the given example, what is the difference between `div` and `quot`?
   ```
-ghci> 8 `div` 3
+>>> 8 `div` 3
 2
-ghci> (-8) `div` 3
+>>> (-8) `div` 3
 -3
-ghci> (-8) `div` (-3)
+>>> (-8) `div` (-3)
 2
-ghci> 8 `div` (-3)
+>>> 8 `div` (-3)
 -3
-ghci> 8 `quot` 3
+>>> 8 `quot` 3
 2
-ghci> (-8) `quot` 3
+>>> (-8) `quot` 3
 -2
-ghci> (-8) `quot` (-3)
+>>> (-8) `quot` (-3)
 2
-ghci> 8 `quot` (-3)
+>>> 8 `quot` (-3)
 -2
 ```
 ]
@@ -406,21 +405,21 @@ ghci> 8 `quot` (-3)
 #exercise()[
   From the given example, what is the difference between `mod` and `rem`?
   ```
-ghci> 8 `mod` 3
+>>> 8 `mod` 3
 2
-ghci> (-8) `mod` 3
+>>> (-8) `mod` 3
 1
-ghci> (-8) `mod` (-3)
+>>> (-8) `mod` (-3)
 -2
-ghci> 8 `mod` (-3)
+>>> 8 `mod` (-3)
 -1
-ghci> 8 `rem` 3
+>>> 8 `rem` 3
 2
-ghci> (-8) `rem` 3
+>>> (-8) `rem` 3
 -2
-ghci> (-8) `rem` (-3)
+>>> (-8) `rem` (-3)
 -2
-ghci> 8 `rem` (-3)
+>>> 8 `rem` (-3)
 2
 ```
 ]
@@ -433,7 +432,7 @@ Basically, `div` returns the floor of the true divison value(recall $floor(-3.56
 
 A simple excercise for us now would be implementing our very own integer division algorithm. We begin with a division algorithm for only positive integers.
 ```
--- A division algorithm on positive integers by repreated subtraction
+-- | A division algorithm on positive integers by repreated subtraction
 divide :: Integer -> Integer -> (Integer, Integer)
 divide n d = go 0 n where
   go q r = if r >= d then go (q+1) (r-d) else (q,r)
@@ -473,15 +472,15 @@ Unlike division, they have almost the same function. The difference here is in t
 The operators clearly get more and more general as we go down the list but they also get slower. However, they are also reducing in accurecy and may even output `Infinity` in some cases. The `...` means I am trunicating the output for readablity, ghci did give the compelete answer.
 
 ```
-ghci> 2^1000
+>>> 2^1000
 10715086071862673209484250490600018105614048117055336074...
-ghci> 2 ^^ 1000
+>>> 2 ^^ 1000
 1.0715086071862673e301
-ghci> 2^10000
+>>> 2^10000
 199506311688075838488374216268358508382...
-ghci> 2^^10000
+>>> 2^^10000
 Infinity
-ghci> 2 ** 10000
+>>> 2 ** 10000
 Infinity
 ```
 
@@ -490,7 +489,7 @@ The exact reasons for the inaccuracy comes from float conversions and approximat
 However, something within our scope is implementing `(^)` ourselves.
 
 ```
--- A naive integer exponation algorithm
+-- | A naive integer exponation algorithm
 exponation :: (Num a, Integral b) => a -> b -> a
 exponation a 0 = 1
 exponation a b = if b < 0 
@@ -503,7 +502,7 @@ However, we could do a bit better here. Notice, to evaluate $a^b$, we are making
 
 So to do better, we could simply compute $a^(b/2)$ and then square it, given $b$ is even, or compute $a^((b-1)/2)$ and then square it and multiply by $a$ otherwise. This can be done recusrsivly till we have the solution. 
 ```
--- A better exponentiation algorithm using divide and conquer
+-- | A better exponentiation algorithm using divide and conquer
 exponation :: (Num a, Integral b) => a -> b -> a
 exponation a 0 = 1
 exponation a b 
@@ -534,20 +533,20 @@ This is a problem as the small $*2$ in every bracket are unbalenced. The exact w
 === `gcd` and `lcm`
 A very common function for number theoretic use cases is `gcd` and `lcm`. They are pre-defined as
 ```
-ghci> :t gcd
+>>> :t gcd
 gcd :: Integral a => a -> a -> a
-ghci> :t lcm
+>>> :t lcm
 lcm :: Integral a => a -> a -> a
-ghci> gcd 12 30
+>>> gcd 12 30
 6
-ghci> lcm 12 30
+>>> lcm 12 30
 60
 ```
 We will now try to define these functions ourselves.
 
 A naive way to do so would be:
 ```
--- Naive GCD and LCM
+-- | Naive GCD and LCM
 -- Uses a brute-force approach starting from the smaller number and counting down
 gcdNaive :: Integer -> Integer -> Integer
 gcdNaive a 0 = a
@@ -582,7 +581,7 @@ A simple optimization could be using $p*q = gcd(p,q) * lcm(p,q)$. This makes the
 
 Let's say we want to find $g := gcd(p,q)$ and $p > q$. That would imply $p = d q + r$ for some $r < q$. This means $g | p, q => g | q, r$ and by the maximality of $g$, $gcd(p,q) = gcd(q,r)$. This helps us out a lot as we could eventually reduce our problem to a case where the larger term is a multiple of the smaller one and we could return the smaller term then and there. This can be implemented as:
 ```
--- Fast GCD and LCM
+-- | Fast GCD and LCM
 gcdFast :: Integer -> Integer -> Integer
 gcdFast p 0 = p -- Using the fact that the moment we get q | p, we will reduce to this case and output the answer.
 gcdFast p q = gcdFast q (p `mod` q)
@@ -601,7 +600,7 @@ While we will see these class of algorithms, including checking if a number is p
 === Recursive Functions
 A lot of mathematical functions are defined recusrsivly. We have already seen a lot of them in < chapter 1>. Factorial, binomials and fibbonacci are common examples. We will implement them here for the the sake of completness, although I don't think converting them from paper to code is hard, we will still do it.
 ```
--- Factorial, Binomial and Fibbonacci
+-- | Factorial, Binomial and Fibbonacci
 factorial :: Integer -> Integer
 factorial 0 = 1
 factorial n = n *  factorial (n-1)
@@ -625,46 +624,46 @@ You might remember that we don't directly translate the defination of fibbonacci
 We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this oppurtunity to talk about real exponation. To begin, Haskell has a lot of pre-defined functions.
 
 ```
-ghci> sqrt 81
+>>> sqrt 81
 9.0
 
-ghci> log (2.71818)
+>>> log (2.71818)
 0.9999625387017254
-ghci> log 4
+>>> log 4
 1.3862943611198906
-ghci> log 100
+>>> log 100
 4.605170185988092
-ghci> logBase 10 100
+>>> logBase 10 100
 2.0
-ghci> exp 1
+>>> exp 1
 2.718281828459045
-ghci> exp 10
+>>> exp 10
 22026.465794806718
 
-ghci> pi
+>>> pi
 3.141592653589793
-ghci> sin pi
+>>> sin pi
 1.2246467991473532e-16
-ghci> cos pi
+>>> cos pi
 -1.0
-ghci> tan pi
+>>> tan pi
 -1.2246467991473532e-16
-ghci> asin 1
+>>> asin 1
 1.5707963267948966
-ghci> asin 1/2
+>>> asin 1/2
 0.7853981633974483
-ghci> acos 1
+>>> acos 1
 0.0
-ghci> atan 1
+>>> atan 1
 0.7853981633974483
 ```
 `pi` is a predefined variable inside haskell. It carries the value of $pi$ upto some decimal places based on what type it is forced in.
 ```
-ghci> a = pi :: Float
-ghci> a
+>>> a = pi :: Float
+>>> a
 3.1415927
-ghci> b = pi :: Double
-ghci> b
+>>> b = pi :: Double
+>>> b
 3.141592653589793
 ```
 All the fucntions above have the type signature `Fractional a => a -> a ` or for our purposes `Float -> Float`. Also, notice the functions are not giving exact answers in some cases and instead are giving approximations. These functions are quite unnatural for a computer, so we surely know that the computer isn't processing them. So what is happening under the hood?
@@ -692,7 +691,7 @@ Keep halving until you find it - or realize it’s not there.
 
 While using a raw binery search for roots would be impossible as the exact answer is seldom rational and hence, the algorithm would never terminate. So instead of searching for the exact root, we look for an approximation by keeping some tolerence. Here is what it looks like:
 ```
--- Square root by binary search
+-- | Square root by binary search
 bsSqrt :: Float -> Float -> Float
 bsSqrt tolerance n
   | n > 1     = binarySearch 1 n
@@ -715,7 +714,7 @@ However, this method won't work for `log` as we would need to do real exponation
 
 We know that $ln(1+x) = x - x^2/2 + x^3/3 - dots$. For small $x, ln(1+x) approx x$. So if we can create a scheme to make $x$ small enough, we could get the logithrm by simply multiplying. Well, $ln(x^2) = 2 ln(|x|)$. So, we could simply keep taking square roots of a number till it is within some error range of $1$ and then simply use the fact $ln(1+x) approx x$ for small $x$.
 ```
--- Log defined using Taylor Approximation
+-- | Log defined using Taylor Approximation
 logTay :: Float -> Float -> Float
 logTay tol n 
   | n <= 0                      = error "Negative log not defined"
@@ -735,7 +734,7 @@ We will use this same Taylor approximation scheme for `sin` and `cos`. The idea 
 
 This can be encoded as
 ```
--- Sin and Cos using Taylor Approximation
+-- | Sin and Cos using Taylor Approximation
 sinTay :: Float -> Float -> Float
 sinTay tol x
   | abs(x) <= tol        = x  -- Base case: sin(x) ≈ x when x is small
@@ -764,23 +763,23 @@ It is left as excercise to use taylor approximation to define inverse sin(`asin`
 == Basic String Operations
 We will now talk about string operations. As we mentioned in the start, strings are a list of characters. This autmoatically implies a lot of advanced string related operations would need to go through lists. Hence, we will only cover the basic ones here.
 ```
-ghci> "hello" ++ " " ++ "world!"
+>>> "hello" ++ " " ++ "world!"
 "hello world"
-ghci> 'h' : "ello world"
+>>> 'h' : "ello world"
 "hello world"
-ghci> 'h' ++ "ello world"
+>>> 'h' ++ "ello world"
 <interactive>:78:1: error: [GHC-83865]
-ghci> "hello" : " " : "world"
+>>> "hello" : " " : "world"
 <interactive>:79:17: error: [GHC-83865]
-ghci> length "hello"
+>>> length "hello"
 5
-ghci> reverse "hello"
+>>> reverse "hello"
 "olleh"
-ghci> take 3 "hello"
+>>> take 3 "hello"
 "hel"
-ghci> drop 3 "hello"
+>>> drop 3 "hello"
 "lo"
-ghci> splitAt 3 "hello"
+>>> splitAt 3 "hello"
 ("hel","lo")
 ```
 We want you to observe and infer that `(++)` is used to concat two strings while `(:)` is used to append a character to a string. This distinction matters as doing it any other way creates a horrible error.
@@ -829,13 +828,13 @@ The most basic and importent functions here are `ord` and `chr`. Characters, lik
 
 In Haskell, the function `ord` takes a character and returns its corresponding numeric code (called its code point). The function `chr` does the reverse: it takes a number and returns the character it represents.
 ```
-ghci> ord 'g'
+>>> ord 'g'
 103
-ghci> ord 'G'
+>>> ord 'G'
 71
-ghci> chr 71
+>>> chr 71
 'G'
-ghci> chr '103
+>>> chr '103
 'g'
 ```
 The ASCII standard originally defined 128 characters, numbered from 0 to 127. These include English letters, digits, punctuation, and some control characters that do not represent symbols but serve technical purposes. For example, 
@@ -856,49 +855,49 @@ We have in total 34 such control characters. From $0-32$ and then at $127$(`'\DE
 
 Although the ASCII range ends at 127, because it was designed for a 7-bit system, modern systems use Unicode, which extends this idea and assigns unique numbers to over a million characters - including symbols from nearly every language. As Haskell uses Unicode under the hood. That means ord and chr can go well beyond ASCII:
 ```
-ghci> ord '☃'
+>>> ord '☃'
 9731
-ghci> chr 9731
+>>> chr 9731
 '☃'
 ```
 We will not go into how `ord` and `chr` are implemented, as that involves lower-level details. Just know that they work reliably and are part of the Haskell standard library.
 
 With this out of the way, we can look at some more char based functions.
 ```
-ghci> isLower 'a'
+>>> isLower 'a'
 True
-ghci> isLower 'A'
+>>> isLower 'A'
 False
-ghci> isLower ','
+>>> isLower ','
 False
-ghci> isUpper 'a'
+>>> isUpper 'a'
 False
-ghci> isUpper 'A'
+>>> isUpper 'A'
 True
-ghci> isUpper ','
+>>> isUpper ','
 False
 
-ghci> toLower 'a'
+>>> toLower 'a'
 'a'
-ghci> toLower 'A'
+>>> toLower 'A'
 'a'
-ghci> toLower ','
+>>> toLower ','
 ,
-ghci> toUpper 'a'
+>>> toUpper 'a'
 'A'
-ghci> toUpper 'A'
+>>> toUpper 'A'
 'A'
-ghci> toUpper ','
+>>> toUpper ','
 ,
 ```
 Simmiler functions are `isSpace, isDigit, isAlpha, isAlphaNum` for white spaces(space, tab, newline), digits, alphabets and alphanumerics(alphabets or number).
 
 This means one could simply turn a whole string lower case or filter out only the alphabnumeric characters using `map` and `filter`.
 ```
-ghci> map toLower "HelLo WOrlD, I am Mixed uP"
+>>> map toLower "HelLo WOrlD, I am Mixed uP"
 "hello world, i am mixed up"
 
-ghci> filter isAlphaNum "mix^@($ed &(u*(!p m&(!^#e)*!^ss"
+>>> filter isAlphaNum "mix^@($ed &(u*(!p m&(!^#e)*!^ss"
 "mixedupmess"
 ```
 

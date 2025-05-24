@@ -1,23 +1,26 @@
 //---------------------functions--------------------
 
-#let light( colour ) = color.mix( (colour, 20%) , (white, 80%) )
+#let light( colour ) = color.mix( (colour, 25%) , white )
 
 #let inline_box( 
-  colour , 
+  colour : black , 
   body 
 ) = {
   box(
     height : 1.3em ,
-    inset : 2.5em/11 ,
+    inset : 3em/11 ,
     radius : 3em/11 ,
-    baseline : 3em/11 ,
+    baseline : 2.5em/11 ,
     fill : light( colour ) ,
-    body
+    text(
+      baseline: 0.06em,
+      body
+    )
   )
 }
 
 #let ordinary_box( 
-  colour , 
+  colour : blue , 
   body 
 ) = figure(
   box( 
@@ -74,6 +77,7 @@
   title : none , 
   fancy_title_size : 1em , 
   label_prefix : "fancy box containing" , 
+  outlined : true ,
   body 
 ) = [
   
@@ -95,10 +99,10 @@
       
       #v( fancy_title_size/6 , weak : true )
       
-      #ordinary_box( colour , body ) 
+      #ordinary_box( colour : colour , body ) 
       ]
       ,
-      kind : "fancy_box",
+      kind : (if outlined {""} else {"unoutlined_"} ) + "fancy_box",
       supplement : fancy_title( 
         colour : colour , 
         symbol : symbol , 
@@ -106,13 +110,13 @@
         fancy_title_size : fancy_title_size )
     )
     
-    #label( ( label_prefix + " " +  title ).replace( " " , "_" ) ) 
+    #label( ( label_prefix + " " +  title ).replace( " " , "_" ) )
 
     ]
     
   } else {
 
-    ordinary_box( colour ,  body )
+    ordinary_box( colour : colour ,  body )
     
   }  
   
@@ -124,8 +128,7 @@
 
 import "Prelude.typ" : *
  
-show ref : it => if targets( it , "fancy_box" ) {
-  
+show ref : it => if targets( it , "fancy_box" ) or targets(it, "unoutlined_fancy_box") {  
   box( baseline : 0.1em , 
     link( it.target , it.element.supplement )
   )
@@ -135,11 +138,11 @@ user_end_body}
 
 //---------------------tests------------------------
 
-#settings[
+// #settings[
 
-In the #inline_box(black , [Middle]) of the line.
-#fancy_box([Body])
-#fancy_box(title : "Title", [Body])
-Let me refer to @fancy_box_containing_Title.
+// In the #inline_box([Middle]) of the line.
+// #fancy_box([Body])
+// #fancy_box(title : "Title", [Body])
+// Let me refer to @fancy_box_containing_Title.
 
-]
+// ]

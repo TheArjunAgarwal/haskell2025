@@ -1,3 +1,7 @@
+// #
+
+#show heading.where( level: 1 ) : it => [ #pagebreak() #it ]
+
 = Code
 
 In the `Middle` of a line.
@@ -9,7 +13,7 @@ hello1 :: any -> String
 hello1     _  =  "world"
 ```
 
-Refer to @code_of_hello1.
+Refer to @code_of_hello1
 
 // hidden from contents
 ```haskell
@@ -24,7 +28,7 @@ hello3 :: any -> String
 hello3     _  =  "world"
 ```
 
-Refer to @code_of_hello3
+Refer to @code_of_hello3.
 
 // hidden from contents, typ
 #metadata[
@@ -52,7 +56,7 @@ hello6     _  =  "world"
 
 = Definition 
 
-#import "../Definition.typ" : def
+#import "../Modules/Definition.typ" : def
 
 // hidden from none
 #def( subject : "disjoint union" )[ 
@@ -60,7 +64,7 @@ hello6     _  =  "world"
   which is not *$X union Y$* exactly.
 ]
 
-Refer to @definition_of__disjoint_union.
+Refer to @definition_of_disjoint_union.
 
 // hidden from contents
 #def[ 
@@ -70,7 +74,7 @@ Refer to @definition_of__disjoint_union.
 
 = Trees
 
-#import "../Tree.typ": tree, far_away, dots
+#import "../Modules/Tree.typ": tree, far_away, dots
 
 Trees can be spread horizontally . . .
 
@@ -87,7 +91,7 @@ Trees can be spread horizontally . . .
 
 . . . or vertically -
 
-#tree( pad: 0.7 ,
+#tree(
   (`(:)`,
     `x1`,
     (`(:)`,

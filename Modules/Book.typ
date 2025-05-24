@@ -1,16 +1,21 @@
-//---------------functions-----------------
+  //---------------functions-----------------
 
 #let title_page(
   title : [Title] ,
   author : [Author]
 ) = {
+
+  set par( leading : 3.5em )
+  
+  set page( header : none )
   
   set align( center + horizon )
+  
   text( 
     size : 100pt , 
     weight : "extrabold" , 
     title 
-  ) + [\ \ ]
+  ) + [\ ]
   
   text( 
     size : 20pt , 
@@ -22,7 +27,8 @@
 #let copyright_declaration( 
   title : [Title] , 
   author : [Author] , 
-  license : [CC-by-SA-4.0] , 
+  text_license : [CC-by-SA-4.0] , 
+  code_license : [AGPL-3.0] ,
   draft : true , 
   feedback_host : [feedback_host\@mailthing.com] 
 ) = {
@@ -51,7 +57,13 @@
   " "
   author + [\ ]
 
-  "Text licensed under " + license + [\ ]
+  if text_license != none {
+    "Text licensed under " + text_license + [\ ]
+  }
+
+  if code_license != none {
+    "Code licensed under " + code_license + [\ ]
+  }
 
   if draft [This is (still!) an incomplete draft.\ ]
 
@@ -88,7 +100,7 @@
     size : 1.3em, 
     font : "Fira Code" , 
     stylistic-set: (3,4,5,6,9) ,
-    theme : "theme.tmTheme"
+    theme : auto //"theme.tmTheme"
   ) ,
   user_end_body
 ) = {
@@ -99,11 +111,11 @@
         weight : "extrabold" , title 
       )
       --
-      Author
+      #author
     ]
   )
-
-  set raw( theme : "theme.tmTheme" )
+  
+  set raw( theme : code_text_settings.theme )
   
   show raw : it => {
     set text(
