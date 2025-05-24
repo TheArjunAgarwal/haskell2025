@@ -20,9 +20,9 @@
     colour : definition_colour,
     symbol : $eq.dots$,
     title : subject,
-    label_prefix : "definition of ",
+    label_prefix : "definition of",
     { 
-      show emph : definition_text
+      show emph : strong
       show strong : definition_text
       body 
     }

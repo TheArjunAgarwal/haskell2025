@@ -5,6 +5,8 @@
   author : [Author]
 ) = align( center + horizon )[#figure(
   {
+
+    set par( leading: 2.5em)
     
     text( 
       size : 80pt , 

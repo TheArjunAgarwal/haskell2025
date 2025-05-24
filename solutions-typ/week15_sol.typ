@@ -1,5 +1,5 @@
 // Solution file for week15.typ
-#import "../style.typ": *
+#import "../Modules/style.typ": *
 #show: codly-init.with()
 #codly(languages: codly-languages)
 

@@ -101,7 +101,7 @@ Trees can be spread horizontally . . .
 
 . . . or vertically -
 
-#tree(
+#tree( pad : 2,
   (`(:)`,
     `x1`,
     (`(:)`,

@@ -1,4 +1,4 @@
-#import "../style.typ":*
+#import "../Modules/style.typ":*
 
 Nothing past this point is for exam, obviously.
 

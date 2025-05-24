@@ -4,6 +4,9 @@ module TypesAsSets where
 ```
 ]
 
+#import "../Modules/Definition.typ" : def
+#import "../Modules/Exercise.typ" : exercise
+
 #metadata[
 ```haskell
 class (Enum t, Bounded t) => Finite t
@@ -26,8 +29,6 @@ instance Finite ()
 instance Finite Int
 ```
 ]
-
-#import "../Definition.typ" : def
 
 = Sets
 
@@ -66,12 +67,12 @@ Other common operations include -
 ]
 
 #def( subject : "cartesian product" )[
-  *$A crossmark B$* is the _set containing all ordered pairs $(a,b)$ such that $a in A$ and $b in B$_.
+  *$A times B$* is the _set containing all ordered pairs $(a,b)$ such that $a in A$ and $b in B$_.
 ]
 
 So, 
 $
-X == { x_1 , x_2 , x_3 } "and" Y == { y_1 , y_2 } \ => \ X crossmark Y ==  { (x_1,y_1),(x_1,y_2),(x_2,y_1),(x_2,y_2),(x_3,y_1),(x_3,y_2) }
+X == { x_1 , x_2 , x_3 } "and" Y == { y_1 , y_2 } \ => \ X times Y ==  { (x_1,y_1),(x_1,y_2),(x_2,y_1),(x_2,y_2),(x_3,y_1),(x_3,y_2) }
 $
 
 #def( subject : "exponent" )[
@@ -80,7 +81,9 @@ $
   or equivalently , the _set of all functions from $A$ to $B$_.
 ]
 
-#pagebreak()
+#exercise( subject: "size of exponent set" )[
+  If $A$ has $|A|$ elements, and $B$ has $|B|$ elements, then how many elements does $B^A$ have?
+]
 
 = Types
 
@@ -88,11 +91,12 @@ We have enconutered a few types in the previous chapter, such as `Bool`, `Intege
 
 For example, 
 - `Bool` can be thought of as the *set of all bolean values*, which is {`False`, `True`}.
-- `Integer` can be thought of as the *set of all integers*, which is {`0`, `1`, `-1`, `2`, `-2`, . . . },
+- `Integer` can be thought of as the *set of all integers*, which is {`0`, `1`, `-1`, `2`, `-2`, . . . }.
+- `Char` can be thought of as the *set of all characters*, which is {`'\\NUL'`,`'\\SOH'`,`'\\STX'`, . . . ,`'a'`,`'b'`,`'c'`, . . . ,`'A'`,`'B'`,`'C'`, . . . }
 
-If this analogy were to extend further, we might expect to see versions of the basic kinds of sets and the common set operations for types, as we can see in the following sections -
+If this analogy were to extend further, we might expect to see analogues of the basic kinds of sets and the common set operations for types, which we can see in the following -
 
-== `::` is analogous to $in$ or @definition_of__belongs
+== `::` is analogous to $in$ or @definition_of_belongs
 
 Whenever we want to claim a value `x` is of type `T`, we can use the `::` keyword, in a similar fashion to $in$, i.e., we can say `x::T` in place of $x in T$.
 
@@ -101,42 +105,54 @@ In programming terms, this is known as declaring the variable `x`.
 For example, 
 
 - ```haskell
--- declaration of x
+-- | declaration of x
 x :: Integer
 x = 42
 ``` This reads - "Let $x in ZZ$. Take the value of $x$ to be $42$."
 
 - ```haskell
--- declaration of y
+-- | declaration of y
 y :: Bool
 y = xor True False
 ``` This reads - "Let $y in$ {False, True}. Take the value of $y$ to be the $xor$ of True and False."
 
-== `A -> B` is analogous to $B^A$ or @definition_of__exponent
+#exercise( subject : "declaring a variable" )[
+  Declare a variable of type `Char`.
+]
+
+== `A -> B` is analogous to $B^A$ or @definition_of_exponent
 
 As $B^A$ contains all functions from $A$ to $B$, \ so is each function `f` defined to take an input of type `A` and output of type `B` satisfy `f::A->B`.
 
 For example -
 
 - ```
--- function
+-- | function
 succ :: Integer -> Integer
 succ x = x + 1
 ```
 
 - ```
--- another function
+-- | another function
 even :: Integer -> Bool
 even n = if n `mod` 2 == 0 then True else False
 ```
 
-== `( A , B )` is analogous to $A crossmark B$ or @definition_of__cartesian_product
+#exercise( subject : "basic function definition" )[
+  Define a non-constant function of type `Bool -> Integer`.
+]
 
-As $A crossmark B$ contains all pairs $(a,b)$ such that $a in A$ and $b in B$, \ so is every pair `(a,b)` of type `(A,B)` if `x` is of type `A` and `b` is of type `B`.
+#exercise( subject : "difference between declaration and function definition")[
+  What are the differences between declaring a variable and defining a function?
+]
+
+== `( A , B )` is analogous to $A times B$ or @definition_of_cartesian_product
+
+As $A times B$ contains all pairs $(a,b)$ such that $a in A$ and $b in B$, \ so is every pair `(a,b)` of type `(A,B)` if `x` is of type `A` and `b` is of type `B`.
 
 For example, if I ask GHCi to tell me the type of `(True, 'c')` (which I can do using the command `:t`), then it would tell me that the value's type is `(Bool, Char)` -
 ```haskell
--- type of a pair
+-- | type of a pair
 >>> :t (True, 'c')
 (True, 'c') :: (Bool, Char)
 ``` This reads - "GHCi, what is the type of `(True, 'c')`? \ #v( 0.1em , weak: true)
@@ -158,7 +174,7 @@ instance ( Finite a , Finite b ) => Finite (a,b)
 
 If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` with elements `Y1` and `Y2`, we can use the author-defined function `listOfAllElements` to obtain a list of all elements of certain types -
 ```haskell
--- elements of a product type
+-- | elements of a product type
 >>> listOfAllElements :: [X]
 [X1,X2,X3]
 
@@ -176,24 +192,24 @@ There are two fundamental inbuilt operations from a product type -
 
 A function to get the first component of a pair - 
 ```
--- first component of a pair
+-- | first component of a pair
 fst (a,b) = a
 ```
 and a similar function to get the second component -
 ```
--- second component of a pair
+-- | second component of a pair
 snd (a,b) = b
 ```
 
 We can define our own functions from a product type using these -
 ```haskell
--- function from a product type
+-- | function from a product type
 xorOnPair :: ( Bool , Bool ) -> Bool
 xorOnPair pair = ( fst pair ) /= ( snd pair )
 ```
 or even by pattern matching the pair -
 ```haskell
--- another function from a product type
+-- | another function from a product type
 xorOnPair' :: ( Bool , Bool ) -> Bool
 xorOnPair' ( a , b ) = a /= b
 ```
@@ -202,12 +218,16 @@ Also, we can define our functions to a product type - \
 For example, consider the useful inbuilt function `divMod`, which *divides a number by another*, and *returns* both the *quotient and the remainder as a pair*.
 Its definition is equivalent to the following -
 ```
--- function to a product type
+-- | function to a product type
 divMod :: Integer -> Integer -> ( Integer , Integer )
 divMod n m = ( n `div` m , n `mod` m )
 ```
 
-== `()` is analogous to @definition_of__singleton_set
+#exercise( subject: "size of a product type" )[
+  If a type `T` has $n$ elements, and type `T'` has $m$ elements, then how many elements does `(T.T')` have?
+]
+
+== `()` is analogous to @definition_of_singleton_set
 
 `()`, pronounced Unit, is a type that contains exactly one element. \ That unique element is `()`.
 
@@ -227,7 +247,15 @@ We can even check this using `listOfAllElements` -
 ```
 This reads - "The list of all elements of the type `()` is a list containing exactly one value, which is the value `()`."
 
-== No @definition_of__intersection of Types 
+#exercise( subject : "function to unit")[
+  Define a function of type `Bool -> ()`.
+]
+
+#exercise( subject : "function from unit")[
+  Define a function of type `() -> Bool`.
+]
+
+== No @definition_of_intersection of Types 
 
 We now need to discuss an important distinction between sets and types.
 While two different sets can have elements in common, like how both $RR$ and $NN$ have the element $10$ in common, on the other hand, two different types `T1` and `T2` cannot have any common elements.
@@ -240,16 +268,20 @@ Thus, the intersection of two different types will always be empty and doesn't m
 
 Therfore, no intersection operation is defined for types.
 
-== No @definition_of__union of Types 
+== No @definition_of_union of Types 
 
 Suppose the type `T1`$union$`T2` were an actual type. It would have elements in common with the type `T1`. As discussed just previously, this is undesirable and thus disallowed.
 
 But there is a promising alternative, for which we need to define the set-theoretic notion of *disjoint union*.
 
+#exercise( subject : "subtype" )[
+  Do you think that there can be an anlogue of the _subset_ relation $subset.eq$ for types?
+]
+
 == Disjoint Union of Sets
 
 #def( subject : "disjoint union" )[
-  *$A union.sq B$* is defined to be _$( {0} crossmark A ) union ({1} crossmark B)$_,
+  *$A union.sq B$* is defined to be _$( {0} times A ) union ({1} times B)$_,
   or equivalently, _the set of all pairs either of the form $(0,a)$ such that $a in A$, or of the form $(1,b)$ such that $b in B$_.
 ]
 
@@ -258,17 +290,17 @@ $
 X == { x_1 , x_2 , x_3 } "and" Y == { y_1 , y_2 } \ => \ X union.sq Y == { (0,x_1) , (0,x_2) , (0,x_3) , (1,y_1) , (1,y_2) }
 $
 
-The main advantage that this construct offers us over the usual @definition_of__union is that given an element $x$ from a disjoint union $A union.sq B$, it is very easy to see whether $x$ comes from $A$, or whether it comes from $B$.
+The main advantage that this construct offers us over the usual @definition_of_union is that given an element $x$ from a disjoint union $A union.sq B$, it is very easy to see whether $x$ comes from $A$, or whether it comes from $B$.
 
 For example, consider the statement - $(0,10) in RR union.sq NN$. \ 
 It is obvious that this $10$ comes from $RR$ and does not come from $NN$.\ 
 $(1,10) in RR union.sq NN $ would indicate exactly the opposite, i.e, the $10$ here comes from $NN$, not $RR$.
 
-== `Either A B` is analogous to $A union.sq B$ or @definition_of__disjoint_union
+== `Either A B` is analogous to $A union.sq B$ or @definition_of_disjoint_union
 
-The term "either" is motivated by its appearance in the definition of @definition_of__disjoint_union.
+The term "either" is motivated by its appearance in the definition of @definition_of_disjoint_union.
 
-Recall that in a @definition_of__disjoint_union , each element has to be
+Recall that in a @definition_of_disjoint_union , each element has to be
 - of the form $(0,a)$, where $a in A$, and $A$ is the set to the left of the $union.sq$ symbol, 
 - or they can be of the form $(1,b)$, where $b in B$, and $B$ is the set to the right of the $union.sq$ symbol.
 
@@ -301,7 +333,7 @@ instance ( Finite a , Finite b ) => Finite (Either a b)
 
 If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` with elements `Y1` and `Y2`, we can use the author-defined function `listOfAllElements` to obtain a list of all elements of certain types -
 ```
--- elements of an either type
+-- | elements of an either type
 >>> listOfAllElements :: [X]
 [X1,X2,X3]
 
@@ -318,7 +350,7 @@ If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` w
 We can define functions to an `Either` type. \
 Consider the following problem : We have to make a function that provides feedback on a quiz. We are given the marks obtained by a student in the quiz marked out of 10 total marks. If the marks obtained are less than 3, return `'F'`, otherwise return the marks as a percentage -
 ```haskell
--- function to an either type
+-- | function to an either type
 feedback :: Integer -> Either Char Integer
 --                     Left ~ Char,Integer ~ Right
 feedback n
@@ -342,7 +374,7 @@ If `n<3`, then we return `'F'`. To denote that `'F'` is a `Char`, we will tag `'
 We can also define a function from an `Either` type. \
 Consider the folowing problem : We are given a value that is either a boolean or a character. We then have to represent this value as a number. 
 ```haskell
--- function from an either type
+-- | function from an either type
 representAsNumber :: Either Bool Char -> Int
 --                   Left ~ Bool,Char ~ Right
 representAsNumber ( Left  bool ) = if bool then 1 else 0
@@ -362,12 +394,16 @@ If the input to `representAsNumber` is of the form `Right char`, we know that `c
 
 We might make things clearer if we use a deeper level of pattern matching, like in the following function ( which is equivalent to the last one ).
 ```haskell
--- another function from an either type
+-- | another function from an either type
 representAsNumber' :: Either Bool Char -> Int
 representAsNumber' ( Left  False ) = 0
 representAsNumber' ( Left  True  ) = 1
 representAsNumber' ( Right char  ) = ord char
 ```
+
+#exercise( subject : "size of an either type" )[
+  If a type `T` has $n$ elements, and type `T'` has $m$ elements, then how many elements does `Either T T'` have?
+]
 
 == The `Maybe` Type
 
@@ -375,7 +411,7 @@ Consider the following problem : We are asked make a function `reciprocal` that 
 
 Sounds simple enough! Let's see -
 ```
--- naive reciprocal
+-- | naive reciprocal
 reciprocal :: Rational -> Rational
 reciprocal x = 1/x
 ```
@@ -393,12 +429,12 @@ Let's add one _extra element_ to the output type `Rational`, and then `reciproca
 
 So the new output type would look something like this - $({$_extra element_$}union.sq$`Rational`$)$
 
-Notice that this ${$_extra element_$}$ is a @definition_of__singleton_set. \ Which means that if we take this _extra element_ to be the value `()`, \  and take ${$_extra element_$}$ to be the type `()`, \ 
+Notice that this ${$_extra element_$}$ is a @definition_of_singleton_set. \ Which means that if we take this _extra element_ to be the value `()`, \  and take ${$_extra element_$}$ to be the type `()`, \ 
 then we can obtain $({$_extra element_$}union.sq$`Rational`$)$ as the type `Either () Rational`.
 
 Then we can finally rewrite @code_of_naive_reciprocal to handle the case of `reciprocal 0` - 
 ```
--- reciprocal using either
+-- | reciprocal using either
 reciprocal :: Rational -> Either () Rational
 reciprocal 0 = Left  ()
 reciprocal x = Right (1/x)
@@ -412,7 +448,7 @@ There is already an inbuilt way to express this notion of `Either () Rational` i
 
 Which means that we can rewrite @code_of_reciprocal_using_either using `Maybe` instead -
 ```haskell
--- reciprocal using maybe
+-- | function from a maybe type
 reciprocal :: Rational -> Maybe Rational
 reciprocal 0 = Nothing
 reciprocal x = Just (1/x)
@@ -452,7 +488,7 @@ instance Finite t => Finite ( Maybe t )
 
 If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` with elements `Y1` and `Y2`, we can use the author-defined function `listOfAllElements` to obtain a list of all elements of certain types -
 ```
--- elements of a maybe type
+-- | elements of a maybe type
 >>> listOfAllElements :: [X]
 [X1,X2,X3]
 
@@ -472,10 +508,22 @@ If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` w
 [Nothing,Just '\NUL',Just '\SOH',Just '\STX',Just '\ETX', . . . ]
 ```
 
-== `Void` is analogous to ${}$ or @definition_of__empty_set
+#exercise( subject : "size of a maybe type" )[
+  If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
+]
+
+We can define functions to a `Maybe` type.
+For example consider the problem of making an inverse function of `reciprocal`, i.e., a function `inversOfReciprocal` s.t. #align(center)[$forall$` x::Rational `,` inverseOfReciprocal ( reciprocal x ) == x `] as follows -
+```haskell
+-- | function to a maybe type
+inverseOfReciprocal Nothing  = 0
+inversOfReciprocal  (Just x) = (1/x)
+```
+
+== `Void` is analogous to ${}$ or @definition_of_empty_set
 
 The type `Void` has no elements at all.
 
 This also means that no actual value has type `Void`.
 
-Even though it is out-of-syllabus, an interesting exercise is to try to define a function of type `( Bool -> Void ) -> Void`.
+Even though it is out-of-syllabus, an interesting exercise is to #exercise[try to define a function of type `( Bool -> Void ) -> Void`.]
