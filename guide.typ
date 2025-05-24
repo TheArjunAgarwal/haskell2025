@@ -487,6 +487,12 @@ Once you've converted your tree, you can display it by applying the typst functi
 
 #c(i:i,"#tree(([A],([B],[D],[E]),([C],[F],[G])))")
 
+=== Padding
+
+We can control how much whitespace padding surrounds each node by setting the ```typ pad``` coefficient settable argument of the ```typ #tree()``` function, \ usually to ensure that the edge does not touch the content of the node.
+
+#c(i:i,"#tree(pad: 0.55,([A],([B],[D],[E]),([C],[F],[G])))")
+
 === Width of a Tree
 
 We can control the width of a tree by the ```typ spread``` coefficient settable argument of the ```typ #tree()``` function.
