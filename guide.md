@@ -175,8 +175,10 @@ haskell-course/
 ├── Contents.typ
 ├── Definition.typ
 ├── Prelude.typ
+├── Tree.typ
 ├── assignments-typ
 │   ├── week01.typ
+│   ├── week02.typ
 │   ├── ...
 │   └── week16.typ
 ├── chapters-typ
@@ -184,27 +186,29 @@ haskell-course/
 │   ├── ch02_setup_linux.typ
 │   ├── ch02_setup_mac.typ
 │   ├── ch02_setup_win.typ
-│   ├── ch03_datatypes.typ
-│   ├── ch04_tuples.typ
-│   ├── ch05_lists.typ
-│   ├── ch06_polymorphism.typ
-│   ├── ch07_advanced_lists.typ
-│   ├── ch08_precomp-datatypes.typ
-│   ├── ch09_computation.typ
-│   ├── ch10_complexity.typ
-│   ├── ch11_postcomp-datatypes.typ
-│   ├── ch12_typeclasses.typ
+│   ├── ...
 │   ├── ch13_monad.typ
 │   └── example_chapter.typ
+├── code_license.txt
+├── example.pdf
 ├── example.typ
 ├── extra-typ
 │   ├── appendix.typ
 │   └── preface.typ
+├── figures
+├── guide.md
+├── main.pdf
 ├── main.typ
 ├── solutions-typ
 │   ├── week01_sol.typ
+│   ├── week02_sol.typ
 │   ├── ...
 │   └── week16_sol.typ
+├── style.typ
+├── text_license.txt
+├── theme.tmTheme
+├── theorems.typ
+└── tutorials-typ
 ```
 Tutorials, assignments and solutions refer to tutorial handouts(if needed), class and tutorial assignments and their solution files. Keep them as .typ/.tex files for now, the required .hs/.lhs files will be generated later.
 

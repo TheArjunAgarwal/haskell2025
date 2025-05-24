@@ -718,9 +718,9 @@ We know that $ln(1+x) = x - x^2/2 + x^3/3 - dots$. For small $x, ln(1+x) approx 
 -- Log defined using Taylor Approximation
 logTay :: Float -> Float -> Float
 logTay tol n 
-  | n <= 0 = error "Negative log not defined"
-  | abs(n - 1) <= tol = n - 1  -- using log(1 + x) ≈ x
-  | otherwise = 2 * logTay tol (sqrt n)
+  | n <= 0                      = error "Negative log not defined"
+  | abs(n - 1) <= tol           = n - 1  -- using log(1 + x) ≈ x
+  | otherwise                   = 2 * logTay tol (sqrt n)
 ```
 This is a very efficient algorithm for approximating `log`. Doing better requires the use of either pre-computed lookup tables(which would make the programme heavier) or use more sophesticated mathematical methods which while more accurate would slow the programme down. There is an excercise in the back, where you will implement a state of the art algorithm to compute `log` accurately upto 400-1000 decimal places.
 
