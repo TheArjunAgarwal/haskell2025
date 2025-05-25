@@ -439,39 +439,33 @@ A *_titled_* exercise with a *_unique title_* can referenced by the usual syntax
 
 #c("Recalling @exercise_of_maybe, we can proceed.")
 
-== Quote
+== Quote 
 
 #let i = "#import \"Modules/Quote.typ\": quote" 
 
 To use this module, we need to #show_import(i)
 
-// #c(i:i,"#exercise( subject : \"maybe\" )[
-//   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
-// ]")
-
 === Quote Box
 
-We can call the function ```typ #quote()``` upon some ```typ content``` put that ```typ content``` in a _*floating*_ exercise box. \ 
-We can put any text that is meant to be an exercise in an exercise box.
+We can call the function ```typ #quote()``` upon some ```typ content``` put that ```typ content``` in a _*floating*_ quote box. \ 
+Quote boxes are meant to have quotes from other source materials like articles or books or people.
 
-#c(i:i,"#exercise[
-  If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
+#c(i:i,"#quote[
+  The name is Bond, James Bond.
 ]")
 
 === Quote Box Title
 
-We will often find it a good idea to title an exercise, because then it will show up in the collection exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
-We can set the ```typst subject``` settable argument of the ```typst #exercise()``` function to a _*```typ string```*_ if we want to add a title.
+Title will be used to give context to the quote, where they are from and so on, and one can reference a quote using this. \
+We can set the ```typst subject``` settable argument of the ```typst #quote()``` function to a _*```typ string```*_ if we want to add a title.
 
-#c(i:i,"#exercise( subject : \"maybe\" )[
-  If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
+#c(i:i,"#quote( subject : \"Daniel Craig, Casion Royale\" )[
+  The name is Bond, James Bond.
 ]")
 
-=== Referencing an Quote
+=== Referencing a Quote
 
-A *_titled_* exercise with a *_unique title_* can referenced by the usual syntax.
-
-#c("Recalling @exercise_of_maybe, we can proceed.")
+This I need to figure out, i don't know if commas can be a part of the name.
 
 == Proof
 
