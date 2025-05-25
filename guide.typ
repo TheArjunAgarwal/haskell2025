@@ -15,7 +15,7 @@
 
 == 🛠 Chapter 2: Haskell Setup
 
-- *Topics*: Minimal setup (hopefully using HaskellKISS) for different OS.
+- *Topics*: Minimal setup (hopefully using haskellKISS) for different OS.
 - *Time*: 1 Parallel Tutorial  
 - *Authors*:  
   - *Windows*: R  
