@@ -328,7 +328,7 @@ hello     _  =  \"world\"
 
 === Hiding a Code Block
 
-We can hide a code block by putting it inside the Typst function ```Typst #metadata()```.
+We can hide a code block by putting it inside the Typst function ```typ #metadata()```.
 
 #c("#metadata(
 ```
@@ -337,7 +337,7 @@ hello     _  =  \"world\"
 ```
 )")
 
-This can be *_useful_* if paired with the syntax required for *_Literate Haskell_*, as then we can have code that doesn't appear on the PDF, but still executable by Literate Haskell. \ And thus readers would stilll be able to access it in GHCi without it taking up valuable reading space on the PDF.
+This can be *_useful_* if paired with the syntax required for *_Literate Haskell_*, as then we can have code that doesn't appear on the PDF, but still executable by Literate Haskell. \ And thus readers would still be able to access it in GHCi without it taking up valuable reading space on the PDF.
 
 === Code Block Title
 
@@ -382,7 +382,7 @@ To increase readability, we can emphasize the subject of the dinition by wrappin
 
 === Emphasizing the Definition
 
-To increase readabilty, we can emphasize _*the part of the text that is the actual definition*_ by wrapping that part in ```typ __```.
+To increase readability, we can emphasize _*the part of the text that is the actual definition*_ by wrapping that part in ```typ __```.
 
 #c(i:i,"#def[
   The empty set is the _set that contains no elements_ or equivalently, _${}$_.
@@ -392,7 +392,7 @@ To increase readabilty, we can emphasize _*the part of the text that is the actu
 
 We will often find it a good idea to title a definition, because then it will show up in the table of
 contents, in the glossary and can be referenced. \
-We can set the ```typst subject``` settable argument of the ```typst #def()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ subject``` settable argument of the ```typ #def()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#def(subject: \"empty set\")[
   The empty set is the set that contains no elements or equivalently, ${}$.
@@ -427,7 +427,7 @@ We can put any text that is meant to be an exercise in an exercise box.
 === Exercise Box Custom Title
 
 We will often find it a good idea to title an exercise, because then it will show up in the collection of exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
-We can set the ```typst subject``` settable argument of the ```typst #exercise()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ subject``` settable argument of the ```typ #exercise()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#exercise( subject : \"maybe\" )[
   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
@@ -457,7 +457,7 @@ Quote boxes are meant to have quotes from other source materials like articles o
 === Quote Box Title
 
 Title will be used to give context to the quote, where they are from and so on, and one can reference a quote using this. \
-We can set the ```typst subject``` settable argument of the ```typst #quote()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ subject``` settable argument of the ```typ #quote()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#quote( subject : \"Daniel Craig, Casion Royale\" )[
   The name is Bond, James Bond.
@@ -484,7 +484,7 @@ We can treat any text that is meant to be an proof in this manner.
 
 === Theorem Environment
 
-To add line with a "Theroem" tag above the proof, we can set the ```typst thm``` settable argument of the ```typ #proof``` function to that line.
+To add line with a "Theroem" tag above the proof, we can set the ```typ thm``` settable argument of the ```typ #proof``` function to that line.
 
 #c(i:i,"#proof( thm: [This is a theorem statement.] )[
   Here is a proof.
