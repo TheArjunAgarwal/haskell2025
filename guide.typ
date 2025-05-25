@@ -168,7 +168,7 @@
 
 = 🗂 Directory Structure
 In general, do not make new typst files in the chapter area, just edit the previously existent ones.
-If you use a figure, please save it as a seperate .typ or .asy file in figures and import when required.
+If you use a figure, please save it as a separate .typ or .asy file in figures and import when required.
 
 ```bash
 haskell-course/
@@ -213,7 +213,7 @@ haskell-course/
 Tutorials, assignments and solutions refer to tutorial handouts(if needed), class and tutorial assignments and their solution files. Keep them as .typ/.tex files for now, the required .hs/.lhs files will be generated later.
 
 Also, if you need to cite something, cite it at the end of your chapter as a comment starting with cite.
-```Typst
+```typ
 // cite:
 // citation 1
 // citation 2
@@ -424,9 +424,9 @@ We can put any text that is meant to be an exercise in an exercise box.
   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
 ]")
 
-=== Exercise Box Title
+=== Exercise Box Custom Title
 
-We will often find it a good idea to title an exercise, because then it will show up in the collection exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
+We will often find it a good idea to title an exercise, because then it will show up in the collection of exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
 We can set the ```typst subject``` settable argument of the ```typst #exercise()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#exercise( subject : \"maybe\" )[
@@ -509,7 +509,7 @@ We can control the depth of a tree by the ```typ grow``` coefficient settable ar
 
 #let j = "#import \"Modules/Tree.typ\": dots"
 
-To do this we need to #show_import(j).
+To do this we need to #show_import(j)
 
 We can suggest that a tree is very wide by making one the nodes the ```typ #dots``` function from this module.
 
@@ -528,7 +528,7 @@ We can suggest that a tree is very wide by making one the nodes the ```typ #dots
 
 #let j = "#import \"Modules/Tree.typ\": far_away"
 
-To do this we need to #show_import(j).
+To do this we need to #show_import(j)
 
 We can suggest that a tree is very wide by applying ```typ #far_away()``` function from this module on one of the nodes.
 
