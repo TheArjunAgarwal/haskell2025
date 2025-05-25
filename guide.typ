@@ -439,6 +439,33 @@ A *_titled_* exercise with a *_unique title_* can referenced by the usual syntax
 
 #c("Recalling @exercise_of_maybe, we can proceed.")
 
+== Quote 
+
+#let i = "#import \"Modules/Quote.typ\": quote" 
+
+To use this module, we need to #show_import(i)
+
+=== Quote Box
+
+We can call the function ```typ #quote()``` upon some ```typ content``` put that ```typ content``` in a _*floating*_ quote box. \ 
+Quote boxes are meant to have quotes from other source materials like articles or books or people.
+
+#c(i:i,"#quote[
+  The name is Bond, James Bond.
+]")
+
+=== Quote Box Title
+
+Title will be used to give context to the quote, where they are from and so on, and one can reference a quote using this. \
+We can set the ```typst subject``` settable argument of the ```typst #quote()``` function to a _*```typ string```*_ if we want to add a title.
+
+#c(i:i,"#quote( subject : \"Daniel Craig, Casion Royale\" )[
+  The name is Bond, James Bond.
+]")
+
+=== Referencing a Quote
+
+This I need to figure out, i don't know if commas can be a part of the name.
 
 == Proof
 

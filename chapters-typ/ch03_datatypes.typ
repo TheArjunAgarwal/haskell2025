@@ -453,7 +453,7 @@ divide n d = go 0 n where
 
 An excercise left for the reader is to figure out which kind of division is this, floored or trunicated, and implement the one we haven't yourself. Let's now tal
 
-=== Exponantion
+=== Exponentiation
 Haskell defines for us three exponation operators, namely `(^^), (^), (**)`. 
 
 #exercise[
@@ -932,6 +932,8 @@ This means one could simply turn a whole string lower case or filter out only th
 ]
 Considering, square root and cube root are well behaved, implement Newton–Raphson method.
 ]
+
+// Suggest that we add a section about types and correctness of code.
 
 // cite
 // Curry Howerd by Example - CJ Quines
