@@ -933,6 +933,8 @@ This means one could simply turn a whole string lower case or filter out only th
 Considering, square root and cube root are well behaved, implement Newton–Raphson method.
 ]
 
+// Suggest that we add a section about types and correctness of code.
+
 // cite
 // Curry Howerd by Example - CJ Quines
 // Programming in Haskell - Grahm Hutton
