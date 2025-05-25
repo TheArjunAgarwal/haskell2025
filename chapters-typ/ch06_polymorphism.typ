@@ -7,9 +7,7 @@
 
 // Chapter content goes here
 
-= Polymorphism and Higher Order Functions
-
-== Polymorphism
+= Polymorphism
 
 Functions are our way, to interact with the elements of a type, and one can define functions in one of the two following ways:
 + Define an output for every single element.
@@ -21,6 +19,7 @@ Up until the section about lists, we saw how to define functions from a given ty
 
 The first is too look at the possible inputs and define the outputs directly:
 ```
+-- | nand 1
 nand :: Bool -> Bool -> Bool
 nand False _    = True
 nand True True  = False
@@ -30,6 +29,7 @@ nand True False = True
 
 The other way is to define the function in terms of other functions and how the elements of the type *`Bool`* behave
 ```
+-- | nand 2
 nand :: Bool -> Bool -> Bool
 nand a b = not (a && b)
 ```
@@ -42,6 +42,7 @@ Consider the type *`[Int]`*, the elements of these types are lists of integers, 
 - so to write a function for this type, one first needs to think about the fact that the _shape_ of an element looks like a list, and how one gets to the items of the list, and then treat the items like integers and write functions on them.
 - A function for lists would thus have 2 components, at least conceptually if not explicit in code itself, consider the following example:
   ```
+  -- | squaring all elements of a list 
   squareAll :: [Int] -> [Int]
   squareAll []       = []
   squareAll (x : xs) = x * x : squareAll xs  
@@ -52,6 +53,7 @@ Something similar can be done with the type *`[Bool]`*:
 - Once again, to write a function, one needs to first look at the _shape_ an element as a list, Then pick elements out of them and treat them as *`Bool`* elements.
 - An example of this will be the *`and`* function, that takes in a collection of *`Bool`* and returns *`True`* if and only if all of them are *`True`*.
   ```
+  -- | And
   and :: [Bool] -> Bool 
   and []       = True  -- We call scenarios like this 'vacuously true'
   and (x : xs) = x && and xs
@@ -94,6 +96,7 @@ A polymorphic function differs from functions we have seen in the following ways
 
 An example for such a function that we have seen in the previous section would be:
 ```
+-- | drop
 drop :: Int -> [a] -> [a]
 drop _ []     = [] 
 drop 0 ls     = ls
@@ -105,7 +108,7 @@ The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [
 A nice excerise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
-=== A Taste of Type Classes
+== A Taste of Type Classes
 Consider the case of the integer functions
 
 ```
@@ -145,6 +148,7 @@ Note that in the above cases, defining one function lets you define some other f
 We will look into how they work, and how to define your own typeclass in a later section, but for now, we use these to define better polymorphic functions.
 
 ```
+-- | elem
 elem :: Eq a => a -> [a] -> Bool
 elem _ []       = False
 elem e (x : xs) = e == x || elem e xs
@@ -171,7 +175,7 @@ Write the function `isSorted` which takes in a list as an argument, such that th
 #linebreak()
 
 
-== Higher Order Functions
+= Higher Order Functions
 
 // cite 
 // citation 1

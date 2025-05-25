@@ -453,7 +453,7 @@ divide n d = go 0 n where
 
 An excercise left for the reader is to figure out which kind of division is this, floored or trunicated, and implement the one we haven't yourself. Let's now tal
 
-=== Exponantion
+=== Exponentiation
 Haskell defines for us three exponation operators, namely `(^^), (^), (**)`. 
 
 #exercise[
