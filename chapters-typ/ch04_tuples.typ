@@ -92,7 +92,7 @@ We have enconutered a few types in the previous chapter, such as `Bool`, `Intege
 For example, 
 - `Bool` can be thought of as the *set of all bolean values*, which is {`False`, `True`}.
 - `Integer` can be thought of as the *set of all integers*, which is {`0`, `1`, `-1`, `2`, `-2`, . . . }.
-- `Char` can be thought of as the *set of all characters*, which is {`'\\NUL'`,`'\\SOH'`,`'\\STX'`, . . . ,`'a'`,`'b'`,`'c'`, . . . ,`'A'`,`'B'`,`'C'`, . . . }
+- `Char` can be thought of as the *set of all characters*, which is {`'\NUL'`,`'\SOH'`,`'\STX'`, . . . ,`'a'`,`'b'`,`'c'`, . . . ,`'A'`,`'B'`,`'C'`, . . . }
 
 If this analogy were to extend further, we might expect to see analogues of the basic kinds of sets and the common set operations for types, which we can see in the following -
 
