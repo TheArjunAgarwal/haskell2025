@@ -904,7 +904,7 @@ This means one could simply turn a whole string lower case or filter out only th
 < I will complete this section later. >
 // TO - DO
 // Rest of Characters
-// Cipher
+// Cipher(a blue print, with a part of it as excercise)
 // Excercises
 // Editing
 
@@ -912,8 +912,19 @@ This means one could simply turn a whole string lower case or filter out only th
 
 
 // Back Excercise
-#exercise[
-#def[
+#exercise(subject: "Collatz")[
+  Collatz conjucture states that for any $n in NN$ exists a $k$ such that  $c^k(n) = 1$ where $c$ is the Collatz function which is $n/2$ for even $n$ and $3n + 1$ for odd $n$.
+
+  Write a functuon `col :: Integer -> Integer` which, given a $n$, finds the smalltest $k$  such that $c^k(n) = 1$, called the Collatz chain length of $n$.
+]
+#exercise(subject: "Palindrome?")[
+  (i) Given a string of lowercase characters, write a function `paliStr :: String -> Bool` to figure out if it is a palindrome.
+  
+  (ii) Using the `show` function, write a function `paliInt :: Integer -> Bool` to figure out if a number is palindrome.
+]
+
+#exercise(subject: "Newton–Raphson method")[
+#def(subject: "Newton–Raphson method")[
   Newton–Raphson method is a method to find the roots of a function via subsequent approximations.
   
   Given $f(x)$, we let $x_0$ be an inital guess. Then we get subsequent guesses using
@@ -922,7 +933,8 @@ This means one could simply turn a whole string lower case or filter out only th
   $
   As $n -> oo$, $f(x_n) -> 0$.
 
-  The intution for why this works is: imagine standing on a curve and wanting to know where it hits the x-axis. You draw the tangent line at your current location and walk down it to where it intersects the x-axis. That’s your next guess. Repeat. If the curve behaves nicely, you converge quickly to the root.
+  The intution for why this works is: imagine standing on a curve and wanting to know where it hits the x-axis. You draw the tangent line at your 
+  current location and walk down it to where it intersects the x-axis. That’s your next guess. Repeat. If the curve behaves nicely, you converge quickly to the root.
   
   Limitations of Newton–Raphson method are
   - Requires derivative: The method needs the function to be differentiable and requires evaluation of the derivative at each step.
@@ -930,8 +942,59 @@ This means one could simply turn a whole string lower case or filter out only th
   - Fails near inflection points or flat slopes: If $f'(x)$ is zero or near zero, the method can behave erratically.
   - Not guaranteed to converge: Particularly for functions with multiple roots or discontinuities.
 ]
-Considering, square root and cube root are well behaved, implement Newton–Raphson method.
+Considering, $f(x) = x^2 - a$ and $f(x) = x^3 - a$ are well behaved for all $a$, implement `sqrtNR :: Float -> Float -> Float` and `cbrtNR :: Float -> Float -> Float` which finds the square root and cube root of a number upto a tolerance using the Newton–Raphson method.
+
+Hint: The number we are trying to get the root of is a sufficiently good guess for numbers absolutly greater than $1$. Otherwise, $1$ or $-1$ is a good guess. We leave it to your mathematical intution to figure out when to use what.
 ]
+#exercise(subject: "Simpson's Fermat")[
+  Fermat's last theorem claims that $x^n + y^n = z^n$ has no solution over integers for integral $n > 2$. After 200 years of work, the proof was finally found by Andrew Wiles in 1998.
+
+  However, in the Simpson's episode titled “The Wizard of Evergreen Terrace”, Homer writes $3987^12 + 4365^12 = 4472^12$. If you put this on your phone calculator, or any handheld calculator, you shall find this to be true.
+
+  This is a prank by one of the show's writer David S. Cohen who wrote a code to find near misses to Fermat's Last Theorem. We want you to find some more such near misses. Write a function `simpsonFermat :: (Int, Int) -> (Int, Int) -> Float -> (Int, Int, Int, Int)` which takes the range for the bases, range for the exponents and an error tolerence(in percentage of distence form the RHS) and returns a tuple containing the satisfying bases and the exponent.
+]
+#exercise(subject:"Digital Root")[
+  The digital root of a number is the digit obtained by summing digits until you get a single digit. For example `digitalRoot 9875 = digitalRoot (9+8+7+5) = digitalRoot 29 = digitalRoot (2+9) = digitalRoot 11 = digitalRoot (1+1) = 2`. 
+  
+  Implement the function `digitalRoot :: Int -> Int`.
+  ]
+#exercise(subject: "AGM Log")[
+  A rather uncommon mathematical function is AGM or arthmatic-geometric mean. For given two numbers, 
+  $
+  op("AGM")(x,y) = cases(
+    x & text("if") x = y\
+    op("AGM") ((x+y)/2, sqrt(x y)) & text("otherwise")
+  )
+  $
+  Write a function `agm :: (Float, Float) -> Float -> Float` which takes two floats and returns the AGM within some tolerance(as getting to the exact one recusrsivly takes, about infinite steps).
+
+  Using AGM, we can define
+  $
+    ln(x) approx pi/(2 op("AGM")(1, 2^(2-m)/x)) - m ln(2)
+  $
+  which is precise upto $p$ bits where $x 2^m > 2^(p/2)$.
+
+  Using the above defined `agm` function, define `logAGM :: Int -> Float -> Float -> Float` which takes the number of bits of precision, the tolerance for `agm` and a number greater than $1$ and gives the natural logithrm of that number.
+
+  Hint: To simplify the question, we added the fact that the input will be greater than $1$. This means a simplification is taking `m = p/2` directly. While geting a better `m` is not hard, this is just simpler.
+]
+#exercise(subject : "Multiplexer")[
+  A multiplexer is a hardware element which chooses the input stream from a variety of streams.
+
+  It is made up of $2^n + n$ components where the $2^n$ are the input streams and the $n$ are the selectors.
+
+  (i) Implement a 2 stream multiplex `mux2 :: Bool -> Bool -> Bool -> Bool` where the first two booleans are the inputs of the streams and the third boolean is the selector. When the selector is `True`, take input from stream $1$, otherwise from stream $2$.
+
+  (ii) Implement a 2 stream multiplex using only boolean operations.
+  
+  (iii) Implement a 4 stream multiplex. The type should be `mux4 :: Bool -> Bool -> Bool -> Bool -> Bool -> Bool -> Bool`. (There are 6 arguments to the function, 4 input streams and 2 selectors). We encourage you to do this in atleast 2 ways (a) Using boolean operations (b) Using only `mux2`.
+
+  Could you describe the general scheme to define `mux2^n` (a) using only boolean operations (b) using only `mux2^(n-1)` (c) using only `mux2`?
+]
+#exercise(subject: "Moduler Exponation")[
+  Implement modular exponentiation ($a^b mod m$) efficiently using the fast exponentiation method. The type signature should be `modExp :: Int -> Int -> Int -> Int`
+]
+
 
 // Suggest that we add a section about types and correctness of code.
 
