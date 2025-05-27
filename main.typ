@@ -22,6 +22,8 @@ Prelude.settings({
 
 Book.title_page(title:title,author:author)
 
+set heading(offset: 1)
+
 set page(numbering: "i") ; counter(page).update(1)
 
 Book.copyright_declaration(title:title,author:author)

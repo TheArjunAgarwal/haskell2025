@@ -125,8 +125,14 @@
     )
     it
   }
+    
+  // because heading levels were to be changed to fixed metadata index
+  show heading.where(level: 2): set text(size: 16pt)
+  show heading.where(level: 3): set text(size: 14pt)
+  show heading.where(level: 4): set text(size: 12pt)
 
-user_end_body}
+  user_end_body
+}
 
 //---------tests--------------------------
 

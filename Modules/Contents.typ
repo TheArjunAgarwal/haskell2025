@@ -2,6 +2,9 @@
 
 //--------------------functions-----------------------
 
+#set outline(indent : auto)
+  
+
 #let contents_selector = {
   figure.where( kind : "chapter_title" )
   .or( heading.where( outlined : true )
@@ -23,33 +26,45 @@
   ) 
   
   [\ ]
+
   
   show outline.entry : it => figure(align(center,{
     
-    if targets( it , "chapter_title" ) [
+    // if targets( it , "chapter_title" ) [
+    //   #set text( size : 1.4em , weight: "extrabold" )
+    //   #v( 2em )
+    //   #link( 
+    //     it.element.location() , 
+    //     it.element.supplement 
+    //   )
+    //   #box( width: 1fr , repeat(" ") ) 
+    //   #text( weight : "extrabold" , it.page() )
+    //   #v( 0.25em )
+    // ]
+  
+    if it.element.func() == heading and it.level == 1 [
       #set text( size : 1.4em , weight: "extrabold" )
       #v( 2em )
       #link( 
         it.element.location() , 
-        it.element.supplement 
+        it.body()
       )
       #box( width: 1fr , repeat(" ") ) 
       #text( weight : "extrabold" , it.page() )
       #v( 0.25em )
     ]
 
-    if it.element.func() == heading {
+    if it.element.func() == heading and it.level != 1 {
       v(0.2em)
       set text( size : 1.3em )
-      it.indented(
-        it.prefix() , 
-        link( it.element.location() , it.body() )
-        + " " 
-        + box( width : 1fr , repeat(gap : 0.15em)[.] ) 
-        + " "
-        + it.page()
-        + h( ( it.level - 1 ) * 1em )
-      )
+      
+      let ind = h( (it.level - 2)*1.2em )
+      let lk = link( it.element.location(), it.body() )
+      let fill = box( width : 1fr , repeat(gap : 0.15em)[.] )
+      let pn = it.page()
+
+      ind + lk + " " + fill + " " + pn + ind + [\ ]
+      // was not able to figure out how to do it using in built functions, but basically, I want top level headings to be chapters, then next level headings to be whatever was done inside a chapter, but I don't want the extra indent to keep it consistent with how it was before. So all indents shift 1 level back.
     }
     
     if targets( it , "fancy_box" ) {

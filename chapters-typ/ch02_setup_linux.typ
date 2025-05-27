@@ -1,8 +1,7 @@
 #import "../Modules/style.typ": *
 #show: codly-init.with()
 #codly(languages: codly-languages)
-= setup
-== setup linux (feel free to change it)
+= setup linux (feel free to change it)
 
 // Chapter content goes here
 
