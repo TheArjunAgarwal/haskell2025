@@ -6,13 +6,12 @@
 ) = align( center + horizon )[#figure(
   {
 
-    set par( leading: 2.5em)
+    set par( leading: 0.35em)
     
     text( 
-      size : 80pt , 
-      weight : "extrabold" , 
-      title 
-    ) + [\ \ ]
+      size : 50pt , 
+      heading(level : 1, title) 
+    ) + [\ \ \ ]
     
     text( 
       size : 16pt , 

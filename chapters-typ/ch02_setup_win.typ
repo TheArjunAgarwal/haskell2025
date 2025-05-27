@@ -2,7 +2,7 @@
 #show: codly-init.with()
 #codly(languages: codly-languages)
 
-== setup win (feel free to change it)
+= setup win (feel free to change it)
 
 // Chapter content goes here
 
