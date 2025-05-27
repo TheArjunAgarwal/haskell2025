@@ -15,7 +15,7 @@
 
 == 🛠 Chapter 2: Haskell Setup
 
-- *Topics*: Minimal setup (hopefully using HaskellKISS) for different OS.
+- *Topics*: Minimal setup (hopefully using haskellKISS) for different OS.
 - *Time*: 1 Parallel Tutorial  
 - *Authors*:  
   - *Windows*: R  
@@ -168,7 +168,7 @@
 
 = 🗂 Directory Structure
 In general, do not make new typst files in the chapter area, just edit the previously existent ones.
-If you use a figure, please save it as a seperate .typ or .asy file in figures and import when required.
+If you use a figure, please save it as a separate .typ or .asy file in figures and import when required.
 
 ```bash
 haskell-course/
@@ -213,7 +213,7 @@ haskell-course/
 Tutorials, assignments and solutions refer to tutorial handouts(if needed), class and tutorial assignments and their solution files. Keep them as .typ/.tex files for now, the required .hs/.lhs files will be generated later.
 
 Also, if you need to cite something, cite it at the end of your chapter as a comment starting with cite.
-```Typst
+```typ
 // cite:
 // citation 1
 // citation 2
@@ -328,7 +328,7 @@ hello     _  =  \"world\"
 
 === Hiding a Code Block
 
-We can hide a code block by putting it inside the Typst function ```Typst #metadata()```.
+We can hide a code block by putting it inside the Typst function ```typ #metadata()```.
 
 #c("#metadata(
 ```
@@ -337,7 +337,7 @@ hello     _  =  \"world\"
 ```
 )")
 
-This can be *_useful_* if paired with the syntax required for *_Literate Haskell_*, as then we can have code that doesn't appear on the PDF, but still executable by Literate Haskell. \ And thus readers would stilll be able to access it in GHCi without it taking up valuable reading space on the PDF.
+This can be *_useful_* if paired with the syntax required for *_Literate Haskell_*, as then we can have code that doesn't appear on the PDF, but still executable by Literate Haskell. \ And thus readers would still be able to access it in GHCi without it taking up valuable reading space on the PDF.
 
 === Code Block Title
 
@@ -382,7 +382,7 @@ To increase readability, we can emphasize the subject of the dinition by wrappin
 
 === Emphasizing the Definition
 
-To increase readabilty, we can emphasize _*the part of the text that is the actual definition*_ by wrapping that part in ```typ __```.
+To increase readability, we can emphasize _*the part of the text that is the actual definition*_ by wrapping that part in ```typ __```.
 
 #c(i:i,"#def[
   The empty set is the _set that contains no elements_ or equivalently, _${}$_.
@@ -392,7 +392,7 @@ To increase readabilty, we can emphasize _*the part of the text that is the actu
 
 We will often find it a good idea to title a definition, because then it will show up in the table of
 contents, in the glossary and can be referenced. \
-We can set the ```typst subject``` settable argument of the ```typst #def()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ subject``` settable argument of the ```typ #def()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#def(subject: \"empty set\")[
   The empty set is the set that contains no elements or equivalently, ${}$.
@@ -424,10 +424,10 @@ We can put any text that is meant to be an exercise in an exercise box.
   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
 ]")
 
-=== Exercise Box Title
+=== Exercise Box Custom Title
 
-We will often find it a good idea to title an exercise, because then it will show up in the collection exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
-We can set the ```typst subject``` settable argument of the ```typst #exercise()``` function to a _*```typ string```*_ if we want to add a title.
+We will often find it a good idea to title an exercise, because then it will show up in the collection of exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
+We can set the ```typ subject``` settable argument of the ```typ #exercise()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#exercise( subject : \"maybe\" )[
   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
@@ -457,7 +457,7 @@ Quote boxes are meant to have quotes from other source materials like articles o
 === Quote Box Title
 
 Title will be used to give context to the quote, where they are from and so on, and one can reference a quote using this. \
-We can set the ```typst subject``` settable argument of the ```typst #quote()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ subject``` settable argument of the ```typ #quote()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#quote( subject : \"Daniel Craig, Casion Royale\" )[
   The name is Bond, James Bond.
@@ -484,7 +484,7 @@ We can treat any text that is meant to be an proof in this manner.
 
 === Theorem Environment
 
-To add line with a "Theroem" tag above the proof, we can set the ```typst thm``` settable argument of the ```typ #proof``` function to that line.
+To add line with a "Theroem" tag above the proof, we can set the ```typ thm``` settable argument of the ```typ #proof``` function to that line.
 
 #c(i:i,"#proof( thm: [This is a theorem statement.] )[
   Here is a proof.
@@ -536,7 +536,7 @@ We can control the depth of a tree by the ```typ grow``` coefficient settable ar
 
 #let j = "#import \"Modules/Tree.typ\": dots"
 
-To do this we need to #show_import(j).
+To do this we need to #show_import(j)
 
 We can suggest that a tree is very wide by making one the nodes the ```typ #dots``` function from this module.
 
@@ -555,7 +555,7 @@ We can suggest that a tree is very wide by making one the nodes the ```typ #dots
 
 #let j = "#import \"Modules/Tree.typ\": far_away"
 
-To do this we need to #show_import(j).
+To do this we need to #show_import(j)
 
 We can suggest that a tree is very wide by applying ```typ #far_away()``` function from this module on one of the nodes.
 
