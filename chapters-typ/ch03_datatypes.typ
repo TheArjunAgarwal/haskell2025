@@ -1001,3 +1001,11 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
 // cite
 // Curry Howerd by Example - CJ Quines
 // Programming in Haskell - Grahm Hutton
+
+
+
+// Editing Advice
+// 1. Keep it relavent
+// 2. Idiotproof
+// 3. Define Stuff also Translate
+// 4. Float?
