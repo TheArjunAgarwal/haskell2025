@@ -130,6 +130,8 @@
   show heading.where(level: 2): set text(size: 16pt)
   show heading.where(level: 3): set text(size: 14pt)
   show heading.where(level: 4): set text(size: 12pt)
+    
+  set par(justify : true)
 
   user_end_body
 }

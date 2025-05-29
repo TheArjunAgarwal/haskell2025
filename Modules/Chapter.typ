@@ -6,10 +6,10 @@
 ) = align( center + horizon )[#figure(
   {
 
-    set par( leading: 0.35em)
+    set par( leading: 0.35em, justify: false)
     
     text( 
-      size : 50pt , 
+      size : 45pt , 
       heading(level : 1, title) 
     ) + [\ \ \ ]
     

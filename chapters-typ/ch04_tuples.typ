@@ -405,7 +405,7 @@ representAsNumber' ( Right char  ) = ord char
   If a type `T` has $n$ elements, and type `T'` has $m$ elements, then how many elements does `Either T T'` have?
 ]
 
-== The `Maybe` Type
+== The `Maybe` Type <maybe>
 
 Consider the following problem : We are asked make a function `reciprocal` that reciprocates a rational number, i.e., $( x |-> 1/x ) : QQ -> QQ$.
 

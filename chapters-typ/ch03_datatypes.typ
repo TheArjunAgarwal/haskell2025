@@ -4,7 +4,7 @@
 #let definition = def
 #let example = it => [For example - \ #it]
 
-= Bool, Int, Integer and more (feel free to change it)
+= Bool, Int, Integer and more (feel free to change it) <intro-to-types>
 
 == Introduction to Types
 Haskell is a strictly typed language. This means, Haskell needs to strictly know what the type of *anything* and everything is.
