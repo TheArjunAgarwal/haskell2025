@@ -191,18 +191,22 @@ Perhaps the first place where we have encountered higher order functions is when
 
 This may seem odd first, but consider the following theorem.
 
-#proof(thm: [*Currying*, There is a _bijection_ between the sets $C^(A times B)$ and the set $(C^B)^A$\ 
+#proof(thm: [*Currying*: Given any sets $A, B, C$, there is a _bijection_ called $"curry"$ between the sets $C^(A times B)$ and the set $(C^B)^A$ such that given any function $f:C^(A times B)$ we have 
+$ 
+("curry" f) (a) (b) = f (a, b) 
+$
+Category theorists call the above condition _naturality_. 
 The notation $Y^X$ is the set of functions from $X$ to $Y$.])[
-We do so by giving 2 functions that are inverses of each other, the first one being $"curry" : C^(A times B) -> (C^B)^A$
+We prove the above by defining $"curry" : C^(A times B) -> (C^B)^A$, and then defining its inverse.
 $
 "curry"(f) :equiv x |-> (y |-> f(x, y))
 $
-And its inverse $"uncurry": (C^B)^A -> C^(A times B)$
+The inverse of $"curry"$ is called $"uncurry": (C^B)^A -> C^(A times B)$
 $
 "uncurry"(g) :equiv (x, y) |-> g(x)(y)
 $
 To complete the proof we need to show that the above functions are inverses.
-#exercise[Show that the uncurry is the inverse of curry. 
+#exercise[Show that the uncurry is the inverse of curry, and that the _naturality_ condition holds.
 
 (Note that one needs to show that uncurry is the 2-way inverse of curry, i.e, $"uncurry" compose "curry" = "id"$ and $"curry" compose "uncurry" = "id"$, one direction is not enough.)]
 ]
@@ -251,7 +255,8 @@ g . f = \a -> g (f a)
 -- example
 square :: Int -> Int 
 square x = x * x
-
+```
+```
 -- checks if a number is the same if written in reverse
 is_palindrome :: Int -> Bool 
 is_palindrome x = (s == reverse s)
