@@ -764,14 +764,14 @@ It is left as excercise to use taylor approximation to define inverse sin(`asin`
 
 
 // Back Excercise
-#exercise(subject: "Collatz")[
+#exercise(sub: "Collatz")[
   Collatz conjucture states that for any $n in NN$ exists a $k$ such that  $c^k(n) = 1$ where $c$ is the Collatz function which is $n/2$ for even $n$ and $3n + 1$ for odd $n$.
 
   Write a functuon `col :: Integer -> Integer` which, given a $n$, finds the smalltest $k$  such that $c^k(n) = 1$, called the Collatz chain length of $n$.
 ]
 
-#exercise(subject: "Newton–Raphson method")[
-#def(subject: "Newton–Raphson method")[
+#exercise(sub: "Newton–Raphson method")[
+#def(sub: "Newton–Raphson method")[
   Newton–Raphson method is a method to find the roots of a function via subsequent approximations.
   
   Given $f(x)$, we let $x_0$ be an inital guess. Then we get subsequent guesses using
@@ -794,12 +794,12 @@ Considering, $f(x) = x^2 - a$ and $f(x) = x^3 - a$ are well behaved for all $a$,
 Hint: The number we are trying to get the root of is a sufficiently good guess for numbers absolutly greater than $1$. Otherwise, $1$ or $-1$ is a good guess. We leave it to your mathematical intution to figure out when to use what.
 ]
 
-#exercise(subject:"Digital Root")[
+#exercise(sub:"Digital Root")[
   The digital root of a number is the digit obtained by summing digits until you get a single digit. For example `digitalRoot 9875 = digitalRoot (9+8+7+5) = digitalRoot 29 = digitalRoot (2+9) = digitalRoot 11 = digitalRoot (1+1) = 2`. 
   
   Implement the function `digitalRoot :: Int -> Int`.
   ]
-#exercise(subject: "AGM Log")[
+#exercise(sub: "AGM Log")[
   A rather uncommon mathematical function is AGM or arthmatic-geometric mean. For given two numbers, 
   $
   op("AGM")(x,y) = cases(
@@ -832,7 +832,7 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
 
   Could you describe the general scheme to define `mux2^n` (a) using only boolean operations (b) using only `mux2^(n-1)` (c) using only `mux2`?
 ]
-#exercise(subject: "Moduler Exponation")[
+#exercise(sub: "Moduler Exponation")[
   Implement modular exponentiation ($a^b mod m$) efficiently using the fast exponentiation method. The type signature should be `modExp :: Int -> Int -> Int -> Int`
 ]
 

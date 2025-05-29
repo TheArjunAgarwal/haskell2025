@@ -155,14 +155,14 @@ This means one could simply turn a whole string lower case or filter out only th
 // Rest of Characters
 // Cipher(a blue print, with a part of it as excercise)
  
-#exercise(subject: "Palindrome?")[
+#exercise(sub: "Palindrome?")[
   (i) Given a string of lowercase characters, write a function `paliStr :: String -> Bool` to figure out if it is a palindrome.
   
   (ii) Using the `show` function, write a function `paliInt :: Integer -> Bool` to figure out if a number is palindrome.
 ]
 
 = A list question
-#exercise(subject: "Simpson's Fermat")[
+#exercise(sub: "Simpson's Fermat")[
   Fermat's last theorem claims that $x^n + y^n = z^n$ has no solution over integers for integral $n > 2$. After 200 years of work, the proof was finally found by Andrew Wiles in 1998.
 
   However, in the Simpson's episode titled “The Wizard of Evergreen Terrace”, Homer writes $3987^12 + 4365^12 = 4472^12$. If you put this on your phone calculator, or any handheld calculator, you shall find this to be true.

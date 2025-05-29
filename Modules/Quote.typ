@@ -2,7 +2,7 @@
 
 #let quote_colour = color.linear-rgb(40%,27%,27%)
 
-#let quote( subject : none , body ) = {
+#let quote(sub: none , body ) = {
   fancy_box( 
     colour : quote_colour , 
     symbol : $bar.v.circle$ , 

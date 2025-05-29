@@ -1,6 +1,6 @@
 #import "Box.typ" : fancy_box
 
-#let exercise( subject : "Exercise" , body ) = {
+#let exercise(sub: "Exercise" , body ) = {
   fancy_box( 
     colour : blue , 
     symbol : $X$ , 

@@ -7,7 +7,7 @@
 
 #let def( 
   definition_colour : definition_colour , 
-  subject : none , 
+  sub : none , 
   body 
 ) = {
 
@@ -19,7 +19,7 @@
   fancy_box(
     colour : definition_colour,
     symbol : $eq.dots$,
-    title : subject,
+    title : sub,
     label_prefix : "definition of",
     { 
       show emph : strong
@@ -32,7 +32,7 @@
 //-----------------------tests----------------------
 
 // hidden from none
-#def( subject : "disjoint union" )[ 
+#def( sub : "disjoint union" )[ 
   I'm defining _$X union.sq Y$_ here, \
   which is not *$X union Y$* exactly.
 ]

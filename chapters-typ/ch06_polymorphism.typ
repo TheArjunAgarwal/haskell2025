@@ -103,7 +103,7 @@ drop n (x:xs) = drop (n-1) xs
 ```
 The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [a]`* where we have used variables (usually called a type variable) instead of explicity mentioning a types, this still has a lot of structure, and is not the same as forgetting about types, for instance, the same variable is used in both the second argument and the output, so they need to be of the same type, dropping some elements from a list of integers also gives a list of integers, we still have all the safety and correctness guarantees that types give us.
 
-#exercise(subject: "Datatypes of some list functions")[
+#exercise(sub: "Datatypes of some list functions")[
 A nice excerise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
@@ -142,7 +142,7 @@ test.hs:8:7: error: [GHC-39999]
 
 To tackel this, we define the following:
 
-#def(subject: "Typeclasses")[
+#def(sub: "Typeclasses")[
 _Typeclasses_ are a collection of types, characterizede by their common _shape_.
 ]
 

@@ -32,17 +32,17 @@ instance Finite Int
 
 = Sets
 
-#def( subject : "set" )[
+#def(sub: "set" )[
   A *set* is a _well-defined collection of "things"_. \
   These "things" can be values, objects, or other sets. \ 
   For any given set, the "things" it contains are called its *elements*.
 ]
 
 Some basic kinds of sets are -
-- #def( subject : "empty set" )[
+- #def(sub: "empty set" )[
   The *empty set* is the _set that contains no elements_ or equivalently, _${}$_.
 ]
-- #def( subject : "singleton set" )[ A *singelten set* is a _set that contains exactly one element_, such as ${34}, {triangle}$, the set of natural numbers strictly betweeen $1$ and $3$, etc. ]
+- #def(sub: "singleton set" )[ A *singelten set* is a _set that contains exactly one element_, such as ${34}, {triangle}$, the set of natural numbers strictly betweeen $1$ and $3$, etc. ]
 
 We might have encountered some mathematical sets before, such as the set of real numbers $RR$ or the set of natural numbers $NN$, or even a set following the rules of vectors ( a vector space ).
 
@@ -51,22 +51,22 @@ We might have encountered sets as data structures acting as an unordered collect
 Note that sets can be finite ( ${12,1,compose,arrow(x)}$ ),  as well as infinite ( $NN$ ) .
 
 A fundamental keyword on sets is "$in$", or "belongs".
-#def( subject : "belongs")[
+#def(sub: "belongs")[
   Given a value $x$ and a set $S$, \ 
   *$x in S$* is a _claim_ that _$x$ is an element of $S$_,  
 ]
 
 Other common operations include - 
 
-#def( subject : "union" )[
+#def(sub: "union" )[
   *$A union B$* is the _set containing all those $x$ such that either $x in A$ or $x in B$_.
 ]
 
-#def( subject : "intersection" )[
+#def(sub: "intersection" )[
   *$A inter B$* is  the _set containing all those $x$ such that $x in A$ and $x in B$_.
 ]
 
-#def( subject : "cartesian product" )[
+#def(sub: "cartesian product" )[
   *$A times B$* is the _set containing all ordered pairs $(a,b)$ such that $a in A$ and $b in B$_.
 ]
 
@@ -75,13 +75,13 @@ $
 X == { x_1 , x_2 , x_3 } "and" Y == { y_1 , y_2 } \ => \ X times Y ==  { (x_1,y_1),(x_1,y_2),(x_2,y_1),(x_2,y_2),(x_3,y_1),(x_3,y_2) }
 $
 
-#def( subject : "exponent" )[
+#def(sub: "exponent" )[
   *$B^A$* is the _set of all functions with domain $A$ and co-domain $B$_, \
   or equivalently , the _set of all functions $f$ such that $f:A->B$_, \
   or equivalently , the _set of all functions from $A$ to $B$_.
 ]
 
-#exercise( subject: "size of exponent set" )[
+#exercise(sub: "size of exponent set" )[
   If $A$ has $|A|$ elements, and $B$ has $|B|$ elements, then how many elements does $B^A$ have?
 ]
 
@@ -116,7 +116,7 @@ y :: Bool
 y = xor True False
 ``` This reads - "Let $y in$ {False, True}. Take the value of $y$ to be the $xor$ of True and False."
 
-#exercise( subject : "declaring a variable" )[
+#exercise(sub: "declaring a variable" )[
   Declare a variable of type `Char`.
 ]
 
@@ -138,11 +138,11 @@ even :: Integer -> Bool
 even n = if n `mod` 2 == 0 then True else False
 ```
 
-#exercise( subject : "basic function definition" )[
+#exercise(sub: "basic function definition" )[
   Define a non-constant function of type `Bool -> Integer`.
 ]
 
-#exercise( subject : "difference between declaration and function definition")[
+#exercise(sub: "difference between declaration and function definition")[
   What are the differences between declaring a variable and defining a function?
 ]
 
@@ -223,7 +223,7 @@ divMod :: Integer -> Integer -> ( Integer , Integer )
 divMod n m = ( n `div` m , n `mod` m )
 ```
 
-#exercise( subject: "size of a product type" )[
+#exercise(sub: "size of a product type" )[
   If a type `T` has $n$ elements, and type `T'` has $m$ elements, then how many elements does `(T.T')` have?
 ]
 
@@ -247,11 +247,11 @@ We can even check this using `listOfAllElements` -
 ```
 This reads - "The list of all elements of the type `()` is a list containing exactly one value, which is the value `()`."
 
-#exercise( subject : "function to unit")[
+#exercise(sub: "function to unit")[
   Define a function of type `Bool -> ()`.
 ]
 
-#exercise( subject : "function from unit")[
+#exercise(sub: "function from unit")[
   Define a function of type `() -> Bool`.
 ]
 
@@ -274,13 +274,13 @@ Suppose the type `T1`$union$`T2` were an actual type. It would have elements in 
 
 But there is a promising alternative, for which we need to define the set-theoretic notion of *disjoint union*.
 
-#exercise( subject : "subtype" )[
+#exercise(sub: "subtype" )[
   Do you think that there can be an anlogue of the _subset_ relation $subset.eq$ for types?
 ]
 
 == Disjoint Union of Sets
 
-#def( subject : "disjoint union" )[
+#def(sub: "disjoint union" )[
   *$A union.sq B$* is defined to be _$( {0} times A ) union ({1} times B)$_,
   or equivalently, _the set of all pairs either of the form $(0,a)$ such that $a in A$, or of the form $(1,b)$ such that $b in B$_.
 ]
@@ -401,7 +401,7 @@ representAsNumber' ( Left  True  ) = 1
 representAsNumber' ( Right char  ) = ord char
 ```
 
-#exercise( subject : "size of an either type" )[
+#exercise(sub: "size of an either type" )[
   If a type `T` has $n$ elements, and type `T'` has $m$ elements, then how many elements does `Either T T'` have?
 ]
 
@@ -508,7 +508,7 @@ If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` w
 [Nothing,Just '\NUL',Just '\SOH',Just '\STX',Just '\ETX', . . . ]
 ```
 
-#exercise( subject : "size of a maybe type" )[
+#exercise(sub: "size of a maybe type" )[
   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
 ]
 
