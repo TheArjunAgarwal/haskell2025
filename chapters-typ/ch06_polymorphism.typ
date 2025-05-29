@@ -79,13 +79,13 @@ Now one can define such functions for every single type, but that has 2 problems
         - Groups let us talk about sets where there is a notion of "combining" things together with more restriction.
     - And this is a powerful tool because solving a problem in the _abstract_ version solves the problem in all _concretized_ scenarios.
     
-#quote(subject : "John Locke, An Essay Concerning Human Understanding (1690)")[
+#quote(sub: "John Locke, An Essay Concerning Human Understanding (1690)")[
 The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three: 1. Combining several simple ideas into one compound one, and thus all complex ideas are made. 2. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations. 3. The third is separating them from all other ideas that accompany them in their real existence: this is called *abstraction*, and thus all its general ideas are made. 
 ]
 
 One of the ways abstraction is handled in Haskell, and a lot of other programming languages is *Polymorphism*.
 
-#def(subject : "Polymorphism")[
+#def(sub: "Polymorphism")[
 A *polymorphic* function is one whose output type depends on the input type. Such a property of a function is called *polymorphism*, and the word itself is latin for _many forms_.
 ]
 
@@ -173,7 +173,7 @@ But if we do that we will encounter the same issue as we did in @code_of_Functio
 ```
 elem :: Eq a => a -> [a] -> Bool
 ```
-#exercise(subject : "Checking if a list is sorted")[
+#exercise(sub: "Checking if a list is sorted")[
 Write the function `isSorted` which takes in a list as an argument, such that the elements of the list have a notion of ordering between them, and the output should be true if the list in an ascending order (equal elements are allowed to be next to each other), and false otherwise.
 ]
 

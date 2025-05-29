@@ -4,7 +4,7 @@
   fancy_box( 
     colour : blue , 
     symbol : $X$ , 
-    title : subject, 
+    title : sub, 
     fancy_title_size : 1em , 
     label_prefix : "exercise of" , 
     outlined : false,

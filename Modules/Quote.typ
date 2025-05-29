@@ -6,7 +6,7 @@
   fancy_box( 
     colour : quote_colour , 
     symbol : $bar.v.circle$ , 
-    title : subject, 
+    title : sub, 
     fancy_title_size : 1em , 
     label_prefix : "quote of" , 
     outlined : false,

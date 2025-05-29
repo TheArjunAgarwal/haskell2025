@@ -819,7 +819,7 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
 
   Hint: To simplify the question, we added the fact that the input will be greater than $1$. This means a simplification is taking `m = p/2` directly. While geting a better `m` is not hard, this is just simpler.
 ]
-#exercise(subject : "Multiplexer")[
+#exercise(sub: "Multiplexer")[
   A multiplexer is a hardware element which chooses the input stream from a variety of streams.
 
   It is made up of $2^n + n$ components where the $2^n$ are the input streams and the $n$ are the selectors.
