@@ -294,7 +294,7 @@ f . g . h . i $ x
 ```
 which in my opinion is much simpler to read!.
 
-#link(<maybe>)[The Maybe Type] is another playground for higher order functions. Recall that `Maybe` is used to append an extra value to a type, so the type `Maybe Int` can the thought of as the set $NN union.sq {*}$ and the elements of this type are denoted as `Just n` for some integer `n` and `Nothing`.
+#link(<maybe>)[The Maybe Type] is another playground for higher order functions. Recall that `Maybe` is used to append an extra value to a type, so the type `Maybe Int` can the thought of as the set $NN union.sq {*}$ and the elements of this type are denoted as `Just n` for some integer `n` and `Nothing`. 
 
 When using the `Maybe` types, one eventually runs into a problem that looks something like this:
 - Break up the problem into a bunch of tiny steps, so make a lot of simple function and the final solution is to be achieved by combining all of them.
