@@ -75,7 +75,7 @@ $
 X == { x_1 , x_2 , x_3 } "and" Y == { y_1 , y_2 } \ => \ X times Y ==  { (x_1,y_1),(x_1,y_2),(x_2,y_1),(x_2,y_2),(x_3,y_1),(x_3,y_2) }
 $
 
-#def(sub: "exponent" )[
+#def(sub: "set exponent" )[
   *$B^A$* is the _set of all functions with domain $A$ and co-domain $B$_, \
   or equivalently , the _set of all functions $f$ such that $f:A->B$_, \
   or equivalently , the _set of all functions from $A$ to $B$_.
@@ -120,7 +120,7 @@ y = xor True False
   Declare a variable of type `Char`.
 ]
 
-== `A -> B` is analogous to $B^A$ or @definition_of_exponent
+== `A -> B` is analogous to $B^A$ or @definition_of_set_exponent
 
 As $B^A$ contains all functions from $A$ to $B$, \ so is each function `f` defined to take an input of type `A` and output of type `B` satisfy `f::A->B`.
 
