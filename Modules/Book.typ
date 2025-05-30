@@ -81,7 +81,7 @@
   
   #pagebreak()
 
-  #for _ in dip*(none,) {text( size : 22pt , [\ ] )}
+  #for _ in dip*(none,) {text( size : size , [\ ] )}
   
   #set align( center + horizon )
 
