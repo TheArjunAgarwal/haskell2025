@@ -25,7 +25,7 @@
 ) = figure(
   box( 
     fill : light(colour) , 
-    width : 100% ,
+    width : 75% ,
     inset: 6pt , 
     radius: 4pt ,
     { 
