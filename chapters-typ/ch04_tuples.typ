@@ -151,7 +151,7 @@ even n = if n `mod` 2 == 0 then True else False
 As $A times B$ contains all pairs $(a,b)$ such that $a in A$ and $b in B$, \ so is every pair `(a,b)` of type `(A,B)` if `x` is of type `A` and `b` is of type `B`.
 
 For example, if I ask GHCi to tell me the type of `(True, 'c')` (which I can do using the command `:t`), then it would tell me that the value's type is `(Bool, Char)` -
-```haskell
+```
 -- | type of a pair
 >>> :t (True, 'c')
 (True, 'c') :: (Bool, Char)
@@ -173,7 +173,7 @@ instance ( Finite a , Finite b ) => Finite (a,b)
 ]
 
 If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` with elements `Y1` and `Y2`, we can use the author-defined function `listOfAllElements` to obtain a list of all elements of certain types -
-```haskell
+```
 -- | elements of a product type
 >>> listOfAllElements :: [X]
 [X1,X2,X3]
@@ -373,6 +373,9 @@ If `n<3`, then we return `'F'`. To denote that `'F'` is a `Char`, we will tag `'
 
 We can also define a function from an `Either` type. \
 Consider the folowing problem : We are given a value that is either a boolean or a character. We then have to represent this value as a number. 
+```haskell top
+import Data.Char(ord)
+```
 ```haskell
 -- | function from an either type
 representAsNumber :: Either Bool Char -> Int
