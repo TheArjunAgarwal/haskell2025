@@ -10,7 +10,7 @@
     
     text( 
       size : 45pt , 
-      heading(level : 1, title) 
+      heading(depth : 1, title)
     ) + [\ \ \ ]
     
     text( 
@@ -25,11 +25,13 @@
 
 //--------------------settings-------------
 
-#let settings(
+#let post_title_page_settings(
   title : [Title] ,
   author : [Author] ,
   user_end_body , 
 ) = {
+
+  set heading( offset : 1 )
 
   set page(
     header : align(right,{
@@ -44,6 +46,6 @@ user_end_body}
 
 //------------------tests---------------------
 
-#settings(title : [Title] , author : [Author])[
+#post_title_page_settings(title : [Title] , author : [Author])[
   #title_page()
 ]

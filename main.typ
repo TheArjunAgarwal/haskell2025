@@ -22,8 +22,6 @@ Prelude.settings({
 
 Book.title_page(title:title,author:author)
 
-set heading(offset: 1)
-
 set page(numbering: "i") ; counter(page).update(1)
 
 Book.copyright_declaration(title:title,author:author)
@@ -121,7 +119,7 @@ for chapter_data in chapters {
     author: chapter_data.at(2)
   )
 
-  Chapter.settings(
+  Chapter.post_title_page_settings(
     title: chapter_data.at(1) ,
     author: chapter_data.at(2) ,
     include "chapters-typ//" + chapter_data.at(0)
