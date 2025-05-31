@@ -79,12 +79,15 @@ user_end_body}
   set text( 
     size : 1.3em, 
     font : "Fira Code" , 
-    stylistic-set: (3,4,5,6,9) 
+    stylistic-set: (3,4,5,6,9),
+    features: ("cv09",)
   )
   it 
 }
 
 #settings[
+
+
 
 In the `Middle` of a line.
 

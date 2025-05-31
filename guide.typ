@@ -1,6 +1,6 @@
 #let body = [
-  #show heading.where( level: 1): it => [ #pagebreak() #it ]
-  #show heading.where( level: 2): it => [ #pagebreak() #it ]
+  #show heading.where( depth: 1): it => [ #pagebreak() #it ]
+  #show heading.where( depth: 2): it => [ #pagebreak() #it ]
 
   = Chapter Sketches
 
