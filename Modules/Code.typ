@@ -82,8 +82,8 @@ user_end_body}
   set text( 
     size : 1.3em, 
     font : "Fira Code" , 
-    stylistic-set: (3,4,5,9),
-    features: ("cv09",)// 6 makes backslash super thin.
+    stylistic-set: (3,4,5,9),//6 makes backslash super thin
+    features: ("cv09",)
   )
   it 
 }
