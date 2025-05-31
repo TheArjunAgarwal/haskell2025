@@ -99,8 +99,9 @@
   code_text_settings : ( 
     size : 1.3em, 
     font : "Fira Code" , 
-    stylistic-set: (3,4,5,6,9) ,
-    theme : auto //"theme.tmTheme"
+    stylistic-set: (3,4,5,9) , // 6 makes backslash super thin
+    theme : auto, //"theme.tmTheme"
+    features : ("cv24",)
   ) ,
   user_end_body
 ) = {
@@ -121,7 +122,8 @@
     set text(
       size : code_text_settings.size,
       font : code_text_settings.font,
-      stylistic-set : code_text_settings.stylistic-set 
+      stylistic-set : code_text_settings.stylistic-set ,
+      features : code_text_settings.features
     )
     it
   }
@@ -135,6 +137,9 @@
 
   user_end_body
 }
+
+#let unligate(body) = text(features: (calt : 0), body)
+
 
 //---------tests--------------------------
 
