@@ -330,12 +330,12 @@ hello     _  =  \"world\"
 
 We can hide a code block by putting it inside the Typst function ```typ #metadata()```.
 
-#c("#metadata(
+#c("#metadata[
 ```
 hello :: any -> String
 hello     _  =  \"world\"
 ```
-)")
+]")
 
 This can be *_useful_* if paired with the syntax required for *_Literate Haskell_*, as then we can have code that doesn't appear on the PDF, but still executable by Literate Haskell. \ And thus readers would still be able to access it in GHCi without it taking up valuable reading space on the PDF.
 
@@ -610,6 +610,8 @@ Book.dedication([To a job well done])
 Contents.contents
 
 set page(numbering: "1") ; counter(page).update(1)
+
+set heading( offset : 1 )
 
 body
 
