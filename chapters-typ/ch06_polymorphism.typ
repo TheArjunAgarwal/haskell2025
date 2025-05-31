@@ -2,6 +2,7 @@
 #import "../Modules/Exercise.typ" : exercise
 #import "../Modules/Quote.typ" : quote
 #import "../Modules/Proof.typ" : proof
+#import "../Modules/Code.typ" : unligate
 
 #let definition = def
 #let example = it => [For example - \ #it]
@@ -324,6 +325,7 @@ maybeMap _ Nothing  = Nothing
 
 (<$>) :: (a -> b) -> Maybe a -> Maybe b
 f <$> a = MaybeMap f a
+-- The symbol here is written as < $ > without the spaces
 
 (<.>) :: (b -> c) -> (a -> Maybe b) -> a -> Maybe c
 g <.> f = \x -> g <$> f x
@@ -331,6 +333,9 @@ g <.> f = \x -> g <$> f x
 infixr 1 <$> 
 infixr 9 <.>
 ```
+
+note: The symbol `<$>` is written as #unligate([`<$>`]).
+
 So consider the following chain of functions:
 ```
 f . g . h . i . j $ x

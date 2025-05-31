@@ -4,6 +4,9 @@
 
 #let code_colour = color.linear-rgb(30%,50%,10%)
 
+#let unligate(body) = text(features: (calt : 0), body)
+
+
 //-------------------settings-----------------------
 
 #let settings( 
@@ -79,8 +82,8 @@ user_end_body}
   set text( 
     size : 1.3em, 
     font : "Fira Code" , 
-    stylistic-set: (3,4,5,6,9),
-    features: ("cv09",)
+    stylistic-set: (3,4,5,9),
+    features: ("cv09",)// 6 makes backslash super thin.
   )
   it 
 }
