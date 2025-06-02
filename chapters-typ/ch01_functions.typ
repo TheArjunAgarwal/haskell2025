@@ -3,6 +3,7 @@
 #import "../Modules/Exercise.typ" : exercise
 #import "../Modules/Tree.typ" : tree, dots
 #let d = sym.colon.eq
+#let e = $==$
 
 = Mathematics vs Haskell (taking suggestions for a better heading) //todo
 
@@ -213,19 +214,19 @@ It is obvious that this definition does not define an actual output for, say, $f
 
 However, the previous definition of $F$ obviously defines a specific output for $F(4)$ as follows -
 $
-  F(4) &== F(3) + F(2)\
-  &== ( F(2) + F(1) ) + F(2)\
-  &== ( ( F(1) + F(0) ) + F(1) ) + F(2)\
-  &== ( ( 1 + F(0) ) + F(1) ) + F(2)\
-  &== ( ( 1 + 1 ) + F(1) ) + F(2)\
-  &== ( 2 + F(1) ) + F(2)\
-  &== ( 2 + 1 ) + F(2)\
-  &== 3 + F(2)\
-  &== 3 + ( F(1) + F(0) )\
-  &== 3 + ( 1 + F(0) )\
-  &== 3 + ( 1 + 1 )\
-  &== 3 + 2\
-  &== 5 
+  F(4) &#e F(3) + F(2)\
+  &#e ( F(2) + F(1) ) + F(2)\
+  &#e ( ( F(1) + F(0) ) + F(1) ) + F(2)\
+  &#e ( ( 1 + F(0) ) + F(1) ) + F(2)\
+  &#e ( ( 1 + 1 ) + F(1) ) + F(2)\
+  &#e ( 2 + F(1) ) + F(2)\
+  &#e ( 2 + 1 ) + F(2)\
+  &#e 3 + F(2)\
+  &#e 3 + ( F(1) + F(0) )\
+  &#e 3 + ( 1 + F(0) )\
+  &#e 3 + ( 1 + 1 )\
+  &#e 3 + 2\
+  &#e 5 
 $
 
 #def(sub:"termination of recursive definition")[
@@ -318,7 +319,7 @@ In order to prove things about trees, we have a version of the @definition_of_pr
       phi_(t_1) "and" phi_(t_2) "and" phi_(t_3) "and" ... "and" phi_(t_(n-1)) "and" phi_(t_n) 
     ) 
     => phi_tau, \
-    "where" tau == #tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))
+    "where" tau #e #tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))
     $
   
   then $phi_t$ is true for each tree $t$ over $S$.
