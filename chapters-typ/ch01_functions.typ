@@ -25,7 +25,7 @@ In order to practice this more formal style of writing required for *haskell cod
 The language of writing mathematics is fundamentally based on two things -
 - *Symbols:* such as $0,1,2,3,x,y,z,n,alpha,gamma,delta,NN,QQ,RR,in,<,>,f,g,h,=>,forall,exists$ etc.
 and
-- *Chains of Symbols:* which are sentences or phrases made by chaining together these symbols, such as 
+- *Expressions:* which are sentences or phrases made by chaining together these symbols, such as 
   - $x^3 dot x^5 + x^2 + 1$
   - $f(g(x,y),f(a,h(v),c),h(h(h(n))))$
   - $forall alpha in RR " " exists L in RR " " forall epsilon > 0 " " exists delta > 0 " " | x - alpha | < delta => | f(x) - f (alpha) | < epsilon$
@@ -44,7 +44,7 @@ Examples include -
 - The function of squaring a real number $: RR -> RR$
 - The number of non-trivial zeroes of the Riemann Zeta function
 
-Therefore we can see that sets and functions can also be *values*, as long as it is constant, specific, and not scenario-dependent.
+Therefore we can see that relations and functions can also be *values*, as long as they are constant, specific, and not scenario-dependent.
 
 In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*,\ as it is a constant, even though it is an unknown constant.
 
@@ -63,63 +63,66 @@ For example, consider the following theorem - \
 Here, $n$ is a variable as it isn't any specific value, but rather an arbitrary instance of a certain type of value. \
 It has been used to show a certain fact that holds for *any* natural number.
 
-= Expressions
+= Well-Formed Expressions
 
-#def(sub:"mathematical expression")[
-  It is difficult to give a direct definition of an *expression*. As an alternative, we can define a _formal procedure_ to check whether a chain of symbols is an expression or not.
+//todo why care about expressions being well-formed
+//otherwise expression can be meaningless, show by example
+
+#def(sub:"well-formed mathematical expression")[
+  It is difficult to give a direct definition of a *well-formed expression*. As an alternative, we can define a _formal procedure_ to check whether an expression is  well-formed or not.
 
   The procedure is as follows - 
 
-  Given a chain of symbols _$s$_, 
+  Given an expression _$e$_, 
   
-    - first check whether _$s$_ is a 
+    - first check whether _$e$_ is a 
       - @definition_of_mathematical_value 
       #v(0pt,weak:true) or #v(5pt,weak:true)
       - @definition_of_mathematical_variable
-      #v(5pt,weak:true) in which cases _$s$_ passes the check and is an expression.
+      #v(5pt,weak:true) in which cases _$e$_ passes the check and is an expression.
     
     Failing that,
   
-    - check whether _$s$_ is of the form _$f(x_1,x_2,x_3,...,x_n)$_, where 
+    - check whether _$e$_ is of the form _$f(e_1,e_2,e_3,...,e_n)$_, where 
       - _$f$_ is a function #text(size:0.8em)[(the function can be a @definition_of_mathematical_value or @definition_of_mathematical_variable)]
       - which takes _$n$_ inputs, 
       #v(5pt,weak:true) and #v(5pt,weak:true)
-      - _$x_1,x_2,x_3,...,x_n$_ are all _expressions_ which are _valid inputs_ to _$f$_.
+      - _$e_1,e_2,e_3,...,e_n$_ are all _well-formed expressions_ which are _valid inputs_ to _$f$_.
 ]
 
-Let us use this defining procedure to check that $x^3 dot x^5 + x^2 + 1$ is an expression. \
+Let us use this defining procedure to check if $x^3 dot x^5 + x^2 + 1$ is a well-formed expression. \
 ( We will skip the check of whether something is a valid input or not, as that notion is still not very well-defined for us. )
 
 $x^3 dot x^5 + x^2 + 1$ is $+$ applied to the inputs $x^3 dot x^5$ and $x^2 + 1$. \
-Thus we need to check that $x^3 dot x^5$ and $x^2 + 1$ are expressions which are valid inputs to $+$.
+Thus we need to check that $x^3 dot x^5$ and $x^2 + 1$ are well-formed expressions which are valid inputs to $+$.
 
 $x^3 dot x^5$ is $dot$ applied to the inputs $x^3$ and $x^5$. \
-Thus we need to check that $x^3$ and $x^5$ are expressions which are valid inputs to $dot$.
+Thus we need to check that $x^3$ and $x^5$ are well-formed expressions.
 
 $x^3$ is $(" ")^3$ applied to the input $x$. \
-Thus we need to check that $x$ is an expression which is a valid input to $(" ")^3$.
+Thus we need to check that $x$ is a well-formed expression.
 
-$x$ is an expression, as it is a @definition_of_mathematical_variable.
+$x$ is a well-formed expression, as it is a @definition_of_mathematical_variable.
 
 $x^5$ is $(" ")^5$ applied to the input $x$. \
-Thus we need to check that $x$ is an expression which is a valid input to $(" ")^5$.
+Thus we need to check that $x$ is a well-formed expression.
 
-$x$ is an expression, as it is a @definition_of_mathematical_variable.
+$x$ is a well-formed expression, as it is a @definition_of_mathematical_variable.
 
 $x^2 + 1$ is $+$ applied to the inputs $x^2$ and $1$. \
-Thus we need to check that $x^2$ and $1$ are expressions which are valid inputs to $+$.
+Thus we need to check that $x^2$ and $1$ are well-formed expressions.
 
 $x^2$ is $(" ")^2$ applied to the input $x$. \
-Thus we need to check that $x$ is an expression which is a valid input to $(" ")^2$.
+Thus we need to check that $x$ is a well-formed expression.
 
-$x$ is an expression, as it is a @definition_of_mathematical_variable.
+$x$ is a well-formed expression, as it is a @definition_of_mathematical_variable.
 
-$1$ is an expression, as it is a @definition_of_mathematical_value.
+$1$ is a well-formed expression, as it is a @definition_of_mathematical_value.
 
 Done!
 
-#exercise(sub:"checking expression")[
-  Check whether $f(g(x,y),f(a,h(v),c),h(h(h(n))))$ is an expression or not.
+#exercise(sub:"checking well-formedness of mathematical expression")[
+  Check whether $f(g(x,y),f(a,h(v),c),h(h(h(n))))$ is a well-formed expression or not.
 ]
 
 = Defining Functions
@@ -139,7 +142,7 @@ On the left we write the name of the function followed by a number of variables 
 
 In the middle we write '$#d$', indicating that right-hand side is the definition of the left-hand side.
 
-On the right, we write an expression using the variables of the left-hand side, describing to how to combine and manipulate the inputs to form the output of the function.
+On the right, we write a @definition_of_well-formed_mathematical_expression using the variables of the left-hand side, describing to how to combine and manipulate the inputs to form the output of the function.
 
 A few examples -
   - $f(x) #d x^3 dot x^5 + x^2 + 1$
@@ -147,7 +150,7 @@ A few examples -
 
 == Some Conveniences
 
-Often in complicated definitions of some functions, the right-hand side expression can get very convoluted, so there are some conveniences which we can use to reduce this mess.
+Often in the complicated definitions of some functions, the right-hand side expression can get very convoluted, so there are some conveniences which we can use to reduce this mess.
 
 === Where, Let //todo
 
@@ -280,7 +283,7 @@ So let's see the @definition_of_principle_of_mathematical_induction in action, a
 
 = Trees
 
-Trees are a way to meaningfully structure a collection of objects. Understanding the meaning captured by these structures is vitally important in learning the study of expressions.
+Trees are a way to meaningfully structure a collection of objects. Understanding the meaning captured by these structures is vitally important in learning about expressions.
 
 *In fact, the internal structure of any object in Haskell is modelled as a tree-like structure.*
 
@@ -289,7 +292,7 @@ Trees are a way to meaningfully structure a collection of objects. Understanding
 We will adopt a similar approach to defining trees as we did with expressions, i.e., we will provide a formal procedure to check whether a mathematical object is a tree, rather than directly defining what a tree is.
 
 #def(sub:"tree")[
-  A *tree over a set $S$* defines a meaningful structure on a collection of elements from $S$.
+  A *tree over a set $S$* defines a meaningful structure on a collection of elements of $S$.
 
   The procedure to determine whether an object is a *tree over a set $S$* is as follows -
 
