@@ -332,7 +332,7 @@ In order to prove things about trees, we have a version of the @definition_of_pr
   then $phi_t$ is true for each tree $t$ over $S$.
 ]
 
-//todo examples of trees
+//todo examples of trees over various sets
 
 == Structural Recursion
 
@@ -344,7 +344,7 @@ From the definition of @definition_of_tree, we know that trees are
 
 So, to define any function $( f : "Trees over" S -> X )$, we can divide taking the input into two cases, and define the outputs respectively.
 
-Let's use this principle to define the function $ "size" : "Trees over" S -> NN $ which is meant to give the number of elements of $S$ appear in a tree over $S$.
+Let's use this principle to define the function $ "size" : "Trees over" S -> NN $ which is meant to give the number of elements of $S$ which appear in a tree over $S$.
 
 $"size"(s) #d 1 \ "size"(#tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))) #d 1 + "size"(t_1) + "size"(t_2) + "size"(t_3) + ... + "size"(t_(n-1)) + "size"(t_n)$
 
