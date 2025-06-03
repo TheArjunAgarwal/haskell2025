@@ -129,7 +129,11 @@ Thus, it is very helpful to have a deeper understanding of how they are defined.
 
 == Using Expressions
 
-In its simplest form, a definition of a function is made up of a left-hand side, '$#d$' in the middle, and a right-hand side.
+In its simplest form, a definition of a function is made up of a left-hand side, '$#d$' in the middle#footnote[
+  In order to have a clear distinction between notation and equality,\
+  we use $A #d B$ to mean "$A$ is defined to be $B$",\
+  and we use $A #e B$ to mean "$A$ is equal to $B$".
+], and a right-hand side.
 
 On the left we write the name of the function followed by a number of variables which represent its inputs.
 
@@ -358,7 +362,7 @@ Using @definition_of_structural_induction_for_trees, let us prove that \
 
     Now, $"size"(tau) #d 1 + "size"(t_1) + "size"(t_2) + "size"(t_3) + ... + "size"(t_(n-1)) + "size"(t_n)$
     
-    Thus, we can see that each term in the right-hand side terminates.\ Therefore, the left-hand side $"size"(tau)$,\ being defined as well-defined combination of these terms,\ must also terminate.
+    Thus, we can see that each term in the right-hand side terminates.\ Therefore, the left-hand side "$"size"(tau)$",\ being defined as a well-defined combination of these terms,\ must also terminate.
 
     Hence $phi_(tau)$ is proved!
 ]
