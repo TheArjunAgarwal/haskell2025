@@ -332,6 +332,8 @@ In order to prove things about trees, we have a version of the @definition_of_pr
   then $phi_t$ is true for each tree $t$ over $S$.
 ]
 
+//todo examples of trees
+
 == Structural Recursion
 
 We can also define functions on trees using a certain style of recursion.
