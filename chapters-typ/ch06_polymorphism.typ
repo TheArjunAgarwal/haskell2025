@@ -70,12 +70,24 @@ Up until now, we had been emphasizing on the _shape_ of elemets of a type, but t
 - The *`elem`* function also doesn't care about the internal type as long as there is some notion of equality defined.
 - The *`(==)`* works on all types where some notion of equality is defined (A counter example would be the type of functions: *`Int -> Int`*).
 
-Now one can define such functions for every single type, but that has 2 problems:
+Now one can define such functions for every single type, //like -
+// ```
+// dropForInteger :: Int -> [Integer] -> [Integer]
+// dropForInteger = ...
+// dropForBool :: Int -> [Bool] -> [Bool]
+// dropForBool = ...
+// dropForChar :: Int -> [Char] -> [Char]
+// dropForChar = ...
+// .
+// .
+// .
+// ```
+ but that has 2 problems:
 - The first is that the defintion of all of these functions is the exact same, so doing this would be a lot of manual work, and one would also need to have different name for different types, which is very inconvenient.
 - The second, and arguably a more serious issue, it stops us from abstracting, abstraction is the process of looking at a scenario and removing information that is not relevant to the problem. 
-    - An example would be that the `drop` simply lets us treat elememts as lists, while we can ignore the type of items in the list.
+    - An example would be that the `drop` simply lets us treat elements as lists, while we can ignore the type of items in the list.
     - All of Mathematics and Computer Science is done like this, in some sense it is just that.
-        - Linear Algebra lets you treat any set where addition and scaling is define as one _kind_ of thing.
+        - Linear Algebra lets us treat any set where addition and scaling is defined as one _kind_ of thing, without worrying about any other structure on the elements.
         - Metric Spaces let us talk about all sets where there is a notion of distance.
         - Groups let us talk about sets where there is a notion of "combining" things together with more restriction.
     - And this is a powerful tool because solving a problem in the _abstract_ version solves the problem in all _concretized_ scenarios.
@@ -102,10 +114,12 @@ drop _ []     = []
 drop 0 ls     = ls
 drop n (x:xs) = drop (n-1) xs
 ```
-The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [a]`* where we have used variables (usually called a type variable) instead of explicity mentioning a types, this still has a lot of structure, and is not the same as forgetting about types, for instance, the same variable is used in both the second argument and the output, so they need to be of the same type, dropping some elements from a list of integers also gives a list of integers, we still have all the safety and correctness guarantees that types give us.
+The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [a]`* where we have used variables //the variable `a`
+(usually called a type variable) instead of explicitly mentioning a type. 
+This still has a lot of structure, and is not the same as forgetting about types, since, for instance, the same variable is used in both the second argument and the output, so they need to be of the same type, dropping some elements from a list of integers also gives a list of integers, we still have all the safety and correctness guarantees that types give us.
 
 #exercise(sub: "Datatypes of some list functions")[
-A nice excerise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
+A nice exercise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
 == A Taste of Type Classes
@@ -141,10 +155,13 @@ test.hs:8:7: error: [GHC-39999]
   |   
 ```
 
-To tackel this, we define the following:
+To tackle this, we define the following:
+
+// define the notion of methods
+// the methods of a type T are functions which has some of its inputs :: T
 
 #def(sub: "Typeclasses")[
-_Typeclasses_ are a collection of types, characterizede by their common _shape_.
+_Typeclasses_ are a collection of types, characterized by their common _shape_. //methods
 ]
 
 The previous section describes how one writes functions based on the _shape_ of the objects. And that different types can have some aspects of their _shape_ in common. And @code_of_Function_Extensionality tells us that we need to be careful, that common shape might not be present in all types.
@@ -184,13 +201,18 @@ Write the function `isSorted` which takes in a list as an argument, such that th
 
 One of the most important parts of the style of functional programming is that functions are first class citizens, they can do whatever other non-functions things can do, specifically they can be passed into functions as argument, or can be as the output of a function.
 
+//define higher order fn.s as those which takes fn as input
+
 This is again a way of generalization and is very handy, for instance, 
 
 == Currying
 
-Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
+Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` //input is not fn 
+way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
 
 This may seem odd first, but consider the following theorem.
+
+// motivate currying by example of derivative operator
 
 #proof(thm: [*Currying*: Given any sets $A, B, C$, there is a _bijection_ called $"curry"$ between the sets $C^(A times B)$ and the set $(C^B)^A$ such that given any function $f:C^(A times B)$ we have 
 $ 
