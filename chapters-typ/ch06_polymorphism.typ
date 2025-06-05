@@ -61,16 +61,28 @@ Something similar can be done with the type *`[Bool]`*:
   Once again, the pattern matching handles the shape of an element as a list, and the definition handles each item of a list as a *`Bool`*.
 
 Then we see functions like the following: 
-- *`drop`*, which takes a list and discards the first couple of elements as specified
-- *`flip`*, which swaps the order of arguments of a binary function.
-- *`id`*, which just returns the argument as it is
+- *`drop`*, which takes a list and discards the first couple of elements as specified.
+- *`elem`*, which checks in an element belong to a list.
+- *`(==)`*, which checks if 2 elements are equal.
 
 Up until now, we had been emphasizing on the _shape_ of elemets of a type, but these functions don't seem to care about it that much:
 - The *`drop`* function just cares about the list structre of an element, and not what the internal item looks like.
-- The *`flip`* function just cares about its argument being a binary function, it does not care about what the exact input types are, or what the output type is.
-- The *`id`* function just takes and argument, and returns it as it is, it truly does not care about the shape of the input at all.
+- The *`elem`* function also does not care about the internal type of list items as long as some notion of equality if defined.
+- The *`(==)`* works on all types where some notion of equality is defined (A counter example would be the type of functions: *`Int -> Int`*).
 
-Now one can define such functions for every single type, but that has 2 problems:
+Now one can define such functions for every single type, like:
+```
+dropIntegers :: Int -> [Integer] -> [Integer]
+dropIntegers = ...
+dropChars :: Int -> [Char] -> [Char]
+dropChars = ...
+dropBools :: Int -> [Bool] -> [Bool]
+dropBools = ...
+.
+.
+.
+```
+but that has 2 problems:
 - The first is that the defintion of all of these functions is the exact same, so doing this would be a lot of manual work, and one would also need to have different name for different types, which is very inconvenient.
 - The second, and arguably a more serious issue, is that it stops us from abstracting, abstraction is the process of looking at a scenario and removing information that is not relevant to the problem. 
     - An example would be that the `drop` simply lets us treat elememts as lists, while we can ignore the type of items in the list.
@@ -109,11 +121,90 @@ The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [
 A nice excerise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
+== A Taste of Type Classes
+Consider the case of the integer functions
+
+```
+f :: Int -> Int
+f x = x^2 + 2*x + 1
+
+g :: Int -> Int 
+g x = (x + 1)^2
+```
+
+We know that both functions, do the same thing in the mathematical sense, given any input, both of then have the same output, this is called function extensionality. But the does the following expression make sense in haskell?
+
+```
+-- | Function Extensionality
+f == g
+```
+
+On one hand, this seems like a fair thing to ask, as we already have a definition for equality of mathematical functions, on the other hand we run into 2 issues:
+- Is it really fair to say that? In computer science, the way things are computed matter, hence the name of the entire field. I lot of times, one will be able to distinguish which of the functions are running, by simply looking at which one works faster or slower on big inputs, and that might be something people might want to factor in what the mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal may not be wise.
+- The second is that in general it is not possible, in this case we have a mathematical identity that lets us prove so, but given any 2 function, it might be that the only way to prove that they are equal would be to actually check on every single value, and since domains of functions can be infinite, this would simply not be possible to compute.
+
+So we can't have the type of *`(==)`* be `a -> a -> Bool`. In fact, if I try to write it, the haskell compiler will complain to me by saying
+
+```
+funext.hs:8:7: error: [GHC-39999]
+    • No instance for ‘Eq (Int -> Int)’ arising from a use of ‘==’
+      ... more error
+  |
+8 | h = f == g
+  |   
+```
+
+To tackle this, we define the following:
+
+// define the notion of methods
+// the methods of a type T are functions which has some of its inputs :: T
+
+#def(sub: "Typeclasses")[
+_Typeclasses_ are a collection of types, characterized by the common _behaviour_. //methods
+]
+
+The previous section describes how one writes functions based on the _shape_ of the objects. And that different types can have some aspects of their _shape_ in common. @code_of_Function_Extensionality tells us that there are other properties shared by elements of different types, which we call their _behaviour_. By that we mean the functions that are defined for them.
+
+Typeclasses are how one expresses in haskell, what a collection of types looks like, and the way to do so is by defining the common functions that work for all of them. Some examples are: 
+- `Eq`, which is the collection of all types for which the function *`(==)`* is defined.
+- `Ord`, which is the collection of all types for which the function *`(<)`* is defined.
+- `Show`, which is the collection of all types for which there is a function that converts them to `String` using the function *`show`*.
+
+Note that in the above cases, defining one function lets you define some other functions, like *`(/=)`* for `Eq` and *`(<=)`*, *`(>=)`* and so on for the `Ord` typeclass.
+
+Now we come back to the `elem` function, the goal of this function is to check if a given element belongs to a list. And the following is a way to write it:
+
+```
+elem _ []       = False
+elem e (x : xs) = e == x || elem e xs
+```
+Now lets try to give this a type. 
+
+First we see that the `e` must have the same types as the items in the list, but if we try to give it the type 
+
+```
+elem :: a -> [a] -> Bool
+``` 
+
+But if we do that we will encounter the same issue as we did in @code_of_Function_Extensionality, because of `(==)` we need to find a way to say that `a` belongs to the collection `Eq`, and this leads to the correct type:
+```
+elem :: Eq a => a -> [a] -> Bool
+```
+#exercise(sub: "Checking if a list is sorted")[
+Write the function `isSorted` which takes in a list as an argument, such that the elements of the list have a notion of ordering between them, and the output should be true if the list in an ascending order (equal elements are allowed to be next to each other), and false otherwise.
+]
+
 #linebreak()
 
 = Higher Order Functions
 
 One of the most important parts of the style of functional programming is that functions are first class citizens, they can do whatever other non-functions things can do, specifically they can be passed into functions as argument, or can be as the output of a function.
+
+#def(sub: "Higher Order Functions")[
+A *higher order function* is a function that does at least one of the following things:
+- It takes one or more functions as its arguments.
+- It returns a function as an argument.
+]
 
 This is again a way of generalization and is very handy, for instance, 
 
@@ -121,7 +212,16 @@ This is again a way of generalization and is very handy, for instance,
 
 Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
 
-This may seem odd first, but consider the following theorem.
+Consider the case of finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
+$ (f, x) |-> f'(x) : ((RR -> RR)^d times RR) -> RR $
+Here $(RR -> RR)^d$ is the type of real differentiable functions.
+
+But one can also think of the derivative operator, that takes a differentiable function $f$ and produces the function $f'$, which can be given the following type:
+$
+d / (d x) : (RR -> RR)^d -> (RR -> RR)
+$
+
+In general, we have the following theorem:
 
 #proof(thm: [*Currying*: Given any sets $A, B, C$, there is a _bijection_ called $"curry"$ between the sets $C^(A times B)$ and the set $(C^B)^A$ such that given any function $f:C^(A times B)$ we have 
 $ 
@@ -232,24 +332,24 @@ Write a function `repeat` that takes a function `f` and an argument `a` along wi
 ]
 
 === A Short Note on Type Inference
-Haskell is a statically typed programming language, what that means is that it requires the types of terms and functions, while the programming is being compiled (that is when haskell code is converted to machine code, which is the only executable format) rather than while actually running program.
+Haskell is a statically typed language. What that means is that it requires the types for the data that is being processed by the program, and it needs to for an analysis that happens before running the program, this is called *type checking*.
 
-The biggest reason why this is important is that it helps us catch a lot of errors before even running the program. One downsides that it has is having code, which is not relevant to the execution of the program, python is considered to be a relatively easy-to-read programming language because one does not need to write down types of a function or a value. A lack of types is of-course a foot gun and having errors feels normalized in the python community, this being one of the biggest reasons.
+It is not however required to give types to all functions (we do strongly recommend it though!), in fact one can simply not give any types at all. This is possible because the haskell compiler is smart enough to figure all of it out on its own! It's so good that when you do write type annotations for functions, haskell ignores it, figures the types out on its own and can then check if you have given the types correctly.
 
-One does not _need_ to write types for haskell programs either (although, we strongly recommend it) it does not cost us any errors. This is because the haskell compiler can infer types of every single program one writes. So we have all the benifits of a statically typed language. On top of that, it does so in the most general way possible. That is the function `id x = x` will be inferred to have the type `a -> a`. 
+Haskell's type inference also gives the most general possible type for a function. To see that, one can open ghci, and use the `:t` command to ask haskell for types of any given expression.
 
-This can be seen by opening a session of ghci, and using the `:t` followed by the function, for example
 ```
-GHCi, version 9.6.6: https://www.haskell.org/ghc/  :? for help
 >>> :t flip
 flip :: (a -> b -> c) -> b -> a -> c
+>>> :t (\ x y -> x == y) 
+(\ x y -> x == y) :: Eq a => a -> a -> Bool
 ```
 
-This is also a useful tool to understand what a function does, types carry a lot of information, the reader is recommend to keep this in their programming toolbox.
+The reader should not be equipped with everything they need to understand how types can be read and can now use type inference like this to understand haskell programs better.
 
 === Higher Order Functions on Maybe Type
 
-#link(<maybe>)[The Maybe Type] is another playground for higher order functions. Recall that `Maybe` is used to append an extra value to a type, so the type `Maybe Int` can the thought of as the set $NN union.sq {*}$ and the elements of this type are denoted as `Just n` for some integer `n` and `Nothing`. 
+The *Maybe Type*, as defined in #link(<maybe>)[Chapter 3] is another playground for higher order functions.
 
 When using the `Maybe` types, one eventually runs into a problem that looks something like this:
 - Break up the problem into a bunch of tiny steps, so make a lot of simple function and the final solution is to be achieved by combining all of them.
@@ -308,7 +408,7 @@ f :: a -> Maybe b
 
 g = f <$> a -> Maybe (Maybe b)
 ```
-This is most likely to be undesirable, the point of `Maybe` was to say that there is a possiblility of error, the point of `maybeMap` was to propogate that possible error, so when there are multiple places where the program can fail, one can define `maybeJoin :: Maybe (Maybe a) -> Maybe a`, with that we can have
+This is most likely going to be undesirable, the point of `Maybe` was to say that there is a possiblility of error, the point of `maybeMap` was to propogate that possible error, so when there are multiple places where the program can fail, one can define `maybeJoin :: Maybe (Maybe a) -> Maybe a`, with that we can have
 ```
 g = maybeJoin $ f <$> a
 ```
