@@ -87,7 +87,7 @@ but that has 2 problems:
 - The second, and arguably a more serious issue, is that it stops us from abstracting, abstraction is the process of looking at a scenario and removing information that is not relevant to the problem. 
     - An example would be that the `drop` simply lets us treat elememts as lists, while we can ignore the type of items in the list.
     - All of Mathematics and Computer Science is done like this, in some sense it is just that.
-        - Linear Algebra lets you treat any set where addition and scaling is define as one _kind_ of thing.
+        - Linear Algebra lets us treat any set where addition and scaling is defined as one _kind_ of thing, without worrying about any other structure on the elements.
         - Metric Spaces let us talk about all sets where there is a notion of distance.
         - Groups let us talk about sets where there is a notion of "combining" things together with more restriction.
         in all of these fields of study, say linear algebra, a theorem generally involes working with an object, whose exact details we don't assume, just that it satisfies the conditions required for it to be a vector space and seeing what can be done with just that much information.
@@ -115,10 +115,12 @@ drop _ []     = []
 drop 0 ls     = ls
 drop n (x:xs) = drop (n-1) xs
 ```
-The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [a]`* where we have used variables (usually called a type variable) instead of explicity mentioning a types, this still has a lot of structure, and is not the same as forgetting about types, for instance, the same variable is used in both the second argument and the output, so they need to be of the same type, dropping some elements from a list of integers also gives a list of integers, we still have all the safety and correctness guarantees that types give us.
+The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [a]`* where we have used variables //the variable `a`
+(usually called a type variable) instead of explicitly mentioning a type. 
+This still has a lot of structure, and is not the same as forgetting about types, since, for instance, the same variable is used in both the second argument and the output, so they need to be of the same type, dropping some elements from a list of integers also gives a list of integers, we still have all the safety and correctness guarantees that types give us.
 
 #exercise(sub: "Datatypes of some list functions")[
-A nice excerise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
+A nice exercise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
 == A Taste of Type Classes
@@ -210,7 +212,8 @@ This is again a way of generalization and is very handy, for instance,
 
 == Currying
 
-Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
+Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` //input is not fn 
+way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
 
 Consider the case of finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
 $ (f, x) |-> f'(x) : ((RR -> RR)^d times RR) -> RR $
@@ -222,6 +225,8 @@ d / (d x) : (RR -> RR)^d -> (RR -> RR)
 $
 
 In general, we have the following theorem:
+
+// motivate currying by example of derivative operator
 
 #proof(thm: [*Currying*: Given any sets $A, B, C$, there is a _bijection_ called $"curry"$ between the sets $C^(A times B)$ and the set $(C^B)^A$ such that given any function $f:C^(A times B)$ we have 
 $ 
