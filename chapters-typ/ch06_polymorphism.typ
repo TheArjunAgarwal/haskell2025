@@ -200,7 +200,7 @@ Write the function `isSorted` which takes in a list as an argument, such that th
 
 = Higher Order Functions
 
-One of the most important parts of the style of functional programming is that functions are first class citizens, they can do whatever other non-functions things can do, specifically they can be passed into functions as argument, or can be as the output of a function.
+One of the most powerful feature of functional programming languages is that it lets one pass in functions as argument to another function, and have funtions return other functions as outputs, these are known as:
 
 #def(sub: "Higher Order Functions")[
 A *higher order function* is a function that does at least one of the following things:
@@ -215,7 +215,7 @@ This is again a way of generalization and is very handy, for instance,
 Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` //input is not fn 
 way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
 
-Consider the case of finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
+An example from mathematics would be finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
 $ (f, x) |-> f'(x) : ((RR -> RR)^d times RR) -> RR $
 Here $(RR -> RR)^d$ is the type of real differentiable functions.
 
