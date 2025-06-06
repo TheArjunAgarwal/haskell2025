@@ -19,8 +19,12 @@ jobs:
           ref: main
       - name: Setup Fonts
         uses: fontist/setup-fontist@v2
-      - name: Install Fira code
-        run: fontist install "Fira Code"
+      - name: Install Fira Code
+        run: |
+          wget -O Fira_Sans.zip https://fonts.google.com/download?family=Fira%20Sans
+          unzip -d fira_sans/ Fira_Sans.zip
+          mv fira_sans /usr/share/fonts/
+          fc-cache -fv
       - name: Install Noto Sans
         run: fontist install "Noto Sans"
       - name: Install Noto Sans CJK
