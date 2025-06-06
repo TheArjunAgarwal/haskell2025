@@ -17,8 +17,16 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
-      - uses: fontist/setup-fontist@v2
-      - run: fontist install "Fira Code"
+      - name: Setup Fonts
+        uses: fontist/setup-fontist@v2
+      - name: Install Fira code
+        run: fontist install "Fira Code"
+      - name: Install Noto Sans
+        run: fontist install "Noto Sans"
+      - name: Install Noto Sans CJK
+        run: fontist install "Noto Sans CJK"
+      - name: Install Noto Sans TC
+        run: fontist install "Noto Sans TC"
       - name: setup typst
         uses: typst-community/setup-typst@v4
       - name: Compile Main
