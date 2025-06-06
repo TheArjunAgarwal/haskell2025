@@ -437,6 +437,10 @@ Define `maybeJoin` and `(>>=)` and see how both of then are used in programs, an
 
 Higher order functions, along with polymorphism help our code be really expressive, so we can write very small amounds of code that looks easy to read, which also does a lot. In the next chapter we will see a lot more examples of such functions.
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 739b177 (auto compile test)
 // cite 
 // citation 1
 // citation 2
