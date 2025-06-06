@@ -17,12 +17,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: main
+      - uses: fontist/setup-fontist@v2
+      - run: fontist install "Fira Code"
       - name: setup typst
         uses: typst-community/setup-typst@v4
       - name: Compile Main
-        run: typst compile main.typ main.pdf
+        run: typst compile main.typ main.pdf --font-path ~/.fontist/fonts
       - name: Compile Guide
-        run: typst compile guide.typ guide.pdf
+        run: typst compile guide.typ guide.pdf --font-path ~/.fontist/fonts
       - name: Add and commit to main
         run: | 
           git config --global user.name 'Typst Compile Bot'
