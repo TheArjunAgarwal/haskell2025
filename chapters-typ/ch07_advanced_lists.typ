@@ -139,27 +139,24 @@ mergeSort xs = merge (mergeSort left) (mergeSort right) where
   (ii) Prove that `mergeSort` works using induction on the size of list to be sorted.
 ]
 
-This is very efficent way to sort a list. If we define a function $T$ count the number of operations we make, $T(n) < 2*T(ceil(n/2)) + n + n + n = 2*T(ceil(n/2)) + 3n$ where the 3 $n$'s come from the length, the `splitAt` and the `merge`.
+This is also a very efficent way to sort a list. If we define a function $C$ that count the number of comparisions we make, 
+$C(n) < 2*C(ceil(n/2)) + n$ where the $n$ comes from the merge.
 
 This implies $
-T(n) <& n ceil(log(n)) T(1) + 3n + 3ceil(n/2) + 3 ceil(ceil(n/2)/2) + dots + 3 \
-=& n ceil(log(n)) + 3(n + ceil(n/2) + ceil(ceil(n/2)/2) + dots + 1)\
-<& n ceil(log(n)) + 3(n + (n+1)/2 + ceil((n+1)/4) + dots +1)\
-=& n ceil(log(n)) + 3(n + n/2 + 1/2 + n/4 + 1/2 + dots +1)\
-<& n ceil(log(n)) + 3 (2n + 1/2log(n))\
-=& n ceil(log(n)) + 6n + 3/2log(n)\
-<& n (log(n) + 1) + 6n + 3/2 log(n)\
-<& n log(n) + 7n + 3/2 log(n)
+C(n) <& n ceil(log(n)) C(1) + n + ceil(n/2) + ceil(ceil(n/2)/2) + dots + 1 \
+<& n ceil(log(n)) + n + (n+1)/2 + ceil((n+1)/4) + dots +1\
+=& n ceil(log(n)) + n + n/2 + 1/2 + n/4 + 1/2 + dots +1\
+<& n ceil(log(n)) + 2n + 1/2log(n)\
 $
 
 Two things to note are that the above computation was very cumbersome. We will later see a way to make it a bit less cumbersome, at the cost of some information.
 
 The second, for sufficiently large $n$, $n log(n)$ dominates the equation. That is $
-exists m op(s.t.) forall n > m : n log(n) > 6n > 3/2log(n)
+exists m op(s.t.) forall n > m : n log(n) > 2n > 1/2log(n)
 $
-This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elemeents in the list is such that they can be compared, we can't do much better. The dominating term will be $n log(n)$ times some constant. This later refers to chapter 10.
+This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elemeents in the list is such that they can be compared, we can't do much better. The dominating term, in the number of comparisins, will be $n log(n)$ times some constant. This later refers to chapter 10.
 
-In this algorithm, we waste some ammount of operations dividing the list in 2. What if we take our odds and approximatly divide the list into two parts?
+In practice, we waste some ammount of operations dividing the list in 2. What if we take our chances and approximatly divide the list into two parts?
 
 This is the idea of quick sort. If we take a random element in the list, we expect half the elements to be lesser than it and half to be greater. We can use this fact to define quickSort by splitting the list on the basis of the first element and keep going. This can be implemented as:
 ```
@@ -168,86 +165,80 @@ quickSort [] = []
 quickSort [x] = [x]
 quickSort (x:xs) = quickSort [l | l <- xs, l > x] ++ [x] ++ quickSort [r | r <- xs, r <= x]
 ``` 
-This is not the most efficent way to do so as we go through the list twice, but it is the most aesthetically pleasing and concise.
-#exercise(sub : "Faster Quick Sort")[
-  A slight improvment can be made to the implementation by not using list comprehension and instead using a helper function, to traverse the list only once.
 
-  Try to figure out this implementation.
-]
-We will use the above deined version for our calculations, although you are reccomended to re-do the with the more efficient implementation as well.
 #exercise(sub : "Quick Sort works?")[
-  Prove that Quick Sort does indeed works. This has to be done by 
+  Prove that Quick Sort does indeed works. The simplest way to do this is by induction on length.
 ]
 
-Clearly, With $n$ being the length of list, $T(n)$ is a random variable dependent on the permutation of the list. 
+Clearly, With $n$ being the length of list, $C(n)$ is a random variable dependent on the permutation of the list. 
 
-Let $l$ be the number of elements less than the first elements and $r = n-l-1$. This means $T(n) = T(l) + T(r) + 2(n - 1) + l + 1$ where the $n-1$ comes from the list comprehension and the $l+1$ from the concatination.
+Let $l$ be the number of elements less than the first elements and $r = n-l-1$. This means $C(n) = C(l) + C(r) + 2(n - 1)$ where the $n-1$ comes from the list comprehension.
 
-In the worst case scenario, our algoritm could keep spliting the list into a length $0$ and a length $n-1$ list. This would screw us very badly. Furthermore, as this is the worst case, our algorithm also gets the worst concatination, that is the left list is $n-1$.
+In the worst case scenario, our algoritm could keep spliting the list into a length $0$ and a length $n-1$ list. This would screw us very badly.
 
-As $T(n) = T(0) + T(n-1) + 2(n - 1) + (n-1) + 1$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the concatination.
-Using $T(0) = 1$, This evaluates to
+As $C(n) = C(0) + C(n-1) + 2(n - 1)$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the concatination.
+Using $C(0) = 0$ as we don't make any comparisions, This evaluates to
 $
-  T(n) &= T(0) + T(n-1) + 2(n - 1) + (n-1) + 1\
-  &= T(n-1) + 3n - 1\
-  &= 3(n+(n-1) + dots + 1)  underbrace(-1 -1 dots -1, n "times")\
-  &= 3 (n(n+1))/2 - n\
-  &= 3/2n^2 + 1/2n
+  C(n) &= C(n-1) + 2(n-1)\
+  &= 2(n-1) + 2(n-2) + dots + 2\
+  &= 2 * (n(n-1))/2\
+  &= n^2 - n
 $
-Which is quite bad. Furthermore, while this case is based on already sorted list; we don't fare better in the case where the list split into $n-1$ and $0$ every stage despite someconcatinaions costing $1$.
-
-The above case is also common enough. How common? 
+Which is quite bad as it grows quadratically. Furthermore, the above case is also common enough. How common? 
 #exercise(sub : "A Strange Proof")[
 Prove $2^(n-1) <= n!$
 ]
 
 Then why are we intrested in Quick Sort? and why is named quick?
 
-Let's look at the average or expected time it would take.
+Let's look at the average or expected number of comparision we would need to make!
 
+Consider the list we are sorting a permutation of $[x_1, x_2, dots , x_n]$. Let $X_(i,j)$ be a random variable which is $1$ if the $x_i$ and $x_j$ are compared and $0$ otherwise. Let $p_(i,j)$ be the 
+probability that $x_i$ and $x_j$ are compared. Then, $EE(X_(i,j)) = 1 * p + 0 * (1-p) = p$.
 
+Using the linearity of expectation(remember $EE(sum X) = sum EE(x)$?), we can say $EE(C(n)) = sum_(i, j) EE(X_(i,j)) = sum_(i,j) p_(i,j)$.
 
+Using the same idea we used to reduce the number of pythogoream triplets we need to check, we rewrite this summation as
 $
-  EE(T(n)) &= EE(T(l) + T(r) + 2(n - 1) + l + 1)\
-  &= EE(T(l)) + EE(T(r)) + 2(n-1) + 1 + EE(l)\
-  &text("Using the fact" l "and" r "are symmetrical and interchangable and assuming" l "is uniform.")\
-  &= 2 EE(T(l)) + 2(n-1) + 1 + (n-1)/2\
-  &= 2/n sum_(i=0)^(n-1) EE(T(i)) + 5/2 n -3/2
+  EE(C(n)) &= sum_(i,j) p_(i,j)\
+  &= sum_(i=1)^n sum_(j=i+1)^n p_(i,j)\
 $
+Despite a toothy appearence, this is rather easy and elegent way to actually compute $p_(i,j)$.\
 
-Now for the sake of simplification, we will take $n EE(T(n)) = S(n)$.
+Notice that each element in the array (except the pivot) is compared only to the pivot at each level of the recurrence. To compute $p_(i,j)$, 
+we shift our focus to the elemenents $[x_i, x_(i+1), dots, x_j]$. If this is split into two parts, $x_i$ and $x_j$ can no longer be compared.
+Hence, $x_i$ and $x_j$ are compared only when from the first pivot from the range $[x_i, x_(i+1), dots, x_j]$ is either $x_i$ or $x_j$.
 
+This clearly has probability $p_(i,j) = 1/(j-i+1) + 1/(j-i+1) = 2/(j-i+1)$. Thus,
 $
-  S(n) &= 2 sum_(i=0)^(n-1) EE(T(i)) + 5/2 n^2 - 3/2 n\
-  & text("and") S(n-1) = 2 sum_(i=0)^(n-2) EE(T(i)) + 5/2 (n-1)^2 - 3/2(n-1)\
-  =>& S(n) - S(n-1) = 2EE(T(n-1)) + 5/2 (2n-1) -3/2\
-  =>& n EE(T(n)) - (n-1) EE(T(n-1)) = 2 EE(T(n-1)) + 5 n - 4\
-  =>&  EE(T(n)) = (n+1)/n EE(T(n-1)) + 5 - 4/n \
+  EE(C(n)) &= sum_(i=1)^n sum_(j=i+1)^n 2/(j-i+1)\
+  &= sum_(i=1)^n 2 (1/2 + dots + 1/(n-i+1))\
+  &= 2 sum_(i=1)^n (1 + 1/2 + dots + 1/(n-i+1) - 1)\
+  &<= 2 sum_(i=1)^n log(i)\
+  &<= 2 sum_(i=1)^n log(n)\
+  &<= 2 n log(n)
 $
-This reccurence can actually be solved! Making the magical substitution $f(n) = EE(T(n))/(n+1)$
-$
-  & (n+1)f(n) = (n+1) f(n-1) + 5 - 4/n\
-  =>& f(n) = f(n-1) + (5n - 4)/(n(n+1))\
-  =>& f(n) = f(1) + sum_(i=2)^(n) (5i-4)/(i(i+1))\
-  =>& f(n) = 1 + sum_(i=2)^(n) (5i-4)/(i(i+1))
+Considering the number of cases where the comparisons with $n^2 - n$ operations is $2^(n-1)$, 
+Quick Sort's expected number of operations is still less than $2 n log(n)$ which, as we discussed, is optimal.
 
-  
-$
-Finally, this is something we can work with. Using the fraction decomposition technique, We can write $(5i - 4)/(i(i+1)) = 9/(i+1) - 4/i$
-$
-  f(n) &= 1 + sum_(i=2)^(n) 9/(i+1) - sum_(i=2)^(n)  4/i\
-  &= 1 + 9/(n+1) + 5 sum_(i=3)^(n) 1/i - 2\
-  &approx 9/(n+1) - 1 + 5(log(n) + gamma - 1 - 1/2)\
-  => EE(T(n)) &= (n+1)f(n) = 9 - (n+1) + 5(n+1)(log(n) + gamma - 3/2)\
-  &= 5n log(n) - (5 gamma - 17/2) n + 5 log(n) + 5 gamma - 1/2 
-$
-Where $gamma = lim_(n -> infinity) (sum_(i=1)^n 1/i) - log(n) = 0.577dots $ is called the Euler–Mascheroni constant.\
+This implies that there are some lists where Quick Sort is extreamly efficent and as one might expect there are many such lists. 
+This is why languages which can keep states (C++, C, Rust etc) etc use something called Introsort which uses 
+Quick Sort till the depth of recusion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); 
+then we fallback to Merge Sort or a Heap/Tree Sort(which we will see in chapter 11).
 
-The point of this, frankly exhausting, calculation is that despite having an exponential number of cases in quadratic time (remember the worst case analysis?), Quick Sort's expected number of operations is still a constent times $n log(n)$ which is optimal.\
+Haskell has an inbuilt `sort` function you can use by putting `import Data.List` at the top of your code. 
+This used to use quickSort as the default but in 2002, 
+Ian Lynagh changed it to Merge Sort. This was motivated by the fact that 
+Merge Sort gurentees sorting in $nlog(n) + dots$ comparisons while Quick Sort will sometimes finish much quicker (pun not intended) 
+and other times, just suffer.
 
-This implies that there are some lists where Quick Sort is extreamly efficent and as one might expect there are many such lists. This is why languages which can keep states (C++, C, Rust etc) etc use something called Introsort which uses Quick Sort till the depth of recusion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); then we fallback to Merge Sort or a Heap Sort(which we will see in chapter 11).
+As a dinal remark, our implementation of the Quick Sort is not the most optimal as we go through the list twice, 
+but it is the most aesthetically pleasing and concise.
+#exercise(sub : "Faster Quick Sort")[
+  A slight improvment can be made to the implementation by not using list comprehension and instead using a helper function, to traverse the list only once.
 
-Haskell used to use quickSort as the default but in 2002, Ian Lynagh changed it to Merge Sort. This was motivated by the fact that Merge Sort gurentees sorting in some time while Quick Sort will sometimes finish much quicker and other times, alas.
+  Try to figure out this implementation.
+]
 
 == Zip it up!
 A simple thing we might want to do at times is to join two lists together as pairs. 
