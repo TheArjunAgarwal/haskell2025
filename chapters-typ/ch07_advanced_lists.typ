@@ -1,6 +1,8 @@
-#import "../Modules/style.typ": *
-#show: codly-init.with()
-#codly(languages: codly-languages)
+#import "../Modules/Definition.typ" : def
+#import "../Modules/Exercise.typ" : exercise
+
+#let definition = def
+#let example = it => [For example - \ #it]
 
 = advanced lists (feel free to change it)
 
@@ -118,7 +120,9 @@ merge (x:xs) (y:ys) = if x < y
 ```
 Note, we can only sort a list which has some definition of order on the elements. That is the elements must be of the typeclass `Ord`.
 
-To implement merge sort, we now only need a way to split the list in half. This is rather easy, we have already seen `drop` and `take`. An inbuilt function in Haskell is `splitAt :: Int -> [a] -> ([a], [a])` which is basically equivalent to `splitAt n xs = (take n xs, drop n xs) `. *An excercise would be to define this in a slightly more efficent manner and is left to the reader.* All in all, we can now merge sort using the function
+To implement merge sort, we now only need a way to split the list in half. This is rather easy, we have already seen `drop` and `take`. An inbuilt function in Haskell is `splitAt :: Int -> [a] -> ([a], [a])` which is basically equivalent to `splitAt n xs = (take n xs, drop n xs) `.
+
+That means, we can now merge sort using the function
 ```
 mergeSort :: Ord a => [a] -> [a]
 mergeSort [] = []
@@ -127,8 +131,126 @@ mergeSort xs = merge (mergeSort left) (mergeSort right) where
   (left,right) = splitAt (length xs `div` 2) xs
 ```
 
+#exercise(sub : "MergeSort Works?")[
+  Prove that merge sort indeed works. A road map is given
+
+  (i) Prove that `merge` defined by taking the smaller of the heads of the lists reccursivly, produces a sorted list given the two input lists were sorted. The idea is that the first element choosen has to be the smallest. Use induction of the sum of lengths of the lists.
+
+  (ii) Prove that `mergeSort` works using induction on the size of list to be sorted.
+]
+
+This is very efficent way to sort a list. If we define a function $T$ count the number of operations we make, $T(n) < 2*T(ceil(n/2)) + n + n + n = 2*T(ceil(n/2)) + 3n$ where the 3 $n$'s come from the length, the `splitAt` and the `merge`.
+
+This implies $
+T(n) <& n ceil(log(n)) T(1) + 3n + 3ceil(n/2) + 3 ceil(ceil(n/2)/2) + dots + 3 \
+=& n ceil(log(n)) + 3(n + ceil(n/2) + ceil(ceil(n/2)/2) + dots + 1)\
+<& n ceil(log(n)) + 3(n + (n+1)/2 + ceil((n+1)/4) + dots +1)\
+=& n ceil(log(n)) + 3(n + n/2 + 1/2 + n/4 + 1/2 + dots +1)\
+<& n ceil(log(n)) + 3 (2n + 1/2log(n))\
+=& n ceil(log(n)) + 6n + 3/2log(n)\
+<& n (log(n) + 1) + 6n + 3/2 log(n)\
+<& n log(n) + 7n + 3/2 log(n)
+$
+
+Two things to note are that the above computation was very cumbersome. We will later see a way to make it a bit less cumbersome, at the cost of some information.
+
+The second, for sufficiently large $n$, $n log(n)$ dominates the equation. That is $
+exists m op(s.t.) forall n > m : n log(n) > 6n > 3/2log(n)
+$
+This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elemeents in the list is such that they can be compared, we can't do much better. The dominating term will be $n log(n)$ times some constant. This later refers to chapter 10.
+
+In this algorithm, we waste some ammount of operations dividing the list in 2. What if we take our odds and approximatly divide the list into two parts?
+
+This is the idea of quick sort. If we take a random element in the list, we expect half the elements to be lesser than it and half to be greater. We can use this fact to define quickSort by splitting the list on the basis of the first element and keep going. This can be implemented as:
+```
+quickSort :: Ord a => [a] -> [a]
+quickSort [] = []
+quickSort [x] = [x]
+quickSort (x:xs) = quickSort [l | l <- xs, l > x] ++ [x] ++ quickSort [r | r <- xs, r <= x]
+``` 
+This is not the most efficent way to do so as we go through the list twice, but it is the most aesthetically pleasing and concise.
+#exercise(sub : "Faster Quick Sort")[
+  A slight improvment can be made to the implementation by not using list comprehension and instead using a helper function, to traverse the list only once.
+
+  Try to figure out this implementation.
+]
+We will use the above deined version for our calculations, although you are reccomended to re-do the with the more efficient implementation as well.
+#exercise(sub : "Quick Sort works?")[
+  Prove that Quick Sort does indeed works. This has to be done by 
+]
+
+Clearly, With $n$ being the length of list, $T(n)$ is a random variable dependent on the permutation of the list. 
+
+Let $l$ be the number of elements less than the first elements and $r = n-l-1$. This means $T(n) = T(l) + T(r) + 2(n - 1) + l + 1$ where the $n-1$ comes from the list comprehension and the $l+1$ from the concatination.
+
+In the worst case scenario, our algoritm could keep spliting the list into a length $0$ and a length $n-1$ list. This would screw us very badly. Furthermore, as this is the worst case, our algorithm also gets the worst concatination, that is the left list is $n-1$.
+
+As $T(n) = T(0) + T(n-1) + 2(n - 1) + (n-1) + 1$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the concatination.
+Using $T(0) = 1$, This evaluates to
+$
+  T(n) &= T(0) + T(n-1) + 2(n - 1) + (n-1) + 1\
+  &= T(n-1) + 3n - 1\
+  &= 3(n+(n-1) + dots + 1)  underbrace(-1 -1 dots -1, n "times")\
+  &= 3 (n(n+1))/2 - n\
+  &= 3/2n^2 + 1/2n
+$
+Which is quite bad. Furthermore, while this case is based on already sorted list; we don't fare better in the case where the list split into $n-1$ and $0$ every stage despite someconcatinaions costing $1$.
+
+The above case is also common enough. How common? 
+#exercise(sub : "A Strange Proof")[
+Prove $2^(n-1) <= n!$
+]
+
+Then why are we intrested in Quick Sort? and why is named quick?
+
+Let's look at the average or expected time it would take.
 
 
+
+$
+  EE(T(n)) &= EE(T(l) + T(r) + 2(n - 1) + l + 1)\
+  &= EE(T(l)) + EE(T(r)) + 2(n-1) + 1 + EE(l)\
+  &text("Using the fact" l "and" r "are symmetrical and interchangable and assuming" l "is uniform.")\
+  &= 2 EE(T(l)) + 2(n-1) + 1 + (n-1)/2\
+  &= 2/n sum_(i=0)^(n-1) EE(T(i)) + 5/2 n -3/2
+$
+
+Now for the sake of simplification, we will take $n EE(T(n)) = S(n)$.
+
+$
+  S(n) &= 2 sum_(i=0)^(n-1) EE(T(i)) + 5/2 n^2 - 3/2 n\
+  & text("and") S(n-1) = 2 sum_(i=0)^(n-2) EE(T(i)) + 5/2 (n-1)^2 - 3/2(n-1)\
+  =>& S(n) - S(n-1) = 2EE(T(n-1)) + 5/2 (2n-1) -3/2\
+  =>& n EE(T(n)) - (n-1) EE(T(n-1)) = 2 EE(T(n-1)) + 5 n - 4\
+  =>&  EE(T(n)) = (n+1)/n EE(T(n-1)) + 5 - 4/n \
+$
+This reccurence can actually be solved! Making the magical substitution $f(n) = EE(T(n))/(n+1)$
+$
+  & (n+1)f(n) = (n+1) f(n-1) + 5 - 4/n\
+  =>& f(n) = f(n-1) + (5n - 4)/(n(n+1))\
+  =>& f(n) = f(1) + sum_(i=2)^(n) (5i-4)/(i(i+1))\
+  =>& f(n) = 1 + sum_(i=2)^(n) (5i-4)/(i(i+1))
+
+  
+$
+Finally, this is something we can work with. Using the fraction decomposition technique, We can write $(5i - 4)/(i(i+1)) = 9/(i+1) - 4/i$
+$
+  f(n) &= 1 + sum_(i=2)^(n) 9/(i+1) - sum_(i=2)^(n)  4/i\
+  &= 1 + 9/(n+1) + 5 sum_(i=3)^(n) 1/i - 2\
+  &approx 9/(n+1) - 1 + 5(log(n) + gamma - 1 - 1/2)\
+  => EE(T(n)) &= (n+1)f(n) = 9 - (n+1) + 5(n+1)(log(n) + gamma - 3/2)\
+  &= 5n log(n) - (5 gamma - 17/2) n + 5 log(n) + 5 gamma - 1/2 
+$
+Where $gamma = lim_(n -> infinity) (sum_(i=1)^n 1/i) - log(n) = 0.577dots $ is called the Euler–Mascheroni constant.\
+
+The point of this, frankly exhausting, calculation is that despite having an exponential number of cases in quadratic time (remember the worst case analysis?), Quick Sort's expected number of operations is still a constent times $n log(n)$ which is optimal.\
+
+This implies that there are some lists where Quick Sort is extreamly efficent and as one might expect there are many such lists. This is why languages which can keep states (C++, C, Rust etc) etc use something called Introsort which uses Quick Sort till the depth of recusion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); then we fallback to Merge Sort or a Heap Sort(which we will see in chapter 11).
+
+Haskell used to use quickSort as the default but in 2002, Ian Lynagh changed it to Merge Sort. This was motivated by the fact that Merge Sort gurentees sorting in some time while Quick Sort will sometimes finish much quicker and other times, alas.
+
+== Zip it up!
+A simple thing we might want to do at times is to join two lists together as pairs. 
 
 // cite
 // citation 1
