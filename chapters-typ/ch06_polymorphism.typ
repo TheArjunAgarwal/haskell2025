@@ -232,7 +232,7 @@ In general, we have the following theorem:
 $ 
 ("curry" f) (a) (b) = f (a, b) 
 $
-Category theorists call the above condition _naturality_. 
+Category theorists call the above condition _naturality_ (or say that the bijection is _natural_ ). 
 The notation $Y^X$ is the set of functions from $X$ to $Y$.])[
 We prove the above by defining $"curry" : C^(A times B) -> (C^B)^A$, and then defining its inverse.
 $
@@ -350,7 +350,7 @@ flip :: (a -> b -> c) -> b -> a -> c
 (\ x y -> x == y) :: Eq a => a -> a -> Bool
 ```
 
-The reader should not be equipped with everything they need to understand how types can be read and can now use type inference like this to understand haskell programs better.
+The reader should now be equipped with everything they need to understand how types can be read and can now use type inference like this to understand haskell programs better.
 
 === Higher Order Functions on Maybe Type
 
