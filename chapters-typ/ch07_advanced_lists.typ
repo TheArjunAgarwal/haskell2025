@@ -1,6 +1,7 @@
 #import "../Modules/Definition.typ" : def
 #import "../Modules/Exercise.typ" : exercise
 #import "../Modules/Tree.typ" : tree
+#import "../Modules/Tree.typ" : far_away
 
 #let definition = def
 #let example = it => [For example - \ #it]
@@ -378,7 +379,7 @@ Note, we need to define till the 5th place as otherwise the code has no way to k
 #exercise(sub: "Tromino's Pizza II")[
   Tromino's has started to charge a box fees. So now given a number of slices, we want to know the minimum number of boxes we can achive the order in. Create a list `minBoxPizza` such that if we can buy exactly `n` slices, the list displays `Just` the minimum number of boxes the order can be achived in, and `Nothing` otherwise. The list is hence of type `[Maybe Int]`.
 
-  Hint : Create a helper function to use with the `zipWith` expression
+  Hint : Create a helper function to use with the `zipWith` expression.
 ]
 
 One more intresting thing we can talk about is higher dimensional `zip` and `zipWith`. One way to talk about them is `zip3 :: [a] -> [b] -> [c] -> [(a,b,c)]` and `zipWith3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]`.  These are defined exactly how might expect them to be.
@@ -399,6 +400,11 @@ zipWith3 f (x:xs) (y:ys) (z:zs) = (f x y z) : zipWith3 f xs ys zs
 #exercise[A slightly tiresome exercise, try to define `zip4` and `zipWith4` blind.]
 
 Haskell predefines till `zip7` and `zipWith7`. We are yet to see anything beyond `zipWith3` used in code, so this is more than enough. Also, if you truly need it, `zip8` and `zipWith8` are not that hard to define.
+
+#exercise(sub : "Tromino's Pizza III")[
+  Tromino's has introduced a new box of size 7 slices. Now they sell $3,5,7$ slice boxes. They still charge the box fees. So now given a number of slices, we still want to know the minimum number of boxes we can achive the order in. Create a list `minBoxPizza` such that if we can buy exactly `n` slices, the list displays  `Just` the minimum number of boxes the order can be achived in, and `Nothing` otherwise. The list is hence of type `[Maybe Int]`.
+
+]
 
 Another idea of dimension would be something that could join together two grids, something with type signature `zip2d :: [[a]] -> [[b]] -> [[(a,b)]]` and `zipWith2d :: (a -> b -> c) -> [[a]] -> [[b]] -> [[c]]`.
 ```
@@ -424,6 +430,332 @@ This also implies `zip2d = zipWith.zipWith $ (\x y -> (x,y))` is also a correct 
 #exercise(sub : "Composing zipWith's")[
   What should the type signature and behaviour of `zipWith . zipWith . <n times> . zipWith` be? Prove it.
 ]
+#exercise(sub : "Unzip")[
+Haskell has an inbuilt function called `unzip :: [(a,b)] -> ([a],[b])` which takes a list of pairs and provides a pair of list in the manner inverse of `zip`.
+
+Try to figure out the implementation of `unzip`.
+]
+
+== Folding, Scaning and The Gate to True Powers
+A lot of reccursion on lists has the following structure
+```
+g [] = v -- The vacous case
+g (x:xs) = x `f` (g xs)
+```
+That is, the function `g :: [a] -> b` maps the empty list to a value `v`, of say type `b`, and for non-empty lists, the head of the list and the result of recursively processing the tail are combined using a function or operator `f :: a -> b -> b`.
+
+Some commone examples from the inbuilt functions are:
+```
+sum :: [Int] -> Int
+sum [] = 0
+sum (x:xs) = x + (sum xs)
+
+product :: [Int] -> Int
+product [] = 1 -- The sturcuture forces this choice as other wise, the product of full lists may become incorrect.
+product (x:xs) = x * (product xs)
+
+or :: [Bool] -> Bool
+or [] = False -- As the structure of our implementation forces this to be false, or otherwise, everything is true.
+or (x:xs) = x || (or xs)
+
+and :: [Bool] -> Bool
+and [] = True
+and (x:xs) = x && (and xs)
+```
+
+We will also see a few more examples in a while, but one can notice that this is a common enough pattern. So what do we do? We abstract it.
+
+```
+-- | Definition of foldr
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr _ v [] = v
+foldr f v (x:xs) = x `f` (foldr f v xs)
+```
+
+This shortens our definitons to
+```
+sum = foldr (+) 0
+product = foldr (*) 1
+or = foldr (||) False
+and = foldr (&&) True
+```
+
+Sometimes, we don't wish to define a base case or maybe the logic makes it so that doing so is not possible, then you use `foldr1 :: (a -> b -> b) -> [a] -> a` defined as
+```
+-- | Definition of foldr1
+foldr1 :: (a -> a -> a) -> [a] -> a
+foldr1 _ [x] = x
+foldr1 f (x:xs) = x `f` (foldr f xs)
+```
+
+Like we could now define `product = foldr1 (*)` which is much more clean as we don't have to define a weird vacous case.
+
+Let's now discuss the naming of the pattern. Recall, `[1,2,3,4]` is syntactic suger for `1 : 2 : 3 : 4 : []`. We are just allowed to write the former as it is more aesthetic and convinient. One could immidietly see that 
+```
+foldr v f [1,2,3,4] = 1 `f` (2 `f` (3 `f` (4 `f` v)))
+-- and if f is right associative
+= 1 `f` 2 `f` 3 `f` 4 `f` v
+```
+We have basically changed the cons (`:`) into the function and the empyy list (`[]`) into `v`. But notice the brackets, the evaluation is going from right to left.
+
+Using trees, A list can be reprasented in the form
+
+#tree(
+(`(:)`,
+`x1`,
+(`(:)`,
+`x2`,
+(`(:)`,
+`x3`,
+(far_away(`(:)`),
+`xn-1`,
+(`(:)`,
+`xn`,
+`[]`
+)
+)
+)
+)
+)
+)
+
+which is converted to:
+
+#tree(
+(`f`,
+`x1`,
+(`f`,
+`x2`,
+(`f`,
+`x3`,
+(far_away(`f`),
+`xn-1`,
+(`f`,
+`xn`,
+`v`
+)
+)
+)
+)
+)
+)
+
+However, what if our function is left associative? After all, if this was the only option, we would have called it `fold`, not `foldr` right?
+
+The recursive pattern
+```
+g :: (b -> a -> b) -> b -> [a] -> b
+g _ v [] = v
+g f v (x:xs) = g (f v x) xs
+```
+is abstracted to `foldl` and `foldl1` respectively.
+```
+-- | Definition of foldl and foldl1
+foldl :: (b -> a -> b) -> b -> [a] -> b
+foldl _ v [] = v
+foldl f v (x:xs) = foldl (f v x) xs
+
+foldl1 :: (a -> a -> a) -> [a] -> a
+foldl1 f (x:xs) = foldl f x xs 
+```
+And as the functions we saw were commutative, we could define them as
+```
+sum       = foldl (+) 0
+product   = foldl (*) 1
+or        = foldl (||) False
+and       = foldl (&&) True
+```
+There is one another pair of function defined in the fold family called `foldl'` and `foldl1'` which are faster than `foldl` and `foldl1` and don't require a lot of working memory. This makes them the defualts used in most production code, but to understand them well, we need to discuss how haskell's lazy computation actually works and is there a way to bypass it. This is done in chapter 9. We will use `foldl` and `foldl1` till then.
+
+The computation of `foldl` proceeds like
+```
+foldl v f [1,2,3,4] = ((((v `f` 1) `f` 2) `f` 3) `f` 4)
+--  and if f is left associative
+= v `f` 1 `f` 2 `f` 3 `f` 4
+```
+Or in tree form as
+
+#tree(
+(`(:)`,
+`x1`,
+(`(:)`,
+`x2`,
+(`(:)`,
+`x3`,
+(far_away(`(:)`),
+`xn-1`,
+(`(:)`,
+`xn`,
+`[]`
+)
+)
+)
+)
+)
+)
+
+which is converted to:
+
+#tree(
+(`f`,
+  (`f`,
+    (`f`,
+    (far_away(`f`),
+      (`f`,`v`,`x1`),`x2`
+    ),`xn-2`
+    ),`xn-1`
+  ), `xn`
+)
+)
+
+Another very cute picture to summerize the diffrences is:
+#image("../images/image.png")
+
+Similer to how `unzip` was for `zip`, could we define `unfoldr`, something that takes a generator function and a seed value and genrates a list out of it.
+
+What could the type of such a function be? Well, like with every design problem; let's see what our requirements are:
+- The list should not just be one element over and over. Thus, we need to be able to update the seed after every unfolding.
+- There should be a way for the list to terminate.
+
+So what could the type be? We can say that our function must spit out pairs: of the new seed value and the element to add to the list. But what about the second condition?
+
+Well, what if we can spit out some seed which can never come otherwise and use that to signal it? The issue is, that would mean the definition of the function has to change from type to type.
+
+Instead, can we use something we studied in ch-6? Maybe. #footnote("Pun intended.")
+```
+-- | Implementation of unfoldr
+unfoldr :: (a -> Maybe (a,b)) -> a -> [b]
+unfoldr gen seed = go seed
+  where
+    go seed = case gen seed of
+        Just (x, newSeed) -> x : go newSeed
+        Nothing         -> []
+```
+For example, we could now define some library functions as:
+```
+replicate :: Int -> a -> [a]
+-- replicate's an value n times
+replicate n x = unfoldr gen n x where
+    rep 0 = Nothing
+    rep m = Just (x, m - 1)
+
+itterate :: (a -> a) -> a -> [a]
+-- given a function f and some starting value x
+-- outputs the infinite list [x, f x, f f x, ...]
+itterate f seed = unfold (\x -> Just (x, f x)) seed
+```
+While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `unfoldr` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we reffered was litrally titled "The Under-Appreciated Unfold".
+
+#exercise(sub : "Some more inbuilt functions")[
+  Implement the following functions using fold and unfold.
+
+  (i) `concat :: [[a]] -> [a]` concats a list of lists into a single list. For example: `concat [[1,2,3],[4,5,6],[7,8],[],[10]] = [1,2,3,4,5,6,7,8,9, 10]`
+
+  (ii) `cycle :: [a] -> [a]` cycles through the list endlessly. For example: `cycle [2, 3, 6, 18] = [2, 3, 6, 18, 2, 3, ...]`
+
+  (iii) `filter :: (a -> Bool) -> [a] -> [a]` takes a predicate and a list and filters out the elements satisfying that predicate.
+
+  (iv) `concatMap :: (a -> [b]) -> [a] -> [b]` maps a function over all the elements of a list and concatenate the resulting lists. Do not use `map` in your definition.
+
+  (v) `length :: [a] -> Int` gives the number of elements in the provided list. Use `foldr` or `foldl`.
+]
+
+#exercise(sub : "Base Conversion")[
+  (i) Comvert list of digits in base `k` to a number. That is `lis2num :: Int -> [Int] -> Int` with the usage `lis2num base [digits]`.
+
+  (ii) Given a number in base 10, convert to a list of digits in base `k`. `num2lis :: Int -> Int -> [Int]` with the usage `num2list base numberInBase10`
+]
+Let's go part by part. The idea of the first question is simply to understand that `[4,2,3]` in base `k` reprasents $4 * k^2 + 2 * k + 3 * k^0 = ((0 * k + 4) * k + 2)*k + 3$; doesn't this smell like `foldl`?
+
+```
+lis2num :: [Int] -> Int -> Int
+lis2num k = foldl (\x y -> k * x + y) 0
+```
+
+For part two, the idea is that we can base convert using repeated division. That is,
+```
+423 `divMod` 10 = (42, 3)
+42 `divMod` 10 = (4, 2)
+4 `divMod` 10 = (0, 4)
+```
+It is clear that we terminate when the quotient reaces $0$ and then just take the remainders. Does this sound like `unfoldr`?
+```
+num2lis :: Int -> Int -> [Int]
+num2lis k = reverse . unfoldr gen where
+  gen 0 = Nothing
+  gen x = Just $ (x `mod` k, x `div` k)
+```
+
+#exercise(sub : "A list of Primes")[
+  This is the time when Haskell itself forgot that the `unfoldr` function exists. The website offers the following method to make a list of primes in Haskell as an advertisment for the language.
+  ```
+  primes = filterPrime [2..] where
+  filterPrime (p:xs) =
+    p : filterPrime [x | x <- xs, x `mod` p /= 0]
+  ```
+  Understand this code (write a para explaining exactly what is happening!) and try to define a shorter (and more aesthetic) version using `unfoldr`.
+]
+The answer is litrally doing what one would do on paper. Like describing it would be a disservice to the code.
+```
+-- | list of primes using unfoldr
+sieve (x:xs) = Just (x, filter (\y -> y `mod` x /= 0) xs)
+primes = unfoldr sieve [2..]
+```
+#exercise(sub : "Subsequences")[
+  Write a function `subslists :: [a] -> [[a]]` which takes a list and returns a list of sublists of the given list. For example: `sublists "abc" = "","a","b","ab","c","ac","bc","abc"` and `sublists [24, 24] = [[],[24],[24],[24,24]]`. 
+
+  Try to use the fact that a sublist either contains an element or not. Second, the fact that sublists correspond nicely to binery numerals may also help.
+
+  You function must be compatable with infinite lists, that is `take 10 $ sublists [1..] = [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3], [4], [1,4]]` should work.
+]
+*Please fill in the blanks below*
+
+A naive, non-infinite compatable definiton is:
+```
+sublists [] = ______
+subslists (x:xs) = concatMap (\ys -> ______) (sublists xs)
+```
+
+On an infinite list, this definition gets stuck in an non-productive loop because we must traverse the entire list before it returns anything.
+
+Note that on finite cases, the first sublist returned is always `______`. This means we can state this as `sublists xs == _______ : ______ (sublists xs)`. It is sensible to extend this equality to the infinite case, due to the analogy of `________`. 
+
+By making this substitution, we produce the definition that can handle infinite lists, from which we can calculate a definition that’s more aesthetically pleasing and slightly more efficient:
+```
+____________ -- Base case
+sublists (x:xs)  = _____ : ______ : concatMap (\ys -> ______) (tail . sublists xs)
+```
+
+We can clean this definition up by calculating definitions for `tail.sublists x` and renaming it something like `nonEmpties`. We start by applying tail to both sides of the two cases. `nonEmpties [] = tail.sublists [] = _______` and `nonEmpties (x:xs) = tail.sublists (x:xs) = _______`
+
+Substituting all thins through the definition.
+```
+-- | Space to write the definition of sublists
+
+
+
+
+
+```
+
+This function can be called in Haskell through the `subsequences` function one gets on importing `Data.Lists`. Our definition is the most efficient and is what is used internally.
+
+Finally, a question which would require you to use a lot of functions we just defined:
+#exercise(sub: "The Recap Problem (Euler's Project 268)")[
+It can be verified that there are $23$ positive integers less than $1000$ that are divisible by at least four distinct primes less than $100$.
+
+Find how many positive integers less than $10^16$ are divisible by at least four distinct primes less than $100$.
+
+Hint : Thik about PIE but not $pi$.
+]
+
+// contine
+
+
+
+
+
+
 
 
 
