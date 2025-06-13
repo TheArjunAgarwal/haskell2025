@@ -42,7 +42,7 @@ Some basic kinds of sets are -
 - #def(sub: "empty set" )[
   The *empty set* is the _set that contains no elements_ or equivalently, _${}$_.
 ]
-- #def(sub: "singleton set" )[ A *singelten set* is a _set that contains exactly one element_, such as ${34}, {triangle}$, the set of natural numbers strictly betweeen $1$ and $3$, etc. ]
+- #def(sub: "singleton set" )[ A *singleton set* is a _set that contains exactly one element_, such as ${34}, {triangle}$, the set of natural numbers strictly between $1$ and $3$, etc. ]
 
 We might have encountered some mathematical sets before, such as the set of real numbers $RR$ or the set of natural numbers $NN$, or even a set following the rules of vectors ( a vector space ).
 
@@ -87,10 +87,10 @@ $
 
 = Types
 
-We have enconutered a few types in the previous chapter, such as `Bool`, `Integer` and `Char`. For our limited purposes, we can think about each such *type* as the *set of all values of that type*.
+We have encountered a few types in the previous chapter, such as `Bool`, `Integer` and `Char`. For our limited purposes, we can think about each such *type* as the *set of all values of that type*.
 
 For example, 
-- `Bool` can be thought of as the *set of all bolean values*, which is {`False`, `True`}.
+- `Bool` can be thought of as the *set of all boolean values*, which is {`False`, `True`}.
 - `Integer` can be thought of as the *set of all integers*, which is {`0`, `1`, `-1`, `2`, `-2`, . . . }.
 - `Char` can be thought of as the *set of all characters*, which is {`'\NUL'`,`'\SOH'`,`'\STX'`, . . . ,`'a'`,`'b'`,`'c'`, . . . ,`'A'`,`'B'`,`'C'`, . . . }
 
@@ -266,7 +266,7 @@ For example, the types `Int` and `Integer` have no elements in common. We might 
 
 Thus, the intersection of two different types will always be empty and doesn't make much sense anyway. 
 
-Therfore, no intersection operation is defined for types.
+Therefore, no intersection operation is defined for types.
 
 == No @definition_of_union of Types 
 
@@ -275,7 +275,7 @@ Suppose the type `T1`$union$`T2` were an actual type. It would have elements in 
 But there is a promising alternative, for which we need to define the set-theoretic notion of *disjoint union*.
 
 #exercise(sub: "subtype" )[
-  Do you think that there can be an anlogue of the _subset_ relation $subset.eq$ for types?
+  Do you think that there can be an analogue of the _subset_ relation $subset.eq$ for types?
 ]
 
 == Disjoint Union of Sets
@@ -372,7 +372,7 @@ If `n<3`, then we return `'F'`. To denote that `'F'` is a `Char`, we will tag `'
 "
 
 We can also define a function from an `Either` type. \
-Consider the folowing problem : We are given a value that is either a boolean or a character. We then have to represent this value as a number. 
+Consider the following problem : We are given a value that is either a boolean or a character. We then have to represent this value as a number. 
 ```haskell top
 import Data.Char(ord)
 ```
@@ -516,11 +516,12 @@ If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` w
 ]
 
 We can define functions to a `Maybe` type.
-For example consider the problem of making an inverse function of `reciprocal`, i.e., a function `inversOfReciprocal` s.t. #align(center)[$forall$` x::Rational `,` inverseOfReciprocal ( reciprocal x ) == x `] as follows -
+For example consider the problem of making an inverse function of `reciprocal`, i.e., a function `inverseOfReciprocal` s.t. #align(center)[$forall$` x::Rational `,` inverseOfReciprocal ( reciprocal x ) == x `] as follows -
 ```haskell
 -- | function to a maybe type
+inverseOfReciprocal :: Maybe Rational -> Rational
 inverseOfReciprocal Nothing  = 0
-inversOfReciprocal  (Just x) = (1/x)
+inverseOfReciprocal  (Just x) = (1/x)
 ```
 
 == `Void` is analogous to ${}$ or @definition_of_empty_set
