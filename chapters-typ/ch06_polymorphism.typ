@@ -36,18 +36,18 @@ nand a b = not (a && b)
 
 The situation is something similar, for a lot of other types, like *`Int`*, *`Char`* and so on.
 
-But with the addition of the List type from the previous chapter, we were able to add _new_ information to a type. In the following sense:
+But with the addition of the List type from the previous chapter, we were able to add _new_ information to a type, in the following sense:
 
 Consider the type *`[Int]`*, the elements of these types are lists of integers, the way one would interact with these would be to treat it as a collection of objects, in which each element is an integer.
 - so to write a function for this type, one first needs to think about the fact that the _shape_ of an element looks like a list, and how one gets to the items of the list, and then treat the items like integers and write functions on them.
-- A function for lists would thus have 2 components, at least conceptually if not explicit in code itself, consider the following example:
+- A function for lists would thus have 2 components, at least conceptually if not explicit in the code itself, consider the following example:
   ```
   -- | squaring all elements of a list 
   squareAll :: [Int] -> [Int]
   squareAll []       = []
   squareAll (x : xs) = x * x : squareAll xs  
   ```
-  Here, in the definition when we match patterns, we figure out the shape of the list element, and if we can extract an integer from it, we do so, square it, then put it back in the list.
+  Here, in the definition when we match patterns, we figure out the shape of the list element, and if we can extract an integer from it, then we square it and put it back in the list.
 
 Something similar can be done with the type *`[Bool]`*:
 - Once again, to write a function, one needs to first look at the _shape_ an element as a list, Then pick elements out of them and treat them as *`Bool`* elements.
@@ -141,11 +141,11 @@ We know that both functions, do the same thing in the mathematical sense, given 
 f == g
 ```
 
-On one hand, this seems like a fair thing to ask, as we already have a definition for equality of mathematical functions, on the other hand we run into 2 issues:
-- Is it really fair to say that? In computer science, the way things are computed matter, hence the name of the entire field. I lot of times, one will be able to distinguish which of the functions are running, by simply looking at which one works faster or slower on big inputs, and that might be something people might want to factor in what the mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal may not be wise.
+This definitely seems like a fair thing to ask, as we already have a definition for equality of mathematical functions, but we run into 2 issues:
+- Is it really fair to say that? In computer science, the way things are computed matter, that is where the subject gets its name from. A lot of times, one will be able to distinguish distinguish between functions, by simply looking at which one works faster or slower on big inputs, and that might be something people might want to factor into what they mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal may not be wise.
 - The second is that in general it is not possible, in this case we have a mathematical identity that lets us prove so, but given any 2 function, it might be that the only way to prove that they are equal would be to actually check on every single value, and since domains of functions can be infinite, this would simply not be possible to compute.
 
-So we can't have the type of *`(==)`* be `a -> a -> Bool`. In fact, if I try to write it, the haskell compiler will complain to me by saying
+So we can't have the type of *`(==)`* to be `a -> a -> Bool`. In fact, if I try to write it, the haskell compiler will complain to me by saying
 
 ```
 funext.hs:8:7: error: [GHC-39999]
@@ -172,7 +172,7 @@ Typeclasses are how one expresses in haskell, what a collection of types looks l
 - `Ord`, which is the collection of all types for which the function *`(<)`* is defined.
 - `Show`, which is the collection of all types for which there is a function that converts them to `String` using the function *`show`*.
 
-Note that in the above cases, defining one function lets you define some other functions, like *`(/=)`* for `Eq` and *`(<=)`*, *`(>=)`* and so on for the `Ord` typeclass.
+Note that in the above cases, defining one function lets you define some other functions, like *`(/=)`* for `Eq` and *`(<=)`*, *`(>=)`* and others for the `Ord` typeclass.
 
 Now we come back to the `elem` function, the goal of this function is to check if a given element belongs to a list. And the following is a way to write it:
 
@@ -188,7 +188,7 @@ First we see that the `e` must have the same types as the items in the list, but
 elem :: a -> [a] -> Bool
 ``` 
 
-But if we do that we will encounter the same issue as we did in @code_of_Function_Extensionality, because of `(==)` we need to find a way to say that `a` belongs to the collection `Eq`, and this leads to the correct type:
+we will encounter the same issue as we did in @code_of_Function_Extensionality, because of `(==)`. We need to find a way to say that `a` belongs to the collection `Eq`, and this leads to the correct type:
 ```
 elem :: Eq a => a -> [a] -> Bool
 ```
@@ -200,7 +200,7 @@ Write the function `isSorted` which takes in a list as an argument, such that th
 
 = Higher Order Functions
 
-One of the most important parts of the style of functional programming is that functions are first class citizens, they can do whatever other non-functions things can do, specifically they can be passed into functions as argument, or can be as the output of a function.
+One of the most powerful feature of functional programming languages is that it lets one pass in functions as argument to another function, and have funtions return other functions as outputs, these kinds of functions are known as:
 
 #def(sub: "Higher Order Functions")[
 A *higher order function* is a function that does at least one of the following things:
@@ -208,14 +208,14 @@ A *higher order function* is a function that does at least one of the following 
 - It returns a function as an argument.
 ]
 
-This is again a way of generalization and is very handy, for instance, 
+This is again a way of generalization and is very handy, as we will see in the rest of the chapter.
 
 == Currying
 
 Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` //input is not fn 
-way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
+way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that is really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
 
-Consider the case of finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
+An example from mathematics would be finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
 $ (f, x) |-> f'(x) : ((RR -> RR)^d times RR) -> RR $
 Here $(RR -> RR)^d$ is the type of real differentiable functions.
 
@@ -339,7 +339,7 @@ Write a function `repeat` that takes a function `f` and an argument `a` along wi
 === A Short Note on Type Inference
 Haskell is a statically typed language. What that means is that it requires the types for the data that is being processed by the program, and it needs to for an analysis that happens before running the program, this is called *type checking*.
 
-It is not however required to give types to all functions (we do strongly recommend it though!), in fact one can simply not give any types at all. This is possible because the haskell compiler is smart enough to figure all of it out on its own! It's so good that when you do write type annotations for functions, haskell ignores it, figures the types out on its own and can then check if you have given the types correctly.
+It is not however required to give types to all functions (we do strongly recommend it though!), in fact one can simply not give any types at all. This is possible because the haskell compiler is smart enough to figure all of it out on its own! It's so good that when you do write type annotations for functions, haskell ignores it, figures the types out on its own and can then check if you have given the types correctly. This is called *type inference*.
 
 Haskell's type inference also gives the most general possible type for a function. To see that, one can open ghci, and use the `:t` command to ask haskell for types of any given expression.
 
@@ -359,8 +359,8 @@ The *Maybe Type*, as defined in #link(<maybe>)[Chapter 3] is another playground 
 When using the `Maybe` types, one eventually runs into a problem that looks something like this:
 - Break up the problem into a bunch of tiny steps, so make a lot of simple function and the final solution is to be achieved by combining all of them.
 - Turns out that one the functions, maybe something in the very beginning returns a `Maybe Int` instead of an `Int`.
-- This means that the next function along the chain, would have had to have its input type as `Maybe Int` to account for the potentially case of `Maybe`.
-- This makes the output type also like to be a `Maybe` type, this makes sense, if the process fails in the beginning, one might not want to continue.
+- This means that the next function along the chain, would have had to have its input type as `Maybe Int` to account for the potentially case of `Nothing`.
+- This also forces the output type to be a `Maybe` type, this makes sense, if the process fails in the beginning, one might not want to continue.
 - The `Maybe` now propogates in this manner through a large section of your code, this means that a huge chunk of code needs to be rewritten to looks something like:
   ```
   f :: a -> b
@@ -372,9 +372,9 @@ When using the `Maybe` types, one eventually runs into a problem that looks some
 ```
 Note that `$` here is making our code a little bit cleaner, otherwise we would have to put the enter expression in paranthesis.
 
-This is still not a very elegant way to write things tho, and its just a lot of repetitive work (book keeping really, one isn't really adding much to the program by making changes, except for safety, programmers usually like to call it boilerplate.)
+This is still not a very elegant way to write things though, and its just a lot of repetitive work (all of it is just book keeping really, one isn't really adding much to the program by making these changes, except for safety, programmers usually like to call it boilerplate.)
 
-Instead of going and modifying each function manually, we make a function modifier, which is precisely what higher order functions are: Our goal, which is obvious from the problem: `(a -> b) -> (Maybe a -> Maybe b)` and we define it as follows:
+Instead of going and modifying each function manually, we make a function modifier, which is precisely what a higher order function: Our goal, which is obvious from the problem: `(a -> b) -> (Maybe a -> Maybe b)` and we define it as follows:
 
 ```
 -- | maybeMap
@@ -433,10 +433,9 @@ final = Maybe val
 Define `maybeJoin` and `(>>=)` and see how both of then are used in programs, and maybe compare then by how one would define `final` without these.
 ]
 
-*Note* The symbol `(>>=)` is written as #unligate([`(>>=)`])
+*Note* The symbol `(>>=)` is written as #unligate([`(>>=)`]).
 
 Higher order functions, along with polymorphism help our code be really expressive, so we can write very small amounds of code that looks easy to read, which also does a lot. In the next chapter we will see a lot more examples of such functions.
-
 
 // cite 
 // citation 1

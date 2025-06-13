@@ -8,5 +8,6 @@ ehthumbs.db
 Thumbs.db
 .vscode
 *.pdf
+*.hs
 !main.pdf
 !guide.pdf

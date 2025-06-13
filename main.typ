@@ -76,12 +76,12 @@ let chapters = (
   (
     "ch07_advanced_lists.typ",
     [Advanced List Operations],
-    S
+    A
   ),
   (
     "ch08_precomp-datatypes.typ",
     [Introduction to Datatypes],
-    A
+    S
   ),
   (
     "ch09_computation.typ",
