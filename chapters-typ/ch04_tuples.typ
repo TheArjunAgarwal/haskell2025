@@ -104,17 +104,24 @@ In programming terms, this is known as declaring the variable `x`.
 
 For example, 
 
-- ```haskell
+- #[
+```haskell
 -- | declaration of x
 x :: Integer
 x = 42
-``` This reads - "Let $x in ZZ$. Take the value of $x$ to be $42$."
-
-- ```haskell
+``` ] This reads - "Let $x in ZZ$. Take the value of $x$ to be $42$."
+- #[
+```haskell
 -- | declaration of y
 y :: Bool
 y = xor True False
-``` This reads - "Let $y in$ {False, True}. Take the value of $y$ to be the $xor$ of True and False."
+```] This reads - "Let $y in$ {False, True}. Take the value of $y$ to be the $xor$ of True and False."
+
+#metadata[
+```haskell
+    where xor = (/=)
+```
+]
 
 #exercise(sub: "declaring a variable" )[
   Declare a variable of type `Char`.
@@ -126,17 +133,19 @@ As $B^A$ contains all functions from $A$ to $B$, \ so is each function `f` defin
 
 For example -
 
-- ```
+- #[
+```
 -- | function
 succ :: Integer -> Integer
 succ x = x + 1
-```
+```]
 
-- ```
+- #[
+```
 -- | another function
 even :: Integer -> Bool
 even n = if n `mod` 2 == 0 then True else False
-```
+```]
 
 #exercise(sub: "basic function definition" )[
   Define a non-constant function of type `Bool -> Integer`.
@@ -242,6 +251,7 @@ On the other hand, other types might have multiple values of that type. (such as
 
 We can even check this using `listOfAllElements` - 
 ```
+-- | elements of unit type
 >>> listOfAllElements :: [()]
 [()]
 ```
@@ -521,7 +531,7 @@ For example consider the problem of making an inverse function of `reciprocal`, 
 -- | function to a maybe type
 inverseOfReciprocal :: Maybe Rational -> Rational
 inverseOfReciprocal Nothing  = 0
-inverseOfReciprocal  (Just x) = (1/x)
+inverseOfReciprocal (Just x) = (1/x)
 ```
 
 == `Void` is analogous to ${}$ or @definition_of_empty_set
