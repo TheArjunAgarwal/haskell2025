@@ -39,20 +39,20 @@ let chapters = (
     author
   ),
   (
-    "ch02_setup_linux.typ",
-    [Haskell Setup on Linux],
+    "ch02_setup.typ",
+    [Installing Haskell],
     S
   ),
-  (
-    "ch02_setup_mac.typ",
-    [Haskell Setup on MacOS],
-    A
-  ),
-  (
-    "ch02_setup_win.typ",
-    [Haskell Setup on Windows],
-    R
-  ),
+  // (
+  //   "ch02_setup_mac.typ",
+  //   [Haskell Setup on MacOS],
+  //   A
+  // ),
+  // (
+  //   "ch02_setup_win.typ",
+  //   [Haskell Setup on Windows],
+  //   R
+  // ),
   (
     "ch03_datatypes.typ",
     [Basic Syntax],
