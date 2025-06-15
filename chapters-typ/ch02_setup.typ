@@ -134,7 +134,7 @@
   
   + Open the folder `installation` in File Explorer.
   
-  + Open the folder `MacOS` in File Explorer.
+  + Open the folder `Wnidows` in File Explorer.
   
   + Double-click on `installHaskell`.
   
