@@ -10,23 +10,24 @@
 // Chapter content goes here
 
 = Polymorphism
+== Classification has always been about _shape_ and _behvaiour_ anyway
 
 Functions are our way, to interact with the elements of a type, and one can define functions in one of the two following ways:
 + Define an output for every single element.
-+ Consider the general shape and behaviour of elements, and how they interact with other simple functions, then  build more complex function with that information.
++ Consider the general behaviour of elements, that is, the functions are defined on them and how one combine simpler functions defined on an element to define more complicated ones.
 
-Up until the chapter about lists, we saw how to define functions from a given type, to another given type, for example:
+And we have seen how to define functions from a given type to another given type using the above ideas, for example:
 
 *`nand`* is a function that accepts 2 *`Bool`* values, and checks if it at least one of them is *`False`*. We will show two ways to write this function.
 
-The first is too look at the possible inputs and define the outputs directly:
+The first is too 
+look at the possible inputs and define the outputs directly:
 ```
 nand :: Bool -> Bool -> Bool
 nand False _    = True
 nand True True  = False
 nand True False = True
 ```
-
 
 The other way is to define the function in terms of other functions and how the elements of the type *`Bool`* behave
 ```
@@ -36,18 +37,22 @@ nand a b = not (a && b)
 
 The situation is something similar, for a lot of other types, like *`Int`*, *`Char`* and so on.
 
-But with the addition of the List type from the previous chapter, we were able to add _new_ information to a type, in the following sense:
+But with the addition of the List type from the previous chapter, we were able to add _shape_ to the elements of a type, in the following sense:
 
-Consider the type *`[Int]`*, the elements of these types are lists of integers, the way one would interact with these would be to treat it as a collection of objects, in which each element is an integer.
-- so to write a function for this type, one first needs to think about the fact that the _shape_ of an element looks like a list, and how one gets to the items of the list, and then treat the items like integers and write functions on them.
-- A function for lists would thus have 2 components, at least conceptually if not explicit in the code itself, consider the following example:
+Consider the type *`[Integer]`*, the elements of these types are lists of integers, the way one would interact with these would be to treat it as a collection of objects, in which each element is an integer.
+- A function for lists would thus have 2 components, at least conceptually if not explicit in the code itself:
+    - The first being that of a list, which can be interacted with using functions like `head`.
+    - The second being that of `Integer`, So that functions on `Integer` can be applied to the elements of the list. 
+  consider the following example:
   ```
   -- | squaring all elements of a list 
-  squareAll :: [Int] -> [Int]
+  squareAll :: [Integer] -> [Integer]
   squareAll []       = []
   squareAll (x : xs) = x * x : squareAll xs  
   ```
   Here, in the definition when we match patterns, we figure out the shape of the list element, and if we can extract an integer from it, then we square it and put it back in the list.
+
+#pagebreak()
 
 Something similar can be done with the type *`[Bool]`*:
 - Once again, to write a function, one needs to first look at the _shape_ an element as a list, Then pick elements out of them and treat them as *`Bool`* elements.
@@ -61,22 +66,22 @@ Something similar can be done with the type *`[Bool]`*:
   Once again, the pattern matching handles the shape of an element as a list, and the definition handles each item of a list as a *`Bool`*.
 
 Then we see functions like the following: 
-- *`drop`*, which takes a list and discards the first couple of elements as specified.
 - *`elem`*, which checks in an element belong to a list.
 - *`(==)`*, which checks if 2 elements are equal.
+- *`drop`*, which takes a list and discards a specfied about of items in the list from the beginning.
 
-Up until now, we had been emphasizing on the _shape_ of elemets of a type, but these functions don't seem to care about it that much:
-- The *`drop`* function just cares about the list structre of an element, and not what the internal item looks like.
-- The *`elem`* function also does not care about the internal type of list items as long as some notion of equality if defined.
-- The *`(==)`* works on all types where some notion of equality is defined (A counter example would be the type of functions: *`Int -> Int`*).
+These functions seem to note care about all of the properties (shape and behaviour together) of their inputs.
+- The *`elem`* function wants its inputs to be list does not care about the internal type of list items as long as some notion of equality if defined.
+- The *`(==)`* works on all types where some notion of equality is defined, this is the only behaviour it is interested in. (A counter example would be the type of functions: *`Integer -> Integer`*, and we will discuss why this is the case soon.)
+- The *`drop`* function just cares about the list structre of an element, and does not look at the behaviour of the list items at all.
 
-Now one can define such functions for every single type, like:
+To define any function in haskell, one needs to give them a type, haskell demands so, so lets look at the case of the `drop` function. One possible way to have it would be to define one for every single type, as shown below:
 ```
-dropIntegers :: Int -> [Integer] -> [Integer]
+dropIntegers :: Integer -> [Integer] -> [Integer]
 dropIntegers = ...
-dropChars :: Int -> [Char] -> [Char]
+dropChars :: Integer -> [Char] -> [Char]
 dropChars = ...
-dropBools :: Int -> [Bool] -> [Bool]
+dropBools :: Integer -> [Bool] -> [Bool]
 dropBools = ...
 .
 .
@@ -89,12 +94,15 @@ but that has 2 problems:
     - All of Mathematics and Computer Science is done like this, in some sense it is just that.
         - Linear Algebra lets us treat any set where addition and scaling is defined as one _kind_ of thing, without worrying about any other structure on the elements.
         - Metric Spaces let us talk about all sets where there is a notion of distance.
-        - Groups let us talk about sets where there is a notion of "combining" things together with more restriction.
+        - Differential Equations let us talk about "change" in many different scenarios.
         in all of these fields of study, say linear algebra, a theorem generally involes working with an object, whose exact details we don't assume, just that it satisfies the conditions required for it to be a vector space and seeing what can be done with just that much information.
     - And this is a powerful tool because solving a problem in the _abstract_ version solves the problem in all _concretized_ scenarios.
     
 #quote(sub: "John Locke, An Essay Concerning Human Understanding (1690)")[
-The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three: 1. Combining several simple ideas into one compound one, and thus all complex ideas are made. 2. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations. 3. The third is separating them from all other ideas that accompany them in their real existence: this is called *abstraction*, and thus all its general ideas are made. 
+The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three: 
+1. Combining several simple ideas into one compound one, and thus all complex ideas are made. 
+2. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them at once, without uniting them into one, by which it gets all its ideas of relations. 
+3. The third is separating them from all other ideas that accompany them in their real existence: this is called *abstraction*, and thus all its general ideas are made. 
 ]
 
 One of the ways abstraction is handled in Haskell, and a lot of other programming languages is *Polymorphism*.
@@ -104,37 +112,49 @@ A *polymorphic* function is one whose output type depends on the input type. Suc
 ]
 
 A polymorphic function differs from functions we have seen in the following ways:
-- It can take input from multiple differnt input types (not necessarily type, restrictions are allowed).
+- It can take input from multiple differnt input types (not necessarily all types, restrictions are allowed).
 - Its output type can be differnt for different inputs types.
 
 An example for such a function that we have seen in the previous section would be:
 ```
 -- | drop
-drop :: Int -> [a] -> [a]
+drop :: Integer -> [a] -> [a]
 drop _ []     = [] 
 drop 0 ls     = ls
 drop n (x:xs) = drop (n-1) xs
 ```
-The polymorphism of this function is shown in the type *`drop :: Int -> [a] -> [a]`* where we have used variables //the variable `a`
-(usually called a type variable) instead of explicitly mentioning a type. 
-This still has a lot of structure, and is not the same as forgetting about types, since, for instance, the same variable is used in both the second argument and the output, so they need to be of the same type, dropping some elements from a list of integers also gives a list of integers, we still have all the safety and correctness guarantees that types give us.
+The polymorphism of this function is shown in the type *`drop :: Integer -> [a] -> [a]`* where we have used the variable `a` (usually called a type variable) instead of explicitly mentioning a type. 
+
+The goal of polymorphic functions is to let us *abstract* over a collection of types. That take a collection of types, based on some common property (either shape, or behavior, maybe both) and treat that as a collection of elements. This lets us build functions that work on "all lists" or "all maybe types" and so on. 
+
+The example @code_of_drop brings together all types of lists and only looks at the _shape_ of the element, that of a list, and does not look at the bhevaiour at all. This is shown by using the type variable `a` in the definition, indicating that we don't care about the properties of the list items.
 
 #exercise(sub: "Datatypes of some list functions")[
 A nice exercise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
+We have now given a type to one of the 3 functions discussed above, by giving a way to group together types by their common _shape_. This is not enough to give types of the other two functions (`(==)` and `elem`), for that we will need a way to group together types by shared _bhehaviour_, which we will see in the next section.
+
+#def(sub: "2 Types of Polymorphism")[
+- Polymorphism done by grouping types that with common _shape_ is called *Parametric Polymorphism*.
+- Polymorphism done by grouping types that with common _behaviour_ is called *Ad-Hoc Polymorphism*.
+]
+
+
+We will come back to *parametric polymorphism* in the second half of the chapter, but for now we discuss *Ad-Hoc polymorphism*.
+
 == A Taste of Type Classes
-Consider the case of the integer functions
+Consider the case of the `Integer` functions
 
 ```
-f :: Int -> Int
+f :: Integer -> Integer
 f x = x^2 + 2*x + 1
 
-g :: Int -> Int 
+g :: Integer -> Integer
 g x = (x + 1)^2
 ```
 
-We know that both functions, do the same thing in the mathematical sense, given any input, both of then have the same output, this is called function extensionality. But the does the following expression make sense in haskell?
+We know that both functions, do the same thing in the mathematical sense, given any input, both of then have the same output, so mathematicans call them the same, and write $f=g$ this is called *function extensionality*. But the does the following expression make sense in haskell?
 
 ```
 -- | Function Extensionality
@@ -142,21 +162,21 @@ f == g
 ```
 
 This definitely seems like a fair thing to ask, as we already have a definition for equality of mathematical functions, but we run into 2 issues:
-- Is it really fair to say that? In computer science, the way things are computed matter, that is where the subject gets its name from. A lot of times, one will be able to distinguish distinguish between functions, by simply looking at which one works faster or slower on big inputs, and that might be something people might want to factor into what they mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal may not be wise.
+- Is it really fair to say that? In computer science, we care about the way things are computed, that is where the subject gets its name from. A lot of times, one will be able to distinguish distinguish between functions, by simply looking at which one works faster or slower on big inputs, and that might be something people might want to factor into what they mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal is not wise.
 - The second is that in general it is not possible, in this case we have a mathematical identity that lets us prove so, but given any 2 function, it might be that the only way to prove that they are equal would be to actually check on every single value, and since domains of functions can be infinite, this would simply not be possible to compute.
 
 So we can't have the type of *`(==)`* to be `a -> a -> Bool`. In fact, if I try to write it, the haskell compiler will complain to me by saying
 
 ```
 funext.hs:8:7: error: [GHC-39999]
-    • No instance for ‘Eq (Int -> Int)’ arising from a use of ‘==’
+    • No instance for ‘Eq (Integer -> Integer)’ arising from a use of ‘==’
       ... more error
   |
 8 | h = f == g
   |   
 ```
 
-To tackle this, we define the following:
+To tackle the problem of giving a type for `(==)`, we define the following:
 
 // define the notion of methods
 // the methods of a type T are functions which has some of its inputs :: T
@@ -165,7 +185,7 @@ To tackle this, we define the following:
 _Typeclasses_ are a collection of types, characterized by the common _behaviour_. //methods
 ]
 
-The previous section describes how one writes functions based on the _shape_ of the objects. And that different types can have some aspects of their _shape_ in common. @code_of_Function_Extensionality tells us that there are other properties shared by elements of different types, which we call their _behaviour_. By that we mean the functions that are defined for them.
+The previous section talked about grouping types together by the common _shape_ of the elements but @code_of_Function_Extensionality tells us that there are other properties shared by elements of different types, which we call their _behaviour_. By that we mean the functions that are defined for them.
 
 Typeclasses are how one expresses in haskell, what a collection of types looks like, and the way to do so is by defining the common functions that work for all of them. Some examples are: 
 - `Eq`, which is the collection of all types for which the function *`(==)`* is defined.
@@ -190,12 +210,23 @@ elem :: a -> [a] -> Bool
 
 we will encounter the same issue as we did in @code_of_Function_Extensionality, because of `(==)`. We need to find a way to say that `a` belongs to the collection `Eq`, and this leads to the correct type:
 ```
+-- | elem
 elem :: Eq a => a -> [a] -> Bool
+elem _ []       = False
+elem e (x : xs) = e == x || elem e xs
 ```
 #exercise(sub: "Checking if a list is sorted")[
 Write the function `isSorted` which takes in a list as an argument, such that the elements of the list have a notion of ordering between them, and the output should be true if the list in an ascending order (equal elements are allowed to be next to each other), and false otherwise.
 ]
 
+#exercise(sub: "Shape is behaviour?")[
+The two types of polymorphism, that is parametric and ad-hoc, are not exlusive, there are plenty of function where both are seen together, an example would be `elem`.
+
+These two happen to not be that different conceptually either, we give elements their _shape_ using functions, try figuring out what the functions are for list types, maybe type, tuples and either type.
+
+That being said, the syntax used to define parametric polymorphism sets us to set operations while defining the type of the function which is very powerful.
+]
+ 
 #linebreak()
 
 = Higher Order Functions
@@ -270,11 +301,11 @@ Currying lets us take a function with with argument, and lets us apply the funct
 Partial applicaion is precisely the process of fixing some arugments to get a function over the remaining, let us look at some examples
 
 ```
-suc :: Int -> Int 
+suc :: Integer -> Integer 
 suc = (+ 1) -- suc 5 = 6
 
 -- | curry examples
-neg :: Int -> Int 
+neg :: Integer -> Integer 
 neg = (-1 *) -- neg 5 = -5 
 ```
 We will find many more examples in the next section.
@@ -290,22 +321,22 @@ Another very useful example, that a lot of us have seen is composition of functi
 g . f = \a -> g (f a)
 
 -- example
-square :: Int -> Int 
+square :: Integer -> Integer 
 square x = x * x
 
 -- checks if a number is the same if written in reverse
-is_palindrome :: Int -> Bool 
+is_palindrome :: Integer -> Bool 
 is_palindrome x = (s == reverse s)
   where
     s = show x -- convert x to string 
 
-is_square_palindrome :: Int -> Bool 
+is_square_palindrome :: Integer -> Bool 
 is_square_palindrome = is_palindrome . square
 ```
 
 Breaking a complicated function into simpler parts, and being able to combime them is fair standard problem solving strategy, in both Mathematics and Computer Science, and in fact in a lot more general scenarios too! Having a clean notation for a tool that used fairly frequently is always a good idea!
 
-Higher order functions are where polymorphism shines it brightest, see how the composition function works on all pairs of functions that can be composed in the mathematical sense, this would have been significantly less impressive if say it was only composition between functions from `Int -> Int` and `Int -> Bool`.
+Higher order functions are where polymorphism shines it brightest, see how the composition function works on all pairs of functions that can be composed in the mathematical sense, this would have been significantly less impressive if say it was only composition between functions from `Integer -> Integer` and `Integer -> Bool`.
 
 Another similar function that makes writing code in haskell much cleaner is the following:
 ```
@@ -333,7 +364,7 @@ f . g . h . i $ x
 which in my opinion is much simpler to read!
 
 #exercise[
-Write a function `repeat` that takes a function `f` and an argument `a` along with a natural number `n` and applies the function `n` times on `a`, for exaxmple: `repeat (+1) 5 3` would return `8`. Also figure out the type of the function.
+Write a function `apply_n_times` that takes a function `f` and an argument `a` along with a natural number `n` and applies the function `n` times on `a`, for exaxmple: `apply_n_times (+1) 5 3` would return `8`. Also figure out the type of the function.
 ]
 
 === A Short Note on Type Inference
@@ -358,8 +389,8 @@ The *Maybe Type*, as defined in #link(<maybe>)[Chapter 3] is another playground 
 
 When using the `Maybe` types, one eventually runs into a problem that looks something like this:
 - Break up the problem into a bunch of tiny steps, so make a lot of simple function and the final solution is to be achieved by combining all of them.
-- Turns out that one the functions, maybe something in the very beginning returns a `Maybe Int` instead of an `Int`.
-- This means that the next function along the chain, would have had to have its input type as `Maybe Int` to account for the potentially case of `Nothing`.
+- Turns out that one the functions, maybe something in the very beginning returns a `Maybe Integer` instead of an `Integer`.
+- This means that the next function along the chain, would have had to have its input type as `Maybe Integer` to account for the potentially case of `Nothing`.
 - This also forces the output type to be a `Maybe` type, this makes sense, if the process fails in the beginning, one might not want to continue.
 - The `Maybe` now propogates in this manner through a large section of your code, this means that a huge chunk of code needs to be rewritten to looks something like:
   ```
@@ -411,11 +442,11 @@ But since we have the power to be able to change _contexts_ whenever wanted easi
 v :: Maybe a
 f :: a -> Maybe b
 
-g = f <$> a -> Maybe (Maybe b)
+g = f <$> v :: Maybe (Maybe b)
 ```
-This is most likely going to be undesirable, the point of `Maybe` was to say that there is a possiblility of error, the point of `maybeMap` was to propogate that possible error, so when there are multiple places where the program can fail, one can define `maybeJoin :: Maybe (Maybe a) -> Maybe a`, with that we can have
+This is most likely undesirable, the point of `Maybe` was to say that there is a possiblility of error, the point of `maybeMap` was to propogate that possible error then the type `Maybe (Maybe b)` seems to not have a place here, in such cases one can define `maybeJoin :: Maybe (Maybe a) -> Maybe a`, with that we can have
 ```
-g = maybeJoin $ f <$> a
+g = maybeJoin $ f <$> a :: Maybe b
 ```
 This particular combination of doing `<$>` then `maybeJoin` will be very common, so people that use haskell put the 2 together in the function `(>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b` (the order of operands is reversed), this makes writing code so much cleaner, for instance:
 ```

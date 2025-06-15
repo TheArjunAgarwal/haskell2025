@@ -229,7 +229,7 @@ then we fallback to Merge Sort or a Heap/Tree Sort(which we will see in chapter 
 Haskell has an inbuilt `sort` function you can use by putting `import Data.List` at the top of your code. 
 This used to use quickSort as the default but in 2002, 
 Ian Lynagh changed it to Merge Sort. This was motivated by the fact that 
-Merge Sort gurentees sorting in $nlog(n) + dots$ comparisons while Quick Sort will sometimes finish much quicker (pun not intended) 
+Merge Sort gurentees sorting in $n log(n) + dots$ comparisons while Quick Sort will sometimes finish much quicker (pun not intended) 
 and other times, just suffer.
 
 As a dinal remark, our implementation of the Quick Sort is not the most optimal as we go through the list twice, 
