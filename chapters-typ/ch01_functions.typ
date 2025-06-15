@@ -65,8 +65,12 @@ It has been used to show a certain fact that holds for *any* natural number.
 
 = Well-Formed Expressions
 
-//todo why care about expressions being well-formed
-//otherwise expression can be meaningless, show by example
+Consider the expression - $ x y x<== forall => f (  <~> arrow(v)  $
+It is an expression as it *is* a bunch of symbols arranged one after the other, but the expression is obviously meaningless.\
+
+So what distinguishes a meaningless expression from a meaningful one? Wouldn't it be nice to have a systematic way to check  whether an expression is meaningful or not?\
+
+Indeed, that is what the following definition tries to achieve - a systematic method to detect whether an expression is well-structured enough to possibly convey any meaning.
 
 #def(sub:"well-formed mathematical expression")[
   It is difficult to give a direct definition of a *well-formed expression*. As an alternative, we can define a _formal procedure_ to check whether an expression is  well-formed or not.
@@ -285,7 +289,7 @@ So let's see the @definition_of_principle_of_mathematical_induction in action, a
 
 Trees are a way to meaningfully structure a collection of objects. Understanding the meaning captured by these structures is vitally important in learning about expressions.
 
-*In fact, the internal structure of any object in Haskell is modelled as a tree-like structure.*
+*In fact,any object in Haskell is internally modelled as a tree-like structure.*
 
 == Definition
 
@@ -374,14 +378,51 @@ Using @definition_of_structural_induction_for_trees, let us prove that \
 
 = Why Trees?
 
-But why care so much about trees anyway? Well, that is mainly due to the previously mentioned fact - "*In fact, the internal structure of any object in Haskell is modelled as a tree-like structure.*"
+But why care so much about trees anyway? Well, that is mainly due to the previously mentioned fact - "*In fact,any object in Haskell is internally modelled as a tree-like structure.*"
 
 But why would Haskell choose to do that? There is a good reason, as we are going to see. //syntax trees
 
 == The Problem
 
-// I can write this - Ryan
+Suppose we are given that $x #e 5$ and then asked to find out the value of the expression $x^3 dot x^5 + x^2 + 1$.
+
+How can we do this?
+
+Well, since we know that $x^3 dot x^5 + x^2 + 1$ is the function $+$ applied to the inputs $x^3 dot x^5$ and $x^2 + 1$, \ we can first find out the values of these inputs and then apply $+$ on them!
+
+Similarly, as long as we can put an expression in the form $f(x_1,x_2,x_3,...,x_(n-1),x_n)$, we can find out its value by finding out the values of its inputs and then applying $f$ on these values.
+
+So, for dumb Haskell to do this (figure out the values of expressions, which is quite an important ability) , a vital requirement is to be able to easily put expressions in the form $f(x_1,x_2,x_3,...,x_(n-1),x_n)$.
+
+But this can be quite difficult - In $x^3 dot x^5 + x^2 + 1$, it takes our human eyes and reasoning to figure it out fully, and for long, complicated expressions it will be even harder.
 
 == The Solution
 
-// I can write this - Ryan 
+One way to make this easier to represent the expression in the form of a tree - 
+
+For example, if we represent  $x^3 dot x^5 + x^2 + 1$ as $ #tree(spread:1.5,($+$, $x^3 dot x^5$, $x^2 + 1$)) $, it becomes obvious what the function is and what the inputs are to which it is applied.
+\ \ \ 
+In general, we can represent the expression $f(x_1,x_2,x_3,...,x_(n-1),x_n)$ as 
+$
+#tree(($f$,$x_1$,$x_2$,$x_3$,dots,$x_(n-1)$,$x_n$))                                    
+$
+\ \ \ 
+But why stop there, we can represent the sub-expressions ( such as $x^3 dot x^5$ and $x^2 + 1$ ) as trees too -
+$
+  #tree(spread:1.5,($+$, ($dot$,$x^3$,$x^5$), ($+$,$x^2$,$1$)))
+$
+\ \
+and their sub-expressions can be represented as trees as well -
+$
+  #tree(spread:1.5,pad:0.25,($+$, ($dot$,($(" ")^3$,$x$),($(" ")^5$,$x$)), ($+$,($(" ")^2$,$x$),$1$)))
+$
+
+This is known as the as an Abstract Syntax Tree, and this is (approximately) how Haskell stores expressions, i.e., how it stores everything.
+
+#def(sub: "abstract syntax tree")[
+  The *abstract syntax tree of a well-formed expression* is defined by applying the "function" _$"AST"$_ to the expression. \ \
+  The "function" _$"AST"$_ is defined as follows - \ \
+  $"AST" : "Expressions" -> "Trees over values and variables"$\ \
+  $"AST"(v) #d v, "if "v" is a value or variable"$\  \
+  $"AST"(f(x_1,x_2,x_3,...,x_(n-1),x_n)) #d\ "                         "#tree(spread:2, grow:1.5,pad:0.4,($f$,$"AST"(x_1)$,$"AST"(x_2)$,$"AST"(x_3)$,dots,$"AST"(x_(n-1))$,$"AST"(x_n)$))$
+]
