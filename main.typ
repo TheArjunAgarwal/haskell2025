@@ -41,7 +41,7 @@ let chapters = (
   (
     "ch02_setup.typ",
     [Installing Haskell],
-    S
+    author
   ),
   // (
   //   "ch02_setup_mac.typ",
