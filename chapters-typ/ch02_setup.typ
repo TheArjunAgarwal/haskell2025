@@ -90,7 +90,7 @@
   + Restart (shut down and open again) your device.
 
 + *Install Visual Studio Code*\
-  Follow the instructions #link("https",[here]).
+    Get it #text(fill:blue,(emph(underline(link("https://code.visualstudio.com/download",[here]))))).
 
 + *Install HaskellSupport*\.
   
@@ -145,7 +145,7 @@
   + Restart (shut down and open again) your device.
 
 + *Install Visual Studio Code*\
-  Follow the instructions #link("https",[here]).
+  Get it #text(fill:blue,(emph(underline(link("https://code.visualstudio.com/download",[here]))))).
 
 + *Install HaskellSupport*\.
   

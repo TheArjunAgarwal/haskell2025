@@ -300,6 +300,32 @@ $ "Show the students how to parse Haskell in natural language over and over agai
 
 #let show_import(it) = raw(lang:"typ", it.replace("\"Modules","\"../Modules"))
 
+== Appendix
+
+
+#let i = "#import \"Modules/Appendix.typ\": appendixed"
+
+To use this module, we need to #show_import(i)
+
+Apply the ```typ #appendixed``` function on some ```typ content``` to move it to the ```typ Appendix``` chapter.
+
+#c(i:i,"
+You can find more information about this fancy stuff in the 
+#appendixed[
+  === Fancy Stuff
+  Some fancy stuff
+].
+")
+
+#block(height:1pt,width:1pt)[
+  #hide[
+    #show pagebreak : {}
+    #import "Modules/Appendix.typ" : appendix
+    #appendix
+  ]
+]
+
+The word "appendix" on the right is a link to the location where the content has been moved to in the ```typ Appendix``` chapter.
 
 == Code Block
 
@@ -392,7 +418,7 @@ To increase readability, we can emphasize _*the part of the text that is the act
 
 We will often find it a good idea to title a definition, because then it will show up in the table of
 contents, in the glossary and can be referenced. \
-We can set the ```typ subject``` settable argument of the ```typ #def()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ sub``` settable argument of the ```typ #def()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#def(sub: \"empty set\")[
   The empty set is the set that contains no elements or equivalently, ${}$.
@@ -427,7 +453,7 @@ We can put any text that is meant to be an exercise in an exercise box.
 === Exercise Box Custom Title
 
 We will often find it a good idea to title an exercise, because then it will show up in the collection of exercises when we use ```typ #exercises```, in the glossary and can be referenced. \
-We can set the ```typ subject``` settable argument of the ```typ #exercise()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ sub``` settable argument of the ```typ #exercise()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#exercise(sub: \"maybe\" )[
   If a type `T` has $n$ elements, then how many elements does `Maybe T` have?
@@ -481,7 +507,7 @@ Quote boxes are meant to have quotes from other source materials like articles o
 === Quote Box Title
 
 Title will be used to give context to the quote, where they are from and so on, and one can reference a quote using this. \
-We can set the ```typ subject``` settable argument of the ```typ #quote()``` function to a _*```typ string```*_ if we want to add a title.
+We can set the ```typ sub``` settable argument of the ```typ #quote()``` function to a _*```typ string```*_ if we want to add a title.
 
 #c(i:i,"#quote(sub: \"Daniel Craig, Casion Royale\" )[
   The name is Bond, James Bond.

@@ -14,11 +14,11 @@ let S = [Shubh Sharma]
 let A = [Arjun Maneesh Agarwal]
 let author = R+[, ]+S+[, ]+A
 
-Book.settings(title:title,author:author,{
-Box.settings({
-Code.settings({
-Contents.settings({
-Prelude.settings({
+show: Book.settings.with(title:title,author:author)
+show: Box.settings
+show: Code.settings
+show: Contents.settings
+show: Prelude.settings
 
 Book.title_page(title:title,author:author)
 
@@ -127,10 +127,6 @@ for chapter_data in chapters {
 
 }
 
-})
-})
-})
-})
-})
+include "extra-typ/appendix.typ"
 
 }
