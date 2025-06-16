@@ -25,18 +25,6 @@
   
   show outline.entry : it => figure(align(center,{
     
-    // if targets( it , "chapter_title" ) [
-    //   #set text( size : 1.4em , weight: "extrabold" )
-    //   #v( 2em )
-    //   #link( 
-    //     it.element.location() , 
-    //     it.element.supplement 
-    //   )
-    //   #box( width: 1fr , repeat(" ") ) 
-    //   #text( weight : "extrabold" , it.page() )
-    //   #v( 0.25em )
-    // ]
-    
     let left_indent_correction_term = -2em
 
     if it.element.func() == heading {
@@ -86,11 +74,6 @@
       ))
     }
 
-    // if it.level == 1 and targets( it , "fancy_box" ) {
-    //   let fancy_level = 1 + query(heading.where(outlined:true)).map(h=>h.level).sorted().last()
-    //   outline.entry( fancy_level , it.element , fill : it.fill )
-    // }
-    
   }) ,
   kind : "contents_entry" ,
   supplement : none
