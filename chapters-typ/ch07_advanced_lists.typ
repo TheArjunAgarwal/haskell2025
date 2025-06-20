@@ -658,6 +658,8 @@ While `foldr` and `foldl` are some of the most common favorite function of haske
   (iv) `concatMap :: (a -> [b]) -> [a] -> [b]` maps a function over all the elements of a list and concatenate the resulting lists. Do not use `map` in your definition.
 
   (v) `length :: [a] -> Int` gives the number of elements in the provided list. Use `foldr` or `foldl`.
+
+  (vi) `iterate :: (a -> a) -> a -> [a]` takes a function `f` and element `a` and returns `[a, f a, f (f a), ...]` (an infinite list). 
 ]
 
 #exercise(sub : "Base Conversion")[
@@ -749,9 +751,103 @@ Find how many positive integers less than $10^16$ are divisible by at least four
 Hint : Thik about PIE but not $pi$.
 ]
 
-== Scaning
+
+=== Numerical Integration
+To quickly revise all the things we just learnt, we will try to write our first big-boy code.
+
+Let's talk about numerical Integration. Numerical Integration refers to finding the value of integral of a function, given the limits. This is also a part of the mathematical computing we first studied in chapter 3. To get going, a very naive idea would be:
+```
+easyIntegrate :: (Float -> Float) -> Float -> Float -> Float
+easyIntegrate f a b = (f b + f a) * (b-a) / 2
+```
+
+This is quite inaccurate unless `a` and `b` are close. We can be better by simply dividing the integral in two parts, ie $integral_a^b f(x) diff x = integral_a^m f(x) diff x + integral_m^b f(x) diff x$ where $a < m < b$ and approximate these parts. Given the error term is smaller in these parts than that of the full integral, we would be done. We can make a sequence converging to the integral we are intrested in as:
+```
+-- | Naive Integration
+integrate :: (Float -> Float) -> Float -> Float -> [Float]
+integrate f a b = (easyIntegrate f a b) : zipWith (+) (integrate f a m) (integrate f m b) where m = (a+b)/2 
+```
+
+If you are of the kind of person who likes to optimize, you can see a very simple inoptimality here. We are computing `f m` far too many times. Considering, `f` might be slow in itself, this seems like a bad idea. What do we do then? Well, ditch the aesthetic for speed and make the naive integrate as:
+
+```
+-- | Naive Integration without repeated computation
+integrate f a b = go f a b (f a) (f b)
+
+integ f a b fa fb = ((fa + fb) * (b-a)/2) : zipWith (+) (integ f a m fa fm) (integ f m b fm fb) where 
+  m = (a + b)/2
+  fm = f m
+```
+
+This process is unfortunatly rather slow to converge for a lot of fucntions. Let's call in some backup from math then. 
+
+The elements of the sequence can be expressed as the correct answer plus some error term, ie $a_i = A + Epsilon$. This error term is roughly propotional to some power of the seperation between the limits evaluated (ie $(b-a), (b-a)/2 dots$) (the proof follows from Taylor exmapnsion of $f$. You are reccomended to prove the same). Thus,
+$
+  a_i = A + B times ((b-a)/2^i)^n\
+  a_(i+1) = A + B times ((b-a)/2^(i+1))^n\
+  => a_(i+1) - 1/2^n a_i = A(1-1/2^n) \
+  => A = (2^n times a_(i+1) - a_i)/(2^n - 1)
+$
+
+This means we can improve our sequence by eliminating the error
+```
+elimerror :: Int -> [Float] -> [Float]
+elimerror n (x:y:xs) = (2^^n * y - x) / (2^^n - 1) : elimerror n (y:xs)
+```
+
+However, we have now found a new problem. How in the world do we get `n`?
+
+$
+  a_i &= A + B times ((b-a)/2^i)^n\
+  a_(i+1) &= A + B times ((b-a)/2^(i+1))^n\
+  a_(i+2) &= A + B times ((b-a)/2^(i+2))^n\
+  => a_i - a_(i+1) &= B times ((b-a)/2^i)^n times (1-1/2^n)\
+  => a_(i+1) - a_(i+2) &= B times ((b-a)/2^i)^n times (1/2^n - 1/4^n)\
+  => (a_i - a_(i+1)) / (a_(i+1) - a_(i+2)) &= (4^n - 2^n )/(2^n - 1) = (2^n (2^n-1))/(2^n - 1) = 2^n\
+  => n &= log_2((a_i - a_(i+1))/(a_(i+1) - a_(i+2)) )
+$
+
+Thus, we can estimate `n` using the function `order`. We will be using the inbuilt function `round :: (RealFrac a, Integral b) -> a -> b` in doing so. In our case, `round :: Float -> Int`. 
+```
+order :: [Float] -> Int
+order (x:y:z:xs) = round $ logBase 2 $ (x-y)/(y-z)
+```
+
+This allows us to improve our sequence 
+```
+improve :: [Float] -> [Float]
+improve xs = elimerror (order xs) xs
+```
+One could make a very fast converging sequence as say `improve $ improve $ improve $ integrate f a b`.
+
+But based on the underlying function, the number of `improve` may differ.
+
+So what do we do?  We make an extreamly clever move to define a super sequence `super` as
+```
+super :: [Float] -> [Float]
+super xs = map (!! 2) (iterate improve xs)
+```
+I will re-instate, the implementation of `super` is extreamly clever. We are recursivly getting a sequence of more and more improved sequences of approximations and constructs a new sequence of approximations by taking the second term from each of the improved sequences. It turns out that the second one is the best one to take. It is more accurate than the first and doesn’t require any extra work to compute. Anything further, requires more computations to compute.
+
+Finally, to complete our job, we define a function to choose the term upto some error.
+```
+within :: Float -> [Float] -> Float
+within error (x:y:xs)
+  | abs(x-y) < error = y
+  | otherwise = within error (y:xs)
+```
+
+```
+-- | An optimalized function for numerical integration
+ans :: (Float -> Float) -> Float -> Float -> Float -> Float
+ans f a b error = within error $ super $ integrate f a b
+```
+
+
 // contine
 
+
+// Include a numerical diffretiation part.
 
 
 
