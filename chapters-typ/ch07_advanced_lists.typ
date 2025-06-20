@@ -825,7 +825,7 @@ But based on the underlying function, the number of `improve` may differ.
 So what do we do?  We make an extreamly clever move to define a super sequence `super` as
 ```
 super :: [Float] -> [Float]
-super xs = map (!! 2) (iterate improve xs)
+super xs = map (!! 2) (iterate improve xs) -- remeber itterate from the excercises above?
 ```
 I will re-instate, the implementation of `super` is extreamly clever. We are recursivly getting a sequence of more and more improved sequences of approximations and constructs a new sequence of approximations by taking the second term from each of the improved sequences. It turns out that the second one is the best one to take. It is more accurate than the first and doesn’t require any extra work to compute. Anything further, requires more computations to compute.
 
@@ -842,6 +842,10 @@ within error (x:y:xs)
 ans :: (Float -> Float) -> Float -> Float -> Float -> Float
 ans f a b error = within error $ super $ integrate f a b
 ```
+
+With this we are done!
+
+== Time to Scan
 
 
 // contine
