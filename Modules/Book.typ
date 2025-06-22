@@ -135,7 +135,7 @@
 
   set heading(numbering: (..nums) => {
     text(fill:gray,
-      [$section$]
+      [$section$] +
       numbering("1.1.", ..nums)
     )
   })
