@@ -5,6 +5,7 @@
 
 #let definition = def
 #let example = it => [For example - \ #it]
+#let isom = $tilde.equiv$
 
 = advanced lists (feel free to change it)
 
@@ -437,6 +438,7 @@ Try to figure out the implementation of `unzip`.
 ]
 
 == Folding, Scaning and The Gate to True Powers
+=== Orgami of Code!
 A lot of reccursion on lists has the following structure
 ```
 g [] = v -- The vacous case
@@ -658,8 +660,6 @@ While `foldr` and `foldl` are some of the most common favorite function of haske
   (iv) `concatMap :: (a -> [b]) -> [a] -> [b]` maps a function over all the elements of a list and concatenate the resulting lists. Do not use `map` in your definition.
 
   (v) `length :: [a] -> Int` gives the number of elements in the provided list. Use `foldr` or `foldl`.
-
-  (vi) `iterate :: (a -> a) -> a -> [a]` takes a function `f` and element `a` and returns `[a, f a, f (f a), ...]` (an infinite list). 
 ]
 
 #exercise(sub : "Base Conversion")[
@@ -751,6 +751,19 @@ Find how many positive integers less than $10^16$ are divisible by at least four
 Hint : Thik about PIE but not $pi$.
 ]
 
+Something we mentioned was that `foldr` and `unfoldr` are inverse (or more accutately duel) of each other. But their types seem so different. How do we reconcile this?
+
+$
+  op("foldr") &:: (a -> b -> b) -> b &-> [a] -> b\
+  & isom (a times b -> b) -> b &-> [a] -> b\
+  &isom (a times b -> b) -> (1 -> b) &-> [a] -> b\
+  &isom (a times b union 1 -> b) &-> [a] -> b\
+  &isom (op("Maybe") (a,b) -> b) &-> [a] -> b\
+  op("Notice, ") op("unfoldr") ::&   (b -> op("Maybe") (a,b)) &-> b -> [a]
+$
+And now the duality emerges. $(op("foldr") f)^(-1) = op("unfoldr") f^(-1)$.
+
+Some more ideas on the nature of fold can be found in the upcoming chapters on datatypes as well as in the appendix.
 
 === Numerical Integration
 To quickly revise all the things we just learnt, we will try to write our first big-boy code.
@@ -845,14 +858,123 @@ ans f a b error = within error $ super $ integrate f a b
 
 With this we are done!
 
-== Time to Scan
+#exercise(sub: "Simpson's Rule")[
+  Here we have used the approximation $integral_a^b f(x) dif x = (f(a) + f(b)) (b-a)/2$ and used divide and conquor. This is called the Trapazoidal Rule in Numerical Analysis.
+
+  A better approximation is called the Simpson's (First) Rule.
+  $
+    integral_a^b f(x) dif x = (b-a)/6 [f(a) + 4 f((a+b)/2) + f(b)]
+  $
+Modify the code to now use Simpson's Rule. Furthermore, show that this approximation makes sense (the idea is to find a quadratic polynomial which takes the same value as our function at $a, (a+b)/2$ and $b$ and using its area).
+]
+
+=== Time to Scan
+
+We will now talk about folds lesser known cousing scans. 
+#definition(sub: "Scans")[
+While fold takes a list and compresses it to a single value, scan takes a list and makes a list of the partial compressions. Basically, 
+```
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+scanr f v [x1, x2, x3, x4] 
+  = [
+      foldr f v [x1, x2, x3, x4],
+      foldr f v [x2, x3, x4],
+      foldr f v [x3, x4],
+      foldr f v [x4],
+      foldr f v []
+    ]
+  = [
+      x1 `f` x2 `f` x3 `f` x4 `f` v,
+      x2 `f` x3 `f` x4 `f` v,
+      x3 `f` x4 `f` v,
+      x4 `f` v,
+      v
+    ] 
+```
+and very much similerly as
+
+```
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl f v [x1, x2, x3, x4] 
+  = [
+      foldl f v [],
+      foldr f v [x1],
+      foldr f v [x1, x2],
+      foldr f v [x1, x2, x3],
+      foldr f v [x1, x2, x3, x4]
+    ]
+  = [
+      v,
+      v `f` x1,
+      v `f` x1 `f` x2,
+      v `f` x1 `f` x2 `f` x3,
+      v `f` x1 `f` x2 `f` x3 `f` x4,
+    ] 
+```
+]
+There are also very much similer `scanr1` and `scanl1`. #footnote("Similer to our note in fold, there is a function pair scanl' and scanl1', which similer to foldl' and foldl1', and have the same set of benefits. This makes them the defualts, but similerly, to understand them well, we need to discuss how haskell's lazy computation actually works and the way to bypass it. This is done in chapter 9.")
+
+The reason the naming is as the internal implementation of these funtions look like similer to the definition of the fold they borrow their name from.
+```
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+scanr _ v [] = [v]
+scanr f v (x:xs) = x `f` (head part) : part where part = scanr f v xs
+
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl _ v [] = [v]
+scanl f v (x:xs) = v : scanl f (v `f` x) xs
+```
+#exercise(sub : "Defining scanl1 and scanr1")[
+  Modify these definitions and define `scanl1` and `scanr1`.
+]
+
+This seems like a much more convaluted reccursion pattern. So why have we decided to study it? Let's see some
+
+#exercise(sub: "Not Quite Lisp (AOC 2015, 1)")[
+Santa is trying to deliver presents in a large apartment building, but he can't find the right floor - the directions he got are a little confusing. He starts on the ground floor (floor 0) and then follows the instructions one character at a time.
+
+An opening parenthesis, `(`, means he should go up one floor, and a closing parenthesis, `)`, means he should go down one floor.
+
+The apartment building is very tall, and the basement is very deep; he will never find the top or bottom floors.
+
+For example:
+- `(())` and `()()` both result in floor 0.
+- `(((` and `(()(()(` both result in floor 3.
+- `))(((((` also results in floor 3.
+- `())` and `))(` both result in floor -1 (the first basement level).
+- `)))` and `)())())` both result in floor -3.
+
+Write a function `parse :: String -> Int` which takes the list of parenthesis as a sting in input and gives the correct integer as output.
+]
+This is quite simple using folds.
+```
+parse :: String -> Int
+parse = foldr (\x y -> if x == '(' then y+1 else y - 1) 0
+```
+#exercise(sub: "Not Quite Lisp, 2")[
+Now, given the same instructions, find the position of the first character that causes him to enter the basement (floor -1). The first character in the instructions has position 1, the second character has position 2, and so on.
+
+For example:
+
+- `)` causes him to enter the basement at character position 1.
+- `()())` causes him to enter the basement at character position 5.
+
+What is the position of the character that causes Santa to first enter the basement?
+]
+
+Here 
+
+=== Doing it in One Line!
+#exercise(sub : "Scan as a fold")[
+  We can define `scanr` using `foldr`, try to figure out a way to do so.
+]
 
 
 // contine
 
 
 // Include a numerical diffretiation part.
-
+// Include a Simpson's Second Rule part
 
 
 
