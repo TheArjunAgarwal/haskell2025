@@ -1,5 +1,7 @@
   //---------------functions-----------------
 
+#let unligate(body) = text(features: (calt : 0), body)
+
 #let title_page(
   title : [Title] ,
   author : [Author]
@@ -144,9 +146,6 @@
 
   user_end_body
 }
-
-#let unligate(body) = text(features: (calt : 0), body)
-
 
 //---------tests--------------------------
 
