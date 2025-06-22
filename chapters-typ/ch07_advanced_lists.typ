@@ -5,6 +5,7 @@
 
 #let definition = def
 #let example = it => [For example - \ #it]
+#let isom = $tilde.equiv$
 
 = advanced lists (feel free to change it)
 
@@ -437,6 +438,7 @@ Try to figure out the implementation of `unzip`.
 ]
 
 == Folding, Scaning and The Gate to True Powers
+=== Orgami of Code!
 A lot of reccursion on lists has the following structure
 ```
 g [] = v -- The vacous case
@@ -749,9 +751,230 @@ Find how many positive integers less than $10^16$ are divisible by at least four
 Hint : Thik about PIE but not $pi$.
 ]
 
+Something we mentioned was that `foldr` and `unfoldr` are inverse (or more accutately duel) of each other. But their types seem so different. How do we reconcile this?
+
+$
+  op("foldr") &:: (a -> b -> b) -> b &-> [a] -> b\
+  & isom (a times b -> b) -> b &-> [a] -> b\
+  &isom (a times b -> b) -> (1 -> b) &-> [a] -> b\
+  &isom (a times b union 1 -> b) &-> [a] -> b\
+  &isom (op("Maybe") (a,b) -> b) &-> [a] -> b\
+  op("Notice, ") op("unfoldr") ::&   (b -> op("Maybe") (a,b)) &-> b -> [a]
+$
+And now the duality emerges. $(op("foldr") f)^(-1) = op("unfoldr") f^(-1)$.
+
+Some more ideas on the nature of fold can be found in the upcoming chapters on datatypes as well as in the appendix.
+
+=== Numerical Integration
+To quickly revise all the things we just learnt, we will try to write our first big-boy code.
+
+Let's talk about numerical Integration. Numerical Integration refers to finding the value of integral of a function, given the limits. This is also a part of the mathematical computing we first studied in chapter 3. To get going, a very naive idea would be:
+```
+easyIntegrate :: (Float -> Float) -> Float -> Float -> Float
+easyIntegrate f a b = (f b + f a) * (b-a) / 2
+```
+
+This is quite inaccurate unless `a` and `b` are close. We can be better by simply dividing the integral in two parts, ie $integral_a^b f(x) diff x = integral_a^m f(x) diff x + integral_m^b f(x) diff x$ where $a < m < b$ and approximate these parts. Given the error term is smaller in these parts than that of the full integral, we would be done. We can make a sequence converging to the integral we are intrested in as:
+```
+-- | Naive Integration
+integrate :: (Float -> Float) -> Float -> Float -> [Float]
+integrate f a b = (easyIntegrate f a b) : zipWith (+) (integrate f a m) (integrate f m b) where m = (a+b)/2 
+```
+
+If you are of the kind of person who likes to optimize, you can see a very simple inoptimality here. We are computing `f m` far too many times. Considering, `f` might be slow in itself, this seems like a bad idea. What do we do then? Well, ditch the aesthetic for speed and make the naive integrate as:
+
+```
+-- | Naive Integration without repeated computation
+integrate f a b = go f a b (f a) (f b)
+
+integ f a b fa fb = ((fa + fb) * (b-a)/2) : zipWith (+) (integ f a m fa fm) (integ f m b fm fb) where 
+  m = (a + b)/2
+  fm = f m
+```
+
+This process is unfortunatly rather slow to converge for a lot of fucntions. Let's call in some backup from math then. 
+
+The elements of the sequence can be expressed as the correct answer plus some error term, ie $a_i = A + Epsilon$. This error term is roughly propotional to some power of the seperation between the limits evaluated (ie $(b-a), (b-a)/2 dots$) (the proof follows from Taylor exmapnsion of $f$. You are reccomended to prove the same). Thus,
+$
+  a_i = A + B times ((b-a)/2^i)^n\
+  a_(i+1) = A + B times ((b-a)/2^(i+1))^n\
+  => a_(i+1) - 1/2^n a_i = A(1-1/2^n) \
+  => A = (2^n times a_(i+1) - a_i)/(2^n - 1)
+$
+
+This means we can improve our sequence by eliminating the error
+```
+elimerror :: Int -> [Float] -> [Float]
+elimerror n (x:y:xs) = (2^^n * y - x) / (2^^n - 1) : elimerror n (y:xs)
+```
+
+However, we have now found a new problem. How in the world do we get `n`?
+
+$
+  a_i &= A + B times ((b-a)/2^i)^n\
+  a_(i+1) &= A + B times ((b-a)/2^(i+1))^n\
+  a_(i+2) &= A + B times ((b-a)/2^(i+2))^n\
+  => a_i - a_(i+1) &= B times ((b-a)/2^i)^n times (1-1/2^n)\
+  => a_(i+1) - a_(i+2) &= B times ((b-a)/2^i)^n times (1/2^n - 1/4^n)\
+  => (a_i - a_(i+1)) / (a_(i+1) - a_(i+2)) &= (4^n - 2^n )/(2^n - 1) = (2^n (2^n-1))/(2^n - 1) = 2^n\
+  => n &= log_2((a_i - a_(i+1))/(a_(i+1) - a_(i+2)) )
+$
+
+Thus, we can estimate `n` using the function `order`. We will be using the inbuilt function `round :: (RealFrac a, Integral b) -> a -> b` in doing so. In our case, `round :: Float -> Int`. 
+```
+order :: [Float] -> Int
+order (x:y:z:xs) = round $ logBase 2 $ (x-y)/(y-z)
+```
+
+This allows us to improve our sequence 
+```
+improve :: [Float] -> [Float]
+improve xs = elimerror (order xs) xs
+```
+One could make a very fast converging sequence as say `improve $ improve $ improve $ integrate f a b`.
+
+But based on the underlying function, the number of `improve` may differ.
+
+So what do we do?  We make an extreamly clever move to define a super sequence `super` as
+```
+super :: [Float] -> [Float]
+super xs = map (!! 2) (iterate improve xs) -- remeber itterate from the excercises above?
+```
+I will re-instate, the implementation of `super` is extreamly clever. We are recursivly getting a sequence of more and more improved sequences of approximations and constructs a new sequence of approximations by taking the second term from each of the improved sequences. It turns out that the second one is the best one to take. It is more accurate than the first and doesn’t require any extra work to compute. Anything further, requires more computations to compute.
+
+Finally, to complete our job, we define a function to choose the term upto some error.
+```
+within :: Float -> [Float] -> Float
+within error (x:y:xs)
+  | abs(x-y) < error = y
+  | otherwise = within error (y:xs)
+```
+
+```
+-- | An optimalized function for numerical integration
+ans :: (Float -> Float) -> Float -> Float -> Float -> Float
+ans f a b error = within error $ super $ integrate f a b
+```
+
+With this we are done!
+
+#exercise(sub: "Simpson's Rule")[
+  Here we have used the approximation $integral_a^b f(x) dif x = (f(a) + f(b)) (b-a)/2$ and used divide and conquor. This is called the Trapazoidal Rule in Numerical Analysis.
+
+  A better approximation is called the Simpson's (First) Rule.
+  $
+    integral_a^b f(x) dif x = (b-a)/6 [f(a) + 4 f((a+b)/2) + f(b)]
+  $
+Modify the code to now use Simpson's Rule. Furthermore, show that this approximation makes sense (the idea is to find a quadratic polynomial which takes the same value as our function at $a, (a+b)/2$ and $b$ and using its area).
+]
+
+=== Time to Scan
+
+We will now talk about folds lesser known cousing scans. 
+#definition(sub: "Scans")[
+While fold takes a list and compresses it to a single value, scan takes a list and makes a list of the partial compressions. Basically, 
+```
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+scanr f v [x1, x2, x3, x4] 
+  = [
+      foldr f v [x1, x2, x3, x4],
+      foldr f v [x2, x3, x4],
+      foldr f v [x3, x4],
+      foldr f v [x4],
+      foldr f v []
+    ]
+  = [
+      x1 `f` x2 `f` x3 `f` x4 `f` v,
+      x2 `f` x3 `f` x4 `f` v,
+      x3 `f` x4 `f` v,
+      x4 `f` v,
+      v
+    ] 
+```
+and very much similerly as
+
+```
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl f v [x1, x2, x3, x4] 
+  = [
+      foldl f v [],
+      foldr f v [x1],
+      foldr f v [x1, x2],
+      foldr f v [x1, x2, x3],
+      foldr f v [x1, x2, x3, x4]
+    ]
+  = [
+      v,
+      v `f` x1,
+      v `f` x1 `f` x2,
+      v `f` x1 `f` x2 `f` x3,
+      v `f` x1 `f` x2 `f` x3 `f` x4,
+    ] 
+```
+]
+There are also very much similer `scanr1` and `scanl1`. #footnote("Similer to our note in fold, there is a function pair scanl' and scanl1', which similer to foldl' and foldl1', and have the same set of benefits. This makes them the defualts, but similerly, to understand them well, we need to discuss how haskell's lazy computation actually works and the way to bypass it. This is done in chapter 9.")
+
+The reason the naming is as the internal implementation of these funtions look like similer to the definition of the fold they borrow their name from.
+```
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+scanr _ v [] = [v]
+scanr f v (x:xs) = x `f` (head part) : part where part = scanr f v xs
+
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl _ v [] = [v]
+scanl f v (x:xs) = v : scanl f (v `f` x) xs
+```
+#exercise(sub : "Defining scanl1 and scanr1")[
+  Modify these definitions and define `scanl1` and `scanr1`.
+]
+
+This seems like a much more convaluted reccursion pattern. So why have we decided to study it? Let's see some
+
+#exercise(sub: "Not Quite Lisp (AOC 2015, 1)")[
+Santa is trying to deliver presents in a large apartment building, but he can't find the right floor - the directions he got are a little confusing. He starts on the ground floor (floor 0) and then follows the instructions one character at a time.
+
+An opening parenthesis, `(`, means he should go up one floor, and a closing parenthesis, `)`, means he should go down one floor.
+
+The apartment building is very tall, and the basement is very deep; he will never find the top or bottom floors.
+
+For example:
+- `(())` and `()()` both result in floor 0.
+- `(((` and `(()(()(` both result in floor 3.
+- `))(((((` also results in floor 3.
+- `())` and `))(` both result in floor -1 (the first basement level).
+- `)))` and `)())())` both result in floor -3.
+
+Write a function `parse :: String -> Int` which takes the list of parenthesis as a sting in input and gives the correct integer as output.
+]
+This is quite simple using folds.
+```
+parse :: String -> Int
+parse = foldr (\x y -> if x == '(' then y+1 else y - 1) 0
+```
+#exercise(sub: "Not Quite Lisp, 2")[
+Now, given the same instructions, find the position of the first character that causes him to enter the basement (floor -1). The first character in the instructions has position 1, the second character has position 2, and so on.
+
+For example:
+
+- `)` causes him to enter the basement at character position 1.
+- `()())` causes him to enter the basement at character position 5.
+
+What is the position of the character that causes Santa to first enter the basement?
+]
+
+Here 
+
+=== Doing it in One Line!
+#exercise(sub : "Scan as a fold")[
+  We can define `scanr` using `foldr`, try to figure out a way to do so.
+]
+
+
 // contine
 
 
+// Include a numerical diffretiation part.
+// Include a Simpson's Second Rule part
 
 
 
