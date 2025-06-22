@@ -5,7 +5,7 @@
 #let d = sym.colon.eq
 #let e = $==$
 
-= Mathematics vs Haskell (taking suggestions for a better heading) //todo
+= Mathematics vs Haskell //todo (taking suggestions for a better heading)
 
 The main difference between mathematics and haskell is *who* reads what we write.
 
@@ -35,6 +35,8 @@ and
 
 #def(sub : "mathematical value")[
   A mathematical *value* is a single and specific well-defined mathematical object that is constant, i.e., does not change from scenario to scenario nor represents an arbitrary object.
+
+  The following examples should clarify further.
 ]
 
 Examples include - 
@@ -51,7 +53,9 @@ In fact, as we see in the last example, even if we don't know what the exact val
 = Variables
 
 #def(sub : "mathematical variable")[
-  A mathematical *variable* is a symbol or chain of symbols meant to represent a value that is arbitrary in some way, usually as a way to show that whatever process follows can be carried out with any arbitrary value.
+  A mathematical *variable* is a symbol or chain of symbols meant to represent a @definition_of_mathematical_value that is arbitrary in some way, usually as a way to show that whatever process follows can be carried out with any arbitrary value.
+
+  The following example should clarify further.
 ]
 
 For example, consider the following theorem - \
@@ -59,6 +63,7 @@ For example, consider the following theorem - \
   Take $n$ to be an arbitrary natural number.\
   We know that $1 > 0$.\
   Adding $n$ to both sides of the preceding inequality yields $ n + 1 > n $
+  Hence Proved !!
 ]
 Here, $n$ is a variable as it isn't any specific value, but rather an arbitrary instance of a certain type of value. \
 It has been used to show a certain fact that holds for *any* natural number.
@@ -73,7 +78,7 @@ So what distinguishes a meaningless expression from a meaningful one? Wouldn't i
 Indeed, that is what the following definition tries to achieve - a systematic method to detect whether an expression is well-structured enough to possibly convey any meaning.
 
 #def(sub:"well-formed mathematical expression")[
-  It is difficult to give a direct definition of a *well-formed expression*. As an alternative, we can define a _formal procedure_ to check whether an expression is  well-formed or not.
+  We can define a _formal procedure_ to check whether an expression is  well-formed or not.
 
   The procedure is as follows - 
 
@@ -88,11 +93,13 @@ Indeed, that is what the following definition tries to achieve - a systematic me
     Failing that,
   
     - check whether _$e$_ is of the form _$f(e_1,e_2,e_3,...,e_n)$_, where 
-      - _$f$_ is a function #text(size:0.8em)[(the function can be a @definition_of_mathematical_value or @definition_of_mathematical_variable)]
+      - _$f$_ is a function
       - which takes _$n$_ inputs, 
       #v(5pt,weak:true) and #v(5pt,weak:true)
       - _$e_1,e_2,e_3,...,e_n$_ are all _well-formed expressions_ which are _valid inputs_ to _$f$_.
 ]
+
+*Remark:* (the function $f$ can be a @definition_of_mathematical_value or @definition_of_mathematical_variable)
 
 Let us use this defining procedure to check if $x^3 dot x^5 + x^2 + 1$ is a well-formed expression. \
 ( We will skip the check of whether something is a valid input or not, as that notion is still not very well-defined for us. )
@@ -150,57 +157,133 @@ On the right, we write a @definition_of_well-formed_mathematical_expression usin
 
 A few examples -
   - $f(x) #d x^3 dot x^5 + x^2 + 1$
-  - more examples //todo
+  - $"second"(a,b) #d (a,b)$
+  - $zeta(s) #d Sigma^infinity_(n=1) 1/(n^s)$
 
 == Some Conveniences
 
 Often in the complicated definitions of some functions, the right-hand side expression can get very convoluted, so there are some conveniences which we can use to reduce this mess.
 
-=== Where, Let //todo
+=== Where, Let
 
-// ordinary function definition
+Consider the definition of the famous $"sine"$ function - \ 
+\
+$ "sine" : RR -> RR $
+Given an angle $theta$,\
+let $T$ be a right-angled triangle, one of whose angles is $theta$.\
+Let $p$ be the length of the perpendicular of $T$.\
+Let $h$ be the length of the hypotenuse of $T$.\
+Then $ "sine"(theta) #d p/h $
+
+Here we use the variables $p$ and $h$ in the right-hand side of the definition, but to get their meanings one will have to look at how they are defined beforehand in the lines beginning with "let".
+
+We can also do this using "where" instead of "let".
+
+$ "sine" : RR &->  RR \
+  "sine"(theta) &#d p/h\
+  "     ,where"\
+  "        "T &#d "a right-angled triangle with one angle == "theta\
+  p &#d "the length of the perpendicular of "T\
+  h &#d "the length of the hypotenuse    of "T
+$
+
+Here we use the variables $p$ and $h$ in the right-hand side of the definition, but to get their meanings one will have to look at how they are defined after "where".
+
+=== Anonymous Functions
+
+A function definition such as
+
+$
+  f : RR &->  RR\
+  f(x) &#d x^3 dot x^5 + x^2 + 1
+$
 
 which, for convenience, can be rewritten as - 
 
-// definition rewritten using where
+$
+  ( x |-> x^3 dot x^5 + x^2 + 1 ) : RR -> RR
+$
 
-or as -
+Notice that we did not use the symbol $f$, which is the name of the function, which is why this style of definition is called "anonymous".
 
-// definition rewritten using let
+Also, we used $|->$ in place of $:=$
 
-=== Anonymous Functions //todo
-
-// ordinary function definition
-
-which, for convenience, can be rewritten as - 
-
-// definition rewritten as (arg |-> expr)
-
-which is particularly useful when we (for some reason) do not want name the function.
+This style is particularly useful when we (for some reason) do not want name the function.
 
 This notation can also be used when there are multiple inputs.
 
 Consider -
 
-// ordinary function definition
+$
+  "harmonicSum" : RR_(>0) times RR_(>0) &-> RR_(>0)\
+  "harmonicSum"(x,y) &#d 1/x + 1/y
+$
 
 which, for convenience, can be rewritten as - 
 
-// definition rewritten as (x,y,z |-> expr)
+$
+  ( x , y |-> 1/x + 1/y ) : RR_(>0) times RR_(>0) &-> RR_(>0)
+$
 
-=== Piecewise Functions //todo 
+=== Piecewise Functions 
 
-=== Pattern Matching //todo
+Sometimes, the expression on the right-hand side of the definition needs to depend upon some condition, and we denote that in the following way -
 
-//intro as an easier alternative to pattern matching
+$
+  "< functionName > "(x) #d cases(
+    "< expression"_1" >" &"; if < condition"_1" >","",
+    "< expression"_2" >" &"; if < condition"_2" >","",
+    "< expression"_3" >" &"; if < condition"_3" >","",
+    .,.,.,"",
+    "< expression"_n" >" &"; if < condition"_n" >",
+  )
+$
 
-// ordinary function definition
+For example, consider the following definition - 
 
-which, for convenience, can be rewritten as - 
+$
+  "signum"(x) #d cases( 
+    +1 &"; if "x " "> &&0 , "",
+    "  "0 &"; if "x == &&0 , "" ,
+    -1 &"; if "x " "< &&0
+    )
+$
 
-// definition rewritten as pattern matching, ensure that there are overlapping patterns
+The "$"signum"$" of a real number tells the "sign" of the real number ; whether the number is positive, zero, or negative.
 
-//explain how to deal with overlapping patterns
+=== Pattern Matching
+
+Pattern Matching is another way to write piecewise definitions which can work in certain situations.
+
+For example, consider the last definition - 
+
+$
+  "signum"(x) #d cases( 
+    +1 &"; if "x " "> &&0 , "",
+    "  "0 &"; if "x == &&0 , "" ,
+    -1 &"; if "x " "< &&0
+    )
+$
+
+which can be rewritten as - 
+
+$
+  "signum"(0) &#d 0\
+  "signum"(x) &#d x/(|x|)
+$
+
+This definition relies on checking the form of the input.
+
+If the input is of the form "$0$", then the output is defined to be $0$.\
+For any other number $x$, the output is defined to be $x/(|x|)$
+
+However, there might remain some confusion -\
+If the input is "$0$", then why can't we take $x$ to be $0$, and apply the second line #text(fill:blue)[($"signum"(x) &#d x/(|x|)$)] of the definition ?
+
+To avoid this confusion, we adopt the following convention -\
+Given any input, we start reading from the topmost line to the bottom-most, and we apply the first applicable definition.
+
+So here, the first line #text(fill:blue)[($"signum"(0) &#d 0$)] will be used as the definition when the input is $0$.
 
 == Recursion
 
@@ -209,7 +292,7 @@ A function definition is recursive when the name of the function being defined a
 For example, consider defining the famous fibonacci function - 
 
 $
-  F &: NN -> NN \
+  F : NN &-> NN \
   F(0) &#d 1 \
   F(1) &#d 1 \
   F(n) &#d F(n-1)+F(n-2)
@@ -241,7 +324,7 @@ $
 $
 
 #def(sub:"termination of recursive definition")[
-  In general, a recursive definition is said to *terminate on an input* \ $<=>$ it eventually gives an _actual specific output for that input_.
+  In general, a recursive definition is said to *terminate on an input* \ _if and only if_ \ it eventually gives an _actual specific output for that input_.
 ]
 
 But what we cannot do this for every $F(n)$ one by one.
@@ -254,7 +337,7 @@ What we can do instead, is use a powerful tool known as the @definition_of_princ
   If we have an infinite sequence of statements $phi_0,phi_1, phi_2, phi_3, . . . $\
   and we can prove the following 2 statements -
   - $phi_0$
-  - $forall n ( phi_n => phi_(n+1) )$
+  - $"For each "n", if "phi_n" is true, then "phi_(n+1)" is also true."$
   then all the statements $phi_0,phi_1, phi_2, phi_3, . . . $ in the sequence are true.
 ]
 
@@ -269,7 +352,7 @@ So let's see the @definition_of_principle_of_mathematical_induction in action, a
   - *$angle.l angle.l" "phi_0" "angle.r angle.r $* \ 
     The only natural number which is $<=0$ is $0$, and $F(0) #d 1$, so the definition terminates immediately.
   
-  - *$angle.l angle.l" "forall n ( phi_n => phi_(n+1) )" "angle.r angle.r $* \ 
+  - *$angle.l angle.l" For each "n", if "phi_n" is true, then "phi_(n+1)" is also true. "angle.r angle.r $* \ 
     Assume that $phi_n$ is true. \
     Let $m$ be an arbitrary natural number which is $<= n+1.$ \ 
 
@@ -283,20 +366,49 @@ So let's see the @definition_of_principle_of_mathematical_induction in action, a
       Thus $F(m) := F(m-1) + F(m-2)$ must also terminate. 
     
     Hence $phi_(n+1)$ is proved!
+  Hence the theorem is proved!!
 ]
 
 = Trees
 
-Trees are a way to meaningfully structure a collection of objects. Understanding the meaning captured by these structures is vitally important in learning about expressions.
+Trees are a way to structure a collection of objects. 
+
+Trees are a fundamental way to understand expressions and how haskell deals with them.
 
 *In fact,any object in Haskell is internally modelled as a tree-like structure.*
 
-== Definition
+== Examples of Trees
+
+Here we have a tree which defines a structure on a collection of natural numbers - 
+
+#tree(($12$,$23$,($10$,$14$,$78$)))
+
+The line segments are what defines the structure.
+
+The following tree defines a structure on a collection of words from the English language - 
+
+#tree(spread:2,([Hello],([my],[name],[is]),([Lorenzo],([Von],[Matterhorn])),([It],([is],[good],[to]),[see],[you])))
+
+== Making Larger Trees from Smaller Trees
+
+If we have an object - $ 89 $
+and a few trees -\
+$
+  #tree(($12$,$23$,($10$,$14$,$78$))) "  ","  "
+  #tree(($36$,($71$,$44$,$13$),$42$,($34$,$7$))) "    ","  "
+  #tree(($1$,($2$,$3$,$4$,$5$),($6$,$7$,$8$)))
+$
+we can put them together into one large tree by connecting them with line segments, like so - 
+$
+  #tree(($89$,($12$,$23$,($10$,$14$,$78$)),($36$,($71$,$44$,$13$),$42$,($34$,$7$)),($1$,($2$,$3$,$4$,$5$),($6$,$7$,$8$))))
+$
+
+== Formal Definition of Trees
 
 We will adopt a similar approach to defining trees as we did with expressions, i.e., we will provide a formal procedure to check whether a mathematical object is a tree, rather than directly defining what a tree is.
 
 #def(sub:"tree")[
-  A *tree over a set $S$* defines a meaningful structure on a collection of elements of $S$.
+  A *tree over a set $S$* defines a meaningful structure on a collection of elements from $S$.
 
   The procedure to determine whether an object is a *tree over a set $S$* is as follows -
 
@@ -313,6 +425,25 @@ We will adopt a similar approach to defining trees as we did with expressions, i
 
 ]
 
+Let us use this definition to check whether $ #tree(($12$,$23$,($10$,$14$,$78$))) $ is a *tree over the natural numbers*.\ \ 
+
+Let's start - \ \ 
+
+#tree(($12$,$23$,($10$,$14$,$78$))) is of the form #tree(($p$,$t_1$,$t_2$)), where $p$ is $12$ , $" "t_1$ is $23$ , and $t_2$ is #tree(($10$,$14$,$78$)).
+
+#v(1.8em, weak:true)
+
+Of course, $12 in NN$ and therefore $p in S$.
+
+So we are only left to check that $23$ and #tree(($10$,$14$,$78$)) are trees over the natural numbers.\ \ 
+$23 in NN$, so $23$ is a tree over $NN$ by the first check.\ \
+
+#tree(($10$,$14$,$78$)) is of the form #tree(($p$,$t_1$,$t_2$)), where $p$ is $10$ , $" "t_1$ is $14$, and $t_2$ is $78$
+
+Now, obviously $10 in NN$, so $p in S$.\
+Also, $14 in NN$ and $78 in NN$, so both pass by the first check.
+
+\
 == Structural Induction
 
 In order to prove things about trees, we have a version of the @definition_of_principle_of_mathematical_induction for trees - 
@@ -322,17 +453,22 @@ In order to prove things about trees, we have a version of the @definition_of_pr
  
   and we can prove the following two statements  -
 
-  - $forall s in S , phi_s "is true"$
+  - For each $s in S , phi_s $ is true
 \
-  - $forall p in S ,\ 
-    forall "trees" t_1, t_2, t_3, ..., t_(n-1),t_n "over" S ,\ 
-    ( 
-      phi_(t_1) "and" phi_(t_2) "and" phi_(t_3) "and" ... "and" phi_(t_(n-1)) "and" phi_(t_n) 
-    ) 
-    => phi_tau, \
-    "where" tau #e #tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))
-    $
+  - For each tree $T$ of the form  #tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$)), \ \
+    if $phi_(t_1) " ," phi_(t_2) " ," phi_(t_3) " ," ... " ," phi_(t_(n-1)) "and" phi_(t_n)$ are all true, \
+    
+    then $phi_T$ is also true.
   
+  // - $forall p in S ,\ 
+  //   forall "trees" t_1, t_2, t_3, ..., t_(n-1),t_n "over" S ,\ 
+  //   ( 
+  //     phi_(t_1) "and" phi_(t_2) "and" phi_(t_3) "and" ... "and" phi_(t_(n-1)) "and" phi_(t_n) 
+  //   ) 
+  //   => phi_tau, \
+  //   "where" tau #e #tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))
+  //   $
+  \
   then $phi_t$ is true for each tree $t$ over $S$.
 ]
 
@@ -348,7 +484,7 @@ From the definition of @definition_of_tree, we know that trees are
 
 So, to define any function $( f : "Trees over" S -> X )$, we can divide taking the input into two cases, and define the outputs respectively.
 
-Let's use this principle to define the function $ "size" : "Trees over" S -> NN $ which is meant to give the number of elements of $S$ which appear in a tree over $S$.
+Let's use this principle to define the function $ "size" : "Trees over" S -> NN $ which is meant to give the number of times the elements of $S$ appear in a tree over $S$.
 
 $"size"(s) #d 1 \ "size"(#tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))) #d 1 + "size"(t_1) + "size"(t_2) + "size"(t_3) + ... + "size"(t_(n-1)) + "size"(t_n)$
 
@@ -363,17 +499,17 @@ Using @definition_of_structural_induction_for_trees, let us prove that \
   - *$angle.l angle.l" "forall s in S , phi_s "is true"" "angle.r angle.r $* \ 
       $"size"(s) #d 1$, so the definition terminates immediately.
   
-  - *$angle.l angle.l" "forall p in S ,..., ( 
-      phi_(t_1) "and" phi_(t_2) "and" phi_(t_3) "and" ... "and" phi_(t_(n-1)) "and" phi_(t_n) 
-    ) => phi_tau" "angle.r angle.r $* \ 
+  - *$angle.l angle.l " For each tree " $T$" of the form " . . . " then " phi_T" is also true" angle.r angle.r $* \ 
     Assume that each of $phi_(t_1)," "phi_(t_2)," "phi_(t_3), . . . ," "phi_(t_(n-1))," "phi_(t_n)$ is true. \
     That means that each of $"size"(t_1)," ""size"(t_2)," ""size"(t_3), . . . ," ""size"(t_(n-1))," ""size"(t_n)$ will terminate.
 
-    Now, $"size"(tau) #d 1 + "size"(t_1) + "size"(t_2) + "size"(t_3) + ... + "size"(t_(n-1)) + "size"(t_n)$
+    Now, $"size"(T) #d 1 + "size"(t_1) + "size"(t_2) + "size"(t_3) + ... + "size"(t_(n-1)) + "size"(t_n)$
     
     Thus, we can see that each term in the right-hand side terminates.\ Therefore, the left-hand side "$"size"(tau)$",\ being defined as a well-defined combination of these terms,\ must also terminate.
 
-    Hence $phi_(tau)$ is proved!
+    Hence $phi_(T)$ is proved!
+
+  Hence the theorem is proved!!
 ]
 
 = Why Trees?
