@@ -15,13 +15,9 @@
   box(content)
 }
 
-<<<<<<< HEAD
 = Precise Communication (better name suggestion always welcome) //lmao better 'better name suggestions' is associative. 
 
 Haskell (along a lot of programming) and Mathematics, both involve communicating an idea in a language that is precise enough for them to be understood without ambiguity.
-=======
-= Mathematics vs Haskell //todo (taking suggestions for a better heading)
->>>>>>> dd7cac8864cba64eaa1e3c7256fc592bd58cd3d1
 
 The main difference between mathematics and haskell is *who* reads what we write.
 
@@ -115,11 +111,7 @@ Indeed, that is what the following definition tries to achieve - a systematic me
 //]
 
 #def(sub:"well-formed mathematical expression")[
-<<<<<<< HEAD
   *Well-formed expressions*, #love[like love], is one of those things which is easier to identify than to describe.
-=======
-  We can define a _formal procedure_ to check whether an expression is  well-formed or not.
->>>>>>> dd7cac8864cba64eaa1e3c7256fc592bd58cd3d1
 
   The following is a procedure to check if a given expression $e$ is *well-formed*: 
     - first check whether _$e$_ is a: 
@@ -127,11 +119,7 @@ Indeed, that is what the following definition tries to achieve - a systematic me
       - @definition_of_mathematical_variable
       in which cases _$e$_ passes the check and is an expression, otherwise;
     - check whether _$e$_ is of the form _$f(e_1,e_2,e_3,...,e_n)$_, where 
-<<<<<<< HEAD
       - _$f$_ is a function #text(size:0.8em)[(which can be either a @definition_of_mathematical_value or @definition_of_mathematical_variable)]
-=======
-      - _$f$_ is a function
->>>>>>> dd7cac8864cba64eaa1e3c7256fc592bd58cd3d1
       - which takes _$n$_ inputs, 
       #v(5pt,weak:true) and #v(5pt,weak:true)
       - _$e_1$,$e_2$,$e_3$...$e_n$_ are all _well-formed expressions_ which are _valid inputs_ to _$f$_.
@@ -196,15 +184,9 @@ In the middle we write '$#d$', indicating that right-hand side is the definition
 On the right, we write a @definition_of_well-formed_mathematical_expression using the variables of the left-hand side, describing to how to combine and manipulate the inputs to form the output of the function.
 
 A few examples -
-<<<<<<< HEAD
 - $f(x) #d x^3 dot x^5 + x^2 + 1$
 - $"snd"(a, b) #d b$
 - $zeta(s) #d sum_(n=1)^oo 1/n^s$
-=======
-  - $f(x) #d x^3 dot x^5 + x^2 + 1$
-  - $"second"(a,b) #d (a,b)$
-  - $zeta(s) #d Sigma^infinity_(n=1) 1/(n^s)$
->>>>>>> dd7cac8864cba64eaa1e3c7256fc592bd58cd3d1
 
 == Some Conveniences
 

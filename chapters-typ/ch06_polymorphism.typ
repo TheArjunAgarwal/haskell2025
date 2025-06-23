@@ -52,8 +52,6 @@ Consider the type *`[Integer]`*, the elements of these types are lists of intege
   ```
   Here, in the definition when we match patterns, we figure out the shape of the list element, and if we can extract an integer from it, then we square it and put it back in the list.
 
-#pagebreak()
-
 Something similar can be done with the type *`[Bool]`*:
 - Once again, to write a function, one needs to first look at the _shape_ an element as a list, Then pick elements out of them and treat them as *`Bool`* elements.
 - An example of this will be the *`and`* function, that takes in a collection of *`Bool`* and returns *`True`* if and only if all of them are *`True`*.
