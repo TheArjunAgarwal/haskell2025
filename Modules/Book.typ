@@ -1,5 +1,7 @@
   //---------------functions-----------------
 
+#let unligate(body) = text(features: (calt : 0), body)
+
 #let title_page(
   title : [Title] ,
   author : [Author]
@@ -111,8 +113,8 @@
       #text( 
         weight : "extrabold" , title 
       )
-      --
-      #author
+      // --
+      // #author
     ]
   )
   
@@ -132,14 +134,18 @@
   show heading.where(level: 2): set text(size: 16pt)
   show heading.where(level: 3): set text(size: 14pt)
   show heading.where(level: 4): set text(size: 12pt)
+
+  set heading(numbering: (..nums) => {
+    text(fill:gray,
+      [$section$] +
+      numbering("1.1.", ..nums)
+    )
+  })
     
   set par(justify : true)
 
   user_end_body
 }
-
-#let unligate(body) = text(features: (calt : 0), body)
-
 
 //---------tests--------------------------
 

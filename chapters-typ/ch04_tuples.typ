@@ -461,7 +461,7 @@ There is already an inbuilt way to express this notion of `Either () Rational` i
 
 Which means that we can rewrite @code_of_reciprocal_using_either using `Maybe` instead -
 ```haskell
--- | function from a maybe type
+-- | function to a maybe type
 reciprocal :: Rational -> Maybe Rational
 reciprocal 0 = Nothing
 reciprocal x = Just (1/x)
@@ -528,7 +528,7 @@ If we have a type `X` with elements `X1`, `X2`, and `X3`, and another type `Y` w
 We can define functions to a `Maybe` type.
 For example consider the problem of making an inverse function of `reciprocal`, i.e., a function `inverseOfReciprocal` s.t. #align(center)[$forall$` x::Rational `,` inverseOfReciprocal ( reciprocal x ) == x `] as follows -
 ```haskell
--- | function to a maybe type
+-- | function from a maybe type
 inverseOfReciprocal :: Maybe Rational -> Rational
 inverseOfReciprocal Nothing  = 0
 inverseOfReciprocal (Just x) = (1/x)

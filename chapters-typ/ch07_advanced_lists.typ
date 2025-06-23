@@ -5,6 +5,7 @@
 
 #let definition = def
 #let example = it => [For example - \ #it]
+#let isom = $tilde.equiv$
 
 = advanced lists (feel free to change it)
 
@@ -437,6 +438,7 @@ Try to figure out the implementation of `unzip`.
 ]
 
 == Folding, Scaning and The Gate to True Powers
+=== Orgami of Code!
 A lot of reccursion on lists has the following structure
 ```
 g [] = v -- The vacous case
@@ -749,12 +751,434 @@ Find how many positive integers less than $10^16$ are divisible by at least four
 Hint : Thik about PIE but not $pi$.
 ]
 
-== Scaning
-// contine
+Something we mentioned was that `foldr` and `unfoldr` are inverse (or more accutately duel) of each other. But their types seem so different. How do we reconcile this?
+
+$
+  op("foldr") &:: (a -> b -> b) -> b &-> [a] -> b\
+  & isom (a times b -> b) -> b &-> [a] -> b\
+  &isom (a times b -> b) -> (1 -> b) &-> [a] -> b\
+  &isom (a times b union 1 -> b) &-> [a] -> b\
+  &isom (op("Maybe") (a,b) -> b) &-> [a] -> b\
+  op("Notice, ") op("unfoldr") ::&   (b -> op("Maybe") (a,b)) &-> b -> [a]
+$
+And now the duality emerges. $(op("foldr") f)^(-1) = op("unfoldr") f^(-1)$.
+
+Some more ideas on the nature of fold can be found in the upcoming chapters on datatypes as well as in the appendix.
+
+Another type of function we sometimes want to define are:
+```
+sumlength :: [Int] -> (Int,Int)
+sumlength xs = (sum xs, length xs)
+```
+This is bad as we traverse the list twice. We could do this twice as fast using
+```
+sumlength :: [Int] -> (Int, Int)
+sumlength = foldr (\x (a,b) -> (a+x, b + 1)) (0,0)
+```
+
+This might seem simple enough, but this idea can be taken to a diffrent level rather immidietly.
+#exercise(sub : "Ackerman Function")[
+The Ackerman function is defined as follows:
+```
+ack :: [Int] -> [Int] -> [Int]
+ack [] ys = 1 : ys
+ack (x : xs) [] = ack xs [1]
+ack (x : xs) (y : ys) = ack xs (ack (x : xs) ys)
+```
+Define this in one single line using `foldr`.
+]
+Let's say `foldr f v` $isom$ `ack`.
+```
+=> ack [] = v
+=> ack (x:xs) = f x (ack xs)
+```
+This means `v = (1:)`. unfortunatly, figuring out `f` seems out of reach. Luckily, we are yet to use all the information the function provides.
+
+Let's say `foldr g w` $isom$ `ack (x:xs)`.
+```
+=> ack (x:xs) [] = w
+=> ack (x:xs) (y:ys) = g y (ack (x:xs) ys)
+```
+This means `w = ack xs [1]` and 
+```
+ack (x:xs) (y:ys) 
+  = g y (ack (x:xs) ys) <=>  ack xs (ack (x : xs) ys)
+  (canceling on both sides)
+  => g y = ack xs
+  => g = (\y z -> ack xs z)
+```
+Thus, `g = (\y z-> ack xs z)`.
+
+And finally, now working towards `f`, we get
+```
+ack (x:xs) 
+  = f x (ack xs) <=> foldr (\y z-> ack xs z) (ack xs [1])
+  (substitution of a = ack xs)
+  => f x a <=> foldr (\y z -> a z) (a [1])
+  => f = (\x a -> foldr (\y z -> a z) (a [1]))
+```
+This gives us the definiton
+```
+ack :: [Int] → [Int] → [Int]
+ack = foldr (\x a -> foldr (\y z -> a z) (a [1])) (1:)
+```
+
+This might seem like a rather messy definition, but from a theoretical point of view, even this has it's importence. The main thing is that folding is faster than recursion at runtime so if no additional overhead is there, folds will run faster.
+
+It is possible, but out of the scope of our current undertaking, to prove that all primitive recursive functions can be written as folds. What does primitive recursive functions mean? Well, that is left for your curiosity.
+
+#exercise(sub : "Removing duplicates")[
+  Haskell has inbuilt function `nub :: Eq a => [a] -> [a]` which is used to remove duplicates in a list. Write a recursive definition of `nub` and then write a definition using folds. 
+
+  Haskell also has an inbuilt function `nubBy :: (a -> a -> Bool) -> [a] -> [a]` which is used to remove elements who report true to some property. That is `nubBy (\x y -> x + y == 4) [1,2,3,4,2, 0] = [1,2,4]` as `1+3 = 4, 2+2 = 4, 4 + 0 = 4`. Write a recursive definition of `nubBy` and then write a definition using folds.
+]
+#exercise(sub : "More droping and more taking")[
+  `dropWhile :: (a -> Bool) -> [a] -> [a]` and `takeWhile :: (a -> Bool) -> [a] -> [a]` take a predicate and a list and drop all elements while the predicate is satisfied and take all objects while the predicate is satisfied respectively.
+
+  Implement them using recusion and then using folds.
+]
 
 
 
 
+=== Numerical Integration
+To quickly revise all the things we just learnt, we will try to write our first big-boy code.
+
+Let's talk about numerical Integration. Numerical Integration refers to finding the value of integral of a function, given the limits. This is also a part of the mathematical computing we first studied in chapter 3. To get going, a very naive idea would be:
+```
+easyIntegrate :: (Float -> Float) -> Float -> Float -> Float
+easyIntegrate f a b = (f b + f a) * (b-a) / 2
+```
+
+This is quite inaccurate unless `a` and `b` are close. We can be better by simply dividing the integral in two parts, ie $integral_a^b f(x) diff x = integral_a^m f(x) diff x + integral_m^b f(x) diff x$ where $a < m < b$ and approximate these parts. Given the error term is smaller in these parts than that of the full integral, we would be done. We can make a sequence converging to the integral we are intrested in as:
+```
+-- | Naive Integration
+integrate :: (Float -> Float) -> Float -> Float -> [Float]
+integrate f a b = (easyIntegrate f a b) : zipWith (+) (integrate f a m) (integrate f m b) where m = (a+b)/2 
+```
+
+If you are of the kind of person who likes to optimize, you can see a very simple inoptimality here. We are computing `f m` far too many times. Considering, `f` might be slow in itself, this seems like a bad idea. What do we do then? Well, ditch the aesthetic for speed and make the naive integrate as:
+
+```
+-- | Naive Integration without repeated computation
+integrate f a b = go f a b (f a) (f b)
+
+integ f a b fa fb = ((fa + fb) * (b-a)/2) : zipWith (+) (integ f a m fa fm) (integ f m b fm fb) where 
+  m = (a + b)/2
+  fm = f m
+```
+
+This process is unfortunatly rather slow to converge for a lot of fucntions. Let's call in some backup from math then. 
+
+The elements of the sequence can be expressed as the correct answer plus some error term, ie $a_i = A + Epsilon$. This error term is roughly propotional to some power of the seperation between the limits evaluated (ie $(b-a), (b-a)/2 dots$) (the proof follows from Taylor exmapnsion of $f$. You are reccomended to prove the same). Thus,
+$
+  a_i = A + B times ((b-a)/2^i)^n\
+  a_(i+1) = A + B times ((b-a)/2^(i+1))^n\
+  => a_(i+1) - 1/2^n a_i = A(1-1/2^n) \
+  => A = (2^n times a_(i+1) - a_i)/(2^n - 1)
+$
+
+This means we can improve our sequence by eliminating the error
+```
+elimerror :: Int -> [Float] -> [Float]
+elimerror n (x:y:xs) = (2^^n * y - x) / (2^^n - 1) : elimerror n (y:xs)
+```
+
+However, we have now found a new problem. How in the world do we get `n`?
+
+$
+  a_i &= A + B times ((b-a)/2^i)^n\
+  a_(i+1) &= A + B times ((b-a)/2^(i+1))^n\
+  a_(i+2) &= A + B times ((b-a)/2^(i+2))^n\
+  => a_i - a_(i+1) &= B times ((b-a)/2^i)^n times (1-1/2^n)\
+  => a_(i+1) - a_(i+2) &= B times ((b-a)/2^i)^n times (1/2^n - 1/4^n)\
+  => (a_i - a_(i+1)) / (a_(i+1) - a_(i+2)) &= (4^n - 2^n )/(2^n - 1) = (2^n (2^n-1))/(2^n - 1) = 2^n\
+  => n &= log_2((a_i - a_(i+1))/(a_(i+1) - a_(i+2)) )
+$
+
+Thus, we can estimate `n` using the function `order`. We will be using the inbuilt function `round :: (RealFrac a, Integral b) -> a -> b` in doing so. In our case, `round :: Float -> Int`. 
+```
+order :: [Float] -> Int
+order (x:y:z:xs) = round $ logBase 2 $ (x-y)/(y-z)
+```
+
+This allows us to improve our sequence 
+```
+improve :: [Float] -> [Float]
+improve xs = elimerror (order xs) xs
+```
+One could make a very fast converging sequence as say `improve $ improve $ improve $ integrate f a b`.
+
+But based on the underlying function, the number of `improve` may differ.
+
+So what do we do?  We make an extreamly clever move to define a super sequence `super` as
+```
+super :: [Float] -> [Float]
+super xs = map (!! 2) (iterate improve xs) -- remeber itterate from the excercises above?
+```
+I will re-instate, the implementation of `super` is extreamly clever. We are recursivly getting a sequence of more and more improved sequences of approximations and constructs a new sequence of approximations by taking the second term from each of the improved sequences. It turns out that the second one is the best one to take. It is more accurate than the first and doesn’t require any extra work to compute. Anything further, requires more computations to compute.
+
+Finally, to complete our job, we define a function to choose the term upto some error.
+```
+within :: Float -> [Float] -> Float
+within error (x:y:xs)
+  | abs(x-y) < error = y
+  | otherwise = within error (y:xs)
+```
+
+```
+-- | An optimalized function for numerical integration
+ans :: (Float -> Float) -> Float -> Float -> Float -> Float
+ans f a b error = within error $ super $ integrate f a b
+```
+
+With this we are done!
+
+#exercise(sub: "Simpson's Rule")[
+  Here we have used the approximation $integral_a^b f(x) dif x = (f(a) + f(b)) (b-a)/2$ and used divide and conquor. This is called the Trapazoidal Rule in Numerical Analysis.
+
+  A better approximation is called the Simpson's (First) Rule.
+  $
+    integral_a^b f(x) dif x = (b-a)/6 [f(a) + 4 f((a+b)/2) + f(b)]
+  $
+Modify the code to now use Simpson's Rule. Furthermore, show that this approximation makes sense (the idea is to find a quadratic polynomial which takes the same value as our function at $a, (a+b)/2$ and $b$ and using its area).
+]
+
+=== Time to Scan
+
+We will now talk about folds lesser known cousing scans. 
+#definition(sub: "Scans")[
+While fold takes a list and compresses it to a single value, scan takes a list and makes a list of the partial compressions. Basically, 
+```
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+scanr f v [x1, x2, x3, x4] 
+  = [
+      foldr f v [x1, x2, x3, x4],
+      foldr f v [x2, x3, x4],
+      foldr f v [x3, x4],
+      foldr f v [x4],
+      foldr f v []
+    ]
+  = [
+      x1 `f` x2 `f` x3 `f` x4 `f` v,
+      x2 `f` x3 `f` x4 `f` v,
+      x3 `f` x4 `f` v,
+      x4 `f` v,
+      v
+    ] 
+```
+and very much similerly as
+
+```
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl f v [x1, x2, x3, x4] 
+  = [
+      foldl f v [],
+      foldr f v [x1],
+      foldr f v [x1, x2],
+      foldr f v [x1, x2, x3],
+      foldr f v [x1, x2, x3, x4]
+    ]
+  = [
+      v,
+      v `f` x1,
+      v `f` x1 `f` x2,
+      v `f` x1 `f` x2 `f` x3,
+      v `f` x1 `f` x2 `f` x3 `f` x4,
+    ] 
+```
+]
+There are also very much similer `scanr1` and `scanl1`. #footnote("Similer to our note in fold, there is a function pair scanl' and scanl1', which similer to foldl' and foldl1', and have the same set of benefits. This makes them the defualts, but similerly, to understand them well, we need to discuss how haskell's lazy computation actually works and the way to bypass it. This is done in chapter 9.")
+
+The reason the naming is as the internal implementation of these funtions look like similer to the definition of the fold they borrow their name from.
+```
+scanr :: (a -> b -> b) -> b -> [a] -> [b]
+scanr _ v [] = [v]
+scanr f v (x:xs) = x `f` (head part) : part where part = scanr f v xs
+
+scanl :: (b -> a -> b) -> b -> [a] -> [b]
+scanl _ v [] = [v]
+scanl f v (x:xs) = v : scanl f (v `f` x) xs
+```
+
+#exercise(sub : "Scan as a fold")[
+  We can define `scanr` using `foldr`, try to figure out a way to do so.
+]
+
+#exercise(sub : "Defining scanl1 and scanr1")[
+  Modify these definitions and define `scanl1` and `scanr1`.
+]
+
+This seems like a much more convaluted reccursion pattern. So why have we decided to study it? Let's see by example
+
+#exercise(sub: "Not Quite Lisp (AOC 2015, 1)")[
+Santa is trying to deliver presents in a large apartment building, but he can't find the right floor - the directions he got are a little confusing. He starts on the ground floor (floor 0) and then follows the instructions one character at a time.
+
+An opening parenthesis, `(`, means he should go up one floor, and a closing parenthesis, `)`, means he should go down one floor.
+
+The apartment building is very tall, and the basement is very deep; he will never find the top or bottom floors.
+
+For example:
+- `(())` and `()()` both result in floor 0.
+- `(((` and `(()(()(` both result in floor 3.
+- `))(((((` also results in floor 3.
+- `())` and `))(` both result in floor -1 (the first basement level).
+- `)))` and `)())())` both result in floor -3.
+
+Write a function `parse :: String -> Int` which takes the list of parenthesis as a sting in input and gives the correct integer as output.
+]
+This is quite simple using folds.
+```
+parse :: String -> Int
+parse = foldl (\x y -> if y == '(' then x+1 else x - 1) 0
+```
+But every AOC question always has a part 2!
+#exercise(sub: "Not Quite Lisp, 2")[
+Now, given the same instructions, find the position of the first character that causes him to enter the basement (floor -1). The first character in the instructions has position 1, the second character has position 2, and so on.
+
+For example:
+
+- `)` causes him to enter the basement at character position 1.
+- `()())` causes him to enter the basement at character position 5.
+
+Make a function `ans` which takes the list of parenthesis as a sting in input and output the position(1 indexed) of the first character that causes Santa to enter the basement
+]
+If we had no idea of scans, this would be harder. In this case, it is just a simple replacement.
+```
+ans :: String -> Int
+ans = length.takeWhile (/= -1).scanl (\x y -> if y == '(' then x+1 else x - 1) 0
+```
+The `takewhile` chooses all the floors we reach before $-1$. As $0$th floor is counted (as it is the scan on empty list), we will have a list of `length` as much as the position of the character that caused us to enter $-1$.
+
+ Now, here is a conincidence we didn't expect. We were told that AOC 2015's first question was a good `foldl` to `scanl` example. What I was not preperaed to see was scanning showing up in AOC 2015's third question as well.
+
+ #exercise(sub: "Perfectly Spherical Houses in a Vacuum (AOC 2015)")[
+  Santa is delivering presents to an infinite two-dimensional grid of houses.
+
+He begins by delivering a present to the house at his starting location, and then an elf at the North Pole calls him via radio and tells him where to move next. Moves are always exactly one house to the north (^), south (v), east (>), or west (<). After each move, he delivers another present to the house at his new location.
+
+However, the elf back at the north pole has had a little too much eggnog, and so his directions are a little off, and Santa ends up visiting some houses more than once. How many houses receive at least one present?
+
+For example:
+
+- `>` delivers presents to 2 houses: one at the starting location, and one to the east.
+- `^>v<` delivers presents to 4 houses in a square, including twice to the house at his starting/ending location.
+- `^v^v^v^v^v` delivers a bunch of presents to some very lucky children at only 2 houses.
+
+*Create function `solve1 :: String -> Int` which takes the list of instructions as string in input and outputs the number of hourses visited.*
+ ]
+ #exercise(sub:"Perfectly Spherical Houses in a Vacuum II")[
+The next year, to speed up the process, Santa creates a robot version of himself, Robo-Santa, to deliver presents with him.
+
+Santa and Robo-Santa start at the same location (delivering two presents to the same starting house), then take turns moving based on instructions from the elf, who is eggnoggedly reading from the same script as the previous year.
+
+This year, how many houses receive at least one present?
+
+For example:
+
+- `^v` delivers presents to 3 houses, because Santa goes north, and then Robo-Santa goes south.
+- `^>v<` now delivers presents to 3 houses, and Santa and Robo-Santa end up back where they started.
+- `^v^v^v^v^v` now delivers presents to 11 houses, with Santa going one direction and Robo-Santa going the other.
+
+*Create function `solve2 :: String -> Int` which takes the list of instructions as string in input and outputs the number of hourses visited.*
+]
+
+We will also breifly talk about something called Segmented Scan.
+
+#definition(sub: "Segmented Scan")[
+  A scan can be broken into segments with flags so that the scan starts again at each segment boundary. Each of these scans takes two vectors of values: a data list and a flag list. The segmented scan operations present a convenient way to execute a scan independently over many sets of values.
+
+  For example, a segmented looks like is:
+  ```
+  1 2 3 4 5 6 -- Input
+  T F F T F T -- Flag
+  1 3 6 4 9 6 -- Result
+  ```
+
+  We will name this function `segScan :: (a -> a -> b) -> [Bool] -> [a] -> [b]`.
+]
+The implementation of function is as follows
+```
+segScan :: (a -> a -> b) -> [Bool] -> [a] -> [b]
+segScan f flag str = scanl (\r (x,y) -> if x then y else r `f` y) (head str) (tail (zip flag str))
+```
+
+This might seem complex but we are merely `zip`-ing the flags and input values, and defining a new function, say `g` which applies the function `f`, but resets to `y` (the new value) whenever `x` (the flag) is `True`. The `head` and `tail` are to ensure that the first element is the beginning of the first segment. 
+
+This will be the end of my discussion of this. The major use of segmented scan is in parallel computation algorithms. A rather complex quick sort parallel algorithm can be created using this as the base.
+
+== Excercises
+
+
+// Include a numerical diffretiation exccise.
+// Include a Simpson's Second Rule execise.
+// Context
+// After attempting to program in Grass for the entire morning, you decide to go outside and mow some real grass. The grass can be viewed as a string consisting exclusively of the following characters: wWv. w denotes tall grass which takes 1
+//  unit of energy to mow. W denotes extremely tall grass which takes 2
+//  units of energy to mow. Lastly v denotes short grass which does not need to be mowed.
+
+// Task
+// You decide to mow the grass from left to right (beginning to the end of the string). However, every time you encouter a v (short grass), you stop to take a break to replenish your energy, before carrying on with the mowing. Your task is to calculate the maximum amount of energy expended while mowing. In other words, find the maximum total energy of mowing a patch of grass, that of which does not contain v.
+
+// Example
+// In the example input below, the answer is 8
+// . Although the patch wwwwwww is a longer patch of grass, it only costs 7
+//  units of energy, whereas the optimal patch WWWW expends 2×4=8
+//  units of energy.
+
+// Input: WwwvWWWWvvwwwwwwwvWwWw
+// Output: 8 
+// Here is an example Python program -> Try It Online!.
+
+// Test Cases
+// WwwvWWWWvvwwwwwwwvWwWw -> 8
+// w -> 1
+// W -> 2
+// vwww -> 3
+// vWWW -> 6
+// v -> 0
+// vvvvvvv -> 0
+// vwvWvwvWv -> 2
+// vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwwwv -> 21
+// vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwv -> 20
+// vvWvv -> 2
+
+
+// A Sumac sequence starts with two non-zero integers 𝑡1
+//  and 𝑡2.
+
+// The next term, 𝑡3=𝑡1−𝑡2
+
+// More generally, 𝑡𝑛=𝑡𝑛−2−𝑡𝑛−1
+
+// The sequence ends when 𝑡𝑛≤0
+// . All values in the sequence must be positive.
+
+// Challenge
+// Given two integers 𝑡1
+//  and 𝑡2
+// , compute the Sumac sequence, and output its length.
+
+// If there is a negative number in the input, remove everything after it, and compute the length.
+
+// You may take the input in any way (Array, two numbers, etc.)
+
+// Test Cases
+// (Sequence is included for clarification)
+
+// [t1,t2]   Sequence          n
+// ------------------------------
+// [120,71]  [120,71,49,22,27] 5
+// [101,42]  [101,42,59]       3
+// [500,499] [500,499,1,498]   4
+// [387,1]   [387,1,386]       3
+// [3,-128]  [3]               1
+// [-2,3]    []                0
+// [3,2]     [3,2,1,1]         4
+// Scoring
+// This is code-golf. Shortest answer in each language wins.
+
+// In some use cases, the intermediate results in a fold are of interest in themselves. For instance, let's say you have an Elo rating calculator which folds match results grouped by tournament into player ratings. If you change the fold into a scan, you get the rating evolution of the players from tournament to tournament.
 
 
 
@@ -764,5 +1188,113 @@ Hint : Thik about PIE but not $pi$.
 
 
 // cite
-// citation 1
-// citation 2
+
+
+// @misc{noauthor_mini-project_nodate,
+// 	title = {Mini-{Project}: {The} {List} of {All} {Prime} {Numbers} - {CSCI} 3137: {Haskell} {Programming}},
+// 	url = {https://web.cs.dal.ca/~nzeh/Teaching/3137/haskell/standard_containers/list_functions/primes/},
+// 	urldate = {2025-06-11},
+// 	file = {Mini-Project\: The List of All Prime Numbers - CSCI 3137\: Haskell Programming:/Users/deepthought/Zotero/storage/TZNT8D7D/primes.html:text/html},
+// }
+
+// @misc{noauthor_blow_nodate,
+// 	title = {Blow your mind - {HaskellWiki}},
+// 	url = {https://wiki.haskell.org/Blow_your_mind},
+// 	urldate = {2025-06-11},
+// }
+
+// @misc{noauthor_powersets_2020,
+// 	title = {On powersets and folds {\textbar} {Melding} {Monads}},
+// 	url = {https://web.archive.org/web/20201109023930/http://blog.melding-monads.com/2010/04/04/on-powersets-and-folds/},
+// 	urldate = {2025-06-11},
+// 	month = nov,
+// 	year = {2020},
+// }
+
+// @book{hutton_programming_2016,
+// 	address = {Cambridge},
+// 	edition = {1st ed},
+// 	title = {Programming in {Haskell}},
+// 	isbn = {978-1-316-62622-1 978-1-316-78409-9},
+// 	abstract = {Cover -- Half-title -- Title page -- Copyright information -- Dedication -- Table of contents -- Foreword -- Preface -- Part I Basic Concepts -- 1 Introduction -- 1.1 Functions -- 1.2 Functional programming -- 1.3 Features of Haskell -- 1.4 Historical background -- 1.5 A taste of Haskell -- 1.6 Chapter remarks -- 1.7 Exercises -- 2 First steps -- 2.1 Glasgow Haskell Compiler -- 2.2 Installing and starting -- 2.3 Standard prelude -- 2.4 Function application -- 2.5 Haskell scripts -- 2.6 Chapter remarks -- 2.7 Exercises -- 3 Types and classes -- 3.1 Basic concepts -- 3.2 Basic types -- 3.3 List types -- 3.4 Tuple types -- 3.5 Function types -- 3.6 Curried functions -- 3.7 Polymorphic types -- 3.8 Overloaded types -- 3.9 Basic classes -- 3.10 Chapter remarks -- 3.11 Exercises -- 4 Defining functions -- 4.1 New from old -- 4.2 Conditional expressions -- 4.3 Guarded equations -- 4.4 Pattern matching -- 4.5 Lambda expressions -- 4.6 Operator sections -- 4.7 Chapter remarks -- 4.8 Exercises -- 5 List comprehensions -- 5.1 Basic concepts -- 5.2 Guards -- 5.3 The zip function -- 5.4 String comprehensions -- 5.5 The Caesar cipher -- 5.6 Chapter remarks -- 5.7 Exercises -- 6 Recursive functions -- 6.1 Basic concepts -- 6.2 Recursion on lists -- 6.3 Multiple arguments -- 6.4 Multiple recursion -- 6.5 Mutual recursion -- 6.6 Advice on recursion -- 6.7 Chapter remarks -- 6.8 Exercises -- 7 Higher-order functions -- 7.1 Basic concepts -- 7.2 Processing lists -- 7.3 The foldr function -- 7.4 The foldl function -- 7.5 The composition operator -- 7.6 Binary string transmitter -- 7.7 Voting algorithms -- 7.8 Chapter remarks -- 7.9 Exercises -- 8 Declaring types and classes -- 8.1 Type declarations -- 8.2 Data declarations -- 8.3 Newtype declarations -- 8.4 Recursive types -- 8.5 Class and instance declarations -- 8.6 Tautology checker -- 8.7 Abstract machine},
+// 	language = {eng},
+// 	publisher = {Cambridge University Press},
+// 	author = {Hutton, Graham},
+// 	year = {2016},
+// 	annote = {Description based on publisher supplied metadata and other sources},
+// }
+
+// @misc{noauthor_foldl_nodate,
+// 	title = {foldl and foldr - {CSCI} 3137: {Haskell} {Programming}},
+// 	url = {https://web.cs.dal.ca/~nzeh/Teaching/3137/haskell/standard_containers/list_functions/folds/},
+// 	urldate = {2025-06-11},
+// }
+
+// @misc{noauthor_unfoldr_nodate,
+// 	title = {unfoldr - {CSCI} 3137: {Haskell} {Programming}},
+// 	url = {https://web.cs.dal.ca/~nzeh/Teaching/3137/haskell/standard_containers/list_functions/unfoldr/},
+// 	urldate = {2025-06-11},
+// 	file = {unfoldr - CSCI 3137\: Haskell Programming:/Users/deepthought/Zotero/storage/5P28K3UE/unfoldr.html:text/html},
+// }
+
+// @article{elliott_folds_nodate,
+// 	title = {Folds and unfolds all around us},
+// 	language = {en},
+// 	author = {Elliott, Conal},
+// 	file = {PDF:/Users/deepthought/Zotero/storage/E8GP5R7L/Elliott - Folds and unfolds all around us.pdf:application/pdf},
+// }
+
+// @misc{noauthor_advent_nodate,
+// 	title = {Advent of {Code} 2015},
+// 	url = {https://adventofcode.com/2015},
+// 	urldate = {2025-06-22},
+// 	file = {Advent of Code 2015:/Users/deepthought/Zotero/storage/8LEAUBLF/2015.html:text/html},
+// }
+
+// @misc{dingledooper_mowing_2020,
+// 	type = {Forum post},
+// 	title = {Mowing the {Grass}},
+// 	url = {https://codegolf.stackexchange.com/q/204434},
+// 	urldate = {2025-06-22},
+// 	journal = {Code Golf Stack Exchange},
+// 	author = {dingledooper},
+// 	month = may,
+// 	year = {2020},
+// }
+
+// @article{blelloch_prex_nodate,
+// 	title = {Preﬁx {Sums} and {Their} {Applications}},
+// 	language = {en},
+// 	author = {Blelloch, Guy E},
+// 	file = {PDF:/Users/deepthought/Zotero/storage/GA8P2ETC/Blelloch - Preﬁx Sums and Their Applications.pdf:application/pdf},
+// }
+
+// @misc{johnorford_scan_2022,
+// 	type = {Reddit {Post}},
+// 	title = {Scan},
+// 	url = {https://www.reddit.com/r/haskell/comments/s737lq/scan/},
+// 	urldate = {2025-06-22},
+// 	journal = {r/haskell},
+// 	author = {johnorford},
+// 	month = jan,
+// 	year = {2022},
+// }
+
+// @article{hutton_tutorial_1999,
+// 	title = {A tutorial on the universality and expressiveness of fold},
+// 	volume = {9},
+// 	copyright = {https://www.cambridge.org/core/terms},
+// 	issn = {0956-7968, 1469-7653},
+// 	url = {https://www.cambridge.org/core/product/identifier/S0956796899003500/type/journal_article},
+// 	doi = {10.1017/S0956796899003500},
+// 	abstract = {In functional programming, fold is a standard operator that encapsulates a simple pattern of recursion for processing lists. This article is a tutorial on two key aspects of the fold operator for lists. First of all, we emphasize the use of the universal property of fold both as a proof principle that avoids the need for inductive proofs, and as a deﬁnition principle that guides the transformation of recursive functions into deﬁnitions using fold. Secondly, we show that even though the pattern of recursion encapsulated by fold is simple, in a language with tuples and functions as ﬁrst-class values the fold operator has greater expressive power than might ﬁrst be expected.},
+// 	language = {en},
+// 	number = {4},
+// 	urldate = {2025-06-22},
+// 	journal = {Journal of Functional Programming},
+// 	author = {Hutton, Graham},
+// 	month = jul,
+// 	year = {1999},
+// 	pages = {355--372},
+// 	file = {PDF:/Users/deepthought/Zotero/storage/V2YXXW7E/Hutton - 1999 - A tutorial on the universality and expressiveness of fold.pdf:application/pdf},
+}

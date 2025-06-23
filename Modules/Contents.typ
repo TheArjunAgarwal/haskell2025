@@ -11,11 +11,14 @@
 
   figure( 
     text(size : 2em , 
-      heading( 
-        level : 1 , 
-        outlined : true , 
-        [Table of Contents] 
-      ) 
+      {
+        set heading(numbering : it => {})
+        heading( 
+          level : 1 , 
+          outlined : true , 
+          [Table of Contents] 
+        )
+      }
     ) ,
     kind : "contents_title" , 
     supplement : none
@@ -25,7 +28,7 @@
   
   show outline.entry : it => figure(align(center,{
     
-    let left_indent_correction_term = -2em
+    let left_indent_correction_term = -2.5em
 
     if it.element.func() == heading {
 
@@ -55,7 +58,7 @@
           )
         /*repr*/(block(
           inset: (
-            left : b4_correction_entry.inset.left + left_indent_correction_term
+            left : 0.7*b4_correction_entry.inset.left + left_indent_correction_term
           ),
           b4_correction_entry.body
         ))
@@ -82,7 +85,6 @@
   outline( 
     title : none , 
     target : contents_selector , 
-    indent : 2em
   )
   
 }

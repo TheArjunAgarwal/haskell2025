@@ -32,6 +32,8 @@ Contents.contents
 
 set page(numbering: "1") ; counter(page).update(1)
 
+counter(heading).update(0)
+
 let chapters = (
   (
     "ch01_functions.typ",
@@ -113,17 +115,18 @@ let chapters = (
 for chapter_data in chapters {
 
   pagebreak()
+
+  show: Chapter.settings.with(
+    title: chapter_data.at(1) ,
+    author: chapter_data.at(2) ,
+  )
   
   Chapter.title_page(
     title: chapter_data.at(1) ,
     author: chapter_data.at(2)
   )
 
-  Chapter.post_title_page_settings(
-    title: chapter_data.at(1) ,
-    author: chapter_data.at(2) ,
-    include "chapters-typ//" + chapter_data.at(0)
-  )
+  include "chapters-typ//" + chapter_data.at(0)
 
 }
 
