@@ -18,7 +18,7 @@ However, in this context, computers, being unintelligent machines, are extremely
 
 Since in this course we are going to be writing for computers, we need to ensure that our writing is very precise, correct and generally *idiot-proof*. (Because, in short, computers are idiots)
 
-In order to practice this more formal style of writing required for *haskell code*, the first step we can take is to know how to write our familiar *mathematics* more formally.
+In order to practice this more formal style of writing required for *haskell code*, the first step we can take is to know how to write our familiar *mathematics more formally*.
 
 = The Building Blocks
 
@@ -46,14 +46,14 @@ Examples include -
 - The function of squaring a real number $: RR -> RR$
 - The number of non-trivial zeroes of the Riemann Zeta function
 
-Therefore we can see that relations and functions can also be *values*, as long as they are constant, specific, and not scenario-dependent.
+Therefore we can see that relations and functions can also be *values*, as long as they are specific and not scenario-dependent.
 
 In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*,\ as it is a constant, even though it is an unknown constant.
 
 = Variables
 
 #def(sub : "mathematical variable")[
-  A mathematical *variable* is a symbol or chain of symbols meant to represent a @definition_of_mathematical_value that is arbitrary in some way, usually as a way to show that whatever process follows can be carried out with any arbitrary value.
+  A mathematical *variable* is a symbol or chain of symbols meant to represent an arbitrary @definition_of_mathematical_value, \ usually as a way to show that whatever process follows is general enough so that the process can be carried out with any arbitrary value.
 
   The following example should clarify further.
 ]
@@ -65,7 +65,8 @@ For example, consider the following theorem - \
   Adding $n$ to both sides of the preceding inequality yields $ n + 1 > n $
   Hence Proved !!
 ]
-Here, $n$ is a variable as it isn't any specific value, but rather an arbitrary instance of a certain type of value. \
+Here, $n$ is a @definition_of_mathematical_variable as it isn't any one specific value, \ but rather *represents an arbitrary* natural number.
+
 It has been used to show a certain fact that holds for *any* natural number.
 
 = Well-Formed Expressions
@@ -149,16 +150,16 @@ In its simplest form, a definition of a function is made up of a left-hand side,
   and we use $A #e B$ to mean "$A$ is equal to $B$".
 ], and a right-hand side.
 
+A few examples -
+  - $f(x) #d x^3 dot x^5 + x^2 + 1$
+  - $"second"(a,b) #d (a,b)$
+  - $zeta(s) #d Sigma^infinity_(n=1) 1/(n^s)$
+
 On the left we write the name of the function followed by a number of variables which represent its inputs.
 
 In the middle we write '$#d$', indicating that right-hand side is the definition of the left-hand side.
 
 On the right, we write a @definition_of_well-formed_mathematical_expression using the variables of the left-hand side, describing to how to combine and manipulate the inputs to form the output of the function.
-
-A few examples -
-  - $f(x) #d x^3 dot x^5 + x^2 + 1$
-  - $"second"(a,b) #d (a,b)$
-  - $zeta(s) #d Sigma^infinity_(n=1) 1/(n^s)$
 
 == Some Conveniences
 
@@ -198,7 +199,7 @@ $
   f(x) &#d x^3 dot x^5 + x^2 + 1
 $
 
-which, for convenience, can be rewritten as - 
+for convenience, can be rewritten as - 
 
 $
   ( x |-> x^3 dot x^5 + x^2 + 1 ) : RR -> RR
@@ -242,7 +243,8 @@ $
 For example, consider the following definition - 
 
 $
-  "signum"(x) #d cases( 
+  "signum" : RR &-> RR\
+  "signum"(x) &#d cases( 
     +1 &"; if "x " "> &&0 , "",
     "  "0 &"; if "x == &&0 , "" ,
     -1 &"; if "x " "< &&0
@@ -281,7 +283,7 @@ However, there might remain some confusion -\
 If the input is "$0$", then why can't we take $x$ to be $0$, and apply the second line #text(fill:blue)[($"signum"(x) &#d x/(|x|)$)] of the definition ?
 
 To avoid this confusion, we adopt the following convention -\
-Given any input, we start reading from the topmost line to the bottom-most, and we apply the first applicable definition.
+Given any input, we start reading from the topmost line of the function definition to the bottom-most, and we apply the first applicable definition.
 
 So here, the first line #text(fill:blue)[($"signum"(0) &#d 0$)] will be used as the definition when the input is $0$.
 
@@ -337,7 +339,7 @@ What we can do instead, is use a powerful tool known as the @definition_of_princ
   If we have an infinite sequence of statements $phi_0,phi_1, phi_2, phi_3, . . . $\
   and we can prove the following 2 statements -
   - $phi_0$
-  - $"For each "n", if "phi_n" is true, then "phi_(n+1)" is also true."$
+  - $"For each "n" > 0, if "phi_(n-1)" is true, then "phi_(n)" is also true."$
   then all the statements $phi_0,phi_1, phi_2, phi_3, . . . $ in the sequence are true.
 ]
 
@@ -352,17 +354,17 @@ So let's see the @definition_of_principle_of_mathematical_induction in action, a
   - *$angle.l angle.l" "phi_0" "angle.r angle.r $* \ 
     The only natural number which is $<=0$ is $0$, and $F(0) #d 1$, so the definition terminates immediately.
   
-  - *$angle.l angle.l" For each "n", if "phi_n" is true, then "phi_(n+1)" is also true. "angle.r angle.r $* \ 
-    Assume that $phi_n$ is true. \
-    Let $m$ be an arbitrary natural number which is $<= n+1.$ \ 
+  - *$angle.l angle.l" For each "n" > 0, if "phi_(n-1)" is true, then "phi_(n)" is also true. "angle.r angle.r $* \ 
+    Assume that $phi_(n-1)$ is true. \
+    Let $m$ be an arbitrary natural number which is $<= n.$ \ 
 
     - $angle.l angle.l" "$ Case 1 $" "(m<=1)$ $" "angle.r angle.r$ \
       $F(m) #d 1$, so the definition terminates immediately.
 
     - $angle.l angle.l" "$ Case 2 $" "(m>1)$ $" "angle.r angle.r$ \
       $F(m) #d F(m-1) + F(m-2)$, \
-      and since $m-1$ and $m-2$ are both $<= n$, \
-      $phi_n$ tells us that both $F(m-1)$ and $F(m-2)$ must terminate. \
+      and since $m-1$ and $m-2$ are both $<=n-1$, \
+      $phi_(n-1)$ tells us that both $F(m-1)$ and $F(m-2)$ must terminate. \
       Thus $F(m) := F(m-1) + F(m-2)$ must also terminate. 
     
     Hence $phi_(n+1)$ is proved!
@@ -493,7 +495,7 @@ $"size"(s) #d 1 \ "size"(#tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))) #d
 Using @definition_of_structural_induction_for_trees, let us prove that \
 #proof(thm:[The definition of the function $"size"$ terminates on any finite tree.])[
   For each tree $t$, let $phi_t$ be the statement 
-  #align(center)[" The definition of $"size"$ terminates on $t$"]
+  #align(center)[" The definition of $"size"(t)$ will terminate "]
   To apply @definition_of_structural_induction_for_trees, we need only prove the 2 requirements and we'll be done. So let's do that -
   
   - *$angle.l angle.l" "forall s in S , phi_s "is true"" "angle.r angle.r $* \ 
