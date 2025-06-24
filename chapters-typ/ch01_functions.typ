@@ -3,18 +3,30 @@
 #import "../Modules/Exercise.typ" : exercise
 #import "../Modules/Tree.typ" : tree, dots
 #let d = sym.colon.eq
-#let e = $==$
+#let e = $stretch(=, size: #120%)$
+#let gray(x) = text(fill: luma(150), x) 
+#let grad(content) = {
+  set text(fill: gradient.linear(..color.map.flare))
+  box(content)
+}
+#let love(content) = {
+  set text(fill: gradient.linear(rgb(214,2,112), rgb(0, 56, 168), angle: -30deg))
+  // Yes, these are bi-flag colors, tried a bunch, this looked the prettiest
+  box(content)
+}
 
-= Mathematics vs Haskell //todo (taking suggestions for a better heading)
+= Precise Communication (better name suggestion always welcome) //lmao better 'better name suggestions' is associative. 
+
+Haskell (along a lot of programming) and Mathematics, both involve communicating an idea in a language that is precise enough for them to be understood without ambiguity.
 
 The main difference between mathematics and haskell is *who* reads what we write.
 
 When writing any form of mathematical expression, it is the expectation that it is meant to be read by humans, and convince them of some mathematical proposition.\
-On the other hand, haskell code is not _primarily_ meant to be read by humans, but rather by machines. The computer reads haskell code, and tries to interpret it into steps of manipulating expressions.
+On the other hand, haskell code is not _primarily_ meant to be read by humans, but rather by machines. The computer reads haskell code, and interprets it into steps for manipulating some expression, or doing some action.
 
 When writing mathematics, we can choose to be a bit sloppy and hand-wavy with our words, as we can rely to some degree on the imagination and pattern-sensing abilities of the reader to fill in the gaps.
 
-However, in this context, computers, being unintelligent machines, are extremely dumb and stupid. Unless we spell out the details for them in excruciating detail, they are not going to understand what we want them to do.
+However, in context of Haskell, computers, being machines, are extremely stupid. Unless we spell out the details for them in excruciating detail, they are not going to understand what we want them to do.
 
 Since in this course we are going to be writing for computers, we need to ensure that our writing is very precise, correct and generally *idiot-proof*. (Because, in short, computers are idiots)
 
@@ -23,8 +35,7 @@ In order to practice this more formal style of writing required for *haskell cod
 = The Building Blocks
 
 The language of writing mathematics is fundamentally based on two things -
-- *Symbols:* such as $0,1,2,3,x,y,z,n,alpha,gamma,delta,NN,QQ,RR,in,<,>,f,g,h,=>,forall,exists$ etc.
-and
+- *Symbols:* such as $0,1,2,3,x,y,z,n,alpha,gamma,delta,NN,QQ,RR,in,<,>,f,g,h,=>,forall,exists$ etc. Along with;
 - *Expressions:* which are sentences or phrases made by chaining together these symbols, such as 
   - $x^3 dot x^5 + x^2 + 1$
   - $f(g(x,y),f(a,h(v),c),h(h(h(n))))$
@@ -78,53 +89,70 @@ So what distinguishes a meaningless expression from a meaningful one? Wouldn't i
 
 Indeed, that is what the following definition tries to achieve - a systematic method to detect whether an expression is well-structured enough to possibly convey any meaning.
 
+//#def(sub:"well-formed mathematical expression")[
+  //It is difficult to give a direct definition of a *well-formed expression*. As an alternative, we can define a _formal procedure_ to check whether an expression is  well-formed or not.
+//
+  //The procedure is as follows - 
+//
+  //Given an expression _$e$_, 
+ // 
+    //- first check whether _$e$_ is a 
+      //- @definition_of_mathematical_value 
+      //#v(0pt,weak:true) or #v(5pt,weak:true)
+      //- @definition_of_mathematical_variable
+      //#v(5pt,weak:true) in which cases _$e$_ passes the check and is an expression.
+   // 
+    //Failing that,
+ // 
+    //- check whether _$e$_ is of the form _$f(e_1,e_2,e_3,...,e_n)$_, where 
+      //- _$f$_ is a function #text(size:0.8em)[(the function can be a @definition_of_mathematical_value or @definition_of_mathematical_variable)]
+      //- which takes _$n$_ inputs, 
+      //#v(5pt,weak:true) and #v(5pt,weak:true)
+      //- _$e_1,e_2,e_3,...,e_n$_ are all _well-formed expressions_ which are _valid inputs_ to _$f$_.
+//]
+
 #def(sub:"well-formed mathematical expression")[
-  We can define a _formal procedure_ to check whether an expression is  well-formed or not.
+  *Well-formed expressions*, #love[like love], is one of those things which is easier to identify than to describe.
 
-  The procedure is as follows - 
-
-  Given an expression _$e$_, 
-  
-    - first check whether _$e$_ is a 
-      - @definition_of_mathematical_value 
-      #v(0pt,weak:true) or #v(5pt,weak:true)
+  The following is a procedure to check if a given expression $e$ is *well-formed*: 
+    - first check whether _$e$_ is a: 
+      - @definition_of_mathematical_value, or;
       - @definition_of_mathematical_variable
-      #v(5pt,weak:true) in which cases _$e$_ passes the check and is an expression.
-    
-    Failing that,
-  
+      in which cases _$e$_ passes the check and is an expression, otherwise;
     - check whether _$e$_ is of the form _$f(e_1,e_2,e_3,...,e_n)$_, where 
-      - _$f$_ is a function
+      - _$f$_ is a function #text(size:0.8em)[(which can be either a @definition_of_mathematical_value or @definition_of_mathematical_variable)]
       - which takes _$n$_ inputs, 
       #v(5pt,weak:true) and #v(5pt,weak:true)
-      - _$e_1,e_2,e_3,...,e_n$_ are all _well-formed expressions_ which are _valid inputs_ to _$f$_.
-]
+      - _$e_1$,$e_2$,$e_3$...$e_n$_ are all _well-formed expressions_ which are _valid inputs_ to _$f$_.
+
+Now we can define a *Well-formed expressions* as any expression that satisfies our procedure.
+] // I think this looks better? 
 
 *Remark:* (the function $f$ can be a @definition_of_mathematical_value or @definition_of_mathematical_variable)
 
 Let us use this defining procedure to check if $x^3 dot x^5 + x^2 + 1$ is a well-formed expression. \
 ( We will skip the check of whether something is a valid input or not, as that notion is still not very well-defined for us. )
 
-$x^3 dot x^5 + x^2 + 1$ is $+$ applied to the inputs $x^3 dot x^5$ and $x^2 + 1$. \
+$x^3 dot x^5 grad(+) x^2 + 1$ is $+$ applied to the inputs $x^3 dot x^5$ and $x^2 + 1$. \
 Thus we need to check that $x^3 dot x^5$ and $x^2 + 1$ are well-formed expressions which are valid inputs to $+$.
 
-$x^3 dot x^5$ is $dot$ applied to the inputs $x^3$ and $x^5$. \
+$x^3 grad(dot) x^5$ is $dot$ applied to the inputs $x^3$ and $x^5$. \
 Thus we need to check that $x^3$ and $x^5$ are well-formed expressions.
 
-$x^3$ is $(" ")^3$ applied to the input $x$. \
+$x^grad(3)$ is $(" ")^3$ applied to the input $x$. \
 Thus we need to check that $x$ is a well-formed expression.
 
 $x$ is a well-formed expression, as it is a @definition_of_mathematical_variable.
 
-$x^5$ is $(" ")^5$ applied to the input $x$. \
+$x^grad(5)$ is $(" ")^5$ applied to the input $x$. \
 Thus we need to check that $x$ is a well-formed expression.
 
 $x$ is a well-formed expression, as it is a @definition_of_mathematical_variable.
 
-$x^2 + 1$ is $+$ applied to the inputs $x^2$ and $1$. \
+$x^2 grad(+) 1$ is $+$ applied to the inputs $x^2$ and $1$. \
 Thus we need to check that $x^2$ and $1$ are well-formed expressions.
 
-$x^2$ is $(" ")^2$ applied to the input $x$. \
+$x^grad(2)$ is $(" ")^2$ applied to the input $x$. \
 Thus we need to check that $x$ is a well-formed expression.
 
 $x$ is a well-formed expression, as it is a @definition_of_mathematical_variable.
@@ -145,7 +173,7 @@ Thus, it is very helpful to have a deeper understanding of how they are defined.
 == Using Expressions
 
 In its simplest form, a definition of a function is made up of a left-hand side, '$#d$' in the middle#footnote[
-  In order to have a clear distinction between notation and equality,\
+  In order to have a clear distinction between definition and equality,\
   we use $A #d B$ to mean "$A$ is defined to be $B$",\
   and we use $A #e B$ to mean "$A$ is equal to $B$".
 ], and a right-hand side.
@@ -160,6 +188,11 @@ On the left we write the name of the function followed by a number of variables 
 In the middle we write '$#d$', indicating that right-hand side is the definition of the left-hand side.
 
 On the right, we write a @definition_of_well-formed_mathematical_expression using the variables of the left-hand side, describing to how to combine and manipulate the inputs to form the output of the function.
+
+A few examples -
+- $f(x) #d x^3 dot x^5 + x^2 + 1$
+- $"snd"(a, b) #d b$
+- $zeta(s) #d sum_(n=1)^oo 1/n^s$
 
 == Some Conveniences
 
@@ -342,6 +375,13 @@ What we can do instead, is use a powerful tool known as the @definition_of_princ
   - $"For each "n" > 0, if "phi_(n-1)" is true, then "phi_(n)" is also true."$
   then all the statements $phi_0,phi_1, phi_2, phi_3, . . . $ in the sequence are true.
 ]
+
+The above definition should be read as follows, given a sequence of formulas:
+- The first one is true.
+- Any formula being true, implies that the next one in the sequence is true.
+Then all of the formulas in the sequence are true. Something like a chain of dominoes falling.
+
+#exercise[Show that $n^2$ is the same as the sum of first $n$ odd numbers using induction.]
 
 === Proving Termination using Induction
 

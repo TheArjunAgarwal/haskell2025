@@ -52,8 +52,6 @@ Consider the type *`[Integer]`*, the elements of these types are lists of intege
   ```
   Here, in the definition when we match patterns, we figure out the shape of the list element, and if we can extract an integer from it, then we square it and put it back in the list.
 
-#pagebreak()
-
 Something similar can be done with the type *`[Bool]`*:
 - Once again, to write a function, one needs to first look at the _shape_ an element as a list, Then pick elements out of them and treat them as *`Bool`* elements.
 - An example of this will be the *`and`* function, that takes in a collection of *`Bool`* and returns *`True`* if and only if all of them are *`True`*.
@@ -367,7 +365,7 @@ which in my opinion is much simpler to read!
 Write a function `apply_n_times` that takes a function `f` and an argument `a` along with a natural number `n` and applies the function `n` times on `a`, for exaxmple: `apply_n_times (+1) 5 3` would return `8`. Also figure out the type of the function.
 ]
 
-=== A Short Note on Type Inference
+== A Short Note on Type Inference
 Haskell is a statically typed language. What that means is that it requires the types for the data that is being processed by the program, and it needs to for an analysis that happens before running the program, this is called *type checking*.
 
 It is not however required to give types to all functions (we do strongly recommend it though!), in fact one can simply not give any types at all. This is possible because the haskell compiler is smart enough to figure all of it out on its own! It's so good that when you do write type annotations for functions, haskell ignores it, figures the types out on its own and can then check if you have given the types correctly. This is called *type inference*.
@@ -383,12 +381,37 @@ flip :: (a -> b -> c) -> b -> a -> c
 
 The reader should now be equipped with everything they need to understand how types can be read and can now use type inference like this to understand haskell programs better.
 
-=== Higher Order Functions on Maybe Type
+== Higher Order Functions on Maybe Type : A Case Study
 
 The *Maybe Type*, as defined in #link(<maybe>)[Chapter 3] is another playground for higher order functions.
 
-When using the `Maybe` types, one eventually runs into a problem that looks something like this:
-- Break up the problem into a bunch of tiny steps, so make a lot of simple function and the final solution is to be achieved by combining all of them.
+As a refresher on *Maybe Types*, given a type `a`, one can add an _extra element_ to it by making it the type `Maybe a`. For example, given the type `Integer`, whose elements are all the integers, the type `Maybe Integer` will be the collection of integers along with an extra element, which we call `Nothing`. 
+
+*Maybe Types* are meant to capture failure, for example, the @code_of_function_to_a_maybe_type defines the `reciprocal` function, which takes a rational number, and returns its reciprocal, except when the input is `0`, in which case it returns the _extra value_ which is `Nothing`.
+
+To state that elements belong to a *Maybe Type* they are decorated with `Just`. For example:
+- The type of `5` is `Integer`
+- The type of `Just 5` is `Maybe Integer`.
+
+To see an example of some functions that use `Maybe` in their type definitions are:
+- A safe version of `head` and `tail`:
+    - `safeHead :: [a] -> Maybe a` 
+    - `safeTail :: [a] -> Maybe a`
+- A safe way to index a list, that is a safe version of `(!!)`:
+    - `safeIndex :: [a] -> Int -> Maybe a`
+    
+#exercise(sub: "Safety First")[Define the functions `safeHead`, `safeTail` and `safeIndex`.]
+
+Something that should be noted is that so far in the book, `head`, `tail` and `(!!)` are the only functions for which we need safe versions. This is because these are the only functions that are not defined for all possible inputs and can hence give an error while the program executes (that would be like passing empty list to head, or idexing an element at a negative position). Every other function we have seen will always have a valid output, that is, it is literally impossible for functions to fail for not having a valid input if one only uses safe functions!
+
+This may seem like a fairly trivial fact for those who are learning haskell as thier first programming language, but for those who has programmed in languages like Java, Python, C or so on, it is impossible to write a program that would lead to an error which is equivalent to the following:
+- Nonetype does not have this attribute: Python
+- Null Pointer Exception: Java
+- Memory Access Violation or Segfault for derefencing a null pointer: C
+If these erros have haunted you, you have our condolences, all of these would have been completely avoided if the langauge had some version of `Maybe`, or even some bare bones type system in case of python.
+
+All of the safety provided by `Maybe` types has 1 potential drawback: When using `Maybe` types, one eventually runs into a problem that looks something like this:
+- While solving a complicated problem, one would break it down into simpler parts, that would correspond to many tiny funtions, that will come to gether to form the functions which solves the problem.
 - Turns out that one the functions, maybe something in the very beginning returns a `Maybe Integer` instead of an `Integer`.
 - This means that the next function along the chain, would have had to have its input type as `Maybe Integer` to account for the potentially case of `Nothing`.
 - This also forces the output type to be a `Maybe` type, this makes sense, if the process fails in the beginning, one might not want to continue.
