@@ -35,7 +35,6 @@
     if element.func() == heading {
 
       heading(
-        offset:0,
         depth:element.depth,
         outlined:element.outlined,
         bookmarked:element.bookmarked,
