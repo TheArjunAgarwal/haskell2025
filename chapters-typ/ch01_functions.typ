@@ -30,7 +30,7 @@ However, in context of Haskell, computers, being machines, are extremely stupid.
 
 Since in this course we are going to be writing for computers, we need to ensure that our writing is very precise, correct and generally *idiot-proof*. (Because, in short, computers are idiots)
 
-In order to practice this more formal style of writing required for *haskell code*, the first step we can take is to know how to write our familiar *mathematics* more formally.
+In order to practice this more formal style of writing required for *haskell code*, the first step we can take is to know how to write our familiar *mathematics more formally*.
 
 = The Building Blocks
 
@@ -57,14 +57,14 @@ Examples include -
 - The function of squaring a real number $: RR -> RR$
 - The number of non-trivial zeroes of the Riemann Zeta function
 
-Therefore we can see that relations and functions can also be *values*, as long as they are constant, specific, and not scenario-dependent.
+Therefore we can see that relations and functions can also be *values*, as long as they are specific and not scenario-dependent.
 
 In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*,\ as it is a constant, even though it is an unknown constant.
 
 = Variables
 
 #def(sub : "mathematical variable")[
-  A mathematical *variable* is a symbol or chain of symbols meant to represent a @definition_of_mathematical_value that is arbitrary in some way, usually as a way to show that whatever process follows can be carried out with any arbitrary value.
+  A mathematical *variable* is a symbol or chain of symbols meant to represent an arbitrary @definition_of_mathematical_value, \ usually as a way to show that whatever process follows is general enough so that the process can be carried out with any arbitrary value.
 
   The following example should clarify further.
 ]
@@ -76,7 +76,8 @@ For example, consider the following theorem - \
   Adding $n$ to both sides of the preceding inequality yields $ n + 1 > n $
   Hence Proved !!
 ]
-Here, $n$ is a variable as it isn't any specific value, but rather an arbitrary instance of a certain type of value. \
+Here, $n$ is a @definition_of_mathematical_variable as it isn't any one specific value, \ but rather *represents an arbitrary* natural number.
+
 It has been used to show a certain fact that holds for *any* natural number.
 
 = Well-Formed Expressions
@@ -177,6 +178,11 @@ In its simplest form, a definition of a function is made up of a left-hand side,
   and we use $A #e B$ to mean "$A$ is equal to $B$".
 ], and a right-hand side.
 
+A few examples -
+  - $f(x) #d x^3 dot x^5 + x^2 + 1$
+  - $"second"(a,b) #d (a,b)$
+  - $zeta(s) #d Sigma^infinity_(n=1) 1/(n^s)$
+
 On the left we write the name of the function followed by a number of variables which represent its inputs.
 
 In the middle we write '$#d$', indicating that right-hand side is the definition of the left-hand side.
@@ -226,7 +232,7 @@ $
   f(x) &#d x^3 dot x^5 + x^2 + 1
 $
 
-which, for convenience, can be rewritten as - 
+for convenience, can be rewritten as - 
 
 $
   ( x |-> x^3 dot x^5 + x^2 + 1 ) : RR -> RR
@@ -270,7 +276,8 @@ $
 For example, consider the following definition - 
 
 $
-  "signum"(x) #d cases( 
+  "signum" : RR &-> RR\
+  "signum"(x) &#d cases( 
     +1 &"; if "x " "> &&0 , "",
     "  "0 &"; if "x == &&0 , "" ,
     -1 &"; if "x " "< &&0
@@ -309,7 +316,7 @@ However, there might remain some confusion -\
 If the input is "$0$", then why can't we take $x$ to be $0$, and apply the second line #text(fill:blue)[($"signum"(x) &#d x/(|x|)$)] of the definition ?
 
 To avoid this confusion, we adopt the following convention -\
-Given any input, we start reading from the topmost line to the bottom-most, and we apply the first applicable definition.
+Given any input, we start reading from the topmost line of the function definition to the bottom-most, and we apply the first applicable definition.
 
 So here, the first line #text(fill:blue)[($"signum"(0) &#d 0$)] will be used as the definition when the input is $0$.
 
@@ -365,7 +372,7 @@ What we can do instead, is use a powerful tool known as the @definition_of_princ
   If we have an infinite sequence of statements $phi_0,phi_1, phi_2, phi_3, . . . $\
   and we can prove the following 2 statements -
   - $phi_0$
-  - $"For each "n", if "phi_n" is true, then "phi_(n+1)" is also true."$
+  - $"For each "n" > 0, if "phi_(n-1)" is true, then "phi_(n)" is also true."$
   then all the statements $phi_0,phi_1, phi_2, phi_3, . . . $ in the sequence are true.
 ]
 
@@ -387,17 +394,17 @@ So let's see the @definition_of_principle_of_mathematical_induction in action, a
   - *$angle.l angle.l" "phi_0" "angle.r angle.r $* \ 
     The only natural number which is $<=0$ is $0$, and $F(0) #d 1$, so the definition terminates immediately.
   
-  - *$angle.l angle.l" For each "n", if "phi_n" is true, then "phi_(n+1)" is also true. "angle.r angle.r $* \ 
-    Assume that $phi_n$ is true. \
-    Let $m$ be an arbitrary natural number which is $<= n+1.$ \ 
+  - *$angle.l angle.l" For each "n" > 0, if "phi_(n-1)" is true, then "phi_(n)" is also true. "angle.r angle.r $* \ 
+    Assume that $phi_(n-1)$ is true. \
+    Let $m$ be an arbitrary natural number which is $<= n.$ \ 
 
     - $angle.l angle.l" "$ Case 1 $" "(m<=1)$ $" "angle.r angle.r$ \
       $F(m) #d 1$, so the definition terminates immediately.
 
     - $angle.l angle.l" "$ Case 2 $" "(m>1)$ $" "angle.r angle.r$ \
       $F(m) #d F(m-1) + F(m-2)$, \
-      and since $m-1$ and $m-2$ are both $<= n$, \
-      $phi_n$ tells us that both $F(m-1)$ and $F(m-2)$ must terminate. \
+      and since $m-1$ and $m-2$ are both $<=n-1$, \
+      $phi_(n-1)$ tells us that both $F(m-1)$ and $F(m-2)$ must terminate. \
       Thus $F(m) := F(m-1) + F(m-2)$ must also terminate. 
     
     Hence $phi_(n+1)$ is proved!
@@ -528,7 +535,7 @@ $"size"(s) #d 1 \ "size"(#tree(($p$,$t_1$,$t_2$,$t_3$,dots,$t_(n-1)$,$t_n$))) #d
 Using @definition_of_structural_induction_for_trees, let us prove that \
 #proof(thm:[The definition of the function $"size"$ terminates on any finite tree.])[
   For each tree $t$, let $phi_t$ be the statement 
-  #align(center)[" The definition of $"size"$ terminates on $t$"]
+  #align(center)[" The definition of $"size"(t)$ will terminate "]
   To apply @definition_of_structural_induction_for_trees, we need only prove the 2 requirements and we'll be done. So let's do that -
   
   - *$angle.l angle.l" "forall s in S , phi_s "is true"" "angle.r angle.r $* \ 
@@ -597,3 +604,200 @@ This is known as the as an Abstract Syntax Tree, and this is (approximately) how
   $"AST"(v) #d v, "if "v" is a value or variable"$\  \
   $"AST"(f(x_1,x_2,x_3,...,x_(n-1),x_n)) #d\ "                         "#tree(spread:2, grow:1.5,pad:0.4,($f$,$"AST"(x_1)$,$"AST"(x_2)$,$"AST"(x_3)$,dots,$"AST"(x_(n-1))$,$"AST"(x_n)$))$
 ]
+
+== Excercises
+#exercise(sub :"Turbo The Snail(IMO 2024,5)")[
+Turbo the snail is in the top row of a grid with $2024$ rows and $2023$ columns and
+wants to get to the bottom row. However, there are $2022$ hidden monsters, one in
+every row except the first and last, with no two monsters in the same column.
+Turbo makes a series of attempts to go from the first row to the last row. On
+each attempt, he chooses to start on any cell in the first row, then repeatedly moves
+to an orthogonal neighbor. (He is allowed to return to a previously visited cell.) If
+Turbo reaches a cell with a monster, his attempt ends and he is transported back to
+the first row to start a new attempt. The monsters do not move between attempts,
+and Turbo remembers whether or not each cell he has visited contains a monster. If
+he reaches any cell in the last row, his attempt ends and Turbo wins.
+Find the smallest integer $n$ such that Turbo has a strategy which guarantees being
+able to reach the bottom row in at most $n$ attempts, regardless of how the monsters
+are placed.
+]
+#exercise(sub:"Turbo returns")[
+  Turbo is now on a $s times (s-1)$ grid with $s-2$ hidden monsters with $s >= 4$. With the same rules as the last time we met Turbo, what is the smallest integer $n$, as a function of $s$, such that Turbo has a strategy which guarantees being
+able to reach the bottom row in at most $n$ attempts, regardless of how the monsters
+are placed.
+]
+
+#exercise(sub:"Points in Triangle")[
+  Inside a right triangle a finite set of points is given. Prove that these points can be connected
+by a broken line such that the sum of the squares of the lengths in the broken line is less than
+or equal to the square of the length of the hypotenuse of the given triangle.
+]
+
+#exercise(sub:"Joining Points(IOI 2006, 6)")[
+  A number of red points and blue points are drawn in a unit square with the following
+properties:
+- The top-left and top-right corners are red points.
+- The bottom-left and bottom-right corners are blue points.
+- No three points are collinear.
+Prove it is possible to draw red segments between red points and blue segments between blue points
+in such a way that: all the red points are connected to each other, all the blue points are connected
+to each other, and no two segments cross.
+
+As a bonus, try to think of a recipie or a set of instructions one could follow to do so.
+
+Hint: Try using the 'trick' you discovered in @exercise_of_Points_in_Triangle.
+]
+
+#exercise(sub:"Usmions(USA TST 2015, simplified)")[
+  A physicist encounters $2015$ atoms called usamons. Each usamon either has one
+electron or zero electrons, and the physicist can’t tell the difference. The physicist’s
+only tool is a diode. The physicist may connect the diode from any usamon A to
+any other usamon B. (This connection is directed.) When she does so, if usamon A
+has an electron and usamon B does not, then the electron jumps from A to B. In
+any other case, nothing happens. In addition, the physicist cannot tell whether an
+electron jumps during any given step. The physicist's goal is to arrange the usamons in a line such that all the
+charged usamons are to the left of the un-charged usamons, regardless of the number
+of charged usamons. Is there any series of diode
+usage that makes this possible?
+]
+
+#exercise(sub:"Battery")[
+(a) There are $2n + 1 (n > 2)$ batteries. We don’t know which batteries are good
+and which are bad but we know that the number of good batteries is greater
+by 1 than the number of bad batteries. A lamp uses two batteries, and it
+works only if both of them are good. What is the least number of attempts
+sufficient to make the lamp work?
+
+(b) The same problem but the total number of batteries is $2n (n > 2)$ and the
+numbers of good and bad batteries are equal.]
+
+#exercise(sub:"Seven Tries (Russia 2000)")[
+  Tanya chose a natural number $X <= 100$, and Sasha is trying to guess this number. He can select two natural numbers $M$ and $N$ less than $100$ and ask about $gcd(X+M,N)$. Show that Sasha can determine Tanya's number with at most seven questions.
+
+  Note: We know of atleast 5 ways to solve this. Some can be genralized to any number $k$ other than $100$, with $ceil(log_2(k))$ many tries, other are a bit less general. We hope you can find atleast $2$.
+]
+
+#exercise(sub:"Squarefull")[
+  Call an integer square-full if each of its prime factors occurs to a second power (at least). Prove that there are infinitely many pairs of consecutive square-fulls.
+
+  Hint: We reccomended using induction. Given $(a,a+1)$ are square-full, can we generate another?
+]
+
+#exercise(sub:"The best (trollest) codeforces question ever!")[
+Let $s(k)$ be sum of digits in decimal representation of positive integer $k$. Given two integers $1 <= m, n <= 1129$ and $n$, find two integers $1 <= a, b <=10^2230$ such that
+- $s(a) >= n$
+- $s(b) >= n$
+- $s(a+b) <= m$
+
+For Example
+
+*Input1* : 6 5
+
+*Output1* : 6 7
+
+*Input2* : 8 16
+
+*Output2* : 35 53
+]
+
+#exercise(sub:"Rope")[
+  Given a $r times c$ grid with $0 <= n <= r * c$ painted cells, we have to arrange ropes to cover the grid. Here are the rules through exmample:
+  #image("../images/rope.png")
+
+  Figure out an algorithm/recipie to covering the grid using $n+1$ ropes leagally.
+
+  Hint: Try to first do the $n=0$ case. Then $r = 1$ case, with arbitrary $n$. Does this help?
+]
+
+#exercise(sub: "n composite")[Given $N$, find $N$ consecutive integers that are all composite numbers.]
+
+#exercise(sub:"This was rated 2100? (Timofey's Colourbook Problem, Codeforces)")[
+
+One of Timofey's birthday presents is a colourbook in the shape of an infinite plane. On the plane, there are $n$ rectangles with sides parallel to the coordinate axes. All sides of the rectangles have odd lengths. The rectangles do not intersect, but they can touch each other.
+
+Your task is, given the coordinates of the rectangles, to help Timofey color the rectangles using four different colors such that any two rectangles that *touch each other by a side* have *different colors*, or determine that it is impossible.
+
+For example,
+
+#figure(
+image("../images/Timofey's Rectangle.png", width: 75%, )
+)
+is a valid filling. Make an algorithm/recipie to fulfill this task.
+
+PS: You will feel a little dumb once you solve it. 
+]
+
+#exercise(sub: "Seating")[
+  Wupendra Wulkarni storms into the exam room. He glares at the students.
+  
+  "Of course you all sat like this on purpose. Don’t act innocent. I know you planned to copy off each other. Do you all think I'm stupid? Hah! I've seen smarter chairs.
+  
+  Well, guess what, darlings? I’m not letting that happen. Not on my watch. 
+  
+  Here’s your punishment - uh, I mean, assignment:
+  
+  You’re all sitting in a nice little grid, let’s say $n$ rows and $m$ columns. I’ll number you from 1 to $n dot m$, row by row. That means the poor soul in row $i$, 
+  column $j$ is student number $(i  - 1) dot m + j$. Got it? 
+  
+  Now, you better rearrange yourselves so that none of you little cheaters ends up next to the same neighbor again. Side-by-side, up-down—any adjacent loser you were plotting with in the original grid? Yeah, stay away from them."
+  
+  Your task is this:
+  Find a new seating chart (in general an algorithm/recipie), using n rows and m columns, using every number from 1 to $n dot m$ such that no two students who were neighbors in the original grid 
+  are neighbors again. 
+  
+  And if you think it’s impossible, then prove it as Wupendra won't satisfy for anything less.
+]
+#exercise(sub : "The sceinic way")[
+   (a) Prove the following theorem of Nicomachus by induction:
+$
+1^3 = 1\
+2^3 = 3 + 5\
+3^3 = 7 + 9 + 11\
+4^3 = 13 + 15 + 17 + 19 \
+.\
+.\
+.\
+$ 
+(b) Use this result to prove the remarkable formula
+$
+  1^3 + 2^3 + dots + n^3 = (1+2+dots+n)^2
+$ 
+]
+
+// cite
+// @misc{noauthor_travelproblemset2015pdf_nodate,
+// 	title = {{TravelProblemSet2015}.pdf},
+// 	url = {https://drive.google.com/file/d/1r5qkXbhLdZWRlMdO9ogVwBe6a8742RAB/view?usp=sharing&usp=embed_facebook},
+// 	urldate = {2025-06-28},
+// 	journal = {Google Docs},
+// 	file = {Snapshot:/Users/deepthought/Zotero/storage/Y3B7ICFE/view.html:text/html},
+// }
+
+// @book{knuth_art_1997,
+// 	address = {Reading, Mass},
+// 	edition = {3rd ed},
+// 	title = {The art of computer programming},
+// 	isbn = {978-0-201-89683-1 978-0-201-89684-8 978-0-201-89685-5},
+// 	publisher = {Addison-Wesley},
+// 	author = {Knuth, Donald Ervin},
+// 	year = {1997},
+// 	keywords = {Computer algorithms, Computer programming},
+// 	annote = {Includes indexes},
+// 	annote = {v. 1. Fundamental algorithms -- v. 2. Seminumerical algorithms -- v. 3. Sorting and searching},
+// }
+
+// @misc{noauthor_algorithmspdf_nodate,
+// 	title = {Algorithms.pdf},
+// 	url = {https://drive.google.com/file/d/19xueTWqPby2GJfTJrRomSg8Vh59pcWS4/view?usp=sharing&usp=embed_facebook},
+// 	urldate = {2025-06-28},
+// 	journal = {Google Docs},
+// 	file = {Snapshot:/Users/deepthought/Zotero/storage/6UG8F599/view.html:text/html},
+// }
+
+// @misc{noauthor_2019-inductionpdf_nodate,
+// 	title = {2019-induction.pdf},
+// 	url = {https://drive.google.com/file/d/1_bxkIbd9tQ1w9qqFShClR9jKEscvoqFw/view?usp=embed_facebook},
+// 	urldate = {2025-06-28},
+// 	journal = {Google Docs},
+// 	file = {Snapshot:/Users/deepthought/Zotero/storage/TK6AIQIL/view.html:text/html},
+// }

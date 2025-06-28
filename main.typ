@@ -109,6 +109,11 @@ let chapters = (
     "ch13_monad.typ",
     [Monads],
     R
+  ),
+  (
+    "../extra-typ/appendix.typ",
+    [Appendix],
+    author
   )
 )
 
@@ -129,7 +134,5 @@ for chapter_data in chapters {
   include "chapters-typ//" + chapter_data.at(0)
 
 }
-
-include "extra-typ/appendix.typ"
 
 }
