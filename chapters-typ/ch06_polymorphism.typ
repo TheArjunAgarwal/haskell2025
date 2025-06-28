@@ -9,7 +9,7 @@
 
 // Chapter content goes here
 
-= Polymorphism
+= Polymorphism <poly>
 == Classification has always been about _shape_ and _behvaiour_ anyway
 
 Functions are our way, to interact with the elements of a type, and one can define functions in one of the two following ways:

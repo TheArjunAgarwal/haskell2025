@@ -30,7 +30,7 @@ instance Finite Int
 ```
 ]
 
-= Sets
+= Sets <sets>
 
 #def(sub: "set" )[
   A *set* is a _well-defined collection of "things"_. \
@@ -85,7 +85,7 @@ $
   If $A$ has $|A|$ elements, and $B$ has $|B|$ elements, then how many elements does $B^A$ have?
 ]
 
-= Types
+= Types <types>
 
 We have encountered a few types in the previous chapter, such as `Bool`, `Integer` and `Char`. For our limited purposes, we can think about each such *type* as the *set of all values of that type*.
 

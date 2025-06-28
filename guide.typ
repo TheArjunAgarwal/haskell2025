@@ -101,7 +101,7 @@
   - Define Nat, List, Tree
   
 - *Time*:
-- *Author*: A
+- *Author*: S
 
 == 🧵 Chapter 9: Computation as Reduction
 
