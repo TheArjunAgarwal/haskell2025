@@ -1,17 +1,22 @@
-#import "../Modules/style.typ": *
-#show: codly-init.with()
-#codly(languages: codly-languages)
+#import "../Modules/Definition.typ" : def
+#import "../Modules/Exercise.typ" : exercise
+#import "../Modules/Quote.typ" : quote
+#import "../Modules/Proof.typ" : proof
+#import "../Modules/Code.typ" : unligate
+
+#let definition = def
+#let example = it => [For example - \ #it]
 
 = post-complexity data types (feel free to change it)
 
-- Queue
-- Segment Tree
-- BST
-- Set
-- Map
+== Stacks and Queues
 
-- Define recurssion in recursive data types and define (4)
-- define Nat, List, Tree
+
+// - Queue
+// - Segment Tree
+// - BST
+// - Set
+// - Map
 // Chapter content goes here
 
 // cite
