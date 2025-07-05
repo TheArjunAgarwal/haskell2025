@@ -366,7 +366,7 @@ But what we cannot do this for every $F(n)$ one by one.
 
 What we can do instead, is use a powerful tool known as the @definition_of_principle_of_mathematical_induction.
 
-=== Induction
+=== Induction <induction>
 
 #def(sub:"principle of mathematical induction")[
   If we have an infinite sequence of statements $phi_0,phi_1, phi_2, phi_3, . . . $\
@@ -554,7 +554,7 @@ Using @definition_of_structural_induction_for_trees, let us prove that \
   Hence the theorem is proved!!
 ]
 
-= Why Trees?
+= Why Trees? <why>
 
 But why care so much about trees anyway? Well, that is mainly due to the previously mentioned fact - "*In fact,any object in Haskell is internally modelled as a tree-like structure.*"
 

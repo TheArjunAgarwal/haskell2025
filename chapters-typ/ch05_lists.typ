@@ -515,7 +515,7 @@ Ans `unlines` combines the lines back into a single string.
 "hello there!\nI am coding...\n"
 ```
 
-= Structural Induction for Lists
+= Structural Induction for Lists <indlist>
 
 Suppose we wan prove some fact about lists.
 
