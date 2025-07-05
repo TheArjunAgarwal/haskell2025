@@ -409,3 +409,5 @@ Also define versions of the `elem` and `sum` functions for the `Tree` datatype.
 // Haskell Mooc
 // https://jameshaydon.github.io/passport/
 // citation 2
+== Excercise
+// Reverse Polish Notation Stack calculator...
