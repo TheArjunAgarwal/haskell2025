@@ -215,3 +215,6 @@ In #link(<types>)[Chapter 4], we saw that types can be thought of as sets, and g
 - We can create the list of elements of type `A` as `[A]`.
 And so on...
 
+
+== Excercise
+// Reverse Polish Notation Stack calculator...

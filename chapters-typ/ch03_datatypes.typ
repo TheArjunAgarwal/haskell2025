@@ -760,10 +760,7 @@ Finally, similer to our above things, we could simply set the tolerance and get 
 
 It is left as excercise to use taylor approximation to define inverse sin(`asin`), inverse cos(`acos`) and inverse tan(`atan`).
 
-
-
-
-// Back Excercise
+== Excercise
 #exercise(sub: "Collatz")[
   Collatz conjucture states that for any $n in NN$ exists a $k$ such that  $c^k(n) = 1$ where $c$ is the Collatz function which is $n/2$ for even $n$ and $3n + 1$ for odd $n$.
 
@@ -835,6 +832,32 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
 #exercise(sub: "Moduler Exponation")[
   Implement modular exponentiation ($a^b mod m$) efficiently using the fast exponentiation method. The type signature should be `modExp :: Int -> Int -> Int -> Int`
 ]
+
+#exercise(sub: "Bean Nim (Putnam 1995, B5)")[
+  A game starts with four heaps of beans containing $a$, $b$, $c$, and $d$ beans. A move consists of taking either
+
+(a) one bean from a heap, provided at least two beans are left behind in that
+heap, or
+
+(b) a complete heap of two or three beans.
+
+The player who takes the last heap wins. Do you want to go first or second?
+
+Write a recursive function to solve this by brute force. Call it `naiveBeans :: Int -> Int -> Int -> Int -> Bool` which gives `True` if it is better to go first and `False` otherwise. Play around with this and make some observations.
+
+Now write a much more efficient (should be one line and has no recursion) function `smartBeans :: Int -> Int -> Int -> Int -> Bool` which does the same.
+]
+
+#exercise(sub : "Squares and Rectangles on a chess grid")[
+  Write a function `squareCount :: Int -> Int` to count number of squares on a  $n times n$ grid. For example, `squareCount 1 = 1` and `squareCount 2 = 5` as four 1x1 squares and one 2x2 square.
+
+  Furthermore, also make a function `rectCount :: Int -> Int` to count the number of rectangles on a $n times n$ grid.
+
+  Finally, make `genSquareCount :: (Int, Int) -> Int` and `genRectCount :: (Int, Int) -> Int` to count number of squares and rectangle in a $a times b$ grid.
+]
+
+
+
 
 
 // Suggest that we add a section about types and correctness of code.

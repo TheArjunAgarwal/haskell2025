@@ -607,8 +607,8 @@ This is known as the as an Abstract Syntax Tree, and this is (approximately) how
 
 == Excercises
 #exercise(sub :"Turbo The Snail(IMO 2024,5)")[
-Turbo the snail is in the top row of a grid with $2024$ rows and $2023$ columns and
-wants to get to the bottom row. However, there are $2022$ hidden monsters, one in
+Turbo the snail is in the top row of a grid with $s >= 4$ rows and $s-1$ columns and
+wants to get to the bottom row. However, there are $s-2$ hidden monsters, one in
 every row except the first and last, with no two monsters in the same column.
 Turbo makes a series of attempts to go from the first row to the last row. On
 each attempt, he chooses to start on any cell in the first row, then repeatedly moves
@@ -617,12 +617,8 @@ Turbo reaches a cell with a monster, his attempt ends and he is transported back
 the first row to start a new attempt. The monsters do not move between attempts,
 and Turbo remembers whether or not each cell he has visited contains a monster. If
 he reaches any cell in the last row, his attempt ends and Turbo wins.
+
 Find the smallest integer $n$ such that Turbo has a strategy which guarantees being
-able to reach the bottom row in at most $n$ attempts, regardless of how the monsters
-are placed.
-]
-#exercise(sub:"Turbo returns")[
-  Turbo is now on a $s times (s-1)$ grid with $s-2$ hidden monsters with $s >= 4$. With the same rules as the last time we met Turbo, what is the smallest integer $n$, as a function of $s$, such that Turbo has a strategy which guarantees being
 able to reach the bottom row in at most $n$ attempts, regardless of how the monsters
 are placed.
 ]
@@ -710,6 +706,8 @@ For Example
 ]
 
 #exercise(sub: "n composite")[Given $N$, find $N$ consecutive integers that are all composite numbers.]
+#exercise(sub : "Divided by 5^n")[Prove that for every positive integer $n$, there exists an $n$-digit number divisible by $5^n$, all of whose
+digits are odd.]
 
 #exercise(sub:"This was rated 2100? (Timofey's Colourbook Problem, Codeforces)")[
 
@@ -764,6 +762,67 @@ $
 $ 
 ]
 
+#exercise(sub : "There is enough information!")[
+  Given $a_0 = 100$ and $a_n = - a_(n-1) - a_(n-2)$, what is $a_2025$?
+]
+
+#exercise(sub : "Yet some more Fibonnaci Identity")[
+  Fibonnaci sequence is defined as $F_0 = 0, F_1 = 1$ and $F_n = F_(n-1) + F_(n-2)$. 
+
+  (i) Prove that
+  $
+    sum_(n=2)^oo arctan((-1)^n/(F_2n)) = 1/2 arctan(1/2)
+  $
+  
+  Hint : What is this problem doing on this list of problems?
+
+  (ii) Every natural number can be expressed uniquely as a sum of Fibonacci numbers where the Fibonacci numbers used in the sum are all distinct, and no two consecutive Fibonacci numbers appear.
+
+  (iii) Evaluate
+  $
+    sum_(i=2)^oo 1/(F_(i-1)F_(i+1))
+  $
+]
+
+#exercise(sub : "Round Robin")[
+   A group of $n$ people play a round-robin chess tournament. Each match ends in either a win or a lost. 
+   Show that it is possible to label the players $P_1, P_2, P_3, dots , P_n$ in such a way that $P_1$ defeated $P_2$, 
+   $P_2$ defeated $P_3$, . . . , $P_(n−1)$ defeated $P_n$.
+]
+
+#exercise(sub : "Stamps")[
+  The country of Philatelia is founded for the pure benefit of stamp-lovers. Each
+year the country introduces a new stamp, for a denomination (in cents) that cannot
+be achieved by any combination of older stamps. Show that at some point the
+country will be forced to introduce a 1-cent stamp, and the fun will have to end.
+]
+
+#exercise(sub : "Seven Dwarfs")[
+The Seven Dwarfs are sitting around the breakfast table;
+Snow White has just poured them some milk. Before they drink, they perform a little
+ritual. First, Dwarf 1 distributes all the milk in his mug equally among his brothers’
+mugs (leaving none for himself). Then Dwarf 2 does the same, then Dwarf 3, 4, etc.,
+finishing with Dwarf 7. At the end of the process, the amount of milk in each dwarf’s
+mug is the same as at the beginning! What was the ratio of milt they started with?
+]
+
+#exercise(sub : "Coin Flip Scores")[
+  A gambling graduate student tosses a fair coin and scores one point for each head that
+turns up and two points for each tail. Prove that the probability of the student scoring
+exactly n points at some time in a sequence of n tosses is $(2 + (−1/2)^n)/3$
+]
+
+#exercise(sub : "2-3 Color Theorem")[
+  A k-coloring is said to exist if the regions the plane is divided off in can be colored with three colors in such a way that no two regions sharing some length of border are the same color.
+  
+  (a) A finite number of circles (possibly intersecting and touching) are drawn on a paper. Prove that a valid 2-coloring of the regions divided off by the circles exists.
+
+  (b) A circle and a chord of that circle are drawn in a plane. Then a second circle
+and chord of that circle are added. Repeating this process, until there are n
+circles with chords drawn, prove that a valid 3-coloring of the regions in the plane divided off by
+the circles and chords exists.
+]
+
 // cite
 // @misc{noauthor_travelproblemset2015pdf_nodate,
 // 	title = {{TravelProblemSet2015}.pdf},
@@ -800,4 +859,51 @@ $
 // 	urldate = {2025-06-28},
 // 	journal = {Google Docs},
 // 	file = {Snapshot:/Users/deepthought/Zotero/storage/TK6AIQIL/view.html:text/html},
+// }
+
+// @book{larson_problem-solving_1990,
+// 	address = {New York Berlin Paris [etc.]},
+// 	series = {Problem books in mathematics},
+// 	title = {Problem-solving through problems},
+// 	isbn = {978-3-540-96171-0 978-0-387-96171-2},
+// 	language = {eng},
+// 	publisher = {Springer},
+// 	author = {Larson, Loren C.},
+// 	year = {1990},
+// }
+
+// @misc{noauthor_polya_2015,
+// 	title = {The {Pólya} {Seminar}},
+// 	url = {https://polyaseminar.wordpress.com/},
+// 	abstract = {You think you have problems...},
+// 	language = {en},
+// 	urldate = {2025-07-05},
+// 	journal = {The Pólya Seminar},
+// 	month = oct,
+// 	year = {2015},
+// }
+
+// @misc{noauthor_william_nodate,
+// 	title = {The {William} {Lowell} {Putnam} competition and the {Polya} problem solving seminar: {Polya} {Problem} {Solving} {Seminar}},
+// 	url = {https://canvas.stanford.edu/courses/46752/wiki},
+// 	urldate = {2025-07-05},
+// }
+
+// @misc{noauthor_21-295_nodate,
+// 	title = {21-295: {Putnam} {Seminar}},
+// 	url = {https://www.math.cmu.edu/~ploh/2015-295.shtml},
+// 	urldate = {2025-07-05},
+// 	file = {21-295\: Putnam Seminar:/Users/deepthought/Zotero/storage/B5CX5UCT/2015-295.html:text/html},
+// }
+
+// @misc{noauthor_william_nodate-1,
+// 	title = {The {William} {Lowell} {Putnam} {Mathematical} {Competition} and the {Polya} {Problem}-{Solving} {Seminars} 2007},
+// 	url = {https://math.stanford.edu/~vakil/putnam07/},
+// 	urldate = {2025-07-05},
+// }
+
+// @misc{noauthor_putnam_nodate,
+// 	title = {Putnam seminar {\textbar} {Pat} {Devlin}},
+// 	url = {https://campuspress.yale.edu/devlin/putnam-seminar/},
+// 	urldate = {2025-07-05},
 // }
