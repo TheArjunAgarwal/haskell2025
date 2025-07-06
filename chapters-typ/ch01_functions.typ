@@ -606,7 +606,7 @@ This is known as the as an Abstract Syntax Tree, and this is (approximately) how
 ]
 
 == Excercises
-#exercise(sub :"Turbo The Snail(IMO 2024,5)")[
+#exercise(sub :"Turbo The Snail(IMO 2024, P5)")[
 Turbo the snail is in the top row of a grid with $s >= 4$ rows and $s-1$ columns and
 wants to get to the bottom row. However, there are $s-2$ hidden monsters, one in
 every row except the first and last, with no two monsters in the same column.
