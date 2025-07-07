@@ -709,3 +709,80 @@ fibs = l 0 1 where l a b = a : l b (a+b)
 ```
 
 Since we obviously cannot view the entirety of an infinite list, it is advisable to use `take` to view an initial section of the list, rather than the whole thing.
+
+== Excercises
+
+#exercise(sub : "Ballons")[
+In an ICPC contest, balloons are distributed as follows: 
+- Whenever a team solves a problem, that team gets a balloon.
+- The first team to solve a problem gets an additional balloon.
+
+A contest has 26 problems, labelled $A,B, dots, Z$. You are given the order of solved problems in the contest, denoted as a string $s$, where the $i$-th character indicates that the problem $s_i$ has been solved by some team. No team will solve the same problem twice.
+
+Write a function `balloons :: String -> Int` to determine the total number of balloons used in the contest. Note that some problems may be solved by none of the teams.
+
+Example : 
+
+```
+balloons "ABA" = 5
+balloons "A" = 2
+balloons "ORZ" = 6
+balloons "BAAAA" = 7
+balloons "BAAAA" = 7
+balloons "BKPT" = 8
+balloons "BKPT" = 8
+balloons "HASKELL" = 13
+```
+]
+
+#exercise(sub : "Neq Array (INOI 2025 P1)")[
+Given a list $A$ of length $N$, we call a list of integers $B$ of length $N$ such that:
+- All elemeents of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
+- $B$ is non-decreasing, ie $B_1 <= B_2 <= dots <= B_N$
+- $forall 1 <= i <= N, B_i = A_i$
+
+Let $op("neq") (A)$ denote the minimum possible value of the last element of $B$ for a valid array $B$.
+
+Write a function `neq :: [Int] -> Int` that takes a list $A$ and returns the $op("neq") (A)$.
+
+Example : 
+```
+neq [2,1] = 2
+neq [1,2,3,4] = 5
+neq [2,1,1,3,2,1] = 3
+```
+]
+
+#exercise(sub : "Nucleria (CEOI 2015 P5")[
+Long ago, the people of Nuclearia decided to build several nuclear plants. They prospered for many years, but then a
+terrible misfortune befell them. The land was hit by an extremely strong earthquake, which caused all the nuclear plants
+to explode, and radiation began to spread throughout the country. When the people had made necessary steps so that
+no more radiation would emanate, the Ministry of Environment started to find out how much individual regions were
+polluted by the radiation. Your task is to write a function `quary :: (Int, Int) -> [(Int, Int, Int, Int)] -> Float` that will find the average radiation in Nuclearia given data.
+
+Nuclearia can be viewed as a rectangle consisting of $W times H$ cells. Each nuclear plant occupies one cell and is
+parametrized by two positive integers: $a$, which is the amount of radiation caused to the cell where the plant was, and $b$,
+which describes how rapidly the caused radiation decreases as we go farther from the plant.
+
+More precisely, the amount of radiation caused to cell $C = (x_C , y_C)$ by explosion of a plant in cell $P = (x_P, y_P)$ is
+$max(0, a - b  dot d(P, C))$, where $d(P, C)$ is the distance of the two cells, defined by $d(P, C) = max(|x_P − x_C | , |y_P − y_C |)$
+(i.e., the minimum number of moves a chess king would travel between them).
+
+The total radiation in a cell is simply the sum of the amounts that individual explosions caused to it.
+As an example, consider a plant with $a = 7$ and $b = 3$. Its explosion causes $7$ units of radiation to the cell it occupies,
+$4$ units of radiation to the $8$ adjacent cells, and $1$ unit of radiation to the $16$ cells whose distance is $2$. 
+
+The Ministry of Environment wants to know the average radiation per cell. The input will be in the form `quary (W, H) [(x1,y1,a1,b1), (x2,y2,a2,b2)]` where we first give the size of Nucleria and then the position of plants and their paramenter.
+
+Example:
+```
+quary (4,3) [(1,1,7,3),(3,2,4,2)] = 3.67
+```
+
+The radiation in Nuclearia after the two explosions is as follows:
+$
+  7& 6& 3& 2\
+  4& 6& 5& 2\
+  1& 3& 3& 2
+$
+]

@@ -1108,6 +1108,11 @@ This might seem complex but we are merely `zip`-ing the flags and input values, 
 This will be the end of my discussion of this. The major use of segmented scan is in parallel computation algorithms. A rather complex quick sort parallel algorithm can be created using this as the base.
 
 == Excercises
+#exercise(sub : "Factors")[
+  (i) Write an optimized function `factors :: Int -> [Int]` which takes in an integer and provides a list of all it's factors.
+
+  (ii) Write an optimized function `primeFactors :: Int -> [Int]` which takes in an integer and provides a list of all it's prime factors, repeated wrt to multiplicity. That is `primeFactors 100 = [2,2,5,5]`.
+]
 
 
 // Include a numerical diffretiation exccise.
