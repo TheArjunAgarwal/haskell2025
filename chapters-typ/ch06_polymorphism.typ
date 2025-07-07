@@ -9,7 +9,7 @@
 
 // Chapter content goes here
 
-= Polymorphism
+= Polymorphism <poly>
 == Classification has always been about _shape_ and _behvaiour_ anyway
 
 Functions are our way, to interact with the elements of a type, and one can define functions in one of the two following ways:
@@ -239,7 +239,7 @@ A *higher order function* is a function that does at least one of the following 
 
 This is again a way of generalization and is very handy, as we will see in the rest of the chapter.
 
-== Currying
+== Currying <curry>
 
 Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` //input is not fn 
 way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that is really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.

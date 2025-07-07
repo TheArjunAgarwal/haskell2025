@@ -760,10 +760,7 @@ Finally, similer to our above things, we could simply set the tolerance and get 
 
 It is left as excercise to use taylor approximation to define inverse sin(`asin`), inverse cos(`acos`) and inverse tan(`atan`).
 
-
-
-
-// Back Excercise
+== Excercise
 #exercise(sub: "Collatz")[
   Collatz conjucture states that for any $n in NN$ exists a $k$ such that  $c^k(n) = 1$ where $c$ is the Collatz function which is $n/2$ for even $n$ and $3n + 1$ for odd $n$.
 
@@ -835,6 +832,63 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
 #exercise(sub: "Moduler Exponation")[
   Implement modular exponentiation ($a^b mod m$) efficiently using the fast exponentiation method. The type signature should be `modExp :: Int -> Int -> Int -> Int`
 ]
+
+#exercise(sub: "Bean Nim (Putnam 1995, B5)")[
+  A game starts with four heaps of beans containing $a$, $b$, $c$, and $d$ beans. A move consists of taking either
+
+(a) one bean from a heap, provided at least two beans are left behind in that
+heap, or
+
+(b) a complete heap of two or three beans.
+
+The player who takes the last heap wins. Do you want to go first or second?
+
+Write a recursive function to solve this by brute force. Call it `naiveBeans :: Int -> Int -> Int -> Int -> Bool` which gives `True` if it is better to go first and `False` otherwise. Play around with this and make some observations.
+
+Now write a much more efficient (should be one line and has no recursion) function `smartBeans :: Int -> Int -> Int -> Int -> Bool` which does the same.
+]
+
+#exercise(sub : "Squares and Rectangles on a chess grid")[
+  Write a function `squareCount :: Int -> Int` to count number of squares on a  $n times n$ grid. For example, `squareCount 1 = 1` and `squareCount 2 = 5` as four 1x1 squares and one 2x2 square.
+
+  Furthermore, also make a function `rectCount :: Int -> Int` to count the number of rectangles on a $n times n$ grid.
+
+  Finally, make `genSquareCount :: (Int, Int) -> Int` and `genRectCount :: (Int, Int) -> Int` to count number of squares and rectangle in a $a times b$ grid.
+]
+
+#exercise(sub:"Knitting Baltik (COMPFEST 13, Codeforces)")[
+Mr. Chanek wants to knit a batik, a traditional cloth from Indonesia. The cloth forms a grid with size $m times n$. There are $k$
+colors, and each cell in the grid can be one of the $k$ colors.
+
+Define a sub-rectangle as an pair of two cells $((x_1,y_1), (x_2,y_2))$, denoting the top-left cell and bottom-right cell (inclusively) of a sub-rectangle in the grid.
+Two sub-rectangles $((x_1,y_1), (x_2,y_2))$ and $((x_1,y_1), (x_2,y_2))$ have the same pattern if and only if the following holds:
+
+(i) they have the same width ($x_2 - x_1 = x_4 - x_3$);
+
+(ii) they have the same height ($y_2 - y_1 = y_4 - y_3$);
+
+(iii) for every pair $i,j$ such that $0 <= i <= x_2 - x_1$ and $0 <= j <= y_2 - y_1$, the color of cells $(x_1 + i, y_1 + j)$ and $(x_3 + i, y_3 + j)$ is the same.
+
+Write a function `countBaltik :: (Int, Int) -> Int -> (Int, Int) -> (Int, Int) -> (Int, Int) -> Integer` to count the number of possible batik color combinations, such that the subrectangles $((a_x,a_y),(a_x+r-1,a_y + c - 1))$ and $((b_x,b_y),(b_x+r-1,b_y + c - 1))$ have the same pattern.
+
+*Input*
+`countBaltik` takes as input:
+
+- The size of grid $(m, n)$
+- Numer of colors $k$
+- Size of sub-rectangle $(r,c)$
+- $(a_x, a_y)$
+- $(b_x,b_y)$
+
+and should output an integer denoting the number of possible batik color combinations.
+
+For example: `countBaltik (3,3) 2 (2,2) (1,1) (2,2) = 32`. The following are all 32 possible color combinations in the first example.
+#image("../images/baltik.png")
+]
+
+
+
+
 
 
 // Suggest that we add a section about types and correctness of code.
