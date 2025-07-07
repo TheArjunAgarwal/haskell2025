@@ -28,7 +28,7 @@
   
   show outline.entry : it => figure(align(center,{
     
-    let left_indent_correction_term = -2.5em
+    let left_indent_correction_term = -2.7em
 
     if it.element.func() == heading {
 
