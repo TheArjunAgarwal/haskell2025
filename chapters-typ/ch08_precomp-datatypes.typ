@@ -12,7 +12,7 @@ In #link(<sets>)[Chapter 4] we saw how Haskell datatypes correspond to sets of v
 A *Datatype*, in its simplest form, is the name of a set.
 ]
 
-In #link(<poly>)[Chapter 6], where we defined polymorphic functions, the _shape_ and _behaviour_ of an element were 2 properties that we built off of. 
+In #ref(<poly>), where we defined polymorphic functions, the _shape_ and _behaviour_ of an element were 2 properties that we built off of. 
 
 As a small recap, consider function `elem`, this is a function which checks if a given element belongs to a given list. The input requires to be a list of elements of a type, such that there is a notion of equality between types.
 
@@ -22,7 +22,7 @@ elem _ []       = False
 elem e (x : xs) = e == x || elem e xs
 ```
 
-Our requirements for the function are very clearly mentioned in the type. We are starting with a type `a` which has a notion of equality defined on it, as depicted by `Eq a`, and our arguments are an element of the type `a` and a list of elements of the type, that is, `[a]`. Here we used datatypes to specify the properties of the elements that we use. So we extend the previous definition
+Our requirements for the function are very clearly mentioned in the type. We are starting with a type `a` which has a notion of equality defined on it, as depicted by `Eq a`, and our arguments are an element of the type `a` and a list of elements of the type, that is, `[a]`. Here we used datatypes to specify the properties of the elements that we use. So we extend the previous definition.
 
 #def(sub: "Types 2")[
 A *Datatype* is the name of a _homogenous_ collection of object, where the common properties, like the shape of elements, is depicted in the name.
@@ -35,7 +35,7 @@ Some examples of datatypes we have already seen are:
   
 This definition suggests that datatypes can be used to _structure_ the data we want to work with. And this is actually something we have seen before!
 
-In #link(<sets>)[Chapter 4], we saw operations on sets such as
+In #ref(<sets>), we saw operations on sets such as
 - `(A, B)` being analogous to @definition_of_cartesian_product.
 - `Either A B` being analogous to @definition_of_disjoint_union.
 Here we will spend some time to see how we can define dataypes like these on our own.
@@ -156,7 +156,7 @@ Define the dataype `Complex`, we will be looking at this again in later sections
 
 = Parametric Types <para>
 
-We will once again extend the use of `data` keyword using ideas form #link(<poly>)[Chapter 6].
+We will once again extend the use of `data` keyword using ideas form #ref(<poly>).
 
 We compared product types with tuples, we even treated `Point` as a special case `(Int, Int)` for a while. Turns out we can define our tuples, in its full generality as follows:
 ```
@@ -314,7 +314,7 @@ Haskell will not let us use `[]`, this is sytactic sugar given by the compiler a
 
 Fixing as as `Integer` for now `Nil` represents `[]` and `Cons` takes an integer `n` and gives the constructor `n:`. This is our workaround for having multiple constructors. The above definition (apart from the syntactic sugar) is how Haskell internally defines lists.
 
-This idea is very much inspired by the concept of #link(<curry>)[Currying] which was discussed in chapter 6.
+This idea is very much inspired by the concept of #link(<curry>)[Currying] which was discussed in #ref(<curry>).
 
 
 == Inductive Types (as a Programmer)
@@ -367,7 +367,7 @@ Also try extending the Expression type to include more operations.
 
 === Trees as Inductive Types
 
-For those with keen eyes and good memory the shape of `ex` should remind you of the discussion in #link(<why>)[Why Trees?] section in chapter 1.
+For those with keen eyes and good memory the shape of `ex` should remind you of the discussion in #link(<why>)[Why Trees?] section in #ref(<why>).
 
 On the topic of trees, while working with such inductive one finds that all inductive dataypes follow a tree structure, this is a result of _free generation_. Trees happen to be a ubiquitous data-structure (way to structure data) in computer science and has applications everwhere. The following is a very tiny subset of those:
 - Compilers (like both haskell and our calculator)
@@ -404,10 +404,45 @@ Define the following functions for the tree datatype:
 Also define versions of the `elem` and `sum` functions for the `Tree` datatype.
 ]
 
+=== Binary Trees
+Binary Trees are a special case of trees, where each node has either exactly 2, or 0 children. Nodes with 0 children are called *leaves*.
+
+Out of the uses cases mentioned for trees the following involve binary trees:
+- Compilers (for functional languages)
+- Internals of File Systems (BTRFS)
+- Databases
+- Data compression (Huffman Encoding)
+
+The following is an example of a binary tree:
+$
+#tree(($3$,($7$,$4$,$1$),($2$,$8$,($5$,$6$,$9$))))
+$
+
+The following is how our definition of a Binary Tree can be written in haskell:
+```
+-- | Btree 
+data BTree a = BNode {left :: Btree a, Val :: a, right :: Btree a}
+             | Leaf a
+```
+
+and the example above can be written as:
+```
+-- | Btree ex
+bex:: Btree Integer 
+bex = BNode (BNode (Leaf 4) 7 (Leaf 1)) 
+            3
+            (BNode (Leaf 8) 2 (BNode (Leaf 5
+                                     5
+                                     (Leaf 9))))
+```
+
+#exercise(sub: "Binary Tree Functions")[
+Define all of the functions of the @exercise_of_Tree_Functions for binary trees.
+]
+
+We will see how these datatypes are used in #ref(<ads>).
 
 // cite
 // Haskell Mooc
 // https://jameshaydon.github.io/passport/
 // citation 2
-== Excercise
-// Reverse Polish Notation Stack calculator...
