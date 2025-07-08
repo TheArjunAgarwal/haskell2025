@@ -753,36 +753,46 @@ neq [2,1,1,3,2,1] = 3
 ```
 ]
 
-#exercise(sub : "Nucleria (CEOI 2015 P5")[
-Long ago, the people of Nuclearia decided to build several nuclear plants. They prospered for many years, but then a
-terrible misfortune befell them. The land was hit by an extremely strong earthquake, which caused all the nuclear plants
-to explode, and radiation began to spread throughout the country. When the people had made necessary steps so that
-no more radiation would emanate, the Ministry of Environment started to find out how much individual regions were
-polluted by the radiation. Your task is to write a function `quary :: (Int, Int) -> [(Int, Int, Int, Int)] -> Float` that will find the average radiation in Nuclearia given data.
+#exercise(sub : "Kratki (COCI 2014)")[
+Given two integers $N$ and $K$, write a function `krat :: Int -> Int -> Maybe [Int]` which constructs a permutation of numbers from $1$ to $N$ such that the length of its longest monotone subsequence (either ascending or descending) is exactly $K$ or declare that the following is not possible.
 
-Nuclearia can be viewed as a rectangle consisting of $W times H$ cells. Each nuclear plant occupies one cell and is
-parametrized by two positive integers: $a$, which is the amount of radiation caused to the cell where the plant was, and $b$,
-which describes how rapidly the caused radiation decreases as we go farther from the plant.
+A monotone subsequence is a subsequence where elements are either in non-decreasing order (ascending) or non-increasing order (descending).
 
-More precisely, the amount of radiation caused to cell $C = (x_C , y_C)$ by explosion of a plant in cell $P = (x_P, y_P)$ is
-$max(0, a - b  dot d(P, C))$, where $d(P, C)$ is the distance of the two cells, defined by $d(P, C) = max(|x_P − x_C | , |y_P − y_C |)$
-(i.e., the minimum number of moves a chess king would travel between them).
-
-The total radiation in a cell is simply the sum of the amounts that individual explosions caused to it.
-As an example, consider a plant with $a = 7$ and $b = 3$. Its explosion causes $7$ units of radiation to the cell it occupies,
-$4$ units of radiation to the $8$ adjacent cells, and $1$ unit of radiation to the $16$ cells whose distance is $2$. 
-
-The Ministry of Environment wants to know the average radiation per cell. The input will be in the form `quary (W, H) [(x1,y1,a1,b1), (x2,y2,a2,b2)]` where we first give the size of Nucleria and then the position of plants and their paramenter.
 
 Example:
 ```
-quary (4,3) [(1,1,7,3),(3,2,4,2)] = 3.67
+krat 4 3 = Just [1,4,2,3]
+krat 5 1 = Nothing
+krat 5 5 = Just [1,2,3,4,5]
 ```
+For example 1: The permutation (1, 4, 2, 3) has longest ascending subsequence (1, 2, 3) of length 3, and no longer monotone subsequence exists.
+For example 2: It's impossible to create a permutation of 5 distinct numbers with longest monotone subsequence of length 1.
+For example 3: The permutation (1, 2, 3, 4, 5) itself is the longest monotone subsequence of length 5.
+]
 
-The radiation in Nuclearia after the two explosions is as follows:
-$
-  7& 6& 3& 2\
-  4& 6& 5& 2\
-  1& 3& 3& 2
-$
+#exercise(sub : "Putnik (COCI 2013")[
+  Chances are that you have probably already heard of the travelling salesman problem. If you have, then you are aware that it is an NP-hard problem because it lacks an efficient solution. Well, this task is an uncommon version of the famous problem! Its uncommonness derives from the fact that this version is, actually, solvable.
+
+  Our vacationing mathematician is on a mission to visit $N$ cities, each exactly once. The cities are represented by numbers $1, 2, dots, N$. What we know is the direct flight duration between each pair of cities. The mathematician, being the efficient woaman that she is, wants to modify the city visiting sequence so that the total flight duration is the minimum possible.
+
+  Alas, all is not so simple. In addition, the mathematician has a peculiar condition regarding the sequence. For each city labeled $K$ must apply: either all cities with labels smaller than $K$ have been visited before the city labeled $K$ or they will all be visited after the city labeled $K$. In other words, the situation when one of such cities is visited before, and the other after is not allowed.
+  
+  Assist the vacationing mathematician in her ambitious mission and write a function `time :: [[Int]] -> Int` to calculate the minimum total flight duration needed in order to travel to all the cities, starting from whichever and ending in whichever city, visiting every city exactly once, so that her peculiar request is fulfilled.
+Example : 
+```
+time [
+  [0,5,2],
+  [5,0,4], 
+  [2,4,0]] = 7
+
+
+time [
+  [0,15,7,8],
+  [15,0,16,9],
+  [7,16,0,12],
+  [8,9,12,0]] = 31
+]
+```
+In the first example: the optimal sequence is 2, 1, 3 or 3, 1, 2. The sequence 1, 3, 2 is even more favourable, but it does not fulfill the condition.
+In the second example: the sequence is either 3, 1, 2, 4 or 4, 2, 1, 3.
 ]
