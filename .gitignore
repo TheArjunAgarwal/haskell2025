@@ -9,6 +9,8 @@ Thumbs.db
 .vscode
 *.pdf
 *.hs
-!tools-hs/unlit.hs
+!tools-hs/**
+*.hi
+*.o
 !main.pdf
 !guide.pdf

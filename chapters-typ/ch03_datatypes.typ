@@ -856,6 +856,37 @@ Now write a much more efficient (should be one line and has no recursion) functi
   Finally, make `genSquareCount :: (Int, Int) -> Int` and `genRectCount :: (Int, Int) -> Int` to count number of squares and rectangle in a $a times b$ grid.
 ]
 
+#exercise(sub:"Knitting Baltik (COMPFEST 13, Codeforces)")[
+Mr. Chanek wants to knit a batik, a traditional cloth from Indonesia. The cloth forms a grid with size $m times n$. There are $k$
+colors, and each cell in the grid can be one of the $k$ colors.
+
+Define a sub-rectangle as an pair of two cells $((x_1,y_1), (x_2,y_2))$, denoting the top-left cell and bottom-right cell (inclusively) of a sub-rectangle in the grid.
+Two sub-rectangles $((x_1,y_1), (x_2,y_2))$ and $((x_1,y_1), (x_2,y_2))$ have the same pattern if and only if the following holds:
+
+(i) they have the same width ($x_2 - x_1 = x_4 - x_3$);
+
+(ii) they have the same height ($y_2 - y_1 = y_4 - y_3$);
+
+(iii) for every pair $i,j$ such that $0 <= i <= x_2 - x_1$ and $0 <= j <= y_2 - y_1$, the color of cells $(x_1 + i, y_1 + j)$ and $(x_3 + i, y_3 + j)$ is the same.
+
+Write a function `countBaltik :: (Int, Int) -> Int -> (Int, Int) -> (Int, Int) -> (Int, Int) -> Integer` to count the number of possible batik color combinations, such that the subrectangles $((a_x,a_y),(a_x+r-1,a_y + c - 1))$ and $((b_x,b_y),(b_x+r-1,b_y + c - 1))$ have the same pattern.
+
+*Input*
+`countBaltik` takes as input:
+
+- The size of grid $(m, n)$
+- Numer of colors $k$
+- Size of sub-rectangle $(r,c)$
+- $(a_x, a_y)$
+- $(b_x,b_y)$
+
+and should output an integer denoting the number of possible batik color combinations.
+
+For example: `countBaltik (3,3) 2 (2,2) (1,1) (2,2) = 32`. The following are all 32 possible color combinations in the first example.
+#image("../images/baltik.png")
+]
+
+
 
 
 

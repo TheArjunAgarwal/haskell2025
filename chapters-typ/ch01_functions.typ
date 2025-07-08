@@ -606,7 +606,7 @@ This is known as the as an Abstract Syntax Tree, and this is (approximately) how
 ]
 
 == Excercises
-#exercise(sub :"Turbo The Snail(IMO 2024,5)")[
+#exercise(sub :"Turbo The Snail(IMO 2024, P5)")[
 Turbo the snail is in the top row of a grid with $s >= 4$ rows and $s-1$ columns and
 wants to get to the bottom row. However, there are $s-2$ hidden monsters, one in
 every row except the first and last, with no two monsters in the same column.
@@ -791,10 +791,12 @@ $
 ]
 
 #exercise(sub : "Stamps")[
-  The country of Philatelia is founded for the pure benefit of stamp-lovers. Each
+(i) The country of Philatelia is founded for the pure benefit of stamp-lovers. Each
 year the country introduces a new stamp, for a denomination (in cents) that cannot
 be achieved by any combination of older stamps. Show that at some point the
 country will be forced to introduce a 1-cent stamp, and the fun will have to end.
+
+(ii) Two officers in Philatelia decide to play a game. They alternate in issuing stamps. The first officer to name 1 or a sum of some previous numbers (possibly with repetition) loses. Determine which player has the winning strategy.
 ]
 
 #exercise(sub : "Seven Dwarfs")[
@@ -821,6 +823,20 @@ exactly n points at some time in a sequence of n tosses is $(2 + (−1/2)^n)/3$
 and chord of that circle are added. Repeating this process, until there are n
 circles with chords drawn, prove that a valid 3-coloring of the regions in the plane divided off by
 the circles and chords exists.
+]
+
+#exercise(sub : "Coins (IMO 2010 P5)")[
+  Each of the six boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$, $B_6$ initially contains one coin. The following operations are allowed
+
+(1) Choose a non-empty box $B_j$, $1 <= j <= 5$, remove one coin from $B_j$ and add two coins to $B_(j+1)$;
+
+(2) Choose a non-empty box $B_k$, $1 <= k <= 4$, remove one coin from $B_k$ and swap the contents (maybe empty) of the boxes $B_(k+1)$ and $B_(k+2)$.
+
+Determine if there exists a finite sequence of operations of the allowed types, such that the five boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$ become empty, while box $B_6$ contains exactly $2010^(2010^2010)$ coins.
+]
+
+#exercise(sub : "Same Height?")[
+Here is a proof by induction that all people have the same height. We prove that for any positive integer $n$, any group of $n$ people all have the same height. This is clearly true for $n = 1$. Now assume it for $n$, and suppose we have a group of $n + 1$ persons, say $P_1, P_2,dots, P_(n+1)$. By the induction hypothesis, the $n$ people $P_1, P_2, dots, P_n$ all have the same height. Similarly the $n$ people $P_2, P_3, dots, P_(n+1)$ all have the same height. Both groups of people contain $P_2, P_3, dots, P_n$, so $P_1$ and $P_(n+1)$ have the same height as $P_2, P_3, dots, P_n$. Thus all of $P_1, P_2,dots, P_(n+1)$ have the same height. Hence by induction, for any $n$ any group of $n$ people have the same height. Letting $n$ be the total number of people in the world, we conclude that all people have the same height. Is there a flaw in this argument?
 ]
 
 // cite

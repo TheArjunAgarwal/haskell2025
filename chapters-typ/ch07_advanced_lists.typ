@@ -1108,7 +1108,110 @@ This might seem complex but we are merely `zip`-ing the flags and input values, 
 This will be the end of my discussion of this. The major use of segmented scan is in parallel computation algorithms. A rather complex quick sort parallel algorithm can be created using this as the base.
 
 == Excercises
+#exercise(sub : "Factors")[
+  (i) Write an optimized function `factors :: Int -> [Int]` which takes in an integer and provides a list of all it's factors.
 
+  (ii) Write an optimized function `primeFactors :: Int -> [Int]` which takes in an integer and provides a list of all it's prime factors, repeated wrt to multiplicity. That is `primeFactors 100 = [2,2,5,5]`.
+]
+
+#exercise(sub : "Trojke (COCI 2006, P3)")[
+Mirko and Slavko are playing a new game, Trojke (Triplets). First they use a chalk to draw an $N times N$ square grid on the road. Then they write letters into some of the squares. No letter is written more than once in the grid.
+
+The game consists of trying to find three letters on a line as fast as possible. Three letters are considered to be on the same line if there is a line going through the centre of each of the three squares (horizontal, vertical and diagonal).
+
+After a while, it gets harder to find new triplets. Mirko and Slavko need a program that counts all the triplets, so that they know if the game is over or they need to search further.
+
+Write a function `trojke :: [String] -> Int` which takes the contents of the lines and outputs the numper of lines.
+
+Example:
+```
+trojke [
+  "...D",
+  "..C.",
+  ".B..",
+  "A..."
+] = 4
+
+trojke [
+"..T..",
+"A....",
+".FE.R",
+"....X",
+"S...."
+] = 3
+
+trojke [
+"....AB....",
+"..C....D..",
+".E......F.",
+"...G..H...",
+"I........J",
+"K........L",
+"...M..N...",
+".O......P.",
+"..Q....R..",
+"....ST...."
+] = 0
+```
+]
+
+#exercise(sub : "Deathstar (COCI 2015, P3)")[
+  Young jedi Ivan has infiltrated in The Death Star and his task is to destroy it. In order to destroy The Death Star, he needs an array $A$ of non-negative integers  of length $N$ that represents the code for initiating the self-destruction of The Death Star. Ivan doesn't have the array, but he has a piece of paper with requirements for that array, given to him by his good old friend Darth Vader.
+
+On the paper, a square matrix of the size  is written down. In that matrix, in the row $i$ and column $j$ there is a number that is equal to bitwise and between numbers $a_i$ and $a_j$. Unfortunately, a lightsaber has destroyed all the fields on the matrix's main diagonal and Ivan cannot read what is on these fields. Help Ivan to reconstruct an array for the self-destruction of The Death Star that meets the requirements of the matrix.
+
+The solution doesn't need to be unique, but will always exist. Your function `destroy :: [[Int]] -> [Int]` only needs to find one of these sequences.
+
+Example:
+```
+destroy [
+  [0,1,1],
+  [1,0,1],
+  [1,1,0]] = [1,1,1]
+destroy [
+  [0,0,1,1,1]
+  [0,0,2,0,2]
+  [1,2,0,1,3]
+  [1,0,1,0,1]
+  [1,2,3,1,0]] = [1,2,3,1,11]
+```
+
+Extra Credit : There is a way to do this in one line.
+]
+
+#exercise(sub : "Nucleria (CEOI 2015 P5")[
+Long ago, the people of Nuclearia decided to build several nuclear plants. They prospered for many years, but then a
+terrible misfortune befell them. The land was hit by an extremely strong earthquake, which caused all the nuclear plants
+to explode, and radiation began to spread throughout the country. When the people had made necessary steps so that
+no more radiation would emanate, the Ministry of Environment started to find out how much individual regions were
+polluted by the radiation. Your task is to write a function `quary :: (Int, Int) -> [(Int, Int, Int, Int)] -> Float` that will find the average radiation in Nuclearia given data.
+
+Nuclearia can be viewed as a rectangle consisting of $W times H$ cells. Each nuclear plant occupies one cell and is
+parametrized by two positive integers: $a$, which is the amount of radiation caused to the cell where the plant was, and $b$,
+which describes how rapidly the caused radiation decreases as we go farther from the plant.
+
+More precisely, the amount of radiation caused to cell $C = (x_C , y_C)$ by explosion of a plant in cell $P = (x_P, y_P)$ is
+$max(0, a - b  dot d(P, C))$, where $d(P, C)$ is the distance of the two cells, defined by $d(P, C) = max(|x_P − x_C | , |y_P − y_C |)$
+(i.e., the minimum number of moves a chess king would travel between them).
+
+The total radiation in a cell is simply the sum of the amounts that individual explosions caused to it.
+As an example, consider a plant with $a = 7$ and $b = 3$. Its explosion causes $7$ units of radiation to the cell it occupies,
+$4$ units of radiation to the $8$ adjacent cells, and $1$ unit of radiation to the $16$ cells whose distance is $2$. 
+
+The Ministry of Environment wants to know the average radiation per cell. The input will be in the form `quary (W, H) [(x1,y1,a1,b1), (x2,y2,a2,b2)]` where we first give the size of Nucleria and then the position of plants and their paramenter.
+
+Example:
+```
+quary (4,3) [(1,1,7,3),(3,2,4,2)] = 3.67
+```
+
+The radiation in Nuclearia after the two explosions is as follows:
+$
+  7& 6& 3& 2\
+  4& 6& 5& 2\
+  1& 3& 3& 2
+$
+]
 
 // Include a numerical diffretiation exccise.
 // Include a Simpson's Second Rule execise.

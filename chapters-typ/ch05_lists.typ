@@ -709,3 +709,90 @@ fibs = l 0 1 where l a b = a : l b (a+b)
 ```
 
 Since we obviously cannot view the entirety of an infinite list, it is advisable to use `take` to view an initial section of the list, rather than the whole thing.
+
+== Excercises
+
+#exercise(sub : "Ballons")[
+In an ICPC contest, balloons are distributed as follows: 
+- Whenever a team solves a problem, that team gets a balloon.
+- The first team to solve a problem gets an additional balloon.
+
+A contest has 26 problems, labelled $A,B, dots, Z$. You are given the order of solved problems in the contest, denoted as a string $s$, where the $i$-th character indicates that the problem $s_i$ has been solved by some team. No team will solve the same problem twice.
+
+Write a function `balloons :: String -> Int` to determine the total number of balloons used in the contest. Note that some problems may be solved by none of the teams.
+
+Example : 
+
+```
+balloons "ABA" = 5
+balloons "A" = 2
+balloons "ORZ" = 6
+balloons "BAAAA" = 7
+balloons "BAAAA" = 7
+balloons "BKPT" = 8
+balloons "BKPT" = 8
+balloons "HASKELL" = 13
+```
+]
+
+#exercise(sub : "Neq Array (INOI 2025 P1)")[
+Given a list $A$ of length $N$, we call a list of integers $B$ of length $N$ such that:
+- All elemeents of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
+- $B$ is non-decreasing, ie $B_1 <= B_2 <= dots <= B_N$
+- $forall 1 <= i <= N, B_i = A_i$
+
+Let $op("neq") (A)$ denote the minimum possible value of the last element of $B$ for a valid array $B$.
+
+Write a function `neq :: [Int] -> Int` that takes a list $A$ and returns the $op("neq") (A)$.
+
+Example : 
+```
+neq [2,1] = 2
+neq [1,2,3,4] = 5
+neq [2,1,1,3,2,1] = 3
+```
+]
+
+#exercise(sub : "Kratki (COCI 2014)")[
+Given two integers $N$ and $K$, write a function `krat :: Int -> Int -> Maybe [Int]` which constructs a permutation of numbers from $1$ to $N$ such that the length of its longest monotone subsequence (either ascending or descending) is exactly $K$ or declare that the following is not possible.
+
+A monotone subsequence is a subsequence where elements are either in non-decreasing order (ascending) or non-increasing order (descending).
+
+
+Example:
+```
+krat 4 3 = Just [1,4,2,3]
+krat 5 1 = Nothing
+krat 5 5 = Just [1,2,3,4,5]
+```
+For example 1: The permutation (1, 4, 2, 3) has longest ascending subsequence (1, 2, 3) of length 3, and no longer monotone subsequence exists.
+For example 2: It's impossible to create a permutation of 5 distinct numbers with longest monotone subsequence of length 1.
+For example 3: The permutation (1, 2, 3, 4, 5) itself is the longest monotone subsequence of length 5.
+]
+
+#exercise(sub : "Putnik (COCI 2013")[
+  Chances are that you have probably already heard of the travelling salesman problem. If you have, then you are aware that it is an NP-hard problem because it lacks an efficient solution. Well, this task is an uncommon version of the famous problem! Its uncommonness derives from the fact that this version is, actually, solvable.
+
+  Our vacationing mathematician is on a mission to visit $N$ cities, each exactly once. The cities are represented by numbers $1, 2, dots, N$. What we know is the direct flight duration between each pair of cities. The mathematician, being the efficient woaman that she is, wants to modify the city visiting sequence so that the total flight duration is the minimum possible.
+
+  Alas, all is not so simple. In addition, the mathematician has a peculiar condition regarding the sequence. For each city labeled $K$ must apply: either all cities with labels smaller than $K$ have been visited before the city labeled $K$ or they will all be visited after the city labeled $K$. In other words, the situation when one of such cities is visited before, and the other after is not allowed.
+  
+  Assist the vacationing mathematician in her ambitious mission and write a function `time :: [[Int]] -> Int` to calculate the minimum total flight duration needed in order to travel to all the cities, starting from whichever and ending in whichever city, visiting every city exactly once, so that her peculiar request is fulfilled.
+Example : 
+```
+time [
+  [0,5,2],
+  [5,0,4], 
+  [2,4,0]] = 7
+
+
+time [
+  [0,15,7,8],
+  [15,0,16,9],
+  [7,16,0,12],
+  [8,9,12,0]] = 31
+]
+```
+In the first example: the optimal sequence is 2, 1, 3 or 3, 1, 2. The sequence 1, 3, 2 is even more favourable, but it does not fulfill the condition.
+In the second example: the sequence is either 3, 1, 2, 4 or 4, 2, 1, 3.
+]
