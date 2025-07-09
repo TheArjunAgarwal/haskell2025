@@ -886,8 +886,19 @@ For example: `countBaltik (3,3) 2 (2,2) (1,1) (2,2) = 32`. The following are all
 #image("../images/baltik.png")
 ]
 
+#exercise(sub: "Modulo Inverse")[
+  Given a prime modulus   $p > a$  , according to Euclidean Division $p = k a + r$ where 
+$
+k a + r equiv 0 mod p\
+=> & k a equiv -r mod p\
+=> & - r a^(-1) equiv k mod p\
+=> & a^(-1) equiv - k r^(-1) mod p
+$ 
 
+Using this, implement `modInv :: Int -> Int -> Int` which takes in $a$ and $p$ and gives $a^(-1) mod p$.
 
+Note that this reasoning does not hold if  $p$  is not prime, since the existence of  $a^(-1)$  does not imply the existence of  $r^(-1)$  in the general case.
+]
 
 
 

@@ -1212,6 +1212,115 @@ $
   1& 3& 3& 2
 $
 ]
+#exercise(sub : "Garner's Algorithm")[
+A consequence of the Chinese Remainder Theorem is, that we can represent big numbers using an array of small integers. For example, let   $p$  be the product of the first   $1000$  primes.  $p$  has around  $3000$  digits.
+  
+Any number  $a$  less than  $p$  can be represented as a list  $a_1, dots, a_k$ , where  $a_i equiv a mod(p_i)$ .  But to do this we obviously need to know how to get back the number  $a$  from its representation (which we will call the CRT form).
+
+Another form for numbers is called the mixed radix form.
+We can represent a number  $a$  in the mixed radix representation as:$
+a = x_1 + x_2 p_1 + x_3 p_1 p_2 + dots + x_k p_1 dots p_(k-1) text(" with ")x_i in [0, p_i)$
+
+(i) Make a list of first $1000$ primes. Call it `primeThousand :: [Int]`.
+
+(ii) Write function `encode :: Int -> [Int]` which encodes a number into the CRT form.
+
+(iii) You had constructed an extreamly fast way to compute modulo inverses in @exercise_of_Modulo_Inverse. Use it to create `residue :: [[Int]]` such that $r_(i j)$ denotes he inverse of  $p_i$  modulo  $p_j$. 
+
+(iv) Garner's algorithm converts from the CRT from to the mixed radix form. We want you to implement `garner :: [Int] -> [Int]`. The idea of the algorithm is as follows:
+
+Substituting $a$ from the mixed radix representation into the first congruence equation we obtain
+
+$ a_1 equiv x_1 mod(p_1). $
+
+Substituting into the second equation yields
+
+$ a_2 equiv x_1 + x_2 p_1 mod(p_2), $
+
+which can be rewritten by subtracting $x_1$ and dividing by $p_1$ to get
+
+$
+  a_2 - x_1 & equiv x_2 p_1 && mod(p_2) \
+  (a_2 - x_1) r_(12) & equiv x_2 && mod(p_2) \
+  x_2 & equiv (a_2 - x_1) r_(12) && mod(p_2)
+$
+
+Similarly we get that
+
+$ x_3 equiv ((a_3 - x_1) r_(13) - x_2) r_(23) mod(p_3). $
+
+(v) Finally, now write a function `decodeMixed :: [Int] -> Int` which decodes from the mixed radix form.
+
+(vi) Finally, combine these functions and write a `decode :: [Int] -> Int` which decodes from CRT form.
+
+Note : We find it extreamly cool to know that so much of math goes on in simply reprasenting big integers in high accuracy systems. Like from airplane cockpits to rocker simulations to some games like Valorent, a very cool algorithm is keeping it up and running.
+]
+
+#exercise(sub : "Shanks Baby Steps-Giant Steps algorithm")[
+  A surprisingly hard problem is, given $a,b,m$ computing $x$ such that $a^x equiv b mod m$ efficiently. This is called the discrete logirithm. We will try to walk through implementing an algorithm to do so efficiently. At the end, you are expected to make a function `dlog :: Int -> Int -> Int -> Maybe Int` which takes in $a,b$ and $m$ and returns $x$ such that $a^x equiv b mod m$ if it exists.
+
+  Let   $x = n p - q$ , where  $n$  is some pre-selected constant (by the end of the description, we want you to think of how to choose $n$).  
+
+  We can also see that $p in {1,2,dots,ceil(m/n)}$ and $q in {0,1,dots, n-1}$.
+
+  $p$  is known as giant step, since increasing it by one increases  $x$  by  $n$ . Similarly,  $q$  is known as baby step. Try to find the bounds
+
+  Then, the equation becomes: $a^(n p - q) equiv b mod m.$
+
+  Using the fact that $a$  and  $m$  are relatively prime, we obtain:
+
+  $a^(n p) equiv b a^q mod m$
+
+  So we now need to find the $p$ and $q$ which satisfies this. Well, that can be done quite easily, right?
+
+Keeping in mind @exercise_of_Moduler_Exponation, what $n$ should we choose to be most optimal?
+]
+
+
+#exercise(sub : "A very cool DP (Codeforces)")[
+  Giant chess is quite common in Geraldion. We will not delve into the rules of the game, we'll just say that the game takes place on an h × w field, and it is painted in two colors, but not like in chess. Almost all cells of the field are white and only some of them are black. Currently Gerald is finishing a game of giant chess against his friend Pollard. Gerald has almost won, and the only thing he needs to win is to bring the pawn from the upper left corner of the board, where it is now standing, to the lower right corner. Gerald is so confident of victory that he became interested, in how many ways can he win?
+
+  The pawn, which Gerald has got left can go in two ways: one cell down or one cell to the right. In addition, it can not go to the black cells, otherwise the Gerald still loses. There are no other pawns or pieces left on the field, so that, according to the rules of giant chess Gerald moves his pawn until the game is over, and Pollard is just watching this process.
+
+  Write a function `wins :: (Int, Int) -> [(Int,Int)] -> Int` to compute the number of ways to win on a $(w, h)$ grid with black squares at given coordinates. The pawn starts at $(1,1)$ and we must go till $(w,h)$.
+
+Examples
+```
+wins (3,4) [(2,2),(2,3)] = 2
+wins (100,100) [(15,16),(16,15),(99,98)] = 545732279
+```
+
+Hint : This is a very hard question to do optimally. The 'standard' way to do so would be making a function `ways :: (Int,Int) -> Integer` and counting the ways to every square recursively and setting the black squares as $0$.
+
+This is not optimal if we have a huge grid. Here the idea is to sort the black squares lexiographically. Let this sorted list be $b_1, b_2, dots , b_n$. We add $b_(n+1) = (w,h)$. Let the paths (ignoring black squares) from $(1,1)$ to $b_i$ be $d_i$. Let the paths respecting black squares be $c_i$. Our goal is to find $c_(n+1)$.
+
+Also try defining a function `paths :: (Int, Int) -> (Int, Int) -> Int` which counts the paths from $(x_1,y_1)$ to $x_2, y_2$ without any black squares. This function should give us $d_i$'s. Can we use these $d_i$ and the `paths` function to get $c_i$'s?
+]
+#exercise(sub: "Mars Rover (Codeforces)")[
+  If you felt bad that I gave a hint in the last problem, here is a similar problem for you to do all on your own.
+
+  Research rover finally reached the surface of Mars and is ready to complete its mission. Unfortunately, due to the mistake in the navigation system design, the rover is located in the wrong place.
+
+  The rover will operate on the grid consisting of n rows and m columns. We will define as $(r, c)$ the cell located in the row $r$ and column $c$. From each cell the rover is able to move to any cell that share a side with the current one.
+
+  The rover is currently located at cell $(1, 1)$ and has to move to the cell $(n, m)$. It will randomly follow some shortest path between these two cells. Each possible way is chosen equiprobably.
+  
+  The cargo section of the rover contains the battery required to conduct the research. Initially, the battery charge is equal to $s$ units of energy.
+  
+  Some of the cells contain anomaly. Each time the rover gets to the cell with anomaly, the battery looses half of its charge rounded down. Formally, if the charge was equal to $x$ before the rover gets to the cell with anomaly, the charge will change to $ceil (x/2)$.
+  
+  While the rover picks a random shortest path to proceed, write function `charge :: (Int, Int) -> [(Int, Int)] -> Int -> Float` to compute the expected value of the battery charge after it reaches cell $(n, m)$, with the anomalies at some positions $[(x_1,y_1),(x_2,y_2), dots, (x_n,y_n)]$ if we started with some $c$ charge. 
+  
+  Note: If the cells $(1, 1)$ and $(n, m)$ contain anomaly, they also affect the charge of the battery.
+  
+
+Examples
+```
+charge (3,3) [(2,1),(2,3)] 11 = 6.33333333333
+```
+]
+
+
 
 // Include a numerical diffretiation exccise.
 // Include a Simpson's Second Rule execise.
@@ -1400,4 +1509,4 @@ $
 // 	year = {1999},
 // 	pages = {355--372},
 // 	file = {PDF:/Users/deepthought/Zotero/storage/V2YXXW7E/Hutton - 1999 - A tutorial on the universality and expressiveness of fold.pdf:application/pdf},
-}
+

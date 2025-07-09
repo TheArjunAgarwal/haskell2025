@@ -796,3 +796,59 @@ time [
 In the first example: the optimal sequence is 2, 1, 3 or 3, 1, 2. The sequence 1, 3, 2 is even more favourable, but it does not fulfill the condition.
 In the second example: the sequence is either 3, 1, 2, 4 or 4, 2, 1, 3.
 ]
+
+#exercise(sub : "Look and Say")[
+Look-and-say sequences are generated iteratively, using the previous value as input for the next step. For each step, take the previous value, and replace each run of digits (like 111) with the number of digits (3) followed by the digit itself (1).
+
+For example:
+
+- $1$ becomes $11$ ($1$ copy of digit $1$).
+- $11$ becomes $21$ ($2$ copies of digit $1$).
+- $21$ becomes $1211$ (one $2$ followed by one $1$).
+- $1211$ becomes $111221$ (one $1$, one $2$, and two $1$s).
+- $111221$ becomes $312211$ (three $1$s, two $2$s, and one $1$).
+
+Write function `lookNsay :: Int -> Int` which takes an number and generates the next number in its look and say sequence.
+]
+
+#exercise(sub : "Triangles (Codeforces)")[
+  Pavel has several sticks with lengths equal to powers of two. He has $a_0$ sticks of length $2^0=1$, $a_1$ sticks of length $2^1 = 2$, ..., $a_n$ sticks of length $2^n$.
+  
+  Pavel wants to make the maximum possible number of triangles using these sticks. The triangles should have strictly positive area, each stick can be used in at most one triangle.
+  
+  It is forbidden to break sticks, and each triangle should consist of exactly three sticks. Write a function `triangles :: [Int] -> Int]` to find the maximum possible number of triangles.
+
+Examples
+```
+triangles [1,2,2,2,2] = 3
+triangles [1,1,1] = 0
+triangles [3,3,3] = 1
+```
+In the first example, Pavel can, for example, make this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^4,2^4), (2^1,2^3,2^3), (2^1,2^2,2̂2)$.
+
+In the second example, Pavel cannot make a single triangle.
+
+In the third example, Pavel can, for example, create this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^0,2^0), (2^1,2^1,2^1), (2^2,2^2,2^2)$.
+]
+
+#exercise(sub : "Thanos Sort (Codeforces)")[
+  Thanos sort is a supervillain sorting algorithm, which works as follows: if the array is not sorted, snap your fingers\* to remove the first or the second half of the items, and repeat the process.
+  
+  Given an input list, what is the size of the longest sorted list you can obtain from it using Thanos sort? Write function `thanos :: Ord a => [a] -> Int` to determine that.
+
+\* Infinity Gauntlet required.
+
+
+Examples
+```
+thanos [1,2,2,4] = 4
+thanos [11, 12, 1, 2, 13, 14, 3, 4] = 2
+thanos [7,6,5,4] = 1
+```
+
+In the first example the list is already sorted, so no finger snaps are required.
+
+In the second example the list actually has a subarray of 4 sorted elements, but you can not remove elements from different sides of the list in one finger snap. Each time you have to remove either the whole first half or the whole second half, so you'll have to snap your fingers twice to get to a 2-element sorted list.
+
+In the third example the list is sorted in decreasing order, so you can only save one element from the ultimate destruction.
+]
