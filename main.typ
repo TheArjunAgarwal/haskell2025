@@ -134,5 +134,4 @@ for chapter_data in chapters {
   include "chapters-typ//" + chapter_data.at(0)
 
 }
-
 }

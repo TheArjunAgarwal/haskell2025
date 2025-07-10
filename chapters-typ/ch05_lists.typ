@@ -852,3 +852,69 @@ In the second example the list actually has a subarray of 4 sorted elements, but
 
 In the third example the list is sorted in decreasing order, so you can only save one element from the ultimate destruction.
 ]
+
+#exercise(sub : "Deadfish")[
+Deadfish XKCD is a fun, unusual programming language. It only has one variable, called $s$, which starts at $0$. You change $s$ by using simple commands.
+
+Your task is to write a Haskell program that reads Deadfish XKCD code from a file, runs it, and prints the output.
+
+Deadfish XKCD has the following commands:
+
+#table(
+  columns: 2,
+  [*Command*], [*What It Does*],
+  [x], [Add $1$ to $s$.],
+  [k], [print $s$ as a number.],
+  [c], [Square $s$,],
+  [d], [Subtract $1$ from $s$.],
+  [X], [Start defining a function (the next character is the function name).],
+  [K], [Print $s$ as an ASCII character.],
+  [C], [End the function definition or run a function.],
+  [D], [Reset $s$ back to 0.],
+  [{}], [Everything inside curly braces is considered a comment.]
+)
+
+Extra Rules:
+
+- $s$ must stay between $0$ and $255$.
+- If $s$ goes above $255$ or below $0$, reset it back to $0$.
+- Ignore spaces, newlines, and tabs in the code.
+- Other characters (not commands) work differently depending on the subtask.
+
+While you can do the whole exercise in one go, we reccomend doing the following subtasks in order.
+
+1. Basic (x, k, c, d only)
+`run "xxcxkdk" = "54"`
+
+2. Extended (add K, D)
+`run "xxcxxxxcxxxxxxxxK" = "H"`
+
+3. Functions (all commands)
+`run "XUxkCxxCUCUCU" = "345"`
+
+4. Comments (ignore {})
+Ignore content inside curly braces.
+
+*Hint*: Don't be afraid to use tuples!
+]
+
+#exercise(sub : "Weakness and Poorness (Codeforces)")[
+You are given a sequence of $n$ integers $a_1, a_2,dots, a_n$.
+
+Write a function `solve :: [Int] -> Float` to determine a real number $x$ such that the weakness of the sequence $a_1 - x, a_2 - x, dots , a_n - x$ is as small as possible.
+
+The weakness of a sequence is defined as the maximum value of the poorness over all segments (contiguous subsequences) of a sequence.
+
+The poorness of a segment is defined as the absolute value of sum of the elements of segment.
+
+Examples
+```
+solve [1,2,3] = 2.0
+solve [1,2,3.4] = 2.5
+```
+Note
+For the first case, the optimal value of $x$ is $2$ so the sequence becomes  $- 1, 0, 1$ and the max poorness occurs at the segment $-1$ or segment $1$.
+
+For the second sample the optimal value of $x$ is $2.5$ so the sequence becomes  $- 1.5,  - 0.5, 0.5, 1.5$ and the max poorness occurs on segment $-1.5, -0.5$ or $0.5, 1.5$.
+]
+

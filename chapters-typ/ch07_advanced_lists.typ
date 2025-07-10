@@ -1320,6 +1320,219 @@ charge (3,3) [(2,1),(2,3)] 11 = 6.33333333333
 ```
 ]
 
+#exercise(sub : "Vegetables (ZCO 2024)")[
+You are a farmer, and you want to grow a wide variety of vegetables so that the people in your town can eat a
+balanced diet.
+
+In order to remain healthy, a person must eat a diet that contains $N$ essential vegetables, numbered from $1$ to $N$ . In total, your town requires $A_i$ units of each vegetable $i$ , for $1 <= i <= N$ . In order to grow a single unit of vegetable $i$ , you require $B_i$ units of water.
+
+However, you can use upgrades to improve the efficiency of your farm. In a single upgrade, you can do one of the following two actions:
+
+1. You can improve the nutritional value of your produce so that your town requires one less unit of some vegetable $i$ . Specifically, you can choose any one vegetable $i$ such that $A_i ≥ 1$ , and reduce $A_i$ by $1$ .
+
+2. You can improve the quality of your soil so that growing one unit of some vegetable $i$ requires one less unit of water. Specifically, you can choose any one vegetable $i$ such that $B_i ≥ 1$ , and reduce $B_i$ by $1$.
+
+If you use at most $X$ upgrades, what is the minimum possible number of units of water you will need to feed your town? Write a function `water :: [Int] -> [Int] -> Int -> Int` to answer this where the first list is $A$, second is $B$ and the integer is $X$.
+]
+
+#exercise(sub : "de Polignac Numbers (Rosetta Code)")[
+Alphonse de Polignac, a French mathematician in the 1800s, conjectured that every positive odd integer could be formed from the sum of a power of $2$ and a prime number.
+
+He was subsequently proved incorrect.
+
+The numbers that fail this condition are now known as de Polignac numbers.
+
+Technically $1$ is a de Polignac number, as there is no prime and power of $2$ that sum to $1$. De Polignac was aware but thought that $1$ was a special case. However, $127$ is also fails that condition, as there is no prime and power of $2$ that sum to $127$.
+
+As it turns out, de Polignac numbers are not uncommon, in fact, there are an infinite number of them.
+
+- Find and display the first fifty de Polignac numbers.
+- Find and display the one thousandth de Polignac number.
+- Find and display the ten thousandth de Polignac number.
+]
+
+#exercise(sub : "")[
+  The Bifid cipher is a polygraphic substitution cipher which was invented by Félix Delastelle in around 1901. It uses a 5 x 5 Polybius square combined with transposition and fractionation to encrypt a message. Any 5 x 5 Polybius square can be used but, as it only has 25 cells and there are 26 letters of the (English) alphabet, one cell needs to represent two letters - I and J being a common choice.
+
+Operation
+Suppose we want to encrypt the message "ATTACKATDAWN".
+
+We use this archetypal Polybius square where I and J share the same position.
+```
+x/y 1 2 3 4 5
+-------------
+1 | A B C D E
+2 | F G H I K
+3 | L M N O P
+4 | Q R S T U 
+5 | V W X Y Z
+```
+The message is first converted to its x, y coordinates, but they are written vertically beneath.
+```
+A T T A C K A T D A W N
+1 4 4 1 1 2 1 4 1 1 5 3
+1 4 4 1 3 5 1 4 4 1 2 3
+```
+They are then arranged in a row.
+```
+1 4 4 1 1 2 1 4 1 1 5 3 1 4 4 1 3 5 1 4 4 1 2 3
+```
+Finally, they are divided up into pairs which are used to look up the encrypted letters in the square.
+```
+14 41 12 14 11 53 14 41 35 14 41 23
+D  Q  B  D  A  X  D  Q  P  D  Q  H
+```
+
+The encrypted message is therefore "DQBDAXDQPDQH".
+
+Decryption can be achieved by simply reversing these steps.
+
+Write functions in haskell to encrypt and descrypt a message using the Bifid cipher.
+
+Use them to verify (including subsequent decryption):
+
+- The above example.
+
+- The example in the Wikipedia article using the message and Polybius square therein.
+
+- The above example but using the Polybius square in the Wikipedia article to illustrate that it doesn't matter which square you use as long, of course, as the same one is used for both encryption and decryption.
+
+In addition, encrypt and decrypt the message "The invasion will start on the first of January" using any Polybius square you like. Convert the message to upper case and ignore spaces.
+]
+
+#exercise(sub : "Colorful Numbers (Rosetta Code)")[
+  A colorful number is a non-negative base 10 integer where the product of every sub group of consecutive digits is unique.
+
+For example: $24753$ is a colorful number. $2, 4, 7, 5, 3, (2×4)8, (4×7)28, (7×5)35, (5×3)15, (2×4×7)56, (4×7×5)140, (7×5×3)105, (2×4×7×5)280, (4×7×5×3)420, (2×4×7×5×3)840$
+
+Every product is unique.
+
+$2346$ is not a colorful number. $2, 3, 4, 6, (2×3)6, (3×4)12, (4×6)24, (2×3×4)48, (3×4×6)72, (2×3×4×6)144$
+
+The product 6 is repeated.
+
+Single digit numbers are considered to be colorful. A colorful number larger than $9$ cannot contain a repeated digit, the digit $0$ or the digit $1$. As a consequence, there is a firm upper limit for colorful numbers; no colorful number can have more than $8$ digits.
+
+- Write a function to test if a number is a colorful number or not.
+- Use that function to find all of the colorful numbers less than 100.
+- Use that function to find the largest possible colorful number.
+- Find and display the count of colorful numbers in each order of magnitude.
+- Find and show the total count of all colorful numbers.
+
+]
+
+#exercise(sub : "Data Transfer Protocol on IOI? Parrots (IOI 2011, P6)")[
+Yanee is a bird enthusiast. Since reading about IP over Avian Carriers (IPoAC), she has spent much of her time training a flock of intelligent parrots to carry messages over long distances.
+
+Yanee’s dream is to use her birds to send a message $M$ to a land far far away. Her message $M$ is asequence of $N$ (not necessarily distinct) integers, each between $0$ and $255$, inclusive. Yanee keeps some $K$ specially-trained parrots. All the parrots look the same; Yanee cannot tell them apart. Each bird can remember a single integer between $0$ and $R$, inclusive.
+
+Early on, she tried a simple scheme: to send a message, Yanee carefully let the birds out of the cage one by one. Before each bird soared into the air, she taught it a number from the message sequence in order. Unfortunately, this scheme did not work. Eventually, all the birds did arrive at the destination, but they did not necessarily arrive in the order in which they left. With this scheme, Yanee could recover all the numbers she sent, but she was unable to put them into the right order.
+
+To realize her dream, Yanee will need a better scheme, and for that she needs your help.
+
+#image("../images/parrots.png")
+
+- Try to design a function that receives the *Original Message* (of some length $N$ with numbers between $0-255$) and encode the original messages to another message sequence, it's called *Encoded Message* with limit the size of message must not exceed $K$ and using numbers from $0-R$.
+- The *encoded message* from will be shuffled.
+- Receive the *Shuffled Message* and Decode back to *Original Message*.
+
+You must implement the `encode :: [Int] -> [Int]` and `decode :: [Int] -> [Int]` process with you own method. We suggest the following roadmap, 
+
+Subtask 1 : $N=8$, all elements of the orignal message are either $0$ or $1$, $R = 2^16 - 1$, $K = 10*N = 80$.
+
+Subtask 2 : $1 <= N <= 16$, $R = 2^16 - 1$, $K = 10*N$
+
+Subtask 3: $1 <= N <= 16$, $R = 255$, $K = 10*N$
+
+Subtask 4: $1 <= N <= 32$, $R = 255$, $K = 10*N$
+
+Subtask 4: $1 <= N <= 32$, $R = 255$, $K = 10*N$
+
+Subtask 5: We now want you to try to reduce the ratio between encoded message length and original message length upto $ 1 <= N <= 64 $. The mathematical limit for the best ratio one can get is slightly above $261/64 approx 4.08$ (Derive the limit!). Anything below $7$ is very good, although we (the authours) are very intrested if someone can find the optimal solution. 
+
+Note: When the problem came in IOI, no one found the optimal solution. Furthermore, most solutions which got $100$, did so they were optimal on the test cases and not in the general case.
+]
+
+#exercise(sub : "Broken Device (JOI 2016, Spring Training Camp)")[
+   Anna wants to send a $60$-bit integer to Bruno. She has a device that can send a sequence of $150$ numbers that are either $0$ or $1$. The twist is that $L$ ($0 <= L <= 40$) of the positions of the device are broken and can only send $0$. Bruno receives the sequence Anna sent, but the does not know the broken positions.
+
+   Anna knows the broken positions but Bruno doesn’t. Write functions `encode :: Int -> [Int] -> [Int]` which given the integer and the broken position encodes the message and function `decode :: [Int] -> Int` which decodes the message and recovers the integer sent.
+
+   Subtask 1: $K = 0$, This should be very simple as you are just converting to binery. 
+
+   Subtask 2: $K = 1$, We will have one broken position. If we can somehow indicate the start of out 60 bit sequence, can we find a continous $61$ bit sequence?
+
+   Subtask 3: $K = 15$, This is where one needs to be creative. Note $150/2 = 75$ and $75 - 15 =60$. Can you think of something now?
+   
+   Subtask 4: $K = 40$, The last question had $2$, now try with $3$ but have some sequences encode more than $1$ bit.
+]
+
+#exercise(sub : "Coins (IOI 2017 Practice)")[
+   You have a number $C$ ($0 <= C < 63$) and an line of $64$ coins that are either heads or tails. 
+   
+   As an secret agent, you want to communicate your number to your handler by flipping some of the coins. To avoid being caught, you want to use as few flips as needed. To make the handler aware that you are communicating, you wish to flip atleast one coin. (The handler doesn't know the initial sequence of coins).
+
+   In the encoding part, you may flip at least one coins and at most $K$ coins of the line. 
+   
+   In the decoding part, you receive the coins already with the changes, in a line, and you must recover the number $C$.
+
+   Write functions `encode :: Int -> [Bool] -> [Bool]` which takes a number and a list of coins (`True` is heads and `False` is tails) and returns a list of bools with atleast $1$ and atmost $K$ of them flipped. Write a function `decode :: [Bool] -> Int` to recover the number. 
+
+   Subtask 1: $K = 64$, This is easy.
+
+   Subtask 2: $K= 6$, Using our friend binery.
+
+   Subtask 3: $K=1$, Note that bitwise Xor $\^$ has some very useful properties. One of these is the fact that it is extreamly easy to change and second is that for numbers between $1-64$, taking bitwise xor of some set of numbers will result in a number between $0-63$. How can we abuse it?
+]
+
+#exercise(sub : "Holes (Singapore 2007)")[
+A group of scientists want to monitor a huge forest. They plan to airdrop small sensors to the forest. Due to many unpredictable conditions during airdropping, each sensor will land in a random location in the forest. After all sensors have landed, there will be square regions in the forest that do not contain any sensor. Let us call such a region a hole. It is desirable that all holes are small. This can be achieved by airdropping very large number of sensors. On the other hand, those sensors are expensive. Hence, the scientists want to conduct a computer simulation to determine how many sensors should be airdropped, so that the chances of having a large hole are small. 
+
+To conduct this simulation, a function `hole :: [Bool] -> Int` is required that, given if a grid of booleans reprasenting the presence of the sensors, outputs the size of the largest hole. This function has to be very efficient since the simulation will be repeated many times with different parameters. You are tasked to write this function.
+
+Example:
+We will use a matrix of one's and zero's to reprasent the input for convenience.
+$ op("hole")
+  mat(
+0, 0, 0, 0, 0, 1, 0, 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 1, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 1;
+0, 0, 0, 0, 1, 0, 0, 0;
+1, 0, 0, 0, 0, 0, 0, 0
+  ) = 5
+$
+as we have a $5 times 5$ grid of $0$'s, made bold. 
+]
+
+#exercise(sub : "Restorers and Destroyers (Codeforces)")[
+You have to restore a temple in Greece. While the roof is long gone, their are $N$ pillars of marble slabs stil standing, the height of the $i$-th pillar is initially equal to $h_i$, the height is measured in number of marble slabs. After the restoration all the $N$ pillars should have equal heights.
+
+You are allowed the following operations:
+
+- put a new slab on top of one pillar, the cost of this operation is $A$;
+
+- remove a slab from the top of one non-empty pillar, the cost of this operation is $R$;
+
+- move a slab from the top of one non-empty pillar to the top of another pillar, the cost of this operation is $M$.
+
+As the name of the temple is based on the number of pillers, you cannot create additional pillars or ignore some of pre-existing pillars even if their height becomes $0$.
+
+What is the minimal total cost of restoration, in other words, what is the minimal total cost to make all the pillars of equal height?
+
+Write a function `cost :: Int -> Int -> Int -> [Int] -> Int` which takes the costs $A, R$ and $M$; and the list of height of pillers and returns the cost of restoration.
+
+Examples
+```
+cost 1 100 100 [1,3,8] = 12
+cost 100 1 100 [1,3,8] = 9
+cost 1 2 4 [5,5,3,6,5] = 4
+cost 1 2 2 [5,5,3,6,5] = 3
+```
+]
+
 
 
 // Include a numerical diffretiation exccise.
