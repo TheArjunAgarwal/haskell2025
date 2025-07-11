@@ -886,8 +886,49 @@ For example: `countBaltik (3,3) 2 (2,2) (1,1) (2,2) = 32`. The following are all
 #image("../images/baltik.png")
 ]
 
+#exercise(sub: "Modulo Inverse")[
+  Given a prime modulus   $p > a$  , according to Euclidean Division $p = k a + r$ where 
+$
+k a + r equiv 0 mod p\
+=> & k a equiv -r mod p\
+=> & - r a^(-1) equiv k mod p\
+=> & a^(-1) equiv - k r^(-1) mod p
+$ 
 
+Using this, implement `modInv :: Int -> Int -> Int` which takes in $a$ and $p$ and gives $a^(-1) mod p$.
 
+Note that this reasoning does not hold if  $p$  is not prime, since the existence of  $a^(-1)$  does not imply the existence of  $r^(-1)$  in the general case.
+]
+
+#exercise(sub : "New Bakery(Codeforces)")[
+  Bob decided to open a bakery. On the opening day, he baked $n$ buns that he can sell. The usual price of a bun is $a$ coins, but to attract customers, Bob organized the following promotion:
+
+- Bob chooses some integer $k(0 <= k <= min(n,b))$.
+- Bob sells the first $k$ buns at a modified price. In this case, the price of the $i$-th $(1 <= i <= k)$ sold bun is $(b-i+1)$ coins.
+- The remaining $(n-k)$ buns are sold at $a$ coins each.
+
+Note that $k$ can be equal to $0$. In this case, Bob will sell all the buns at $a$ coins each.
+
+Write a function `profit :: Int -> Int -> Int -> Int` Help Bob determine the maximum profit he can obtain by selling all $n$ buns with $a$ being the normal price and $b$ the price of first bun to be sold at a modified price.
+
+Example
+```
+profit          4         4           5 = 17
+profit          5         5           9 = 35
+profit         10        10           5 = 100
+profit 1000000000 1000000000 1000000000 = 1000000000000000000
+profit 1000000000 1000000000          1 = 1000000000000000000
+profit       1000           1      1000 = 500500
+```
+
+Note
+
+In the first test case, it is optimal for Bob to choose $k=1$. Then he will sell one bun for $5$ coins, and three buns at the usual price for $4$ coins each. Then the profit will be $5+4+4+4=17$ coins.
+
+In the second test case, it is optimal for Bob to choose $k=5$. Then he will sell all the buns at the modified price and obtain a profit of $9+8+7+6+5=35$ coins.
+
+In the third test case, it is optimal for Bob to choose $k=0$. Then he will sell all the buns at the usual price and obtain a profit of $10 dot 10=100$ coins.
+]
 
 
 

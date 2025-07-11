@@ -796,3 +796,125 @@ time [
 In the first example: the optimal sequence is 2, 1, 3 or 3, 1, 2. The sequence 1, 3, 2 is even more favourable, but it does not fulfill the condition.
 In the second example: the sequence is either 3, 1, 2, 4 or 4, 2, 1, 3.
 ]
+
+#exercise(sub : "Look and Say")[
+Look-and-say sequences are generated iteratively, using the previous value as input for the next step. For each step, take the previous value, and replace each run of digits (like 111) with the number of digits (3) followed by the digit itself (1).
+
+For example:
+
+- $1$ becomes $11$ ($1$ copy of digit $1$).
+- $11$ becomes $21$ ($2$ copies of digit $1$).
+- $21$ becomes $1211$ (one $2$ followed by one $1$).
+- $1211$ becomes $111221$ (one $1$, one $2$, and two $1$s).
+- $111221$ becomes $312211$ (three $1$s, two $2$s, and one $1$).
+
+Write function `lookNsay :: Int -> Int` which takes an number and generates the next number in its look and say sequence.
+]
+
+#exercise(sub : "Triangles (Codeforces)")[
+  Pavel has several sticks with lengths equal to powers of two. He has $a_0$ sticks of length $2^0=1$, $a_1$ sticks of length $2^1 = 2$, ..., $a_n$ sticks of length $2^n$.
+  
+  Pavel wants to make the maximum possible number of triangles using these sticks. The triangles should have strictly positive area, each stick can be used in at most one triangle.
+  
+  It is forbidden to break sticks, and each triangle should consist of exactly three sticks. Write a function `triangles :: [Int] -> Int]` to find the maximum possible number of triangles.
+
+Examples
+```
+triangles [1,2,2,2,2] = 3
+triangles [1,1,1] = 0
+triangles [3,3,3] = 1
+```
+In the first example, Pavel can, for example, make this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^4,2^4), (2^1,2^3,2^3), (2^1,2^2,2̂2)$.
+
+In the second example, Pavel cannot make a single triangle.
+
+In the third example, Pavel can, for example, create this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^0,2^0), (2^1,2^1,2^1), (2^2,2^2,2^2)$.
+]
+
+#exercise(sub : "Thanos Sort (Codeforces)")[
+  Thanos sort is a supervillain sorting algorithm, which works as follows: if the array is not sorted, snap your fingers\* to remove the first or the second half of the items, and repeat the process.
+  
+  Given an input list, what is the size of the longest sorted list you can obtain from it using Thanos sort? Write function `thanos :: Ord a => [a] -> Int` to determine that.
+
+\* Infinity Gauntlet required.
+
+
+Examples
+```
+thanos [1,2,2,4] = 4
+thanos [11, 12, 1, 2, 13, 14, 3, 4] = 2
+thanos [7,6,5,4] = 1
+```
+
+In the first example the list is already sorted, so no finger snaps are required.
+
+In the second example the list actually has a subarray of 4 sorted elements, but you can not remove elements from different sides of the list in one finger snap. Each time you have to remove either the whole first half or the whole second half, so you'll have to snap your fingers twice to get to a 2-element sorted list.
+
+In the third example the list is sorted in decreasing order, so you can only save one element from the ultimate destruction.
+]
+
+#exercise(sub : "Deadfish")[
+Deadfish XKCD is a fun, unusual programming language. It only has one variable, called $s$, which starts at $0$. You change $s$ by using simple commands.
+
+Your task is to write a Haskell program that reads Deadfish XKCD code from a file, runs it, and prints the output.
+
+Deadfish XKCD has the following commands:
+
+#table(
+  columns: 2,
+  [*Command*], [*What It Does*],
+  [x], [Add $1$ to $s$.],
+  [k], [print $s$ as a number.],
+  [c], [Square $s$,],
+  [d], [Subtract $1$ from $s$.],
+  [X], [Start defining a function (the next character is the function name).],
+  [K], [Print $s$ as an ASCII character.],
+  [C], [End the function definition or run a function.],
+  [D], [Reset $s$ back to 0.],
+  [{}], [Everything inside curly braces is considered a comment.]
+)
+
+Extra Rules:
+
+- $s$ must stay between $0$ and $255$.
+- If $s$ goes above $255$ or below $0$, reset it back to $0$.
+- Ignore spaces, newlines, and tabs in the code.
+- Other characters (not commands) work differently depending on the subtask.
+
+While you can do the whole exercise in one go, we reccomend doing the following subtasks in order.
+
+1. Basic (x, k, c, d only)
+`run "xxcxkdk" = "54"`
+
+2. Extended (add K, D)
+`run "xxcxxxxcxxxxxxxxK" = "H"`
+
+3. Functions (all commands)
+`run "XUxkCxxCUCUCU" = "345"`
+
+4. Comments (ignore {})
+Ignore content inside curly braces.
+
+*Hint*: Don't be afraid to use tuples!
+]
+
+#exercise(sub : "Weakness and Poorness (Codeforces)")[
+You are given a sequence of $n$ integers $a_1, a_2,dots, a_n$.
+
+Write a function `solve :: [Int] -> Float` to determine a real number $x$ such that the weakness of the sequence $a_1 - x, a_2 - x, dots , a_n - x$ is as small as possible.
+
+The weakness of a sequence is defined as the maximum value of the poorness over all segments (contiguous subsequences) of a sequence.
+
+The poorness of a segment is defined as the absolute value of sum of the elements of segment.
+
+Examples
+```
+solve [1,2,3] = 2.0
+solve [1,2,3.4] = 2.5
+```
+Note
+For the first case, the optimal value of $x$ is $2$ so the sequence becomes  $- 1, 0, 1$ and the max poorness occurs at the segment $-1$ or segment $1$.
+
+For the second sample the optimal value of $x$ is $2.5$ so the sequence becomes  $- 1.5,  - 0.5, 0.5, 1.5$ and the max poorness occurs on segment $-1.5, -0.5$ or $0.5, 1.5$.
+]
+
