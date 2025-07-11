@@ -110,8 +110,8 @@ A *polymorphic* function is one whose output type depends on the input type. Suc
 ]
 
 A polymorphic function differs from functions we have seen in the following ways:
-- It can take input from multiple differnt input types (not necessarily all types, restrictions are allowed).
-- Its output type can be differnt for different inputs types.
+- It can take input from multiple different input types (not necessarily all types, restrictions are allowed).
+- Its output type can be different for different inputs types.
 
 An example for such a function that we have seen in the previous section would be:
 ```
@@ -160,7 +160,7 @@ f == g
 ```
 
 This definitely seems like a fair thing to ask, as we already have a definition for equality of mathematical functions, but we run into 2 issues:
-- Is it really fair to say that? In computer science, we care about the way things are computed, that is where the subject gets its name from. A lot of times, one will be able to distinguish distinguish between functions, by simply looking at which one works faster or slower on big inputs, and that might be something people might want to factor into what they mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal is not wise.
+- Is it really fair to say that? In computer science, we care about the way things are computed, that is where the subject gets its name from. A lot of times, one will be able to distinguish distinguish between functions, by simply looking at which one works faster or slower on big inputs, and that might be something people would want to factor into what they mean by "sameness". So maybe the assumption that 2 functions being equal pointwise imply the functions are equal is not wise.
 - The second is that in general it is not possible, in this case we have a mathematical identity that lets us prove so, but given any 2 function, it might be that the only way to prove that they are equal would be to actually check on every single value, and since domains of functions can be infinite, this would simply not be possible to compute.
 
 So we can't have the type of *`(==)`* to be `a -> a -> Bool`. In fact, if I try to write it, the haskell compiler will complain to me by saying
@@ -229,7 +229,7 @@ That being said, the syntax used to define parametric polymorphism sets us to se
 
 = Higher Order Functions
 
-One of the most powerful feature of functional programming languages is that it lets one pass in functions as argument to another function, and have funtions return other functions as outputs, these kinds of functions are known as:
+One of the most powerful features of functional programming languages is that it lets one pass in functions as argument to another function, and have functions return other functions as outputs, these kinds of functions are known as:
 
 #def(sub: "Higher Order Functions")[
 A *higher order function* is a function that does at least one of the following things:
@@ -242,7 +242,7 @@ This is again a way of generalization and is very handy, as we will see in the r
 == Currying <curry>
 
 Perhaps the first place where we have encountered higher order functions is when we defined `(+) :: Int -> Int -> Int` //input is not fn 
-way back in #link(<intro-to-types>)[Chapter 3]. We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that is really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
+way back in #ref(<intro-to-types>). We have been suggesting to think of the type as `(+) :: (Int, Int) -> Int`, because that is really what we want the function to do, but in haskell it would actually mean `(+) :: Int -> (Int -> Int)`, which says the function has 1 interger argument, and it returns a function of type `Int -> Int`.
 
 An example from mathematics would be finding the derivative of a differentiable function $f$ at a point $x$. This is generally represented as $f'(x)$ and the process of computing the derivative can be given to have the type 
 $ (f, x) |-> f'(x) : ((RR -> RR)^d times RR) -> RR $
@@ -265,24 +265,22 @@ Category theorists call the above condition _naturality_ (or say that the biject
 The notation $Y^X$ is the set of functions from $X$ to $Y$.])[
 We prove the above by defining $"curry" : C^(A times B) -> (C^B)^A$, and then defining its inverse.
 $
-"curry"(f) :equiv x |-> (y |-> f(x, y))
+"curry"(f) := x |-> (y |-> f(x, y))
 $
 The inverse of $"curry"$ is called $"uncurry": (C^B)^A -> C^(A times B)$
 $
-"uncurry"(g) :equiv (x, y) |-> g(x)(y)
+"uncurry"(g) := (x, y) |-> g(x)(y)
 $
 To complete the proof we need to show that the above functions are inverses.
 #exercise[Show that the uncurry is the inverse of curry, and that the _naturality_ condition holds.
 
-(Note that one needs to show that uncurry is the 2-way inverse of curry, i.e, $"uncurry" compose "curry" = "id"$ and $"curry" compose "uncurry" = "id"$, one direction is not enough.)]
+(Note that one needs to show that uncurry is the 2-way inverse of curry, that is,\ $"uncurry" compose "curry" = "id"$ and $"curry" compose "uncurry" = "id"$, one direction is not enough.)]
 ]
 
 The above theorem, is a concretization of the very intuitive idea:
-
-This may seem odd at first, but the relation between the two kinds of functions is not that hard to see, at least intuitively:
 - Given a function $f$ that takes in a pair of type $(A, B) ->C$, if one fixes the first argument, then we get a function $f(A, -)$ which would take an element of type $B$ and then give an element of types $C$.
-- But every different value of type $A$ that we fix, we get a differnt function.
-- Thus we can think of $f$ as a function that takes in an element of type $A$ and returns a function of type $B->C$
+- But every different value of type $A$ that we fix, we get a different function.
+- Thus we can think of $f$ as a function that takes in an element of type $A$ and returns a function of type $B->C$.
 
 And the above theorem is also "implemented" in haskell using the following functions:
 ```
@@ -332,7 +330,7 @@ is_square_palindrome :: Integer -> Bool
 is_square_palindrome = is_palindrome . square
 ```
 
-Breaking a complicated function into simpler parts, and being able to combime them is fair standard problem solving strategy, in both Mathematics and Computer Science, and in fact in a lot more general scenarios too! Having a clean notation for a tool that used fairly frequently is always a good idea!
+Breaking a complicated function into simpler parts, and being able to combime them is fairly standard problem solving strategy, in both Mathematics and Computer Science, and in fact in a lot more general scenarios too! Having a clean notation for a tool that used fairly frequently is always a good idea!
 
 Higher order functions are where polymorphism shines it brightest, see how the composition function works on all pairs of functions that can be composed in the mathematical sense, this would have been significantly less impressive if say it was only composition between functions from `Integer -> Integer` and `Integer -> Bool`.
 
@@ -346,7 +344,7 @@ This may seem like a fairly trivial function that really doesn't offer anything 
 
 ```
 -- | operator precedence
--- The 'r' in infixr says a.b.c = a.(b.c)
+-- The 'r' in infixr says a.b.c.d is interpreted by haskell as a.(b.(c.d))
 infixr 9 . 
 infixr 0 $
 ```
@@ -366,7 +364,7 @@ Write a function `apply_n_times` that takes a function `f` and an argument `a` a
 ]
 
 == A Short Note on Type Inference
-Haskell is a statically typed language. What that means is that it requires the types for the data that is being processed by the program, and it needs to for an analysis that happens before running the program, this is called *type checking*.
+Haskell is a statically typed language. What that means is that it requires the types for the data that is being processed by the program, and it needs to do so for an analysis that happens before running called *type checking*.
 
 It is not however required to give types to all functions (we do strongly recommend it though!), in fact one can simply not give any types at all. This is possible because the haskell compiler is smart enough to figure all of it out on its own! It's so good that when you do write type annotations for functions, haskell ignores it, figures the types out on its own and can then check if you have given the types correctly. This is called *type inference*.
 
@@ -396,7 +394,7 @@ To state that elements belong to a *Maybe Type* they are decorated with `Just`. 
 To see an example of some functions that use `Maybe` in their type definitions are:
 - A safe version of `head` and `tail`:
     - `safeHead :: [a] -> Maybe a` 
-    - `safeTail :: [a] -> Maybe a`
+    - `safeTail :: [a] -> Maybe [a]`
 - A safe way to index a list, that is a safe version of `(!!)`:
     - `safeIndex :: [a] -> Int -> Maybe a`
     
@@ -411,7 +409,7 @@ This may seem like a fairly trivial fact for those who are learning haskell as t
 If these erros have haunted you, you have our condolences, all of these would have been completely avoided if the langauge had some version of `Maybe`, or even some bare bones type system in case of python.
 
 All of the safety provided by `Maybe` types has 1 potential drawback: When using `Maybe` types, one eventually runs into a problem that looks something like this:
-- While solving a complicated problem, one would break it down into simpler parts, that would correspond to many tiny funtions, that will come to gether to form the functions which solves the problem.
+- While solving a complicated problem, one would break it down into simpler parts, that would correspond to many tiny functions, that will come to gether to form the functions which solves the problem.
 - Turns out that one the functions, maybe something in the very beginning returns a `Maybe Integer` instead of an `Integer`.
 - This means that the next function along the chain, would have had to have its input type as `Maybe Integer` to account for the potentially case of `Nothing`.
 - This also forces the output type to be a `Maybe` type, this makes sense, if the process fails in the beginning, one might not want to continue.
@@ -436,7 +434,7 @@ maybeMap :: (a -> b) -> Maybe a -> Maybe b
 maybeMap f (Just a) = Just . f $ a
 maybeMap _ Nothing  = Nothing
 
-(<$>) :: (a -> b) -> Maybe a -> Maybe b
+(<$>) :: (a -> b) -> Maybe a -> Maybe b -- symbol version
 f <$> a = maybeMap f a
 
 (<.>) :: (b -> c) -> (a -> Maybe b) -> a -> Maybe c

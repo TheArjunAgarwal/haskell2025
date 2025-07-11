@@ -12,7 +12,7 @@
 == List Comprehensions
 As we have talked about before, Haskell tries to make it's syntax look as similer as possible to math notation. This is reprasented in one of the most powerful syntactic sugers in Haskell, list comprehension.
 
-If we want to talk about all pythogorean triplets using integers from $1-n$, we could express it mathematically as 
+If we want to talk about all pythagorian triplets using integers from $1-n$, we could express it mathematically as 
 $
   {(x,y,z) | x,y,z in {1,2,dots,n}, x^2 + y^2 = z^2}
 $
@@ -20,7 +20,7 @@ which can be written in Haskell as
 ```
 [(x,y,z) | x <- [1..n], y <- [1..n], z <- [1..n], x^2 + y^2 == z^2]
 ```
-This allows us to define a lof of operations we have seen before, in ch 1, in rather concise manner.
+This allows us to define a lot of operations we have seen before, in ch 1, in rather concise manner.
 
 For example, `map :: (a-> b) -> [a] -> [b]` which used to apply a function to a list of elements of a suitable input type and gave a list of the suitable output type. Basically, `map f [a1,a2,a3] = [f a1, f a2, f a3]`. We can define this in two ways:
 ```
@@ -41,13 +41,13 @@ filter p (x:xs) = let rest = p xs in
 -- and much more cleanly as
 filter p ls = [l | l <- ls, p l]
 ```
- Another operation we can consider, though not explictly defined in Haskell, is cartisian product. Hopefully, you can see where we are going with this right?
+ Another operation we can consider, though not explictly defined in Haskell, is cartesian product. Hopefully, you can see where we are going with this right?
  ```
--- | Defining cartisian product using pattern matching and list comprehension
+-- | Defining cartesian product using pattern matching and list comprehension
  cart :: [a] -> [b] -> [(a,b)]
  cart xs ys = [(x,y) | x <- xs, y <- ys]
  
- -- Trying to define this reccursivly is much more cumbersome.
+ -- Trying to define this recursively is much more cumbersome.
  
 cart [] _ = []
 cart (x:xs) ys = (go x ys) ++ (cart xs ys) where
@@ -55,9 +55,9 @@ cart (x:xs) ys = (go x ys) ++ (cart xs ys) where
   go l (m:ms) = (l,m) : (go l ms)
 ```
 
-Finally, let's talk a bit more about our pythogorean triplets example at the start of this section.
+Finally, let's talk a bit more about our pythagorian triplets example at the start of this section.
 ```
--- | A naive way to get pythogorean triplets
+-- | A naive way to get pythagorian triplets
 pythNaive :: Int -> [(Int, Int, Int)]
 pythNaive n = [(x,y,z) | 
           x <- [1..n], 
@@ -65,11 +65,11 @@ pythNaive n = [(x,y,z) |
           z <- [1..n], 
           x^2 + y^2 == z^2]
 ```
-For `n = 1000`, we get the answer is some 13 minutes, which makes sense as our code is basically considering the $1000^3$ triplets and then culling the ones which are not pythogorean. But could we do better?
+For `n = 1000`, we get the answer is some 13 minutes, which makes sense as our code is basically considering the $1000^3$ triplets and then culling the ones which are not pythagorian. But could we do better?
 
 A simple idea would be to not check for `z` as it is implied by the choice of `x` and `y` and instead set the condition as
 ```
--- | A mid way to get pythogorean triplets
+-- | A mid way to get pythagorian triplets
 pythMid n = [(x, y, z) |
     x <- [1..n],
     y <- [1..n],
@@ -82,9 +82,9 @@ Continuing with our example, for `n = 1000`, we finish in 1.32 seconds. As we ex
 
 Also notice that we can define variables inside the comprehension by using the `let` syntax.
 
- However, there is one final optimization we can do. The idea is that $x > y$ or $ x < y$ for pythogorean triplets as $sqrt 2$ is irrational. So if we can somehow, only evaluate only the cases where $x < y$ and then just genrate $(x,y,z)$ and $(y,x,z)$; we almost half the number of cases we check. This means, our final optimized code would look like:
+ However, there is one final optimization we can do. The idea is that $x > y$ or $ x < y$ for pythagorian triplets as $sqrt 2$ is irrational. So if we can somehow, only evaluate only the cases where $x < y$ and then just genrate $(x,y,z)$ and $(y,x,z)$; we almost half the number of cases we check. This means, our final optimized code would look like:
 ```
--- | The optimal way to get pythogorean triplets
+-- | The optimal way to get pythagorian triplets
 pythOpt n = [t|
     x <- [1..n],
     y <- [(x+1)..n],
@@ -145,12 +145,12 @@ mergeSort xs = merge (mergeSort left) (mergeSort right) where
 #exercise(sub : "MergeSort Works?")[
   Prove that merge sort indeed works. A road map is given
 
-  (i) Prove that `merge` defined by taking the smaller of the heads of the lists reccursivly, produces a sorted list given the two input lists were sorted. The idea is that the first element choosen has to be the smallest. Use induction of the sum of lengths of the lists.
+  (i) Prove that `merge` defined by taking the smaller of the heads of the lists recursively, produces a sorted list given the two input lists were sorted. The idea is that the first element choosen has to be the smallest. Use induction of the sum of lengths of the lists.
 
   (ii) Prove that `mergeSort` works using induction on the size of list to be sorted.
 ]
 
-This is also a very efficent way to sort a list. If we define a function $C$ that count the number of comparisions we make, 
+This is also a very efficient way to sort a list. If we define a function $C$ that count the number of comparisons we make, 
 $C(n) < 2*C(ceil(n/2)) + n$ where the $n$ comes from the merge.
 
 This implies $
@@ -169,7 +169,7 @@ exists m op(s.t.) forall n > m : n log(n) > 3n > 1/2log(n) > 1/2
 $
 This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elemeents in the list is such that they can be compared, we can't do much better. The dominating term, in the number of comparisins, will be $n log(n)$ times some constant. This later refers to chapter 10.
 
-In practice, we waste some ammount of operations dividing the list in 2. What if we take our chances and approximatly divide the list into two parts?
+In practice, we waste some amount of operations dividing the list in 2. What if we take our chances and approximatly divide the list into two parts?
 
 This is the idea of quick sort. If we take a random element in the list, we expect half the elements to be lesser than it and half to be greater. We can use this fact to define quickSort by splitting the list on the basis of the first element and keep going. This can be implemented as:
 ```
@@ -191,7 +191,7 @@ Let $l$ be the number of elements less than the first elements and $r = n-l-1$. 
 In the worst case scenario, our algoritm could keep spliting the list into a length $0$ and a length $n-1$ list. This would screw us very badly.
 
 As $C(n) = C(0) + C(n-1) + 2(n - 1)$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the concatination.
-Using $C(0) = 0$ as we don't make any comparisions, This evaluates to
+Using $C(0) = 0$ as we don't make any comparisons, This evaluates to
 $
   C(n) &= C(n-1) + 2(n-1)\
   &= 2(n-1) + 2(n-2) + dots + 2\
@@ -205,7 +205,7 @@ Prove $2^(n-1) <= n!$
 
 Then why are we intrested in Quick Sort? and why is named quick?
 
-Let's look at the average or expected number of comparision we would need to make!
+Let's look at the average or expected number of comparison we would need to make!
 
 Consider the list we are sorting a permutation of $[x_1, x_2, dots , x_n]$. Let $X_(i,j)$ be a random variable which is $1$ if the $x_i$ and $x_j$ are compared and $0$ otherwise. Let $p_(i,j)$ be the 
 probability that $x_i$ and $x_j$ are compared. Then, $EE(X_(i,j)) = 1 * p + 0 * (1-p) = p$.
@@ -235,9 +235,9 @@ $
 Considering the number of cases where the comparisons with $n^2 - n$ operations is $2^(n-1)$, 
 Quick Sort's expected number of operations is still less than $2 n log(n)$ which, as we discussed, is optimal.
 
-This implies that there are some lists where Quick Sort is extreamly efficent and as one might expect there are many such lists. 
+This implies that there are some lists where Quick Sort is extreamly efficient and as one might expect there are many such lists. 
 This is why languages which can keep states (C++, C, Rust etc) etc use something called Introsort which uses 
-Quick Sort till the depth of recusion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); 
+Quick Sort till the depth of recursion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); 
 then we fallback to Merge Sort or a Heap/Tree Sort(which we will see in chapter 11).
 
 Haskell has an inbuilt `sort` function you can use by putting `import Data.List` at the top of your code. 
@@ -415,7 +415,7 @@ zip2d = map zip
 zipWith2d :: (a -> b -> c) -> [[a]] -> [[b]] -> [[c]]
 zipWith2d = zipWith . zipWith
 ```
-The second definition should raise immidiete alarms. It seems too good to be true. Let's formally check
+The second definition should raise immediate alarms. It seems too good to be true. Let's formally check
 ```
 zipWith . zipWith $ (a -> b -> c) [[a]]  [[b]]
 = zipWith (zipWith (a -> b -> c))  [[a]] [[b]] -- Using the fact that composition only allows one of the inputs to be pulled inside
@@ -441,7 +441,7 @@ Try to figure out the implementation of `unzip`.
 === Orgami of Code!
 A lot of reccursion on lists has the following structure
 ```
-g [] = v -- The vacous case
+g [] = v -- The vacuous case
 g (x:xs) = x `f` (g xs)
 ```
 That is, the function `g :: [a] -> b` maps the empty list to a value `v`, of say type `b`, and for non-empty lists, the head of the list and the result of recursively processing the tail are combined using a function or operator `f :: a -> b -> b`.
@@ -453,7 +453,7 @@ sum [] = 0
 sum (x:xs) = x + (sum xs)
 
 product :: [Int] -> Int
-product [] = 1 -- The sturcuture forces this choice as other wise, the product of full lists may become incorrect.
+product [] = 1 -- The structure forces this choice as other wise, the product of full lists may become incorrect.
 product (x:xs) = x * (product xs)
 
 or :: [Bool] -> Bool
@@ -641,12 +641,12 @@ replicate n x = unfoldr gen n x where
     rep 0 = Nothing
     rep m = Just (x, m - 1)
 
-itterate :: (a -> a) -> a -> [a]
+iterate :: (a -> a) -> a -> [a]
 -- given a function f and some starting value x
 -- outputs the infinite list [x, f x, f f x, ...]
-itterate f seed = unfold (\x -> Just (x, f x)) seed
+iterate f seed = unfold (\x -> Just (x, f x)) seed
 ```
-While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `unfoldr` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we reffered was litrally titled "The Under-Appreciated Unfold".
+While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `unfoldr` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was litrally titled "The Under-Appreciated Unfold".
 
 #exercise(sub : "Some more inbuilt functions")[
   Implement the following functions using fold and unfold.
@@ -835,7 +835,7 @@ It is possible, but out of the scope of our current undertaking, to prove that a
 #exercise(sub : "More droping and more taking")[
   `dropWhile :: (a -> Bool) -> [a] -> [a]` and `takeWhile :: (a -> Bool) -> [a] -> [a]` take a predicate and a list and drop all elements while the predicate is satisfied and take all objects while the predicate is satisfied respectively.
 
-  Implement them using recusion and then using folds.
+  Implement them using recursion and then using folds.
 ]
 
 
@@ -914,7 +914,7 @@ But based on the underlying function, the number of `improve` may differ.
 So what do we do?  We make an extreamly clever move to define a super sequence `super` as
 ```
 super :: [Float] -> [Float]
-super xs = map (!! 2) (iterate improve xs) -- remeber itterate from the excercises above?
+super xs = map (!! 2) (iterate improve xs) -- remeber iterate from the excercises above?
 ```
 I will re-instate, the implementation of `super` is extreamly clever. We are recursivly getting a sequence of more and more improved sequences of approximations and constructs a new sequence of approximations by taking the second term from each of the improved sequences. It turns out that the second one is the best one to take. It is more accurate than the first and doesn’t require any extra work to compute. Anything further, requires more computations to compute.
 
@@ -1009,7 +1009,7 @@ scanl f v (x:xs) = v : scanl f (v `f` x) xs
   Modify these definitions and define `scanl1` and `scanr1`.
 ]
 
-This seems like a much more convaluted reccursion pattern. So why have we decided to study it? Let's see by example
+This seems like a much more convoluted recursion pattern. So why have we decided to study it? Let's see by example
 
 #exercise(sub: "Not Quite Lisp (AOC 2015, 1)")[
 Santa is trying to deliver presents in a large apartment building, but he can't find the right floor - the directions he got are a little confusing. He starts on the ground floor (floor 0) and then follows the instructions one character at a time.

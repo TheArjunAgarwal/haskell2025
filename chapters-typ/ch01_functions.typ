@@ -59,7 +59,7 @@ Examples include -
 
 Therefore we can see that relations and functions can also be *values*, as long as they are specific and not scenario-dependent.
 
-In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*,\ as it is a constant, even though it is an unknown constant.
+In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*, as it is a constant, even though it is an unknown constant.
 
 = Variables
 
