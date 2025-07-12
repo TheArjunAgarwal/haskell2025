@@ -9,7 +9,8 @@
 
   set par( leading : 3.5em )
   
-  set page( header : none )
+  set page( header : none, fill: rgb("FDF6E3"))
+  set text(fill: rgb("375E97"))
   
   set align( center + horizon )
   

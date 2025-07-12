@@ -137,8 +137,10 @@
       
     }
   
-  })
+  }, fill: rgb("FDF6E3")
+  )
   
+  set text(fill: rgb("375E97"))
     
   user_end_body}
 
