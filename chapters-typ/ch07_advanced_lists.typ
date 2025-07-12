@@ -7,9 +7,7 @@
 #let example = it => [For example - \ #it]
 #let isom = $tilde.equiv$
 
-= advanced lists (feel free to change it)
-
-== List Comprehensions
+= List Comprehensions
 As we have talked about before, Haskell tries to make it's syntax look as similer as possible to math notation. This is reprasented in one of the most powerful syntactic sugers in Haskell, list comprehension.
 
 If we want to talk about all pythagorian triplets using integers from $1-n$, we could express it mathematically as 
@@ -254,7 +252,7 @@ but it is the most aesthetically pleasing and concise.
   Try to figure out this implementation.
 ]
 
-== Zip it up!
+= Zip it up!
 Have you ever suffered through a conversation with a very dry person with the goal of getting the contact information of a person you are actually intrested in? If you haven't well, that is what you will have to do now.
 
 #exercise(sub : "The boring zip")[
@@ -437,8 +435,8 @@ Haskell has an inbuilt function called `unzip :: [(a,b)] -> ([a],[b])` which tak
 Try to figure out the implementation of `unzip`.
 ]
 
-== Folding, Scaning and The Gate to True Powers
-=== Orgami of Code!
+= Folding, Scaning and The Gate to True Powers
+== Orgami of Code!
 A lot of reccursion on lists has the following structure
 ```
 g [] = v -- The vacuous case
@@ -841,7 +839,7 @@ It is possible, but out of the scope of our current undertaking, to prove that a
 
 
 
-=== Numerical Integration
+== Numerical Integration
 To quickly revise all the things we just learnt, we will try to write our first big-boy code.
 
 Let's talk about numerical Integration. Numerical Integration refers to finding the value of integral of a function, given the limits. This is also a part of the mathematical computing we first studied in chapter 3. To get going, a very naive idea would be:
@@ -944,7 +942,7 @@ With this we are done!
 Modify the code to now use Simpson's Rule. Furthermore, show that this approximation makes sense (the idea is to find a quadratic polynomial which takes the same value as our function at $a, (a+b)/2$ and $b$ and using its area).
 ]
 
-=== Time to Scan
+== Time to Scan
 
 We will now talk about folds lesser known cousing scans. 
 #definition(sub: "Scans")[
@@ -1107,7 +1105,7 @@ This might seem complex but we are merely `zip`-ing the flags and input values, 
 
 This will be the end of my discussion of this. The major use of segmented scan is in parallel computation algorithms. A rather complex quick sort parallel algorithm can be created using this as the base.
 
-== Excercises
+= Excercises
 #exercise(sub : "Factors")[
   (i) Write an optimized function `factors :: Int -> [Int]` which takes in an integer and provides a list of all it's factors.
 
@@ -1533,75 +1531,46 @@ cost 1 2 2 [5,5,3,6,5] = 3
 ```
 ]
 
+#exercise(sub : "Numerical Diffrentiation")[
+  Using the techniques decribed in numerical integration, create a numerical Diffrentiation function.
+
+  You will need to write the following functions. You will be able to reuse some of the definitions from Numerical integration.
+
+  ```
+  easyDiff :: (Float -> Float) -> Float -> Float -> Float
+  diffrentiate :: (Float -> Float) -> Float -> Float -> [Float]
+  elimerror :: Int -> [Float] -> [Float]
+  order :: [Float] -> Int
+  improve :: [Float] -> [Float]
+  super :: [Float] -> [Float]
+  within :: Float -> [Float] -> Float
+  ans :: (Float -> Float) -> Float -> Float -> Float -> Float
+  ```
+]
+
+#exercise(sub : "Cutting Grass")[
+  After attempting to program in Grass for the entire morning, you decide to go outside and mow some real grass. The grass can be viewed as a string consisting exclusively of the following characters: `wWv`. `w` denotes tall grass which takes $1$ unit of energy to mow. `W` denotes extremely tall grass which takes $2$ units of energy to mow. Lastly $v$ denotes short grass which does not need to be mowed.
+  
+  You decide to mow the grass from left to right (beginning to the end of the string). However, every time you encouter a $v$ (short grass), you stop to take a break to replenish your energy, before carrying on with the mowing. Your task is to calculate the maximum amount of energy expended while mowing. In other words, write a function `energy :: String -> Int` to find the maximum total energy of mowing a patch of grass, that of which does not contain $v$. 
+
+  Examples
+  ```
+  energy "WwwvWWWWvvwwwwwwwvWwWw" = 8
+  energy "w" = 1
+  energy "W" = 2
+  energy "vwww" = 3
+  energy "vWWW" = 6
+  energy "v" =  0
+  energy "vvvvvvv" = 0
+  energy "vwvWvwvWv" = 2
+  energy "vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwwwv" = 21
+  energy "vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwv" = 20
+  energy "vvWvv" = 2
+  ```
+]
 
 
-// Include a numerical diffretiation exccise.
-// Include a Simpson's Second Rule execise.
-// Context
-// After attempting to program in Grass for the entire morning, you decide to go outside and mow some real grass. The grass can be viewed as a string consisting exclusively of the following characters: wWv. w denotes tall grass which takes 1
-//  unit of energy to mow. W denotes extremely tall grass which takes 2
-//  units of energy to mow. Lastly v denotes short grass which does not need to be mowed.
 
-// Task
-// You decide to mow the grass from left to right (beginning to the end of the string). However, every time you encouter a v (short grass), you stop to take a break to replenish your energy, before carrying on with the mowing. Your task is to calculate the maximum amount of energy expended while mowing. In other words, find the maximum total energy of mowing a patch of grass, that of which does not contain v.
-
-// Example
-// In the example input below, the answer is 8
-// . Although the patch wwwwwww is a longer patch of grass, it only costs 7
-//  units of energy, whereas the optimal patch WWWW expends 2×4=8
-//  units of energy.
-
-// Input: WwwvWWWWvvwwwwwwwvWwWw
-// Output: 8 
-// Here is an example Python program -> Try It Online!.
-
-// Test Cases
-// WwwvWWWWvvwwwwwwwvWwWw -> 8
-// w -> 1
-// W -> 2
-// vwww -> 3
-// vWWW -> 6
-// v -> 0
-// vvvvvvv -> 0
-// vwvWvwvWv -> 2
-// vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwwwv -> 21
-// vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwv -> 20
-// vvWvv -> 2
-
-
-// A Sumac sequence starts with two non-zero integers 𝑡1
-//  and 𝑡2.
-
-// The next term, 𝑡3=𝑡1−𝑡2
-
-// More generally, 𝑡𝑛=𝑡𝑛−2−𝑡𝑛−1
-
-// The sequence ends when 𝑡𝑛≤0
-// . All values in the sequence must be positive.
-
-// Challenge
-// Given two integers 𝑡1
-//  and 𝑡2
-// , compute the Sumac sequence, and output its length.
-
-// If there is a negative number in the input, remove everything after it, and compute the length.
-
-// You may take the input in any way (Array, two numbers, etc.)
-
-// Test Cases
-// (Sequence is included for clarification)
-
-// [t1,t2]   Sequence          n
-// ------------------------------
-// [120,71]  [120,71,49,22,27] 5
-// [101,42]  [101,42,59]       3
-// [500,499] [500,499,1,498]   4
-// [387,1]   [387,1,386]       3
-// [3,-128]  [3]               1
-// [-2,3]    []                0
-// [3,2]     [3,2,1,1]         4
-// Scoring
-// This is code-golf. Shortest answer in each language wins.
 
 // In some use cases, the intermediate results in a fold are of interest in themselves. For instance, let's say you have an Elo rating calculator which folds match results grouped by tournament into player ratings. If you change the fold into a scan, you get the rating evolution of the players from tournament to tournament.
 
