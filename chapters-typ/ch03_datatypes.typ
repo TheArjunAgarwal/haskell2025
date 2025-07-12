@@ -1235,3 +1235,5 @@ ratingCon 3500 = 27
 // 2. Idiotproof
 // 3. Define Stuff also Translate
 // 4. Float?
+
+//  Just a rando edit
