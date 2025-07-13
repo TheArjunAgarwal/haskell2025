@@ -7,7 +7,7 @@
 #let definition = def
 #let example = it => [For example - \ #it]
 
-= post-complexity data types (feel free to change it)
+= post-complexity data types (feel free to change it) <ads>
 
 == Stacks and Queues
 

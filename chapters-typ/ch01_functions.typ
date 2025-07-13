@@ -59,7 +59,7 @@ Examples include -
 
 Therefore we can see that relations and functions can also be *values*, as long as they are specific and not scenario-dependent.
 
-In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*,\ as it is a constant, even though it is an unknown constant.
+In fact, as we see in the last example, even if we don't know what the exact value is, we can still know that it is *some value*, as it is a constant, even though it is an unknown constant.
 
 = Variables
 
@@ -838,6 +838,25 @@ Determine if there exists a finite sequence of operations of the allowed types, 
 #exercise(sub : "Same Height?")[
 Here is a proof by induction that all people have the same height. We prove that for any positive integer $n$, any group of $n$ people all have the same height. This is clearly true for $n = 1$. Now assume it for $n$, and suppose we have a group of $n + 1$ persons, say $P_1, P_2,dots, P_(n+1)$. By the induction hypothesis, the $n$ people $P_1, P_2, dots, P_n$ all have the same height. Similarly the $n$ people $P_2, P_3, dots, P_(n+1)$ all have the same height. Both groups of people contain $P_2, P_3, dots, P_n$, so $P_1$ and $P_(n+1)$ have the same height as $P_2, P_3, dots, P_n$. Thus all of $P_1, P_2,dots, P_(n+1)$ have the same height. Hence by induction, for any $n$ any group of $n$ people have the same height. Letting $n$ be the total number of people in the world, we conclude that all people have the same height. Is there a flaw in this argument?
 ]
+
+#exercise(sub : "Caves (IOI 2013, P4)")[
+While lost on the long walk from the college to the UQ Centre, you have stumbled across the entrance to a secret cave system running deep under the university. The entrance is blocked by a security system consisting of $N$ consecutive doors, each door behind the previous; and $N$ switches, with each switch connected to a different door.
+
+The doors are numbered $0, 1, dots, 4999$ in order, with door $0$ being closest to you. The switches are also numbered $0, 1, dots, 4999$, though you do not know which switch is connected to which door.
+
+The switches are all located at the entrance to the cave. Each switch can either be in an up or down position. Only one of these positions is correct for each switch. If a switch is in the correct position then the door it is connected to will be open, and if the switch is in the incorrect position then the door it is connected to will be closed. The correct position may be different for different switches, and you do not know which positions are the correct ones.
+
+You would like to understand this security system. To do this, you can set the switches to any combination, and then walk into the cave to see which is the first closed door. Doors are not transparent: once you encounter the first closed door, you cannot see any of the doors behind it. You have time to try $70,000$ combinations of switches, but no more. Your task is to determine the correct position for each switch, and also which door each switch is connected to.
+]
+
+#exercise(sub : "Carnivel (CEIO 2014)")[
+  Each of Peter’s $N$ friends (numbered from $1$ to $N$) bought exactly one carnival costume in order to wear it at this year’s carnival parties. There are $C$ different kinds of costumes,numbered from $1$ to $C$. Some of Peter’s friends, however, might have bought the same kind of costume. Peter would like to know which of his friends bought the same costume. For this purpose, he organizes some parties, to each of which he invites some of his friends. 
+  
+  Peter knows that on the morning after each party he will not be able to recall which costumes he will have seen the night before, but only how many different kinds of costumes he will have seen at the party. Peter wonders if he can nevertheless choose the guests of each party such that he will know in the end, which of his friends had the same kind of costume. Help Peter!
+
+  Peter has $N <= 60$ friends and we can not have more than $365$ parties(as we want to know the costumes by the end of the year).
+]
+
 
 // cite
 // @misc{noauthor_travelproblemset2015pdf_nodate,

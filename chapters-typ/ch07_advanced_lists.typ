@@ -7,12 +7,10 @@
 #let example = it => [For example - \ #it]
 #let isom = $tilde.equiv$
 
-= advanced lists (feel free to change it)
-
-== List Comprehensions
+= List Comprehensions
 As we have talked about before, Haskell tries to make it's syntax look as similer as possible to math notation. This is reprasented in one of the most powerful syntactic sugers in Haskell, list comprehension.
 
-If we want to talk about all pythogorean triplets using integers from $1-n$, we could express it mathematically as 
+If we want to talk about all pythagorian triplets using integers from $1-n$, we could express it mathematically as 
 $
   {(x,y,z) | x,y,z in {1,2,dots,n}, x^2 + y^2 = z^2}
 $
@@ -20,7 +18,7 @@ which can be written in Haskell as
 ```
 [(x,y,z) | x <- [1..n], y <- [1..n], z <- [1..n], x^2 + y^2 == z^2]
 ```
-This allows us to define a lof of operations we have seen before, in ch 1, in rather concise manner.
+This allows us to define a lot of operations we have seen before, in ch 1, in rather concise manner.
 
 For example, `map :: (a-> b) -> [a] -> [b]` which used to apply a function to a list of elements of a suitable input type and gave a list of the suitable output type. Basically, `map f [a1,a2,a3] = [f a1, f a2, f a3]`. We can define this in two ways:
 ```
@@ -41,13 +39,13 @@ filter p (x:xs) = let rest = p xs in
 -- and much more cleanly as
 filter p ls = [l | l <- ls, p l]
 ```
- Another operation we can consider, though not explictly defined in Haskell, is cartisian product. Hopefully, you can see where we are going with this right?
+ Another operation we can consider, though not explictly defined in Haskell, is cartesian product. Hopefully, you can see where we are going with this right?
  ```
--- | Defining cartisian product using pattern matching and list comprehension
+-- | Defining cartesian product using pattern matching and list comprehension
  cart :: [a] -> [b] -> [(a,b)]
  cart xs ys = [(x,y) | x <- xs, y <- ys]
  
- -- Trying to define this reccursivly is much more cumbersome.
+ -- Trying to define this recursively is much more cumbersome.
  
 cart [] _ = []
 cart (x:xs) ys = (go x ys) ++ (cart xs ys) where
@@ -55,9 +53,9 @@ cart (x:xs) ys = (go x ys) ++ (cart xs ys) where
   go l (m:ms) = (l,m) : (go l ms)
 ```
 
-Finally, let's talk a bit more about our pythogorean triplets example at the start of this section.
+Finally, let's talk a bit more about our pythagorian triplets example at the start of this section.
 ```
--- | A naive way to get pythogorean triplets
+-- | A naive way to get pythagorian triplets
 pythNaive :: Int -> [(Int, Int, Int)]
 pythNaive n = [(x,y,z) | 
           x <- [1..n], 
@@ -65,11 +63,11 @@ pythNaive n = [(x,y,z) |
           z <- [1..n], 
           x^2 + y^2 == z^2]
 ```
-For `n = 1000`, we get the answer is some 13 minutes, which makes sense as our code is basically considering the $1000^3$ triplets and then culling the ones which are not pythogorean. But could we do better?
+For `n = 1000`, we get the answer is some 13 minutes, which makes sense as our code is basically considering the $1000^3$ triplets and then culling the ones which are not pythagorian. But could we do better?
 
 A simple idea would be to not check for `z` as it is implied by the choice of `x` and `y` and instead set the condition as
 ```
--- | A mid way to get pythogorean triplets
+-- | A mid way to get pythagorian triplets
 pythMid n = [(x, y, z) |
     x <- [1..n],
     y <- [1..n],
@@ -82,9 +80,9 @@ Continuing with our example, for `n = 1000`, we finish in 1.32 seconds. As we ex
 
 Also notice that we can define variables inside the comprehension by using the `let` syntax.
 
- However, there is one final optimization we can do. The idea is that $x > y$ or $ x < y$ for pythogorean triplets as $sqrt 2$ is irrational. So if we can somehow, only evaluate only the cases where $x < y$ and then just genrate $(x,y,z)$ and $(y,x,z)$; we almost half the number of cases we check. This means, our final optimized code would look like:
+ However, there is one final optimization we can do. The idea is that $x > y$ or $ x < y$ for pythagorian triplets as $sqrt 2$ is irrational. So if we can somehow, only evaluate only the cases where $x < y$ and then just genrate $(x,y,z)$ and $(y,x,z)$; we almost half the number of cases we check. This means, our final optimized code would look like:
 ```
--- | The optimal way to get pythogorean triplets
+-- | The optimal way to get pythagorian triplets
 pythOpt n = [t|
     x <- [1..n],
     y <- [(x+1)..n],
@@ -145,12 +143,12 @@ mergeSort xs = merge (mergeSort left) (mergeSort right) where
 #exercise(sub : "MergeSort Works?")[
   Prove that merge sort indeed works. A road map is given
 
-  (i) Prove that `merge` defined by taking the smaller of the heads of the lists reccursivly, produces a sorted list given the two input lists were sorted. The idea is that the first element choosen has to be the smallest. Use induction of the sum of lengths of the lists.
+  (i) Prove that `merge` defined by taking the smaller of the heads of the lists recursively, produces a sorted list given the two input lists were sorted. The idea is that the first element choosen has to be the smallest. Use induction of the sum of lengths of the lists.
 
   (ii) Prove that `mergeSort` works using induction on the size of list to be sorted.
 ]
 
-This is also a very efficent way to sort a list. If we define a function $C$ that count the number of comparisions we make, 
+This is also a very efficient way to sort a list. If we define a function $C$ that count the number of comparisons we make, 
 $C(n) < 2*C(ceil(n/2)) + n$ where the $n$ comes from the merge.
 
 This implies $
@@ -169,7 +167,7 @@ exists m op(s.t.) forall n > m : n log(n) > 3n > 1/2log(n) > 1/2
 $
 This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elemeents in the list is such that they can be compared, we can't do much better. The dominating term, in the number of comparisins, will be $n log(n)$ times some constant. This later refers to chapter 10.
 
-In practice, we waste some ammount of operations dividing the list in 2. What if we take our chances and approximatly divide the list into two parts?
+In practice, we waste some amount of operations dividing the list in 2. What if we take our chances and approximatly divide the list into two parts?
 
 This is the idea of quick sort. If we take a random element in the list, we expect half the elements to be lesser than it and half to be greater. We can use this fact to define quickSort by splitting the list on the basis of the first element and keep going. This can be implemented as:
 ```
@@ -191,7 +189,7 @@ Let $l$ be the number of elements less than the first elements and $r = n-l-1$. 
 In the worst case scenario, our algoritm could keep spliting the list into a length $0$ and a length $n-1$ list. This would screw us very badly.
 
 As $C(n) = C(0) + C(n-1) + 2(n - 1)$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the concatination.
-Using $C(0) = 0$ as we don't make any comparisions, This evaluates to
+Using $C(0) = 0$ as we don't make any comparisons, This evaluates to
 $
   C(n) &= C(n-1) + 2(n-1)\
   &= 2(n-1) + 2(n-2) + dots + 2\
@@ -205,7 +203,7 @@ Prove $2^(n-1) <= n!$
 
 Then why are we intrested in Quick Sort? and why is named quick?
 
-Let's look at the average or expected number of comparision we would need to make!
+Let's look at the average or expected number of comparison we would need to make!
 
 Consider the list we are sorting a permutation of $[x_1, x_2, dots , x_n]$. Let $X_(i,j)$ be a random variable which is $1$ if the $x_i$ and $x_j$ are compared and $0$ otherwise. Let $p_(i,j)$ be the 
 probability that $x_i$ and $x_j$ are compared. Then, $EE(X_(i,j)) = 1 * p + 0 * (1-p) = p$.
@@ -235,9 +233,9 @@ $
 Considering the number of cases where the comparisons with $n^2 - n$ operations is $2^(n-1)$, 
 Quick Sort's expected number of operations is still less than $2 n log(n)$ which, as we discussed, is optimal.
 
-This implies that there are some lists where Quick Sort is extreamly efficent and as one might expect there are many such lists. 
+This implies that there are some lists where Quick Sort is extreamly efficient and as one might expect there are many such lists. 
 This is why languages which can keep states (C++, C, Rust etc) etc use something called Introsort which uses 
-Quick Sort till the depth of recusion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); 
+Quick Sort till the depth of recursion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); 
 then we fallback to Merge Sort or a Heap/Tree Sort(which we will see in chapter 11).
 
 Haskell has an inbuilt `sort` function you can use by putting `import Data.List` at the top of your code. 
@@ -254,7 +252,7 @@ but it is the most aesthetically pleasing and concise.
   Try to figure out this implementation.
 ]
 
-== Zip it up!
+= Zip it up!
 Have you ever suffered through a conversation with a very dry person with the goal of getting the contact information of a person you are actually intrested in? If you haven't well, that is what you will have to do now.
 
 #exercise(sub : "The boring zip")[
@@ -415,7 +413,7 @@ zip2d = map zip
 zipWith2d :: (a -> b -> c) -> [[a]] -> [[b]] -> [[c]]
 zipWith2d = zipWith . zipWith
 ```
-The second definition should raise immidiete alarms. It seems too good to be true. Let's formally check
+The second definition should raise immediate alarms. It seems too good to be true. Let's formally check
 ```
 zipWith . zipWith $ (a -> b -> c) [[a]]  [[b]]
 = zipWith (zipWith (a -> b -> c))  [[a]] [[b]] -- Using the fact that composition only allows one of the inputs to be pulled inside
@@ -437,11 +435,11 @@ Haskell has an inbuilt function called `unzip :: [(a,b)] -> ([a],[b])` which tak
 Try to figure out the implementation of `unzip`.
 ]
 
-== Folding, Scaning and The Gate to True Powers
-=== Orgami of Code!
+= Folding, Scaning and The Gate to True Powers
+== Orgami of Code!
 A lot of reccursion on lists has the following structure
 ```
-g [] = v -- The vacous case
+g [] = v -- The vacuous case
 g (x:xs) = x `f` (g xs)
 ```
 That is, the function `g :: [a] -> b` maps the empty list to a value `v`, of say type `b`, and for non-empty lists, the head of the list and the result of recursively processing the tail are combined using a function or operator `f :: a -> b -> b`.
@@ -453,7 +451,7 @@ sum [] = 0
 sum (x:xs) = x + (sum xs)
 
 product :: [Int] -> Int
-product [] = 1 -- The sturcuture forces this choice as other wise, the product of full lists may become incorrect.
+product [] = 1 -- The structure forces this choice as other wise, the product of full lists may become incorrect.
 product (x:xs) = x * (product xs)
 
 or :: [Bool] -> Bool
@@ -641,12 +639,12 @@ replicate n x = unfoldr gen n x where
     rep 0 = Nothing
     rep m = Just (x, m - 1)
 
-itterate :: (a -> a) -> a -> [a]
+iterate :: (a -> a) -> a -> [a]
 -- given a function f and some starting value x
 -- outputs the infinite list [x, f x, f f x, ...]
-itterate f seed = unfold (\x -> Just (x, f x)) seed
+iterate f seed = unfold (\x -> Just (x, f x)) seed
 ```
-While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `unfoldr` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we reffered was litrally titled "The Under-Appreciated Unfold".
+While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `unfoldr` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was litrally titled "The Under-Appreciated Unfold".
 
 #exercise(sub : "Some more inbuilt functions")[
   Implement the following functions using fold and unfold.
@@ -835,13 +833,13 @@ It is possible, but out of the scope of our current undertaking, to prove that a
 #exercise(sub : "More droping and more taking")[
   `dropWhile :: (a -> Bool) -> [a] -> [a]` and `takeWhile :: (a -> Bool) -> [a] -> [a]` take a predicate and a list and drop all elements while the predicate is satisfied and take all objects while the predicate is satisfied respectively.
 
-  Implement them using recusion and then using folds.
+  Implement them using recursion and then using folds.
 ]
 
 
 
 
-=== Numerical Integration
+== Numerical Integration
 To quickly revise all the things we just learnt, we will try to write our first big-boy code.
 
 Let's talk about numerical Integration. Numerical Integration refers to finding the value of integral of a function, given the limits. This is also a part of the mathematical computing we first studied in chapter 3. To get going, a very naive idea would be:
@@ -914,7 +912,7 @@ But based on the underlying function, the number of `improve` may differ.
 So what do we do?  We make an extreamly clever move to define a super sequence `super` as
 ```
 super :: [Float] -> [Float]
-super xs = map (!! 2) (iterate improve xs) -- remeber itterate from the excercises above?
+super xs = map (!! 2) (iterate improve xs) -- remeber iterate from the excercises above?
 ```
 I will re-instate, the implementation of `super` is extreamly clever. We are recursivly getting a sequence of more and more improved sequences of approximations and constructs a new sequence of approximations by taking the second term from each of the improved sequences. It turns out that the second one is the best one to take. It is more accurate than the first and doesn’t require any extra work to compute. Anything further, requires more computations to compute.
 
@@ -944,7 +942,7 @@ With this we are done!
 Modify the code to now use Simpson's Rule. Furthermore, show that this approximation makes sense (the idea is to find a quadratic polynomial which takes the same value as our function at $a, (a+b)/2$ and $b$ and using its area).
 ]
 
-=== Time to Scan
+== Time to Scan
 
 We will now talk about folds lesser known cousing scans. 
 #definition(sub: "Scans")[
@@ -1009,7 +1007,7 @@ scanl f v (x:xs) = v : scanl f (v `f` x) xs
   Modify these definitions and define `scanl1` and `scanr1`.
 ]
 
-This seems like a much more convaluted reccursion pattern. So why have we decided to study it? Let's see by example
+This seems like a much more convoluted recursion pattern. So why have we decided to study it? Let's see by example
 
 #exercise(sub: "Not Quite Lisp (AOC 2015, 1)")[
 Santa is trying to deliver presents in a large apartment building, but he can't find the right floor - the directions he got are a little confusing. He starts on the ground floor (floor 0) and then follows the instructions one character at a time.
@@ -1107,76 +1105,472 @@ This might seem complex but we are merely `zip`-ing the flags and input values, 
 
 This will be the end of my discussion of this. The major use of segmented scan is in parallel computation algorithms. A rather complex quick sort parallel algorithm can be created using this as the base.
 
-== Excercises
+= Excercises
+#exercise(sub : "Factors")[
+  (i) Write an optimized function `factors :: Int -> [Int]` which takes in an integer and provides a list of all it's factors.
+
+  (ii) Write an optimized function `primeFactors :: Int -> [Int]` which takes in an integer and provides a list of all it's prime factors, repeated wrt to multiplicity. That is `primeFactors 100 = [2,2,5,5]`.
+]
+
+#exercise(sub : "Trojke (COCI 2006, P3)")[
+Mirko and Slavko are playing a new game, Trojke (Triplets). First they use a chalk to draw an $N times N$ square grid on the road. Then they write letters into some of the squares. No letter is written more than once in the grid.
+
+The game consists of trying to find three letters on a line as fast as possible. Three letters are considered to be on the same line if there is a line going through the centre of each of the three squares (horizontal, vertical and diagonal).
+
+After a while, it gets harder to find new triplets. Mirko and Slavko need a program that counts all the triplets, so that they know if the game is over or they need to search further.
+
+Write a function `trojke :: [String] -> Int` which takes the contents of the lines and outputs the numper of lines.
+
+Example:
+```
+trojke [
+  "...D",
+  "..C.",
+  ".B..",
+  "A..."
+] = 4
+
+trojke [
+"..T..",
+"A....",
+".FE.R",
+"....X",
+"S...."
+] = 3
+
+trojke [
+"....AB....",
+"..C....D..",
+".E......F.",
+"...G..H...",
+"I........J",
+"K........L",
+"...M..N...",
+".O......P.",
+"..Q....R..",
+"....ST...."
+] = 0
+```
+]
+
+#exercise(sub : "Deathstar (COCI 2015, P3)")[
+  Young jedi Ivan has infiltrated in The Death Star and his task is to destroy it. In order to destroy The Death Star, he needs an array $A$ of non-negative integers  of length $N$ that represents the code for initiating the self-destruction of The Death Star. Ivan doesn't have the array, but he has a piece of paper with requirements for that array, given to him by his good old friend Darth Vader.
+
+On the paper, a square matrix of the size  is written down. In that matrix, in the row $i$ and column $j$ there is a number that is equal to bitwise and between numbers $a_i$ and $a_j$. Unfortunately, a lightsaber has destroyed all the fields on the matrix's main diagonal and Ivan cannot read what is on these fields. Help Ivan to reconstruct an array for the self-destruction of The Death Star that meets the requirements of the matrix.
+
+The solution doesn't need to be unique, but will always exist. Your function `destroy :: [[Int]] -> [Int]` only needs to find one of these sequences.
+
+Example:
+```
+destroy [
+  [0,1,1],
+  [1,0,1],
+  [1,1,0]] = [1,1,1]
+destroy [
+  [0,0,1,1,1]
+  [0,0,2,0,2]
+  [1,2,0,1,3]
+  [1,0,1,0,1]
+  [1,2,3,1,0]] = [1,2,3,1,11]
+```
+
+Extra Credit : There is a way to do this in one line.
+]
+
+#exercise(sub : "Nucleria (CEOI 2015 P5")[
+Long ago, the people of Nuclearia decided to build several nuclear plants. They prospered for many years, but then a
+terrible misfortune befell them. The land was hit by an extremely strong earthquake, which caused all the nuclear plants
+to explode, and radiation began to spread throughout the country. When the people had made necessary steps so that
+no more radiation would emanate, the Ministry of Environment started to find out how much individual regions were
+polluted by the radiation. Your task is to write a function `quary :: (Int, Int) -> [(Int, Int, Int, Int)] -> Float` that will find the average radiation in Nuclearia given data.
+
+Nuclearia can be viewed as a rectangle consisting of $W times H$ cells. Each nuclear plant occupies one cell and is
+parametrized by two positive integers: $a$, which is the amount of radiation caused to the cell where the plant was, and $b$,
+which describes how rapidly the caused radiation decreases as we go farther from the plant.
+
+More precisely, the amount of radiation caused to cell $C = (x_C , y_C)$ by explosion of a plant in cell $P = (x_P, y_P)$ is
+$max(0, a - b  dot d(P, C))$, where $d(P, C)$ is the distance of the two cells, defined by $d(P, C) = max(|x_P − x_C | , |y_P − y_C |)$
+(i.e., the minimum number of moves a chess king would travel between them).
+
+The total radiation in a cell is simply the sum of the amounts that individual explosions caused to it.
+As an example, consider a plant with $a = 7$ and $b = 3$. Its explosion causes $7$ units of radiation to the cell it occupies,
+$4$ units of radiation to the $8$ adjacent cells, and $1$ unit of radiation to the $16$ cells whose distance is $2$. 
+
+The Ministry of Environment wants to know the average radiation per cell. The input will be in the form `quary (W, H) [(x1,y1,a1,b1), (x2,y2,a2,b2)]` where we first give the size of Nucleria and then the position of plants and their paramenter.
+
+Example:
+```
+quary (4,3) [(1,1,7,3),(3,2,4,2)] = 3.67
+```
+
+The radiation in Nuclearia after the two explosions is as follows:
+$
+  7& 6& 3& 2\
+  4& 6& 5& 2\
+  1& 3& 3& 2
+$
+]
+#exercise(sub : "Garner's Algorithm")[
+A consequence of the Chinese Remainder Theorem is, that we can represent big numbers using an array of small integers. For example, let   $p$  be the product of the first   $1000$  primes.  $p$  has around  $3000$  digits.
+  
+Any number  $a$  less than  $p$  can be represented as a list  $a_1, dots, a_k$ , where  $a_i equiv a mod(p_i)$ .  But to do this we obviously need to know how to get back the number  $a$  from its representation (which we will call the CRT form).
+
+Another form for numbers is called the mixed radix form.
+We can represent a number  $a$  in the mixed radix representation as:$
+a = x_1 + x_2 p_1 + x_3 p_1 p_2 + dots + x_k p_1 dots p_(k-1) text(" with ")x_i in [0, p_i)$
+
+(i) Make a list of first $1000$ primes. Call it `primeThousand :: [Int]`.
+
+(ii) Write function `encode :: Int -> [Int]` which encodes a number into the CRT form.
+
+(iii) You had constructed an extreamly fast way to compute modulo inverses in @exercise_of_Modulo_Inverse. Use it to create `residue :: [[Int]]` such that $r_(i j)$ denotes he inverse of  $p_i$  modulo  $p_j$. 
+
+(iv) Garner's algorithm converts from the CRT from to the mixed radix form. We want you to implement `garner :: [Int] -> [Int]`. The idea of the algorithm is as follows:
+
+Substituting $a$ from the mixed radix representation into the first congruence equation we obtain
+
+$ a_1 equiv x_1 mod(p_1). $
+
+Substituting into the second equation yields
+
+$ a_2 equiv x_1 + x_2 p_1 mod(p_2), $
+
+which can be rewritten by subtracting $x_1$ and dividing by $p_1$ to get
+
+$
+  a_2 - x_1 & equiv x_2 p_1 && mod(p_2) \
+  (a_2 - x_1) r_(12) & equiv x_2 && mod(p_2) \
+  x_2 & equiv (a_2 - x_1) r_(12) && mod(p_2)
+$
+
+Similarly we get that
+
+$ x_3 equiv ((a_3 - x_1) r_(13) - x_2) r_(23) mod(p_3). $
+
+(v) Finally, now write a function `decodeMixed :: [Int] -> Int` which decodes from the mixed radix form.
+
+(vi) Finally, combine these functions and write a `decode :: [Int] -> Int` which decodes from CRT form.
+
+Note : We find it extreamly cool to know that so much of math goes on in simply reprasenting big integers in high accuracy systems. Like from airplane cockpits to rocker simulations to some games like Valorent, a very cool algorithm is keeping it up and running.
+]
+
+#exercise(sub : "Shanks Baby Steps-Giant Steps algorithm")[
+  A surprisingly hard problem is, given $a,b,m$ computing $x$ such that $a^x equiv b mod m$ efficiently. This is called the discrete logirithm. We will try to walk through implementing an algorithm to do so efficiently. At the end, you are expected to make a function `dlog :: Int -> Int -> Int -> Maybe Int` which takes in $a,b$ and $m$ and returns $x$ such that $a^x equiv b mod m$ if it exists.
+
+  Let   $x = n p - q$ , where  $n$  is some pre-selected constant (by the end of the description, we want you to think of how to choose $n$).  
+
+  We can also see that $p in {1,2,dots,ceil(m/n)}$ and $q in {0,1,dots, n-1}$.
+
+  $p$  is known as giant step, since increasing it by one increases  $x$  by  $n$ . Similarly,  $q$  is known as baby step. Try to find the bounds
+
+  Then, the equation becomes: $a^(n p - q) equiv b mod m.$
+
+  Using the fact that $a$  and  $m$  are relatively prime, we obtain:
+
+  $a^(n p) equiv b a^q mod m$
+
+  So we now need to find the $p$ and $q$ which satisfies this. Well, that can be done quite easily, right?
+
+Keeping in mind @exercise_of_Moduler_Exponation, what $n$ should we choose to be most optimal?
+]
 
 
-// Include a numerical diffretiation exccise.
-// Include a Simpson's Second Rule execise.
-// Context
-// After attempting to program in Grass for the entire morning, you decide to go outside and mow some real grass. The grass can be viewed as a string consisting exclusively of the following characters: wWv. w denotes tall grass which takes 1
-//  unit of energy to mow. W denotes extremely tall grass which takes 2
-//  units of energy to mow. Lastly v denotes short grass which does not need to be mowed.
+#exercise(sub : "A very cool DP (Codeforces)")[
+  Giant chess is quite common in Geraldion. We will not delve into the rules of the game, we'll just say that the game takes place on an h × w field, and it is painted in two colors, but not like in chess. Almost all cells of the field are white and only some of them are black. Currently Gerald is finishing a game of giant chess against his friend Pollard. Gerald has almost won, and the only thing he needs to win is to bring the pawn from the upper left corner of the board, where it is now standing, to the lower right corner. Gerald is so confident of victory that he became interested, in how many ways can he win?
 
-// Task
-// You decide to mow the grass from left to right (beginning to the end of the string). However, every time you encouter a v (short grass), you stop to take a break to replenish your energy, before carrying on with the mowing. Your task is to calculate the maximum amount of energy expended while mowing. In other words, find the maximum total energy of mowing a patch of grass, that of which does not contain v.
+  The pawn, which Gerald has got left can go in two ways: one cell down or one cell to the right. In addition, it can not go to the black cells, otherwise the Gerald still loses. There are no other pawns or pieces left on the field, so that, according to the rules of giant chess Gerald moves his pawn until the game is over, and Pollard is just watching this process.
 
-// Example
-// In the example input below, the answer is 8
-// . Although the patch wwwwwww is a longer patch of grass, it only costs 7
-//  units of energy, whereas the optimal patch WWWW expends 2×4=8
-//  units of energy.
+  Write a function `wins :: (Int, Int) -> [(Int,Int)] -> Int` to compute the number of ways to win on a $(w, h)$ grid with black squares at given coordinates. The pawn starts at $(1,1)$ and we must go till $(w,h)$.
 
-// Input: WwwvWWWWvvwwwwwwwvWwWw
-// Output: 8 
-// Here is an example Python program -> Try It Online!.
+Examples
+```
+wins (3,4) [(2,2),(2,3)] = 2
+wins (100,100) [(15,16),(16,15),(99,98)] = 545732279
+```
 
-// Test Cases
-// WwwvWWWWvvwwwwwwwvWwWw -> 8
-// w -> 1
-// W -> 2
-// vwww -> 3
-// vWWW -> 6
-// v -> 0
-// vvvvvvv -> 0
-// vwvWvwvWv -> 2
-// vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwwwv -> 21
-// vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwv -> 20
-// vvWvv -> 2
+Hint : This is a very hard question to do optimally. The 'standard' way to do so would be making a function `ways :: (Int,Int) -> Integer` and counting the ways to every square recursively and setting the black squares as $0$.
+
+This is not optimal if we have a huge grid. Here the idea is to sort the black squares lexiographically. Let this sorted list be $b_1, b_2, dots , b_n$. We add $b_(n+1) = (w,h)$. Let the paths (ignoring black squares) from $(1,1)$ to $b_i$ be $d_i$. Let the paths respecting black squares be $c_i$. Our goal is to find $c_(n+1)$.
+
+Also try defining a function `paths :: (Int, Int) -> (Int, Int) -> Int` which counts the paths from $(x_1,y_1)$ to $x_2, y_2$ without any black squares. This function should give us $d_i$'s. Can we use these $d_i$ and the `paths` function to get $c_i$'s?
+]
+#exercise(sub: "Mars Rover (Codeforces)")[
+  If you felt bad that I gave a hint in the last problem, here is a similar problem for you to do all on your own.
+
+  Research rover finally reached the surface of Mars and is ready to complete its mission. Unfortunately, due to the mistake in the navigation system design, the rover is located in the wrong place.
+
+  The rover will operate on the grid consisting of n rows and m columns. We will define as $(r, c)$ the cell located in the row $r$ and column $c$. From each cell the rover is able to move to any cell that share a side with the current one.
+
+  The rover is currently located at cell $(1, 1)$ and has to move to the cell $(n, m)$. It will randomly follow some shortest path between these two cells. Each possible way is chosen equiprobably.
+  
+  The cargo section of the rover contains the battery required to conduct the research. Initially, the battery charge is equal to $s$ units of energy.
+  
+  Some of the cells contain anomaly. Each time the rover gets to the cell with anomaly, the battery looses half of its charge rounded down. Formally, if the charge was equal to $x$ before the rover gets to the cell with anomaly, the charge will change to $ceil (x/2)$.
+  
+  While the rover picks a random shortest path to proceed, write function `charge :: (Int, Int) -> [(Int, Int)] -> Int -> Float` to compute the expected value of the battery charge after it reaches cell $(n, m)$, with the anomalies at some positions $[(x_1,y_1),(x_2,y_2), dots, (x_n,y_n)]$ if we started with some $c$ charge. 
+  
+  Note: If the cells $(1, 1)$ and $(n, m)$ contain anomaly, they also affect the charge of the battery.
+  
+
+Examples
+```
+charge (3,3) [(2,1),(2,3)] 11 = 6.33333333333
+```
+]
+
+#exercise(sub : "Vegetables (ZCO 2024)")[
+You are a farmer, and you want to grow a wide variety of vegetables so that the people in your town can eat a
+balanced diet.
+
+In order to remain healthy, a person must eat a diet that contains $N$ essential vegetables, numbered from $1$ to $N$ . In total, your town requires $A_i$ units of each vegetable $i$ , for $1 <= i <= N$ . In order to grow a single unit of vegetable $i$ , you require $B_i$ units of water.
+
+However, you can use upgrades to improve the efficiency of your farm. In a single upgrade, you can do one of the following two actions:
+
+1. You can improve the nutritional value of your produce so that your town requires one less unit of some vegetable $i$ . Specifically, you can choose any one vegetable $i$ such that $A_i ≥ 1$ , and reduce $A_i$ by $1$ .
+
+2. You can improve the quality of your soil so that growing one unit of some vegetable $i$ requires one less unit of water. Specifically, you can choose any one vegetable $i$ such that $B_i ≥ 1$ , and reduce $B_i$ by $1$.
+
+If you use at most $X$ upgrades, what is the minimum possible number of units of water you will need to feed your town? Write a function `water :: [Int] -> [Int] -> Int -> Int` to answer this where the first list is $A$, second is $B$ and the integer is $X$.
+]
+
+#exercise(sub : "de Polignac Numbers (Rosetta Code)")[
+Alphonse de Polignac, a French mathematician in the 1800s, conjectured that every positive odd integer could be formed from the sum of a power of $2$ and a prime number.
+
+He was subsequently proved incorrect.
+
+The numbers that fail this condition are now known as de Polignac numbers.
+
+Technically $1$ is a de Polignac number, as there is no prime and power of $2$ that sum to $1$. De Polignac was aware but thought that $1$ was a special case. However, $127$ is also fails that condition, as there is no prime and power of $2$ that sum to $127$.
+
+As it turns out, de Polignac numbers are not uncommon, in fact, there are an infinite number of them.
+
+- Find and display the first fifty de Polignac numbers.
+- Find and display the one thousandth de Polignac number.
+- Find and display the ten thousandth de Polignac number.
+]
+
+#exercise(sub : "")[
+  The Bifid cipher is a polygraphic substitution cipher which was invented by Félix Delastelle in around 1901. It uses a 5 x 5 Polybius square combined with transposition and fractionation to encrypt a message. Any 5 x 5 Polybius square can be used but, as it only has 25 cells and there are 26 letters of the (English) alphabet, one cell needs to represent two letters - I and J being a common choice.
+
+Operation
+Suppose we want to encrypt the message "ATTACKATDAWN".
+
+We use this archetypal Polybius square where I and J share the same position.
+```
+x/y 1 2 3 4 5
+-------------
+1 | A B C D E
+2 | F G H I K
+3 | L M N O P
+4 | Q R S T U 
+5 | V W X Y Z
+```
+The message is first converted to its x, y coordinates, but they are written vertically beneath.
+```
+A T T A C K A T D A W N
+1 4 4 1 1 2 1 4 1 1 5 3
+1 4 4 1 3 5 1 4 4 1 2 3
+```
+They are then arranged in a row.
+```
+1 4 4 1 1 2 1 4 1 1 5 3 1 4 4 1 3 5 1 4 4 1 2 3
+```
+Finally, they are divided up into pairs which are used to look up the encrypted letters in the square.
+```
+14 41 12 14 11 53 14 41 35 14 41 23
+D  Q  B  D  A  X  D  Q  P  D  Q  H
+```
+
+The encrypted message is therefore "DQBDAXDQPDQH".
+
+Decryption can be achieved by simply reversing these steps.
+
+Write functions in haskell to encrypt and descrypt a message using the Bifid cipher.
+
+Use them to verify (including subsequent decryption):
+
+- The above example.
+
+- The example in the Wikipedia article using the message and Polybius square therein.
+
+- The above example but using the Polybius square in the Wikipedia article to illustrate that it doesn't matter which square you use as long, of course, as the same one is used for both encryption and decryption.
+
+In addition, encrypt and decrypt the message "The invasion will start on the first of January" using any Polybius square you like. Convert the message to upper case and ignore spaces.
+]
+
+#exercise(sub : "Colorful Numbers (Rosetta Code)")[
+  A colorful number is a non-negative base 10 integer where the product of every sub group of consecutive digits is unique.
+
+For example: $24753$ is a colorful number. $2, 4, 7, 5, 3, (2×4)8, (4×7)28, (7×5)35, (5×3)15, (2×4×7)56, (4×7×5)140, (7×5×3)105, (2×4×7×5)280, (4×7×5×3)420, (2×4×7×5×3)840$
+
+Every product is unique.
+
+$2346$ is not a colorful number. $2, 3, 4, 6, (2×3)6, (3×4)12, (4×6)24, (2×3×4)48, (3×4×6)72, (2×3×4×6)144$
+
+The product 6 is repeated.
+
+Single digit numbers are considered to be colorful. A colorful number larger than $9$ cannot contain a repeated digit, the digit $0$ or the digit $1$. As a consequence, there is a firm upper limit for colorful numbers; no colorful number can have more than $8$ digits.
+
+- Write a function to test if a number is a colorful number or not.
+- Use that function to find all of the colorful numbers less than 100.
+- Use that function to find the largest possible colorful number.
+- Find and display the count of colorful numbers in each order of magnitude.
+- Find and show the total count of all colorful numbers.
+
+]
+
+#exercise(sub : "Data Transfer Protocol on IOI? Parrots (IOI 2011, P6)")[
+Yanee is a bird enthusiast. Since reading about IP over Avian Carriers (IPoAC), she has spent much of her time training a flock of intelligent parrots to carry messages over long distances.
+
+Yanee’s dream is to use her birds to send a message $M$ to a land far far away. Her message $M$ is asequence of $N$ (not necessarily distinct) integers, each between $0$ and $255$, inclusive. Yanee keeps some $K$ specially-trained parrots. All the parrots look the same; Yanee cannot tell them apart. Each bird can remember a single integer between $0$ and $R$, inclusive.
+
+Early on, she tried a simple scheme: to send a message, Yanee carefully let the birds out of the cage one by one. Before each bird soared into the air, she taught it a number from the message sequence in order. Unfortunately, this scheme did not work. Eventually, all the birds did arrive at the destination, but they did not necessarily arrive in the order in which they left. With this scheme, Yanee could recover all the numbers she sent, but she was unable to put them into the right order.
+
+To realize her dream, Yanee will need a better scheme, and for that she needs your help.
+
+#image("../images/parrots.png")
+
+- Try to design a function that receives the *Original Message* (of some length $N$ with numbers between $0-255$) and encode the original messages to another message sequence, it's called *Encoded Message* with limit the size of message must not exceed $K$ and using numbers from $0-R$.
+- The *encoded message* from will be shuffled.
+- Receive the *Shuffled Message* and Decode back to *Original Message*.
+
+You must implement the `encode :: [Int] -> [Int]` and `decode :: [Int] -> [Int]` process with you own method. We suggest the following roadmap, 
+
+Subtask 1 : $N=8$, all elements of the orignal message are either $0$ or $1$, $R = 2^16 - 1$, $K = 10*N = 80$.
+
+Subtask 2 : $1 <= N <= 16$, $R = 2^16 - 1$, $K = 10*N$
+
+Subtask 3: $1 <= N <= 16$, $R = 255$, $K = 10*N$
+
+Subtask 4: $1 <= N <= 32$, $R = 255$, $K = 10*N$
+
+Subtask 4: $1 <= N <= 32$, $R = 255$, $K = 10*N$
+
+Subtask 5: We now want you to try to reduce the ratio between encoded message length and original message length upto $ 1 <= N <= 64 $. The mathematical limit for the best ratio one can get is slightly above $261/64 approx 4.08$ (Derive the limit!). Anything below $7$ is very good, although we (the authours) are very intrested if someone can find the optimal solution. 
+
+Note: When the problem came in IOI, no one found the optimal solution. Furthermore, most solutions which got $100$, did so they were optimal on the test cases and not in the general case.
+]
+
+#exercise(sub : "Broken Device (JOI 2016, Spring Training Camp)")[
+   Anna wants to send a $60$-bit integer to Bruno. She has a device that can send a sequence of $150$ numbers that are either $0$ or $1$. The twist is that $L$ ($0 <= L <= 40$) of the positions of the device are broken and can only send $0$. Bruno receives the sequence Anna sent, but the does not know the broken positions.
+
+   Anna knows the broken positions but Bruno doesn’t. Write functions `encode :: Int -> [Int] -> [Int]` which given the integer and the broken position encodes the message and function `decode :: [Int] -> Int` which decodes the message and recovers the integer sent.
+
+   Subtask 1: $K = 0$, This should be very simple as you are just converting to binery. 
+
+   Subtask 2: $K = 1$, We will have one broken position. If we can somehow indicate the start of out 60 bit sequence, can we find a continous $61$ bit sequence?
+
+   Subtask 3: $K = 15$, This is where one needs to be creative. Note $150/2 = 75$ and $75 - 15 =60$. Can you think of something now?
+   
+   Subtask 4: $K = 40$, The last question had $2$, now try with $3$ but have some sequences encode more than $1$ bit.
+]
+
+#exercise(sub : "Coins (IOI 2017 Practice)")[
+   You have a number $C$ ($0 <= C < 63$) and an line of $64$ coins that are either heads or tails. 
+   
+   As an secret agent, you want to communicate your number to your handler by flipping some of the coins. To avoid being caught, you want to use as few flips as needed. To make the handler aware that you are communicating, you wish to flip atleast one coin. (The handler doesn't know the initial sequence of coins).
+
+   In the encoding part, you may flip at least one coins and at most $K$ coins of the line. 
+   
+   In the decoding part, you receive the coins already with the changes, in a line, and you must recover the number $C$.
+
+   Write functions `encode :: Int -> [Bool] -> [Bool]` which takes a number and a list of coins (`True` is heads and `False` is tails) and returns a list of bools with atleast $1$ and atmost $K$ of them flipped. Write a function `decode :: [Bool] -> Int` to recover the number. 
+
+   Subtask 1: $K = 64$, This is easy.
+
+   Subtask 2: $K= 6$, Using our friend binery.
+
+   Subtask 3: $K=1$, Note that bitwise Xor $\^$ has some very useful properties. One of these is the fact that it is extreamly easy to change and second is that for numbers between $1-64$, taking bitwise xor of some set of numbers will result in a number between $0-63$. How can we abuse it?
+]
+
+#exercise(sub : "Holes (Singapore 2007)")[
+A group of scientists want to monitor a huge forest. They plan to airdrop small sensors to the forest. Due to many unpredictable conditions during airdropping, each sensor will land in a random location in the forest. After all sensors have landed, there will be square regions in the forest that do not contain any sensor. Let us call such a region a hole. It is desirable that all holes are small. This can be achieved by airdropping very large number of sensors. On the other hand, those sensors are expensive. Hence, the scientists want to conduct a computer simulation to determine how many sensors should be airdropped, so that the chances of having a large hole are small. 
+
+To conduct this simulation, a function `hole :: [Bool] -> Int` is required that, given if a grid of booleans reprasenting the presence of the sensors, outputs the size of the largest hole. This function has to be very efficient since the simulation will be repeated many times with different parameters. You are tasked to write this function.
+
+Example:
+We will use a matrix of one's and zero's to reprasent the input for convenience.
+$ op("hole")
+  mat(
+0, 0, 0, 0, 0, 1, 0, 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 1, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
+0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 1;
+0, 0, 0, 0, 1, 0, 0, 0;
+1, 0, 0, 0, 0, 0, 0, 0
+  ) = 5
+$
+as we have a $5 times 5$ grid of $0$'s, made bold. 
+]
+
+#exercise(sub : "Restorers and Destroyers (Codeforces)")[
+You have to restore a temple in Greece. While the roof is long gone, their are $N$ pillars of marble slabs stil standing, the height of the $i$-th pillar is initially equal to $h_i$, the height is measured in number of marble slabs. After the restoration all the $N$ pillars should have equal heights.
+
+You are allowed the following operations:
+
+- put a new slab on top of one pillar, the cost of this operation is $A$;
+
+- remove a slab from the top of one non-empty pillar, the cost of this operation is $R$;
+
+- move a slab from the top of one non-empty pillar to the top of another pillar, the cost of this operation is $M$.
+
+As the name of the temple is based on the number of pillers, you cannot create additional pillars or ignore some of pre-existing pillars even if their height becomes $0$.
+
+What is the minimal total cost of restoration, in other words, what is the minimal total cost to make all the pillars of equal height?
+
+Write a function `cost :: Int -> Int -> Int -> [Int] -> Int` which takes the costs $A, R$ and $M$; and the list of height of pillers and returns the cost of restoration.
+
+Examples
+```
+cost 1 100 100 [1,3,8] = 12
+cost 100 1 100 [1,3,8] = 9
+cost 1 2 4 [5,5,3,6,5] = 4
+cost 1 2 2 [5,5,3,6,5] = 3
+```
+]
+
+#exercise(sub : "Numerical Diffrentiation")[
+  Using the techniques decribed in numerical integration, create a numerical Diffrentiation function.
+
+  You will need to write the following functions. You will be able to reuse some of the definitions from Numerical integration.
+
+  ```
+  easyDiff :: (Float -> Float) -> Float -> Float -> Float
+  diffrentiate :: (Float -> Float) -> Float -> Float -> [Float]
+  elimerror :: Int -> [Float] -> [Float]
+  order :: [Float] -> Int
+  improve :: [Float] -> [Float]
+  super :: [Float] -> [Float]
+  within :: Float -> [Float] -> Float
+  ans :: (Float -> Float) -> Float -> Float -> Float -> Float
+  ```
+]
+
+#exercise(sub : "Cutting Grass")[
+  After attempting to program in Grass for the entire morning, you decide to go outside and mow some real grass. The grass can be viewed as a string consisting exclusively of the following characters: `wWv`. `w` denotes tall grass which takes $1$ unit of energy to mow. `W` denotes extremely tall grass which takes $2$ units of energy to mow. Lastly $v$ denotes short grass which does not need to be mowed.
+  
+  You decide to mow the grass from left to right (beginning to the end of the string). However, every time you encouter a $v$ (short grass), you stop to take a break to replenish your energy, before carrying on with the mowing. Your task is to calculate the maximum amount of energy expended while mowing. In other words, write a function `energy :: String -> Int` to find the maximum total energy of mowing a patch of grass, that of which does not contain $v$. 
+
+  Examples
+  ```
+  energy "WwwvWWWWvvwwwwwwwvWwWw" = 8
+  energy "w" = 1
+  energy "W" = 2
+  energy "vwww" = 3
+  energy "vWWW" = 6
+  energy "v" =  0
+  energy "vvvvvvv" = 0
+  energy "vwvWvwvWv" = 2
+  energy "vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwwwv" = 21
+  energy "vWWWWWWWWWWvwwwwwwwwwwwwwwwwwwwv" = 20
+  energy "vvWvv" = 2
+  ```
+]
 
 
-// A Sumac sequence starts with two non-zero integers 𝑡1
-//  and 𝑡2.
 
-// The next term, 𝑡3=𝑡1−𝑡2
-
-// More generally, 𝑡𝑛=𝑡𝑛−2−𝑡𝑛−1
-
-// The sequence ends when 𝑡𝑛≤0
-// . All values in the sequence must be positive.
-
-// Challenge
-// Given two integers 𝑡1
-//  and 𝑡2
-// , compute the Sumac sequence, and output its length.
-
-// If there is a negative number in the input, remove everything after it, and compute the length.
-
-// You may take the input in any way (Array, two numbers, etc.)
-
-// Test Cases
-// (Sequence is included for clarification)
-
-// [t1,t2]   Sequence          n
-// ------------------------------
-// [120,71]  [120,71,49,22,27] 5
-// [101,42]  [101,42,59]       3
-// [500,499] [500,499,1,498]   4
-// [387,1]   [387,1,386]       3
-// [3,-128]  [3]               1
-// [-2,3]    []                0
-// [3,2]     [3,2,1,1]         4
-// Scoring
-// This is code-golf. Shortest answer in each language wins.
 
 // In some use cases, the intermediate results in a fold are of interest in themselves. For instance, let's say you have an Elo rating calculator which folds match results grouped by tournament into player ratings. If you change the fold into a scan, you get the rating evolution of the players from tournament to tournament.
 
@@ -1297,4 +1691,4 @@ This will be the end of my discussion of this. The major use of segmented scan i
 // 	year = {1999},
 // 	pages = {355--372},
 // 	file = {PDF:/Users/deepthought/Zotero/storage/V2YXXW7E/Hutton - 1999 - A tutorial on the universality and expressiveness of fold.pdf:application/pdf},
-}
+

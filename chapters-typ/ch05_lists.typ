@@ -709,3 +709,212 @@ fibs = l 0 1 where l a b = a : l b (a+b)
 ```
 
 Since we obviously cannot view the entirety of an infinite list, it is advisable to use `take` to view an initial section of the list, rather than the whole thing.
+
+== Excercises
+
+#exercise(sub : "Ballons")[
+In an ICPC contest, balloons are distributed as follows: 
+- Whenever a team solves a problem, that team gets a balloon.
+- The first team to solve a problem gets an additional balloon.
+
+A contest has 26 problems, labelled $A,B, dots, Z$. You are given the order of solved problems in the contest, denoted as a string $s$, where the $i$-th character indicates that the problem $s_i$ has been solved by some team. No team will solve the same problem twice.
+
+Write a function `balloons :: String -> Int` to determine the total number of balloons used in the contest. Note that some problems may be solved by none of the teams.
+
+Example : 
+
+```
+balloons "ABA" = 5
+balloons "A" = 2
+balloons "ORZ" = 6
+balloons "BAAAA" = 7
+balloons "BAAAA" = 7
+balloons "BKPT" = 8
+balloons "BKPT" = 8
+balloons "HASKELL" = 13
+```
+]
+
+#exercise(sub : "Neq Array (INOI 2025 P1)")[
+Given a list $A$ of length $N$, we call a list of integers $B$ of length $N$ such that:
+- All elemeents of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
+- $B$ is non-decreasing, ie $B_1 <= B_2 <= dots <= B_N$
+- $forall 1 <= i <= N, B_i = A_i$
+
+Let $op("neq") (A)$ denote the minimum possible value of the last element of $B$ for a valid array $B$.
+
+Write a function `neq :: [Int] -> Int` that takes a list $A$ and returns the $op("neq") (A)$.
+
+Example : 
+```
+neq [2,1] = 2
+neq [1,2,3,4] = 5
+neq [2,1,1,3,2,1] = 3
+```
+]
+
+#exercise(sub : "Kratki (COCI 2014)")[
+Given two integers $N$ and $K$, write a function `krat :: Int -> Int -> Maybe [Int]` which constructs a permutation of numbers from $1$ to $N$ such that the length of its longest monotone subsequence (either ascending or descending) is exactly $K$ or declare that the following is not possible.
+
+A monotone subsequence is a subsequence where elements are either in non-decreasing order (ascending) or non-increasing order (descending).
+
+
+Example:
+```
+krat 4 3 = Just [1,4,2,3]
+krat 5 1 = Nothing
+krat 5 5 = Just [1,2,3,4,5]
+```
+For example 1: The permutation (1, 4, 2, 3) has longest ascending subsequence (1, 2, 3) of length 3, and no longer monotone subsequence exists.
+For example 2: It's impossible to create a permutation of 5 distinct numbers with longest monotone subsequence of length 1.
+For example 3: The permutation (1, 2, 3, 4, 5) itself is the longest monotone subsequence of length 5.
+]
+
+#exercise(sub : "Putnik (COCI 2013")[
+  Chances are that you have probably already heard of the travelling salesman problem. If you have, then you are aware that it is an NP-hard problem because it lacks an efficient solution. Well, this task is an uncommon version of the famous problem! Its uncommonness derives from the fact that this version is, actually, solvable.
+
+  Our vacationing mathematician is on a mission to visit $N$ cities, each exactly once. The cities are represented by numbers $1, 2, dots, N$. What we know is the direct flight duration between each pair of cities. The mathematician, being the efficient woaman that she is, wants to modify the city visiting sequence so that the total flight duration is the minimum possible.
+
+  Alas, all is not so simple. In addition, the mathematician has a peculiar condition regarding the sequence. For each city labeled $K$ must apply: either all cities with labels smaller than $K$ have been visited before the city labeled $K$ or they will all be visited after the city labeled $K$. In other words, the situation when one of such cities is visited before, and the other after is not allowed.
+  
+  Assist the vacationing mathematician in her ambitious mission and write a function `time :: [[Int]] -> Int` to calculate the minimum total flight duration needed in order to travel to all the cities, starting from whichever and ending in whichever city, visiting every city exactly once, so that her peculiar request is fulfilled.
+Example : 
+```
+time [
+  [0,5,2],
+  [5,0,4], 
+  [2,4,0]] = 7
+
+
+time [
+  [0,15,7,8],
+  [15,0,16,9],
+  [7,16,0,12],
+  [8,9,12,0]] = 31
+]
+```
+In the first example: the optimal sequence is 2, 1, 3 or 3, 1, 2. The sequence 1, 3, 2 is even more favourable, but it does not fulfill the condition.
+In the second example: the sequence is either 3, 1, 2, 4 or 4, 2, 1, 3.
+]
+
+#exercise(sub : "Look and Say")[
+Look-and-say sequences are generated iteratively, using the previous value as input for the next step. For each step, take the previous value, and replace each run of digits (like 111) with the number of digits (3) followed by the digit itself (1).
+
+For example:
+
+- $1$ becomes $11$ ($1$ copy of digit $1$).
+- $11$ becomes $21$ ($2$ copies of digit $1$).
+- $21$ becomes $1211$ (one $2$ followed by one $1$).
+- $1211$ becomes $111221$ (one $1$, one $2$, and two $1$s).
+- $111221$ becomes $312211$ (three $1$s, two $2$s, and one $1$).
+
+Write function `lookNsay :: Int -> Int` which takes an number and generates the next number in its look and say sequence.
+]
+
+#exercise(sub : "Triangles (Codeforces)")[
+  Pavel has several sticks with lengths equal to powers of two. He has $a_0$ sticks of length $2^0=1$, $a_1$ sticks of length $2^1 = 2$, ..., $a_n$ sticks of length $2^n$.
+  
+  Pavel wants to make the maximum possible number of triangles using these sticks. The triangles should have strictly positive area, each stick can be used in at most one triangle.
+  
+  It is forbidden to break sticks, and each triangle should consist of exactly three sticks. Write a function `triangles :: [Int] -> Int]` to find the maximum possible number of triangles.
+
+Examples
+```
+triangles [1,2,2,2,2] = 3
+triangles [1,1,1] = 0
+triangles [3,3,3] = 1
+```
+In the first example, Pavel can, for example, make this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^4,2^4), (2^1,2^3,2^3), (2^1,2^2,2̂2)$.
+
+In the second example, Pavel cannot make a single triangle.
+
+In the third example, Pavel can, for example, create this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^0,2^0), (2^1,2^1,2^1), (2^2,2^2,2^2)$.
+]
+
+#exercise(sub : "Thanos Sort (Codeforces)")[
+  Thanos sort is a supervillain sorting algorithm, which works as follows: if the array is not sorted, snap your fingers\* to remove the first or the second half of the items, and repeat the process.
+  
+  Given an input list, what is the size of the longest sorted list you can obtain from it using Thanos sort? Write function `thanos :: Ord a => [a] -> Int` to determine that.
+
+\* Infinity Gauntlet required.
+
+
+Examples
+```
+thanos [1,2,2,4] = 4
+thanos [11, 12, 1, 2, 13, 14, 3, 4] = 2
+thanos [7,6,5,4] = 1
+```
+
+In the first example the list is already sorted, so no finger snaps are required.
+
+In the second example the list actually has a subarray of 4 sorted elements, but you can not remove elements from different sides of the list in one finger snap. Each time you have to remove either the whole first half or the whole second half, so you'll have to snap your fingers twice to get to a 2-element sorted list.
+
+In the third example the list is sorted in decreasing order, so you can only save one element from the ultimate destruction.
+]
+
+#exercise(sub : "Deadfish")[
+Deadfish XKCD is a fun, unusual programming language. It only has one variable, called $s$, which starts at $0$. You change $s$ by using simple commands.
+
+Your task is to write a Haskell program that reads Deadfish XKCD code from a file, runs it, and prints the output.
+
+Deadfish XKCD has the following commands:
+
+#table(
+  columns: 2,
+  [*Command*], [*What It Does*],
+  [x], [Add $1$ to $s$.],
+  [k], [print $s$ as a number.],
+  [c], [Square $s$,],
+  [d], [Subtract $1$ from $s$.],
+  [X], [Start defining a function (the next character is the function name).],
+  [K], [Print $s$ as an ASCII character.],
+  [C], [End the function definition or run a function.],
+  [D], [Reset $s$ back to 0.],
+  [{}], [Everything inside curly braces is considered a comment.]
+)
+
+Extra Rules:
+
+- $s$ must stay between $0$ and $255$.
+- If $s$ goes above $255$ or below $0$, reset it back to $0$.
+- Ignore spaces, newlines, and tabs in the code.
+- Other characters (not commands) work differently depending on the subtask.
+
+While you can do the whole exercise in one go, we reccomend doing the following subtasks in order.
+
+1. Basic (x, k, c, d only)
+`run "xxcxkdk" = "54"`
+
+2. Extended (add K, D)
+`run "xxcxxxxcxxxxxxxxK" = "H"`
+
+3. Functions (all commands)
+`run "XUxkCxxCUCUCU" = "345"`
+
+4. Comments (ignore {})
+Ignore content inside curly braces.
+
+*Hint*: Don't be afraid to use tuples!
+]
+
+#exercise(sub : "Weakness and Poorness (Codeforces)")[
+You are given a sequence of $n$ integers $a_1, a_2,dots, a_n$.
+
+Write a function `solve :: [Int] -> Float` to determine a real number $x$ such that the weakness of the sequence $a_1 - x, a_2 - x, dots , a_n - x$ is as small as possible.
+
+The weakness of a sequence is defined as the maximum value of the poorness over all segments (contiguous subsequences) of a sequence.
+
+The poorness of a segment is defined as the absolute value of sum of the elements of segment.
+
+Examples
+```
+solve [1,2,3] = 2.0
+solve [1,2,3.4] = 2.5
+```
+Note
+For the first case, the optimal value of $x$ is $2$ so the sequence becomes  $- 1, 0, 1$ and the max poorness occurs at the segment $-1$ or segment $1$.
+
+For the second sample the optimal value of $x$ is $2.5$ so the sequence becomes  $- 1.5,  - 0.5, 0.5, 1.5$ and the max poorness occurs on segment $-1.5, -0.5$ or $0.5, 1.5$.
+]
+
