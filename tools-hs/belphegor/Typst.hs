@@ -15,7 +15,7 @@ highlight :: ContentWrapper -> ContentWrapper
 highlight = Wrap <$> ( ("#box(stroke:red,inset:2pt)["++).(++"]") . unWrap )
 
 appendLnBrk :: ContentWrapper -> ContentWrapper
-appendLnBrk = Wrap <$> ( (++" \\ ") . unWrap )
+appendLnBrk = Wrap <$> ( (++" \\ \n") . unWrap )
 
 newtype Raw = Raw String deriving (Eq, Ord, Show)
 
