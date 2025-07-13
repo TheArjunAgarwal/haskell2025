@@ -8,8 +8,8 @@
 #import "@preview/codly-languages:0.1.1": *
 
 #let fonts = (
-  text: ("Libertinus Serif", "Noto Serif CJK TC", "Noto Color Emoji"),
-  sans: ("Noto Sans", "Noto Sans CJK TC", "Noto Color Emoji"),
+  text: ("Atkinson Hyperlegible", "Libertinus Serif", "Noto Serif CJK TC", "Noto Color Emoji"),
+  sans: ("Atkinson Hyperlegible", "Noto Sans", "Noto Sans CJK TC", "Noto Color Emoji"),
   mono: ("Fira Code"),
 )
 

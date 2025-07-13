@@ -9,9 +9,6 @@
 
   set par( leading : 3.5em )
   
-  set page( header : none, fill: rgb("FDF6E3"))
-  set text(fill: rgb("375E97"))
-  
   set align( center + horizon )
   
   text( 
@@ -132,9 +129,9 @@
   }
     
   // heading formatting choices
-  show heading.where(level: 2): set text(size: 16pt)
-  show heading.where(level: 3): set text(size: 14pt)
-  show heading.where(level: 4): set text(size: 12pt)
+  show heading.where(level: 2): set text(size: 16pt, font: "Libertinus Serif")
+  show heading.where(level: 3): set text(size: 14pt, font: "Libertinus Serif")
+  show heading.where(level: 4): set text(size: 12pt, font: "Libertinus Serif")
 
   set heading(numbering: (..nums) => {
     text(fill:gray,

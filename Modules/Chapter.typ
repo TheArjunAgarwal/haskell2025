@@ -9,6 +9,7 @@
     set par( leading: 0.35em, justify: false)
     
     text( 
+      font : "Libertinus Serif",
       size : 45pt , 
       { 
         set heading(numbering : it => {})
@@ -17,6 +18,7 @@
     )
 
     text( 
+      font : "Libertinus Serif",
       size : 16pt , 
       emph( author ) 
     )
@@ -41,6 +43,7 @@
   set page(
     header : align(right,{
       text( 
+        font : "Libertinus Serif",
         weight : "extrabold" , title 
       )
       // [ -- ]

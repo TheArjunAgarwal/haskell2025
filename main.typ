@@ -27,8 +27,10 @@ set page(numbering: "i") ; counter(page).update(1)
 Book.copyright_declaration(title:title,author:author)
 
 Book.dedication([To someone])
-
+    
 Contents.contents
+
+set text(font: "Atkinson Hyperlegible")
 
 set page(numbering: "1") ; counter(page).update(1)
 
