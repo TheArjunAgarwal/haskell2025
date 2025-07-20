@@ -668,7 +668,7 @@ $ #tree((`(:)`,`x1`,(`(:)`,`x2`,(`(:)`,`x3`,(far_away(`(:)`),`xn`,`[]`))))) $
 
 This is the representation that Haskell actually uses to store lists.
 
-= Dark Magic
+= Dark Magic <dark_magic>
 
 We can use our arithmetic progression notation to generate infinite arithmetic progressions.
 ```

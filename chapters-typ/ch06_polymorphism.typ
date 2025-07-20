@@ -14,7 +14,7 @@
 
 Functions are our way, to interact with the elements of a type, and one can define functions in one of the two following ways:
 + Define an output for every single element.
-+ Consider the general behaviour of elements, that is, the functions are defined on them and how one combine simpler functions defined on an element to define more complicated ones.
++ Consider the general property of elements, that is, how they look like, and the functions defined on them.
 
 And we have seen how to define functions from a given type to another given type using the above ideas, for example:
 
@@ -123,7 +123,7 @@ drop n (x:xs) = drop (n-1) xs
 ```
 The polymorphism of this function is shown in the type *`drop :: Integer -> [a] -> [a]`* where we have used the variable `a` (usually called a type variable) instead of explicitly mentioning a type. 
 
-The goal of polymorphic functions is to let us *abstract* over a collection of types. That take a collection of types, based on some common property (either shape, or behavior, maybe both) and treat that as a collection of elements. This lets us build functions that work on "all lists" or "all maybe types" and so on. 
+The goal of polymorphic functions is to let us *abstract* over a collection of types. That take a collection of types, based on some common property (either shape, or behaviour, maybe both) and treat that as a collection of elements. This lets us build functions that work on "all lists" or "all maybe types" and so on. 
 
 The example @code_of_drop brings together all types of lists and only looks at the _shape_ of the element, that of a list, and does not look at the bhevaiour at all. This is shown by using the type variable `a` in the definition, indicating that we don't care about the properties of the list items.
 
@@ -131,7 +131,13 @@ The example @code_of_drop brings together all types of lists and only looks at t
 A nice exercise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
-We have now given a type to one of the 3 functions discussed above, by giving a way to group together types by their common _shape_. This is not enough to give types of the other two functions (`(==)` and `elem`), for that we will need a way to group together types by shared _bhehaviour_, which we will see in the next section.
+We have now given a type to one of the 3 functions discussed above, by giving a way to group together types by their common _shape_. This is not enough to give types of the other two functions (`(==)` and `elem`), to do so we define the following:
+
+#def(sub: "Behaviour")[
+    Given a type `T`, the *behaviour* of the elements in `T` is the set of definable functions whose type includes `T`. 
+]
+
+We use this to define the two types of polymorphism, one of which we have already seen in this section, and we will look at the other one more deepy in the next.
 
 #def(sub: "2 Types of Polymorphism")[
 - Polymorphism done by grouping types that with common _shape_ is called *Parametric Polymorphism*.

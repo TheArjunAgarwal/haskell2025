@@ -208,17 +208,6 @@ Now consider the following example: You are trying to braid your (or your long h
 - You either swapped the middle bunch with the left, or with the right bunch and kept doing this.
 This is another example of a *generated* set, but here there are no extra rules other than the starting element and the operations (unlike the restrictions imposed by the geometry of the chessboard). In such cases we say that the set is *freely generated* (free as is no restrictions). A very useful fact about such sets is that each element can be identified with the sequence of operations used to create them, in fact a lot of the times this is how people talk about elements of freely generated sets.
 
-#def(sub: "Freely Generated Sets")[
-Given a collection of of *base values* $cal(B)= {b_1,b_2... b_n}$ and a collection of *operationd* $cal(F)={f_1,f_2, ... f_m}$ we say that a set $S$ is freely generated from $cal(B)$ using $cal(F)$ if $S$ satisfies the following properties:
-- $cal(B) subset.eq S$, that is, all the base values are in the set.
-- Given $s_1,s_2...s_n in S$ and any $f in cal(F)$ we have that $f(s_1,s_2... s_n)in S$.
-- If there are 2 elements in $S$ constructed as $s_1 = f_1(v_1,v_2...v_p)$ and $s_2 = f_2(w_1,w_2...w_q)$ such that $s_1 = s_2$, then we can say that
-    - $f_1 = f_2$,
-    - $p = q$ and
-    - $v_1 = w_1$, $v_2= w_2$... $v_p = w_q$
-- $S$ is the smallest such set satisfying these properties.
-]
-
 Now we see some more examples.
 
 === Natural Numbers as Inductive Types
@@ -242,8 +231,8 @@ This way is very similar to how mathematicians usually formalize natural numbers
 - $0$ is a natural number 
 - Natural numbers are closed under the $"succ"$ operation 
 - For each number $x$ that is not $0$, there is a unique number $y$ such that $x= "succ" y$
-- $0$ is not the successor of any number.
-].
+- $0$ is not the successor of any number
+The first 2 rule are given in the definition, the next 2 are subsumed in the definition of "free generation".].
 
 These "freely generated sets" are what programmers call Inductive types, and one can define the type of natural numbers in haskell as follows:
 ```
@@ -310,7 +299,7 @@ Fixing as `A` as `Integer` for now `Nil` represents `[]` and `Cons` takes an int
 This idea is very much inspired by the concept of #link(<curry>)[Currying] which was discussed in #ref(<curry>).
 
 
-== (Not Quite) Inductive Types (as a Programmer) <nqit>
+== (Not Quite) Inductive Types (as a Programmer)
 
 As a programmer, we will be using these types as a _blueprint_ for the shape of the element in the type. Specifically to indicate that an element is created by combining other elements of the type together, hence, these are also called *recrusive datatypes*.
 
@@ -371,21 +360,21 @@ We will now justify the satement made there:
 *In fact, any object in Haskell is internally modelled as a tree-like structure.*
 ]
 
-We will now see that Haskell verifies that the element `ex` (from @code_of_expr_example) is an `Expr` using a procedure that is very similar to what was defined in @definition_of_tree.
+We will now see that Haskell verifies that the element `ex` (from @code_of_expr_example) is a `Tree` using a procedure that is very similar to what was defined in @definition_of_tree.
 
 - We see that the value `ex` is created using the constructor `Add`, so it must produce an `Expr`, now we need to make sure that both  of its arguments are also of type `Expr`.
     - The fisrt argument of the above is `Val 3.0` which defines a `Expr`.
     - The second argument of the above constructor is also `Add` so it must produce an `Expr` given that both its arguments are also of type `Expr`.
         - The first argument to this is produced using the constructor `Mul` hence it must produce an element of type `Expr` given the correct arguments.
             - Its first argument is `Val 5.0`
-            - Its second argument is `Val 10.0`, both of which are `Expr`.
-        - The second argument to the `Add` is constructed using `Div`, so it must be a tree given both its arguments are `Expr`.
-            - Its first argument is constructed using `Exp`, so it must be a `Expr` given its arguments are also `Expr`
+            - Its second argument is `Val 10.0`, both of which are trees
+        - The second argument to the `Add` is constructed using `Div`, so it must be a tree given both its arguments are trees
+            - Its first argument is constructed using `Exp`, so it must be a tree given its arguments are also trees
                 - Its first argument is `Val 8.0`
-                - Its second argument is `Val 3.0`, both of which are `Expr`.
-            - Its second argument is `Val 2.0` which is a `Expr`.
-
-by simply checking that all constructors get inputs of the correct type, Haskell has gone through the procedure defined in @definition_of_tree to check that the element `ex` is well defined.
+                - Its second argument is `Val 3.0`, both of which are trees.
+            - Its second argument is `Val 2.0` which is a tree
+        
+Hence by simply checking that all constructors get inputs of the correct type, Haskell has gone through the procedure defined in @definition_of_tree to check that the element `ex` is well defined.
 
 === Trees as Inductive Types <treei>
 
@@ -442,7 +431,7 @@ Here unlike the (not necessarily binary) tree, we don't allow leaves to hold val
 
 ```
 -- | Btree 
-data Btree a = BNode {left :: Btree a, Val :: a, right :: Btree a}
+data BTree a = BNode {left :: Btree a, Val :: a, right :: Btree a}
              | Leaf
 ```
 
@@ -482,64 +471,6 @@ $
 
 Write a function `treeToBtree::Tree a -> Btree a` to convert to a tree. Also write the function `btreeToTree::Tree a -> Maybe (Btree a)` and show why `Maybe` is required here.
 ]
-
-=== Addressing the "Not Quite"...
-The title of @nqit is *(Not Quite) Inductive Types (as a Programmer)*. Turns out that while we have been discussing inductive types this entire section of the chapter, because of the way haskell works, all of the types that we have defined like :
-- `Nat`
-- `Expr`
-- `Tree`
-- `Btree`
-- `List`
-aren't exactly inductive types, a consequence of this is that the type `Nat` isn't exactly the set $NN$ either.
-
-The culprit here is laziness and its exactly what was discussed in @dark_magic, that is infinite elements, to understand that one of the important points in @definition_of_Freely_Generated_Sets is that that the set that is being generated must be the *smallest* set that satisfies the other properties given in the definition.
-
-Consider the case of the type `Nat = Zero | Succ Nat`, this is supposed to represent the set $NN$ and it satisfies all the properties fo a freely generated set, aka an inductive type except for one: The one about $NN$ being the smallests set that satisfies the given properties because of the following extra elements:
-```
-infinity :: Nat
-infinity = Succ infinity
-
--- so the element looks like
--- infinity = Succ( Succ( Succ( Succ( Succ( Succ...)))))
-``` 
-So Haskell is letting the `infinity` sneak into our type `Nat`. 
-
-The same also holds for all of the other types where we can define
-```
-inflist :: a -> [a]
-inflist a = a : inflist a 
--- which is simply
--- a : a : a : a : a ...
-```
-
-And even infinite expressions like 
-```
-infexpr :: Double -> Expr 
-infexpr x = Add x (infexpr x)
-```
-which is a funny term that is simply evalutates to 
-```
-infexpr x = x + x + x + x + ...
-```
-One can make weirder terms that make even less sense than the above and are encouraged to do so, its fun.
-
-There is a formal way to reason about such infinite data structures, and this feature is captured in programming languages like Lean and Agda and is called *coinduction*, but we will not be discussing it. 
-
-We still chose to put emphasis on *inductive datatypes* as we think that its an idea helpful in designing programs. A lot of the functions that we have discussed so far, like 
-- `eval` from @exercise_of_Evaluate_and_extend
-- `depth` and `size` from @exercise_of_Tree_Functions
-- `natToInteger` from @code_of_nat_and_integer
-
-and many more from the list chapter and so on are designed with the idea of inductive types. The purpose of types, as discussed, was to be able to give information to the Haskell compiler about what the functions should expect as an argument, this is one of the places where the Haskell type system fails to express that.
-
-Nonetheless, most of the time people do tend to asssume that the functions are going to get arugments that are finite, which is reasonable in most cases, for example if you are writing a full fledged calculator, using the type described in @calc, it would involve something like
-- Being able to take a string input
-- Parse it into an `Expr` element
-- Evaluate it and return the answer 
-
-In such cases it is very easy to make sure that expressions are going to be finite (I don't any user has enough free time to enter an infinite expression).
-
-If you are disappointed by the fact that the Haskell compiler is letting a potential error pass through, not that the alternative would be, being able to prove that all programs in haskell would terminate. This problem is a version of the *Halting Problem* which is one of the most famous problems in computer science and, in some sense, is the problem that the field of modern computer science stems from. Alan Turing proposed this problem and prove that it is _unsolvable_, so it simply isn't possible for a language like haskell to check for infinite structures like this. Languages like Lean and Adga achieve this by also disallowing some programs that do terminate. These languages are not Turing Complete (its not possible to write every valid program in this language).
 
 = Same Same but Different
 This section is a bit differnt from the previous one, the goal here is not to create new types but to repurpose the old ones.
