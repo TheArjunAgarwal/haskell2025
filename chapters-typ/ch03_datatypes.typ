@@ -1220,6 +1220,19 @@ ratingCon 3500 = 27
 ```
 ]
 
+#exercise(sub : "Knuth's Arrow")[
+  Knuth introduced the following notation for a family of math notation:
+  $
+  3 dot 4 = 12\
+  3 arrow.t 4 = 3 dot (3 dot (3 dot 3)) = 3^4 = 81\
+  3 arrow.t arrow.t 4 = 3 arrow.t (3 arrow.t (3 arrow.t 3)) = 3^(3^3^(3)) = 3^7625597484987\ 
+  approx 1.25801429062749131786039069820328121551804671431659601518967 × 10^3638334640024 \
+  3 arrow.t arrow.t arrow.t 4 = 3 arrow.t arrow.t (3 arrow.t arrow.t (3 arrow.t arrow.t 3))
+  $
+
+  You can see the pattern as well as the extreame growth rate. Make a function `knuthArrow :: Integer -> Int -> Integer -> Integer` which takes the first argument, number of arrows and second argument and provides the answer.
+]
+
 
 
 // Suggest that we add a section about types and correctness of code.
