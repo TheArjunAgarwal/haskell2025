@@ -1,0 +1,58 @@
+name: Compile Typst if 24h since last run
+
+on:
+  push:
+    branches:
+      - main  # or your default branch
+
+jobs:
+  compile-typst:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Typst
+        run: |
+          curl -L https://github.com/typst/typst/releases/latest/download/typst-x86_64-linux.tar.xz -o typst.tar.xz
+          tar -xf typst.tar.xz
+          sudo mv typst-x86_64-linux/typst /usr/local/bin
+
+      - name: Get timestamp of last successful run
+        id: last-run
+        uses: actions/cache@v4
+        with:
+          path: .last_success_time
+          key: last-success-${{ github.run_id }}
+
+      - name: Check if 24 hours have passed
+        id: check-time
+        run: |
+          now=$(date +%s)
+          if [ -f .last_success_time ]; then
+            last=$(cat .last_success_time)
+          else
+            last=0
+          fi
+
+          diff=$((now - last))
+          echo "Time since last success: $diff seconds"
+          if [ "$diff" -gt 86400 ]; then
+            echo "Should run=true" >> $GITHUB_OUTPUT
+          else
+            echo "Should run=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Compile Typst
+        if: steps.check-time.outputs.Should == 'true'
+        run: |
+          mkdir -p $HOME
+          typst compile main.typ $HOME/main.pdf
+          echo "$(date +%s)" > .last_success_time
+
+      - name: Cache new timestamp
+        if: steps.check-time.outputs.Should == 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: .last_success_time
+          key: last-success-${{ github.run_id }}
