@@ -2,7 +2,6 @@
 #import "../Modules/Exercise.typ" : exercise
 #import "../Modules/Tree.typ" : tree
 #import "../Modules/Tree.typ" : far_away
-#import "../Modules/Code.typ" : unligate
 
 #let definition = def
 #let example = it => [For example - \ #it]
@@ -775,7 +774,7 @@ sumlength :: [Int] -> (Int, Int)
 sumlength = foldr (\x (a,b) -> (a+x, b + 1)) (0,0)
 ```
 
-This might seem simple enough, but this idea can be taken to a different level rather immidietly.
+This might seem simple enough, but this idea can be taken to a diffrent level rather immidietly.
 #exercise(sub : "Ackerman Function")[
 The Ackerman function is defined as follows:
 ```
@@ -1105,172 +1104,6 @@ segScan f flag str = scanl (\r (x,y) -> if x then y else r `f` y) (head str) (ta
 This might seem complex but we are merely `zip`-ing the flags and input values, and defining a new function, say `g` which applies the function `f`, but resets to `y` (the new value) whenever `x` (the flag) is `True`. The `head` and `tail` are to ensure that the first element is the beginning of the first segment. 
 
 This will be the end of my discussion of this. The major use of segmented scan is in parallel computation algorithms. A rather complex quick sort parallel algorithm can be created using this as the base.
-
-= Path Finding : A Case Study
-You're stuck in a maze, you have the entire layout with you, but its to complicated for you to do it in your head, or on paper, so you decide to write a haskell program to do it. The format is pretty standard, you're in a square grid, with some walls and the other paths are free for you to walk through and you need to get to the exit from your location. Lists will be important in solving this as we will use them to capture the fact that from each point we can move in multiple directions.
-
-== Setup
-
-The inputs are precisely laid out to you in the following format:
-
-```
--- input:
-type Position = (Integer, Integer)
-data Maze = Maze { 
-  size  :: (Integer, Integer), 
-  -- top right corner of the maze, (0,0) is assumed to be the bottom left.
-  walls :: [Position], -- positions of blocks
-  start :: Position,   -- starting position 
-  goal  :: Position    -- ending position
-}
-```
-
-The plan for solving the maze is to explore outwards from the starting position:
-- Begin with the starting position 
-- Look at all the places you can reach in 1 move (left, right, up or down unless blocked or out of bounds)
-    - If that gets you to the goal, then yay! We are done
-    - Otherwise, start the previous step from all of the new places visited
-    
-Note that on step $n$ we would have explored all positions we can reach after $n$ steps.
-
-#exercise(sub: "maze exploration")[
-If we follow the above algorith, after following it for $n$ steps, will would have explored all positions that we can reach from the `start` after at most $n$ steps. Prove this using induction.
-]
-
-== Next Step
-
-The most important function in carrying out our algorithm is the `next` function, which we will describe as follows:
-
-```
--- | next
-next :: Maze -> Position -> [Position]
-next m (a, b) = filter bounded $ filter notWall $ [up, down, left, right]
-  where
-    -- possible moves
-    up    = (a, b+1)
-    down  = (a, b-1)
-    left  = (a-1, b)
-    right = (a+1, b)
-
-    -- checking that we don't move into a wall  
-    notWall :: Position -> Bool 
-    notWall p = not (position `elem` (walls m))
-  
-    (x, y) = size m
-    -- checking that we don't move outside of the maze
-    bounded :: Position -> Bool 
-    bounded (p, q) = p >= 0 && q >= 0 && p < x && q < y 
-```
-
-This is great, and now we need to keep applying it repeatedly until we get to the goal, we also need to keep track of the path we took, and some other things, but baby steps.
-
-== Extending path 
-Since our goal is to find a path from the start position to the goal, we should give it some more attention. This is fairly easy though, a path is just going to be a sequence of positions, that we will make sure represent adjacent squares, then a solution would just be path with one of the ends being the start position and the other end being the goal, and that is what we will be looking for.
-
-So first we define 
-
-```
-type Path = [Position]
-```
-
-And now we use @code_of_next to define the function `extPath` which extends a path by one step, since there can be multiple ways to extend a path, we will return `[Path]` for the output. 
-
-```
--- | extend path 
-extPath :: Maze -> Path -> [Path]
-extPath m p | null p = [] 
-            | otherwise =  (:p) <$> filter newPlace nexts 
-              -- extend to new locations
-  where 
-    nexts = next m (head p) -- places the path can extend to
- 
-    --  make sure path does loop back into itself
-    newPlace :: Position -> Bool
-    newPlace pos = not (pos `elem` p)  
-```
-
-#exercise(sub: "Fast solver")[
-While extending paths, we put a restriction that the path cannot go over the same position multiple times, this makes our solver significantly more efficient. Another very useful way in which we can optimizie this is to do the following instead:
-- Keep track of all the positions that have been observed yet, and make sure when extending the path, the program does not include any of those positions.
-This is an improvement because now a path will not extend to a vertex covered by not just itself, but also other paths.
-]
-== Repeated Extention
-Now the plan is simple. We start with the singleton path, containting only the start position then we keep applying the `extPath` function to whatever we have until we finally get to the goal. 
-
-```
-m :: Maze
-startPos = [start m] :: Path   
-
-ls = extPath startPos :: [Path]
-```
-
-And we can't apply `extPath` to this anymore. We can use the map function to apply the `extPath` to all the paths in the list, but then we will end up getting an element of `[[Path]]`. This is very similar to the problem discussed in @exercise_of_Beyond_map.
-
-```
-f :: a -> Maybe b
-g :: b -> Maybe c
- 
-h x = g <$> f x :: a -> Maybe (Maybe c)
-
-f' :: a -> [b]
-g' :: b -> [c]
- 
-h' x = g' <$> f' x :: a -> [[c]]
-```
-
-Just like @exercise_of_Beyond_map we will write our own way of composing functions and use that instead.
-
-In our case, we start with `[Path]`, and then for each path in the list, which put together gives us `[[Path]]`, but we can concatenate all the lists together and see that this is exactly wanted! 
-
-```
-(>>=) ::  [a] -> (a -> [b]) -> [b]
-[]     >>= _ = [] 
-(x:xs) >>= f = f x ++ (xs >>= f)
-
-infixl 1 >>=
-```
-Note : The symbol `>>=` is written as #unligate[`>>=`].
-
-Note that `(>>=)` is a modifidation of function application `($)`, the same way `(>=>)` was a modification of function composition `(.)`.
-
-Now we can write a sequence of `extPath` as follows:
-```
-start m & extPath >>= extPath >>= extPath .... 
-```
-
-We can even define something similar to `(>=>)` for lists using `>>=` as follows:
-```
-(>=>) :: (a -> [b]) -> (b -> [c]) -> (a -> [c])
-f >=> g = \x -> (f x >>= g)
-```
-
-== Putting it all together
-We now write the function that will repeatedly apply `extPath` until we find a solution or see that no solution exists.
-
-```
-solve' :: Maze -> [Path] -> Maybe Path
-solve' _ [] = Nothing
-solve' m ps | hasSol ps = Just $ getSol ps
-            | otherwise = solve' m $ ps >>= extPath m
-  where 
-    hasSol :: [Path] -> Bool 
-    hasSol = any (\x -> head x == goal m)
-    getSol :: [Path] -> Path 
-    getSol = head . filter (\x -> head x == goal m)
-```
-
-This function takes in a list of paths then it returs a solution if there is one in the list. Otherwise it tries to extend all paths recursively until a solution is found, or when there are no more paths to check.
-
-And we can finally define 
-```
-solve :: Maze -> Maybe Path 
-solve m | goal m == start m = Just [start m]
-        | otherwise         = solve' m $ extPath m [start m]
-```
-
-#exercise(sub: "Many Paths")[
-Note that there can be multiple solution (0 or more) to the maze. In our case we return `Nothing` if there are no solutions and `Just sol` that returns one out of many solutions. Change the function so that instead of returning one of the solution, it returns a list of all solutions. This means that the type of `solve` will be `solve :: Maze -> [Path]`.
-]
 
 = Excercises
 #exercise(sub : "Factors")[
@@ -1751,6 +1584,36 @@ crack 116401024 97 1024 = Just (11640, 1024)
 crack 284254589153928171911281811000 1009 1000 = Just (2842545891539, 28171911281811000)
 crack 120 12 1 = Nothing
 ```
+]
+
+#exercise(sub : "Mohak has explictly approved this (Codeforces 1874D)")[
+There are `n+1` cities with numbers from `0` to `n`, connected by `n` roads. The `i`-th road connects city `i−1`and city `i`  bi-directionally. 
+
+After Mohak flew back to city 0, he found out that he had left her Miku fufu in city `n`.
+
+Each road has a positive integer level of beauty. Denote the beauty of the `i`-th road as `a_i`.
+
+Mohak is trying to find his fufu. As all Miku fans are obsessive indoor creatues and have no sense of direction and are basically useless without Miku fufu for encouragement, he doesn't know which way to go. Every day, he randomly chooses a road connected to the city she currently is in and traverses it. 
+
+Let `s` be the sum of the beauty of the roads connected to the current city. For each road connected to the current city, Mohak will traverse the road with a probability of `x/s`, where `x` is the beauty of the road, reaching the city on the other side of the road.
+
+Mohak starts in cuty `0` and Fufu is in city `n`.
+
+In order to help Mohak, you want to choose the beauty of the roads such that the expected number of days Mohak takes to find his fufu will be the minimum possible. However, due to limited funding, the sum of beauties of all roads must be less than or equal to `m`.
+
+Write a function `miku :: Int -> Int -> Float` which takes the value of `m` and `n` and tells us the expected time for Mohak to find his fufu.
+
+Examples
+```
+miku 3 8 = 5.2
+miku 10 98 = 37.721155173329
+```
+Note
+In the first example, the optimal assignment of beauty is 𝑎=[1,2,5]. The expected number of days Mohak needs to get his fufu back is 5.2.
+
+Hint: Let's say you are given the beauty list $a$. Now, how will you compute the expected number of days? Consider $f(i)$ to be expected number of days to reach the $i$-th city. Can you find these recursivly? What about $g(i) = f(i) - f(i-1)$? Can you find a form in terms of $a$, can you use `zipWith` to compute these?
+
+Now, can you make a function to make lists that sum up to $m$ and are of length $n$? You can save a lot of time by imposing one condition on the lists. The idea is that we want to keep moving forward.
 ]
 
 
