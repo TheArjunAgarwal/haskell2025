@@ -436,9 +436,99 @@ Thus, $x < (2N)/3$ for some $n$. Thus, atleast $N/3$  integers exist satisfying 
 = Analysis of Algoritms
 With the (damn scary) math out of the way, we will now move to algoritms and the real reason we are concerned with asymptotics. Take a deep breath, relax; the scary part is beyond us.
 
+Before we get to designing and analyzing algorithms, let's pause and breifly question what ‘algorithm’ actually means. To quote Hannah Fry,
+
+#quote(sub : "Hannah Fry")[
+It’s a term that, although used frequently,
+routinely fails to convey much actual information. This is partly because the word itself is quite vague. Officially, it is defined as follows:
+
+_algorithm (noun): A step-by-step procedure for solving a problem or accomplishing some end especially by a computer._
+
+An algorithm is simply a series of logical instructions that show, from start to finish, how to accomplish a task. By this broad definition, a cake recipe counts as an algorithm. So does a list of directions you might give to a lost stranger. IKEA manuals, YouTube troubleshooting videos, even self-help books – in theory, any self-contained list of instructions for achieving a specific, defined objective could be described as an algorithm. But that’s not quite how the term is used. Usually, algorithms refer to something a little more specific. They still boil down to a list of step-by-step instructions, but these algorithms are almost always mathematical objects. They take a sequence of mathematical operations – using equations, arithmetic, algebra, calculus, logic and probability – and translate them into computer code. They are fed with data from the real world, given an objective and set to work crunching through the calculations to achieve their aim. They are what makes computer science an actual science, and in the process have fuelled many of the most miraculous modern achievements made by machines.
+]
+
+We will take Prof. Fry's defination as the gospel as trying to go into more details will open up questions which are more philosophical than we wish to be here.
+
+== Multiplication
+The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients, let's begin with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. Similerly, if a function calls some other function, we say this call takes $cal(O)(1)$ time.
+
+The naive way to do so would be to define multiplication as repeated addition. Something of the sort `multiply 1 b = b` and the reccurence. `multiply a b = b + multiply (a-1) b`. For two `n` digit numbers, this will take $cal(O)(10^n) dot cal(O)(n) = cal(O)(n 10^n)$ operations as $b < 10^n$ and we need to make $b$ function calls and as many additions with the smallest number of size $n$. That is very bad, we will see the quantitatatives in a moment. #footnote[
+  We obviously know that the function definition is not complete. We need to deal with negitives and zero, but all of that doesn't really change the time complexity.
+]
+
+Notice, this is a departure from our usual method of counting every operation and we are instead taking the big-oh approximation. We will talk why this is a good idea most of the times in some while, but in this case, it is the only way to deal with the mix of operations we are using and reconciling number of operations.
+
+An improvement in the multiplication algorithm, we are already familier with, is the one taught in school. This was also the algorithm Al-Khwarizmi found. The number of operations fort this algorithm is $cal(O)(n^2) + cal(O)(n) cal(O)(n-1) = cal(O)(n)$ as we multiply all the digits in the latter number with the digits in the former number and then add the results suitably one by one. That is in $32 * 45$, we will compute $32 * 5$ and $32 * 4$ and add them.
+
+Doing a lot better than this took about a millenia, with the improvement comming from Anatoly Karatsuba in 1962. The idea used is the usual divide and conquor.
+
+We divide the fist number into $x = a*10^(n/2) + b$ and the second number as $y = c*10^(n/2) + d$. Thus,
+$
+x y = (a*10^(n/2) + b) * (c*10^(n/2) + d)\
+= a c * 10^n + b c * 10^(n/2) + a d * 10^(n/2) + b d
+$
+
+Let's say it take $T(n)$ operations to multiply two $n$ digit numbers. Thus, our problem of multiplying two $n$ digit numbers can be reduced to multiplying two $n/2$ digit number $4$ times. 
+
+$
+T(n) = 4 T(n/2) + cal(O)(n) + cal(O)(1)\
+=> T(n/2) = 4T(n/4) + cal(O)(n/2) + O(1)\
+=> dots
+=> T(n) = 4^(log(n)) + cal(O)(n) cal(1) * log(n)\
+=> T(n) = n^2 + cal(O)(log(n)) = cal(O)(n^2) 
+$
+
+But we didn't do any better! All the effort seems to be in vain. Well, this is where Karatsuba's brillience comes to play.
+$
+x y = a c * 10^n + b c * 10^(n/2) + a d * 10^(n/2) + b d\
+x y = a c * 10^n + (b c + a d) * 10^(n/2) + b d\
+$
+
+We only need three terms. If we could somehow figure out $b c + a d$ without needing to find them both individually. The genius idea was:
+$
+(a+b)(c+d) = a c + b d + (b c + a d)
+$
+and we already have computed $a c$ and $b d$. If we subtract them, we will have the third term. Notice, $a + b, c+d$ are atmost an $n/2+1$ digit numbers. Thus, we can now only make three smaller multiplications. We will claim $T(n + 1) = T(n) + cal(O)(n)$ as we can divide the given $n+1$ digit numbers into two parts, the most significent $n$ digits and then the last digit and complete the computation.
+
+This will give us,
+
+$
+T(n) = 3 T(n/2) + cal(O)(n) + cal(O)(1)\
+=> T(n) = 3^(log(n)) + cal(O)(n) + cal(O)(1) log(n)\
+=> T(n) = cal(O)(n^(log(3))) approx cal(O)(n^(1.6))
+$
+
+This is a lot better. The next improvement came just an year later in 1963 by Tooom and Cook, making it $cal(O)(n^(log_3(5)))$. Here is what we belive their research process looked like:
+#image("../images/multiplication-algo-meme.png")
+
+If you are wondering, they showed that we can break the multiplication in five $n/3$ sized products. Actually, we can split in any number of parts we want. Karatsuba is Toom-2, the $cal(O)(n^(log_3(5)))$ algorithm is Toom-3.  When split in some $k$ parts, the complexity is $cal(O)(n^E)$ where $E = log_k(2k − 1))$.
+
+This can in theory do $cal(O)(1)$ multiplication. As we will see in the upcoming section on the dark secrets of big-oh, $cal(O)$ sweeps the constents under the rug. This works when the rug is heavy, large and the constents tiny. But if, the constent is large: well then $Theta(10^(10^100) n)$ is worse than $ Theta(n^2)$ for all values we could care about, irrespective of the fact the former is $cal(O)(n)$ while the latter is $cal(O)(n^2)$.
+
+Doing an exact complexity analysis can allow us to compute the exact speed of growth of the constent of $cal(O)(n^E)$ (hint: It is basically exponential).
+
+This leads us to the $cal(O)(n log(n) log(log(n)))$ Schönhage–Strassen algorithm (1971) which uses the Discrete Fast Fouries Transform algorithm described in chapter 8. The exact implementation is left as excercise to the morbidly curious. In this paper, Arnold Schönhage and Volker Strassen also conjectured a lower bound of $Omega(n log(n))$.
 
 
+This is about the end of multiplication algorithms I can hope to talk about with the material in this book. Also, the constents hidden by big-oh become so large that most implementations use Karatsuba or Toom-3 till some size and then switch to Schönhage–Strassen. So everything here onwards are just fun facts. 
 
+The next leap came in 2007, when Martin Fürer improved the bound to $cal(O)(n log(n) 2^(cal(O)(log^*(n))))$ where the $log^*(n)$ denotes the number of times we must take $log(n)$ before we go below $1$. This leap was made possible due to half-DFT's, lots of ring theory and complex analysis and certain results about primes of form $p = 2^(2^k) + 1$ turining up true. This algorithm beats Schönhage–Strassen for integers with about $10^19$ digits.
+
+The next improvement came by using number theory inplace of complex analysis and other changes courtasy Anindya De, Piyush P Kurur, Chandan Saha and Ramprasad Saptharishi #footnote[] (2008) which beats this Fürer for numbers with about $10^4796$ digits.
+
+In 2015, David Harvey, Joris van der Hoeven and Grégoire Lecerf gave a new algorithm which replaced the $cal(O)(log^*(n))$ with $3 log^*(n)$. The only issue is that this paper used certain unproven conjuctures on Mersenne primes. 
+
+In 2015-16, in a series of two papers, Svyatoslav Covanov and Emmanuel Thomé first made a new algorithm with same complexity as Fürer and then, using unproven conjuctures on Fermat Primes and genralizations, produced an algorithm where $cal(O)(log^*(n))$ is replaced with $2 log^*(n)$.
+
+Not to be defeated so easily, Harvey and Hoevan snapped back in 2018 with an algorithm which acives the $2 log^*(n)$ complexity without any conjuctures. They use Minkowski's theorem (which funnily was proven in 1889).
+
+And to end this on a win, Harvey and Hoeveen publish the first $cal(O)(n log(n))$ in March 2019.
+
+#quote(sub : "David Harvey and Joris van der Hoeven")[...our work is expected to be the end of the road for this problem, although we don't know yet how to prove this rigorously.”]
+
+So well, can we do better is still an open question.
+
+Anyways, for this paper, they shared the de Bruijn medal in 2022. Well, we have come full circle I guess.
 
 
 // = Exercise

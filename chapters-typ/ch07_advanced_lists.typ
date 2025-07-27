@@ -1755,7 +1755,6 @@ crack 120 12 1 = Nothing
 
 
 
-
 // In some use cases, the intermediate results in a fold are of interest in themselves. For instance, let's say you have an Elo rating calculator which folds match results grouped by tournament into player ratings. If you change the fold into a scan, you get the rating evolution of the players from tournament to tournament.
 
 
