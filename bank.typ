@@ -71,7 +71,7 @@ betterReverse (x:xs) = go (x:xs) [] where
 == Dealing with Characters
 We will now talk about characters. Haskell packs up all the functions relating to them in a module called `Data.Char`. We will explore some of the functions there.
 
-So if you are following along, feel free to enter `import Data.Char` in your ghci or add it to the top of your haskell file.
+So if you are following along, feel free to enter `import Data.Char` in your GHCi or add it to the top of your haskell file.
 
 The most basic and importent functions here are `ord` and `chr`. Characters, like the ones you are reading now, are represented inside a computer using numbers. These numbers are part of a standard called ASCII (American Standard Code for Information Interchange), or more generally, Unicode.
 
