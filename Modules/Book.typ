@@ -137,10 +137,12 @@
 
   set heading(numbering: (..nums) => {
     text(fill:gray,
-      [$section$] +
+      [$section$] + [#h(0.1em)] +
       numbering("1.1.", ..nums)
     )
   })
+
+  set heading(supplement: none)
     
   set par(justify : true)
 
