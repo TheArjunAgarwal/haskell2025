@@ -5,7 +5,7 @@
 #import "../Modules/Code.typ" : unligate
 #import "../Modules/Tree.typ" : tree, dots
 
-= Datatypes (Once Again)
+= Datatypes (Once Again) <data>
 
 In #link(<sets>)[Chapter 4] we saw how Haskell datatypes correspond to sets of values. Like `Integer` is the set of all integers and `String -> Bool` is the set of all functions that take in a `String` as an argument and return a `Boolean` as their output. This was the first time we gave explicit attention to datatypes and learned the following:
 #def(sub: "Types 1")[
@@ -48,28 +48,9 @@ Before getting to defining our own datatypes, its good to remember what the purp
   
 We will now see how to define our own types.
 
-= Type Synonyms
-
-The simpest way in which we can define our own type is by giving another name to an already existing type. This is done using the keyword `type` as follows:
-
-```
--- | type aliases
-type Point = (Integer, Integer)
-type String = [Char] -- This is how Haskell defines String!
-
-type Name = String
-type Age = Integer
-
-type Person = (Name, Age)
-```
-
-note that any type defined using the keyword `type` is simply an alias for another type and Haskell does not treat it any differently.
-
-Nonetheless, this can be very helpful for interpreting the type for a human. For example the type `Person` which is an alias for `(String, Integer)`, when written as `(Name, Age)`, is very clearly meant to be a pair containg the name of a person, and their age, and that the _type_ of object being talked about here is a person.
-
 = Finite Types <fin>
 
-The next step, which is really a big one, is that we will now define our own types, which contain the values that we create, this is done using the `data` keyword.
+The first step we take in defining types is by creating values and put them together in a collection, this is done using the `data` keyword.
 
 ```
 -- | finite types
@@ -105,38 +86,35 @@ These are what we get when take @definition_of_cartesian_product of other, simpl
 - A `Profile` representing a profile on a dating app, which would contain the person's name, their age, some images and more information about them. We will be using the first example to keep things simple.
 - Complex Numbers can be thought of as having 2 components, real and imaginary.
 
-The first way to create a product, which is something we have already seen before is a tuple.
-```
-type Point = (  Int   ,  Int  )
-          --   X-coord  Y-coord
-```
-And we can extract components using `fst` and `snd` functions. (Note `Point` is just a synonym for `(Int, Int)`).
+The first way to create a product, which is something we have already seen before is a tuple. As our example we will consider the type `(Integer, Integer)` which we are supposed to interpret as the the set of points on a 2-dimensional lattice. where the two `Integer`s represent the x and y coordinates of a point on the lattice.
+
+And we can extract components using `fst` and `snd` functions. (Note `Point` is just a synonym for `(Integer, Integer)`).
 
 Another way to do so is to use the `data` keyword again in a much more powerful way!
 ```
-data Point = Coord Int Int -- Constructors can take inputs!
-                 --  X   Y
+data Point = Coord Integer Integer -- Constructors can take inputs!
+                 --  X        Y
 
-x_coord, y_coord :: Point -> Int 
+x_coord, y_coord :: Point -> Integer 
 x_coord (Point x _) = x 
 y_coord (Point _ y) = y
 -- we use underscores to state that we don't care about the value
 ```
-Here we need to define our own functions to extract components as `Point` is differnet from `(Int, Int)`.
+Here we need to define our own functions to extract components as `Point` is differnet from `(Integer, Integer)`.
 
 The second important thing to highlight here is that constructors are functions! They are called so because they "construct" and element of the type associated with them, like `Coord` constructs elements of type `Point`, infact Haskell will even give us a type for it. Constructors for finite types can be thought of as functions that take 0 arguments (so, they just behave as values).
 
 ```
 >>> :t Coord
-Coord :: Int -> Int -> Point
+Coord :: Integer -> Integer -> Point
 ```
 
 Since defining a product type, and then defining functions to extract the components is a fairly common practice, haskell has another way to define product types.
 
 ```
 data Point = Coord {
-  x_coord :: Int,
-  y_coord :: Int
+  x_coord :: Integer,
+  y_coord :: Integer
 }
 
 -- This is how one can create an element!
@@ -158,11 +136,11 @@ Define the dataype `Complex`, we will be looking at this again in later sections
 
 We will once again extend the use of `data` keyword using ideas form #ref(<poly>).
 
-We compared product types with tuples, we even treated `Point` as a special case `(Int, Int)` for a while. Turns out we can define our tuples, in its full generality as follows:
+We compared product types with tuples, we even treated `Point` as a special case `(Integer, Integer)` for a while. Turns out we can define our tuples, in its full generality as follows:
 ```
 Tuple A B = Pair A B 
 
-ex :: Tuple Int String
+ex :: Tuple Integer String
 ex = Pair 5 "Heyy!"
 ```
 
@@ -191,7 +169,7 @@ Either a b = Left a | Right b -- This is how Haskell defines Either types!
 Shape = Circle { radius :: Double } -- Record syntax works!
       | Square { side :: Double }
       | Rectangle { len :: Double, width :: Double }
--- Remember, the records are just syntactic sugar, whicha are converted to
+-- Remember, the records are just syntactic sugar, which are converted to
 -- Shape = Circle Double | Square Double | Rectangle Double Double
 ```
 
@@ -202,7 +180,7 @@ area :: Shape -> Double
 area (Circle r)      = pi * r * r
 area (Square s)      = s * s
 area (Rectangle l b) = l * b
--- If this doesn't make a lot of sense, read the comment below the definition of the type.
+-- If this doesn't make a lot of sense, read the comment below the definition of the type Shape.
 ```
 
 #exercise(sub : "Better Dating Profile")[
@@ -230,6 +208,17 @@ Now consider the following example: You are trying to braid your (or your long h
 - You either swapped the middle bunch with the left, or with the right bunch and kept doing this.
 This is another example of a *generated* set, but here there are no extra rules other than the starting element and the operations (unlike the restrictions imposed by the geometry of the chessboard). In such cases we say that the set is *freely generated* (free as is no restrictions). A very useful fact about such sets is that each element can be identified with the sequence of operations used to create them, in fact a lot of the times this is how people talk about elements of freely generated sets.
 
+#def(sub: "Freely Generated Sets")[
+Given a collection of of *base values* $cal(B)= {b_1,b_2... b_n}$ and a collection of *operationd* $cal(F)={f_1,f_2, ... f_m}$ we say that a set $S$ is freely generated from $cal(B)$ using $cal(F)$ if $S$ satisfies the following properties:
+- $cal(B) subset.eq S$, that is, all the base values are in the set.
+- Given $s_1,s_2...s_n in S$ and any $f in cal(F)$ we have that $f(s_1,s_2... s_n)in S$.
+- If there are 2 elements in $S$ constructed as $s_1 = f_1(v_1,v_2...v_p)$ and $s_2 = f_2(w_1,w_2...w_q)$ such that $s_1 = s_2$, then we can say that
+    - $f_1 = f_2$,
+    - $p = q$ and
+    - $v_1 = w_1$, $v_2= w_2$... $v_p = w_q$
+- $S$ is the smallest such set satisfying these properties.
+]
+
 Now we see some more examples.
 
 === Natural Numbers as Inductive Types
@@ -253,8 +242,8 @@ This way is very similar to how mathematicians usually formalize natural numbers
 - $0$ is a natural number 
 - Natural numbers are closed under the $"succ"$ operation 
 - For each number $x$ that is not $0$, there is a unique number $y$ such that $x= "succ" y$
-- $0$ is not the successor of any number
-The first 2 rule are given in the definition, the next 2 are subsumed in the definition of "free generation".].
+- $0$ is not the successor of any number.
+].
 
 These "freely generated sets" are what programmers call Inductive types, and one can define the type of natural numbers in haskell as follows:
 ```
@@ -292,7 +281,7 @@ Natural numbers are the default way people count things. A lot of the haskell fu
 #exercise(sub: "Functions on naturals")[
 Define versions of functions `max`, `sum`, `prod`(product), `min` and `==` for natural numbers. Note that you would have to use new names.
 ]
-=== Lists as Inductive Types
+=== Lists as Inductive Types <listi>
 
 Another interesting example of an inductive type is the set of lists over the type `A`.
 
@@ -321,13 +310,17 @@ Fixing as `A` as `Integer` for now `Nil` represents `[]` and `Cons` takes an int
 This idea is very much inspired by the concept of #link(<curry>)[Currying] which was discussed in #ref(<curry>).
 
 
-== Inductive Types (as a Programmer)
+== (Not Quite) Inductive Types (as a Programmer) <nqit>
 
-As a programmer, inductive types are used to indicate that the elements of a type are created from other smaller elements of the type. This is pretty much the same as what the mathematician thinks, as it should be, but a programmer puts more emphasis on the fact that the type is the _blueprint_ of the elements in it, that is, the _shape_ of the elements is reflected in the type. (A possibly more apt name would be *recursive data-structures*)
+As a programmer, we will be using these types as a _blueprint_ for the shape of the element in the type. Specifically to indicate that an element is created by combining other elements of the type together, hence, these are also called *recrusive datatypes*.
 
-To understand this better, consider the example where you want to write a calculator. A calculator takes a simple arithmetic expression and evaulates it.
+In fact, the constructors defined are often used to describe a procedure to check if an element belong to the type, very similar to what we did in @definition_of_tree and in @definition_of_well-formed_mathematical_expression.
 
-=== Calculator
+We will see how to extract such a procedure from the constructors of a type in #ref(<treei>).
+
+But first we see a simple example of a recursive datatype, a type to represent arithmetic expressions.
+
+=== Calculator <calc>
 
 For our purposes, we say that our calculator can compute:
 - Addition
@@ -363,15 +356,38 @@ ex = Add (Val 3.0)
                    (Val 2.0))
 ```
 
+The following is the procedure to check 
+
 #exercise(sub:"Evaluate and extend")[
 Write a function `eval::Expr -> Double` that takes an expression and returns its value. The potential failure case here is division by 0. To deal with it, either add an failure value to the expression type, or make the function have a `Maybe` output.
 
 Also try extending the Expression type to include more operations.
 ]
 
-=== Trees as Inductive Types
-
 For those with keen eyes and good memory the shape of `ex` should remind you of the discussion in #link(<why>)[Why Trees?] section in #ref(<why>).
+
+We will now justify the satement made there:
+#quote(sub: "Ryan Hota, Haskell2025")[
+*In fact, any object in Haskell is internally modelled as a tree-like structure.*
+]
+
+We will now see that Haskell verifies that the element `ex` (from @code_of_expr_example) is an `Expr` using a procedure that is very similar to what was defined in @definition_of_tree.
+
+- We see that the value `ex` is created using the constructor `Add`, so it must produce an `Expr`, now we need to make sure that both  of its arguments are also of type `Expr`.
+    - The fisrt argument of the above is `Val 3.0` which defines a `Expr`.
+    - The second argument of the above constructor is also `Add` so it must produce an `Expr` given that both its arguments are also of type `Expr`.
+        - The first argument to this is produced using the constructor `Mul` hence it must produce an element of type `Expr` given the correct arguments.
+            - Its first argument is `Val 5.0`
+            - Its second argument is `Val 10.0`, both of which are `Expr`.
+        - The second argument to the `Add` is constructed using `Div`, so it must be a tree given both its arguments are `Expr`.
+            - Its first argument is constructed using `Exp`, so it must be a `Expr` given its arguments are also `Expr`
+                - Its first argument is `Val 8.0`
+                - Its second argument is `Val 3.0`, both of which are `Expr`.
+            - Its second argument is `Val 2.0` which is a `Expr`.
+
+by simply checking that all constructors get inputs of the correct type, Haskell has gone through the procedure defined in @definition_of_tree to check that the element `ex` is well defined.
+
+=== Trees as Inductive Types <treei>
 
 On the topic of trees, while working with such inductive one finds that all inductive dataypes follow a tree structure, this is a result of _free generation_. Trees happen to be a ubiquitous data-structure (way to structure data) in computer science and has applications everwhere. The following is a very tiny subset of those:
 - Compilers (like both haskell and our calculator)
@@ -408,6 +424,7 @@ Define the following functions for the tree datatype:
 Also define versions of the `elem` and `sum` functions for the `Tree` datatype.
 ]
 
+        
 === Binary Trees
 Binary Trees are a special case of trees, where each node has either exactly 2, or 0 children. Nodes with 0 children are called *leaves*.
 
@@ -425,7 +442,7 @@ Here unlike the (not necessarily binary) tree, we don't allow leaves to hold val
 
 ```
 -- | Btree 
-data BTree a = BNode {left :: Btree a, Val :: a, right :: Btree a}
+data Btree a = BNode {left :: Btree a, Val :: a, right :: Btree a}
              | Leaf
 ```
 
@@ -465,6 +482,108 @@ $
 
 Write a function `treeToBtree::Tree a -> Btree a` to convert to a tree. Also write the function `btreeToTree::Tree a -> Maybe (Btree a)` and show why `Maybe` is required here.
 ]
+
+=== Addressing the "Not Quite"...
+The title of @nqit is *(Not Quite) Inductive Types (as a Programmer)*. Turns out that while we have been discussing inductive types this entire section of the chapter, because of the way haskell works, all of the types that we have defined like :
+- `Nat`
+- `Expr`
+- `Tree`
+- `Btree`
+- `List`
+aren't exactly inductive types, a consequence of this is that the type `Nat` isn't exactly the set $NN$ either.
+
+The culprit here is laziness and its exactly what was discussed in @dark_magic, that is infinite elements, to understand that one of the important points in @definition_of_Freely_Generated_Sets is that that the set that is being generated must be the *smallest* set that satisfies the other properties given in the definition.
+
+Consider the case of the type `Nat = Zero | Succ Nat`, this is supposed to represent the set $NN$ and it satisfies all the properties fo a freely generated set, aka an inductive type except for one: The one about $NN$ being the smallests set that satisfies the given properties because of the following extra elements:
+```
+infinity :: Nat
+infinity = Succ infinity
+
+-- so the element looks like
+-- infinity = Succ( Succ( Succ( Succ( Succ( Succ...)))))
+``` 
+So Haskell is letting the `infinity` sneak into our type `Nat`. 
+
+The same also holds for all of the other types where we can define
+```
+inflist :: a -> [a]
+inflist a = a : inflist a 
+-- which is simply
+-- a : a : a : a : a ...
+```
+
+And even infinite expressions like 
+```
+infexpr :: Double -> Expr 
+infexpr x = Add x (infexpr x)
+```
+which is a funny term that is simply evalutates to 
+```
+infexpr x = x + x + x + x + ...
+```
+One can make weirder terms that make even less sense than the above and are encouraged to do so, its fun.
+
+There is a formal way to reason about such infinite data structures, and this feature is captured in programming languages like Lean and Agda and is called *coinduction*, but we will not be discussing it. 
+
+We still chose to put emphasis on *inductive datatypes* as we think that its an idea helpful in designing programs. A lot of the functions that we have discussed so far, like 
+- `eval` from @exercise_of_Evaluate_and_extend
+- `depth` and `size` from @exercise_of_Tree_Functions
+- `natToInteger` from @code_of_nat_and_integer
+
+and many more from the list chapter and so on are designed with the idea of inductive types. The purpose of types, as discussed, was to be able to give information to the Haskell compiler about what the functions should expect as an argument, this is one of the places where the Haskell type system fails to express that.
+
+Nonetheless, most of the time people do tend to asssume that the functions are going to get arugments that are finite, which is reasonable in most cases, for example if you are writing a full fledged calculator, using the type described in @calc, it would involve something like
+- Being able to take a string input
+- Parse it into an `Expr` element
+- Evaluate it and return the answer 
+
+In such cases it is very easy to make sure that expressions are going to be finite (I don't any user has enough free time to enter an infinite expression).
+
+If you are disappointed by the fact that the Haskell compiler is letting a potential error pass through, not that the alternative would be, being able to prove that all programs in haskell would terminate. This problem is a version of the *Halting Problem* which is one of the most famous problems in computer science and, in some sense, is the problem that the field of modern computer science stems from. Alan Turing proposed this problem and prove that it is _unsolvable_, so it simply isn't possible for a language like haskell to check for infinite structures like this. Languages like Lean and Adga achieve this by also disallowing some programs that do terminate. These languages are not Turing Complete (its not possible to write every valid program in this language).
+
+= Same Same but Different
+This section is a bit differnt from the previous one, the goal here is not to create new types but to repurpose the old ones.
+
+== Same Same
+One of the two reasons we had given in #ref(<data>) for creating types was to make programs make more sense to people who try to read them. Datatypes often indiciate the structure of the code and it doing so, they can express the intent of the programmer. One of the ways in which haskell makes this easy for us by letting us come up with aliases for types. This is done using the `type` keyword.
+
+```
+-- | type aliases
+type Point = (Integer, Integer)
+type String = [Char] -- This is how Haskell defines String!
+
+type Name = String
+type Age = Integer
+
+type Person = (Name, Age)
+```
+note that any type defined using the keyword `type` is simply an alias for another type and Haskell does not treat it any differently.
+
+Nonetheless, this can be very helpful for interpreting the type for a human. For example the type `Person` which is an alias for `(String, Integer)`, when written as `(Name, Age)`, is very clearly meant to be a pair containg the _name_ and _age_ of a *person*.
+
+== Different
+
+Another thing one might want to do with an existing type is to use it as your own and define your own functions on it. 
+
+One reason you might want to do this would be to use the same datatype to for different pieces of data, and you might not want them to get mixed up. For example, say you're playing a game involving you going down a cave to find treasures. Your 'health' would be an `Integer`, if that goes to `0` your character dies. The 'depth' you're at would also be an `Integer` which would be used to decide how valuable the minerals you find would be. (For those interested, the game in mind is Minecraft).
+
+We can use `data` to let us define separate types like:
+```
+data Health = Health Integer 
+data Depth = Depth Integer
+```
+
+Now you have 2 copies of `Integer` that haskell will treat differently, making sure that they never get mixed up. 
+
+One change that we can make here is to use the `newtype` keyword instead of `data` and get the following:
+
+```
+newtype Health = Health Integer 
+newtype Depth = Depth Integer
+```
+
+This just tells Haskell that your datatype has only 1 constructor with exacty 1 field which will allow Haskell to apply some optimizations. It otherwise behaves just like `data` except for the above mentioned restrictions.
+
 
 // cite
 // Haskell Mooc

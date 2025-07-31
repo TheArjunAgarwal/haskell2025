@@ -14,7 +14,7 @@
 
 Functions are our way, to interact with the elements of a type, and one can define functions in one of the two following ways:
 + Define an output for every single element.
-+ Consider the general behaviour of elements, that is, the functions are defined on them and how one combine simpler functions defined on an element to define more complicated ones.
++ Consider the general property of elements, that is, how they look like, and the functions defined on them.
 
 And we have seen how to define functions from a given type to another given type using the above ideas, for example:
 
@@ -123,7 +123,7 @@ drop n (x:xs) = drop (n-1) xs
 ```
 The polymorphism of this function is shown in the type *`drop :: Integer -> [a] -> [a]`* where we have used the variable `a` (usually called a type variable) instead of explicitly mentioning a type. 
 
-The goal of polymorphic functions is to let us *abstract* over a collection of types. That take a collection of types, based on some common property (either shape, or behavior, maybe both) and treat that as a collection of elements. This lets us build functions that work on "all lists" or "all maybe types" and so on. 
+The goal of polymorphic functions is to let us *abstract* over a collection of types. That take a collection of types, based on some common property (either shape, or behaviour, maybe both) and treat that as a collection of elements. This lets us build functions that work on "all lists" or "all maybe types" and so on. 
 
 The example @code_of_drop brings together all types of lists and only looks at the _shape_ of the element, that of a list, and does not look at the bhevaiour at all. This is shown by using the type variable `a` in the definition, indicating that we don't care about the properties of the list items.
 
@@ -131,7 +131,13 @@ The example @code_of_drop brings together all types of lists and only looks at t
 A nice exercise would be to write the types of the following functions defined in the previous section: *`head`*, *`tail`*, *`(!!)`*, *`take`* and *`splitAt`*.
 ]
 
-We have now given a type to one of the 3 functions discussed above, by giving a way to group together types by their common _shape_. This is not enough to give types of the other two functions (`(==)` and `elem`), for that we will need a way to group together types by shared _bhehaviour_, which we will see in the next section.
+We have now given a type to one of the 3 functions discussed above, by giving a way to group together types by their common _shape_. This is not enough to give types of the other two functions (`(==)` and `elem`), to do so we define the following:
+
+#def(sub: "Behaviour")[
+    Given a type `T`, the *behaviour* of the elements in `T` is the set of definable functions whose type includes `T`. 
+]
+
+We use this to define the two types of polymorphism, one of which we have already seen in this section, and we will look at the other one more deepy in the next.
 
 #def(sub: "2 Types of Polymorphism")[
 - Polymorphism done by grouping types that with common _shape_ is called *Parametric Polymorphism*.
@@ -339,14 +345,18 @@ Another similar function that makes writing code in haskell much cleaner is the 
 -- | function application function
 ($) :: (a -> b) -> a -> b
 f $ a = f a
+
+(&) :: a -> (a -> b) -> b
+a & f = f a
 ```
-This may seem like a fairly trivial function that really doesn't offer anything apart from an extra `$`, but the following 2 lines make it useful
+These may seem like a fairly trivial function that really doesn't offer anything apart from an extra `$`, but the following 3 lines make them useful
 
 ```
 -- | operator precedence
 -- The 'r' in infixr says a.b.c.d is interpreted by haskell as a.(b.(c.d))
 infixr 9 . 
 infixr 0 $
+infixl 1 &
 ```
 
 These 2 lines are saying that, whenever there is an expression, which contains both `($)` and `(.)`, haskell will first evaluate `(.)`, using these 2 one can write a chain of function applications as follows:
@@ -356,6 +366,9 @@ f (g (h (i x)))
 
 -- new way
 f . g . h . i $ x
+
+-- also
+x & f & g & h & i
 ```
 which in my opinion is much simpler to read!
 
@@ -379,7 +392,7 @@ flip :: (a -> b -> c) -> b -> a -> c
 
 The reader should now be equipped with everything they need to understand how types can be read and can now use type inference like this to understand haskell programs better.
 
-== Higher Order Functions on Maybe Type : A Case Study
+== Higher Order Functions on Maybe Type : A Case Study <csm>
 
 The *Maybe Type*, as defined in #link(<maybe>)[Chapter 3] is another playground for higher order functions.
 
@@ -455,39 +468,45 @@ where say `i` was the function that turned out to be the one with `Maybe` output
 f . g . h <.> i . j $ x
 ``` 
 
+Higher order functions, along with polymorphism help our code be really expressive, so we can write very small amounds of code that looks easy to read, which also does a lot. In the next chapter we will see a lot more examples of such functions.
+
 #exercise(sub: "Beyond map")[
     The above shows how haskell can elegantly handle cases when we want to convert a function from type `a -> b` to a function from type `Maybe a -> Maybe b`. This can be thought of as some sort of a _change in context_, where our function is now aware that its inputs can contain a possible fail value, which is `Nothing`. The reason for needing such a _change in context_ were function of type `f :: a -> Maybe b`, that is ones which can fail. They add the possiblility of failure to the _context_.
 
 But since we have the power to be able to change _contexts_ whenever wanted easily, we have a responsibility to keep it consistent when it makes sense. That is, what if there are multiple function with type `f :: a -> Maybe b` we then would just want to use `<.>` or `maybeMap` to get something like:
 ```
-v :: Maybe a
 f :: a -> Maybe b
+g :: b -> Maybe c
 
-g = f <$> v :: Maybe (Maybe b)
+h x = g <$> f x :: a -> Maybe (Maybe c)
 ```
-This is most likely undesirable, the point of `Maybe` was to say that there is a possiblility of error, the point of `maybeMap` was to propogate that possible error then the type `Maybe (Maybe b)` seems to not have a place here, in such cases one can define `maybeJoin :: Maybe (Maybe a) -> Maybe a`, with that we can have
+This is most likely undesirable, the point of `Maybe` was to say that there is a possiblility of error, the point of `(<$>)` was to propogate that possible error then the type `Maybe (Maybe c)` seems to not have a place here.
+
+To rectify this, we find a way to compose such functions together:
 ```
-g = maybeJoin $ f <$> a :: Maybe b
+maybe_comp :: (a -> Maybe b) -> (b -> Maybe c) -> (a -> Maybe c)
+infixr 8 >=>
 ```
-This particular combination of doing `<$>` then `maybeJoin` will be very common, so people that use haskell put the 2 together in the function `(>>=) :: Maybe a -> (a -> Maybe b) -> Maybe b` (the order of operands is reversed), this makes writing code so much cleaner, for instance:
+This cute looking function is called the *fish* operator. This will be our way to compose functions of the shape `a -> Maybe b` together, but note that the order of inputs is reversed, so it not looks like a pipe through which the value is passed. The above function `h` is defined as follows:
 ```
-val :: a 
+h = f >=> g :: a -> Maybe c
+```
+This function, takes a value of type `a`, first applies `f` to it, and then applies `g` to it in a way that the final output is of type `Maybe c`, and of course, we can use this to make longer chains!
+
+```
 func1 :: a -> Maybe b
 func2 :: b -> Maybe c
 func3 :: c -> Maybe d
+func4 :: d -> Maybe e
 
-final :: Maybe d
-final = Maybe val 
-    >>= func1 
-    >>= func2
-    >>= func3 
+final :: a -> Maybe e
+final = func1 >=> func2 
+    >=> func3 >=> func4 
 ```
-Define `maybeJoin` and `(>>=)` and see how both of then are used in programs, and maybe compare then by how one would define `final` without these.
+Define and `(>=>)` and see how both of then are used in programs, and compare then by how one would define `final` without these.
 ]
 
-*Note* The symbol `(>>=)` is written as #unligate([`(>>=)`]).
-
-Higher order functions, along with polymorphism help our code be really expressive, so we can write very small amounds of code that looks easy to read, which also does a lot. In the next chapter we will see a lot more examples of such functions.
+*Note* The symbol `(>=>)` is written as #unligate([`(>=>)`]).
 
 // cite 
 // citation 1

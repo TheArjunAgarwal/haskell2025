@@ -7,4 +7,4 @@
 #let definition = def
 #let example = it => [For example - \ #it]
 
-= computation (feel free to change it)
+

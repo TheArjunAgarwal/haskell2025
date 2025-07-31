@@ -1569,6 +1569,52 @@ cost 1 2 2 [5,5,3,6,5] = 3
   ```
 ]
 
+#exercise(sub : "Hacking Cyper (Codeforces)")[
+Polycarpus participates in a competition for hacking into a new secure messenger. He's almost won.
+
+Having carefully studied the interaction protocol, Polycarpus came to the conclusion that the secret key can be obtained if he properly cuts the public key of the application into two parts. The public key is a long integer which may consist of even a million digits!
+
+Polycarpus needs to find such a way to cut the public key into two nonempty parts, that the first (left) part is divisible by $a$ as a separate number, and the second (right) part is divisible by $b$ as a separate number. Both parts should be positive integers that have no leading zeros. Polycarpus knows values $a$ and $b$.
+
+Write function `crack :: Integer -> Integer -> Integer -> Maybe (Integer, Integer)` to help Polycarpus and find any suitable method to cut the public key, given the key, $a$ and $b$; if possible.
+
+Examples
+```
+crack 116401024 97 1024 = Just (11640, 1024)
+crack 284254589153928171911281811000 1009 1000 = Just (2842545891539, 28171911281811000)
+crack 120 12 1 = Nothing
+```
+]
+
+#exercise(sub : "Mohak has explictly approved this (Codeforces 1874D)")[
+There are `n+1` cities with numbers from `0` to `n`, connected by `n` roads. The `i`-th road connects city `i−1`and city `i`  bi-directionally. 
+
+After Mohak flew back to city 0, he found out that he had left her Miku fufu in city `n`.
+
+Each road has a positive integer level of beauty. Denote the beauty of the `i`-th road as `a_i`.
+
+Mohak is trying to find his fufu. As all Miku fans are obsessive indoor creatues and have no sense of direction and are basically useless without Miku fufu for encouragement, he doesn't know which way to go. Every day, he randomly chooses a road connected to the city she currently is in and traverses it. 
+
+Let `s` be the sum of the beauty of the roads connected to the current city. For each road connected to the current city, Mohak will traverse the road with a probability of `x/s`, where `x` is the beauty of the road, reaching the city on the other side of the road.
+
+Mohak starts in cuty `0` and Fufu is in city `n`.
+
+In order to help Mohak, you want to choose the beauty of the roads such that the expected number of days Mohak takes to find his fufu will be the minimum possible. However, due to limited funding, the sum of beauties of all roads must be less than or equal to `m`.
+
+Write a function `miku :: Int -> Int -> Float` which takes the value of `m` and `n` and tells us the expected time for Mohak to find his fufu.
+
+Examples
+```
+miku 3 8 = 5.2
+miku 10 98 = 37.721155173329
+```
+Note
+In the first example, the optimal assignment of beauty is 𝑎=[1,2,5]. The expected number of days Mohak needs to get his fufu back is 5.2.
+
+Hint: Let's say you are given the beauty list $a$. Now, how will you compute the expected number of days? Consider $f(i)$ to be expected number of days to reach the $i$-th city. Can you find these recursivly? What about $g(i) = f(i) - f(i-1)$? Can you find a form in terms of $a$, can you use `zipWith` to compute these?
+
+Now, can you make a function to make lists that sum up to $m$ and are of length $n$? You can save a lot of time by imposing one condition on the lists. The idea is that we want to keep moving forward.
+]
 
 
 
