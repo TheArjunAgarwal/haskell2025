@@ -50,28 +50,29 @@ instance ShowChange (Expression ContentWrapper) where
 parseExpression :: Bracketed String -> Expression String
 
 -- unit
-parseExpression ( Bracketed [] )                                   = ConsE { name =      "()"       , args = [] }
+parseExpression ( Bracketed [] )                           = ConsE { name =      "()"       , args = [] }
 -- pairing function
-parseExpression ( Bracketed [ Word "," ] )                         = ConsE { name =      "(,)"      , args = [] }
+parseExpression ( Bracketed [ Word "," ] )                 = ConsE { name =      "(,)"      , args = [] }
 -- constructor 
-parseExpression ( Word w@( c : _ ) ) | isUpper c || strIsNumber w  = ConsE { name =        w        , args = [] }
+parseExpression ( Word w ) | strIsConstructorFunction w    = ConsE { name =        w        , args = [] }
 -- constructor operator
-parseExpression( Bracketed [ Word w@( ':' : _ ) ] )                = ConsE { name = "(" ++ w ++ ")" , args = [] }
+parseExpression( Bracketed [ Word w@( ':' : _ ) ] )        = ConsE { name = "(" ++ w ++ ")" , args = [] }
 
 -- variable
-parseExpression ( Word w )                                         = varE                  w
+parseExpression ( Word w )                                 = varE                  w
 -- variable operator
-parseExpression ( Bracketed [ Word w ] ) | strIsOperator w         = varE  (        "(" ++ w ++ ")"             )
+parseExpression ( Bracketed [ Word w ] ) | strIsOperator w = varE  (        "(" ++ w ++ ")"             )
 
 -- application
-parseExpression ( Bracketed ( w : ws ) )                           = parseExpression w `apply` ( parseExpression <$> ws )
+parseExpression ( Bracketed ( w : ws ) )                   = parseExpression w `apply` ( parseExpression <$> ws )
 
--- | check whether a string represents a number
-strIsNumber :: String -> Bool
-strIsNumber = isJust . ( readMaybe :: String -> Maybe Int )
+strIsConstructorFunction "[]" = True
+strIsConstructorFunction w@(c:_) 
+               | isUpper c = True
+strIsConstructorFunction w = isJust ( readMaybe w :: Maybe Integer ) 
 
 strIsOperator :: Foldable t => t Char -> Bool
-strIsOperator = all ( `elem` ">+~!%:-=*/^\\$&|<" )
+strIsOperator = all ( `elem` ">+~!%:-=*/^\\$&|<@" )
 
 -- | given an expression @e@ and some expressions @es@, \ 
 -- treat @e@ as a function and apply it to the arguments @es@

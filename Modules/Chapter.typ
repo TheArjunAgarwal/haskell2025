@@ -16,12 +16,12 @@
       }
     )
 
-    text( 
-      size : 16pt , 
-      emph( author ) 
-    )
+    // text( 
+    //   size : 16pt , 
+    //   emph( author ) 
+    // )
 
-    [\ \ ]
+    [\ ]
       
   } ,
   kind : "chapter_title" ,

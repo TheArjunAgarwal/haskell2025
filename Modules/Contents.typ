@@ -123,7 +123,7 @@
 
       let destination = corresponding_contents_entry.location()
 
-      let symbol = { text(size:0.5em,fill:blue)[#underline[Contents]]
+      let symbol = { text(size:0.8em,fill:blue)[#underline[Contents]]
 
         // if here().page() < destination.page() [after]
 

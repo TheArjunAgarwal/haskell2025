@@ -381,7 +381,7 @@ Haskell is a statically typed language. What that means is that it requires the 
 
 It is not however required to give types to all functions (we do strongly recommend it though!), in fact one can simply not give any types at all. This is possible because the haskell compiler is smart enough to figure all of it out on its own! It's so good that when you do write type annotations for functions, haskell ignores it, figures the types out on its own and can then check if you have given the types correctly. This is called *type inference*.
 
-Haskell's type inference also gives the most general possible type for a function. To see that, one can open ghci, and use the `:t` command to ask haskell for types of any given expression.
+Haskell's type inference also gives the most general possible type for a function. To see that, one can open GHCi, and use the `:t` command to ask haskell for types of any given expression.
 
 ```
 >>> :t flip

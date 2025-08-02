@@ -6,6 +6,7 @@ module TypesAsSets where
 
 #import "../Modules/Definition.typ" : def
 #import "../Modules/Exercise.typ" : exercise
+#import "../Modules/Proof.typ" : proof
 
 #metadata[
 ```haskell
@@ -159,10 +160,10 @@ even n = if n `mod` 2 == 0 then True else False
 
 As $A times B$ contains all pairs $(a,b)$ such that $a in A$ and $b in B$, \ so is every pair `(a,b)` of type `(A,B)` if `x` is of type `A` and `b` is of type `B`.
 
-For example, if I ask GHCi to tell me the type of `(True, 'c')` (which I can do using the command `:t`), then it would tell me that the value's type is `(Bool, Char)` -
+For example, if I ask GHCi to tell me the type of `(True, 'c')`, then it would tell me that the value's type is `(Bool, Char)` -
 ```
 -- | type of a pair
->>> :t (True, 'c')
+>>> :type (True, 'c')
 (True, 'c') :: (Bool, Char)
 ``` This reads - "GHCi, what is the type of `(True, 'c')`? \ #v( 0.1em , weak: true)
 $"                "$Answer : the type of `(True, 'c')` is `(Bool, Char)`."
@@ -303,8 +304,8 @@ $
 The main advantage that this construct offers us over the usual @definition_of_union is that given an element $x$ from a disjoint union $A union.sq B$, it is very easy to see whether $x$ comes from $A$, or whether it comes from $B$.
 
 For example, consider the statement - $(0,10) in RR union.sq NN$. \ 
-It is obvious that this $10$ comes from $RR$ and does not come from $NN$.\ 
-$(1,10) in RR union.sq NN $ would indicate exactly the opposite, i.e, the $10$ here comes from $NN$, not $RR$.
+It is obvious that this "$10$" comes from $RR$ and does not come from $NN$.\ 
+$(1,10) in RR union.sq NN $ would indicate exactly the alternative, i.e, the "$10$" here comes from $NN$, not $RR$.
 
 == `Either A B` is analogous to $A union.sq B$ or @definition_of_disjoint_union
 
@@ -541,3 +542,273 @@ The type `Void` has no elements at all.
 This also means that no actual value has type `Void`.
 
 Even though it is out-of-syllabus, an interesting exercise is to #exercise[try to define a function of type `( Bool -> Void ) -> Void`.]
+
+= Currying 
+
+Let's try to explore some more elaborate types. \ For example, let us try to find out the *type of the derivative operator*, $ d/(d x) $
+
+Let $DD$ be the set of all differentiable $RR -> RR$ functions.
+
+Now, for any $f in DD$, i.e., for any differentiable function $f : RR -> RR$,\ we know that $(d f)/(d x)$ will be also be a $RR -> RR$ function. 
+
+Specifically, we could define
+$
+  (d f)/(d x) := ( p |-> lim_(h -> 0)(f(p+h)-f(p))/h)
+$
+
+Therefore, the function $d/(d x)$\ takes an input $f$ of type $DD$, \ and produces an output $(d f)/(d x)$ of type $RR -> RR$, which is written set-theoretically as $RR^RR$.
+
+An thus we obtain the type of the derivative operator as
+$
+  d/(d x) : DD -> ( RR -> RR )
+$
+or more formally,
+$
+  d/(d x) : DD -> RR^RR
+$
+
+But we know another syntax for writing the derivative, which is - $ (d f)/(d x)#h(0em,weak:true)#text(size:2.1em,baseline:0.1em)[$bar$] #h(0pt,weak:true) #text(size:1em,baseline:0.8em)[$p$] $, which refers to the derivative evaluated at a point $p in RR$.
+
+Here, the definition could be written as
+$
+  (d f)/(d x)#h(0em,weak:true)#text(size:2.1em,baseline:0.1em)[$bar$] #h(0pt,weak:true) #text(size:1em,baseline:0.8em)[$p$] := lim_(h -> 0)(f(p+h)-f(p))/h
+$
+
+So here there are two inputs, namely $f in DD$ and $p in RR$, \
+and an output $(d f)/(d x)#h(0em,weak:true)#text(size:1.6em,baseline:0.1em)[$bar$] #h(0pt,weak:true) #text(size:0.8em,baseline:0.6em)[$p$]$, which is of type $RR$.
+
+That leads us to the type -
+$  
+  d/(d x) : DD times RR -> RR
+$
+
+We understand that these two definitions are equivalent.\
+So now the question is, which type do we use?
+
+High-school math usually chooses to use the $DD times RR -> RR$ style of typing.
+
+Haskell, and in several situations math as well,\ defaults to the $DD -> ( RR -> RR ) $, or equivalently $DD ->  RR^RR$ style of typing.
+
+#box(stroke:yellow, inset:0.7em, width:100%)[
+  In general, that means that if a function $F : A -> ( B -> C ) $ 
+
+  takes an input from $A$, \ and gives as output a $B -> C$ function,
+
+  then it is equivalent to saying $F : A times B -> C$, which would make $F$ a function 
+
+  that takes inputs of type $A$ and $B$ respectively, \ and gives an output of type $C$.
+]#footnote([will be proven soon])
+
+We have just seen the example where $F$ was $d/(d x)$ and $A,B,C$ were $DD,RR,RR$ respectively.
+
+However, this has more profound consequences than what appears at first glance, in Haskell as well as in post-high-school mathematics.
+
+This is due to looking in the opposite direction, i.e., taking a definition like 
+$
+  (d f)/(d x)#h(0em,weak:true)#text(size:2.1em,baseline:0.1em)[$bar$] #h(0pt,weak:true) #text(size:1em,baseline:0.8em)[$p$] := lim_(h -> 0)(f(p+h)-f(p))/h
+$
+and rephrasing it as
+$
+  (d f)/(d x) := ( p |-> lim_(h -> 0)(f(p+h)-f(p))/h)
+$
+
+#box(stroke:yellow, inset:0.7em, width:100%)[
+  In general, if a function $F : A times B -> C$
+
+  takes inputs of type $A$ and $B$ respectively, \ and gives an output of type $C$.
+
+  then it is equivalent to saying $F : A -> ( B -> C )$, which would make $F$ a function 
+
+  that takes an input from $A$, \ and gives as output a $B -> C$ function.
+
+]#footnote([will be proven soon])
+
+This rephrasing is known as "currying".
+
+== In Haskell
+
+Again, for example,\ if we have a function such as $d/(d x)$ which has *2 inputs* ($f$ and $p$),
+\ we can use it by *only giving the first input*\ in the following sense -
+$
+  (d f)/(d x) := ( p |-> (d f)/(d x)#h(0em,weak:true)#text(size:2.1em,baseline:0.1em)[$bar$] #h(0pt,weak:true) #text(size:1em,baseline:0.8em)[$p$])
+$
+
+Let's see how it works in Haskell.
+
+#def(sub:"currying rule")[If we have a function `f` that takes 2 inputs (say `x` and `y`), then we can use `f x` as
+```
+f x = \ y -> f x y
+```]
+
+We know that `(+)` is a function that takes in two `Integer`s and outputs an `Integer`. \ This means that $A,B,C$ are `Integer`,`Integer`,`Integer` respectively.
+
+By currying or rephrasing, this would mean that we could treat `(+)` like a function that takes a single input of type `Integer` (i.e., $A$) and outputs a function of type `Integer -> Integer` (i.e., $B -> C$).
+
+In fact, that's exactly what Haskell lets you do - 
+```
+>>> :type +d (+) 17    
+(+) 17 :: Integer -> Integer
+```
+
+Meaning that when `(+)` is given the `Integer` input `17`, it outputs the function `(+) 17`, of type `Integer -> Integer`.
+
+More explicitly, by the @definition_of_currying_rule, we have that
+```
+(+) 17 = \ y -> (+) 17 y
+```
+
+Thus, what does this function `(+) 17` actually do?\
+Simple! It is a function that takes in any `Integer` and adds `17` to it.
+
+So, for example,\
+If we define -
+```haskell
+-- | currying usage
+test = (+) 17
+```
+it behaves as such -
+```
+>>> test 0
+17
+>>> test 1
+18
+>>> test 12
+29
+>>> test (-17)
+0
+```
+
+Another - 
+
+```
+>>> :type +d (*)
+(*) :: Integer -> Integer -> Integer
+
+>>> :type +d (*) 2
+(*) 2 :: Integer -> Integer
+```
+
+Meaning that when `(*)` is given the `Integer` input `2`, it outputs the function `(*) 2`, of type `Integer -> Integer`.
+
+More explicitly, by the @definition_of_currying_rule, we have that
+```
+(*) 2 = \ y -> (*) 2 y
+```
+
+Thus, the function `(*) 2`\ takes in an `Integer` input\ and multiplies it by `2`, 
+i.e., doubles it.
+
+So if we define -
+```haskell
+-- | another currying usage
+doubling :: Integer -> Integer
+doubling = (*) 2
+```
+it behaves as such -
+```
+>>> doubling 0
+0
+>>> doubling 1
+2
+>>> doubling 12
+24
+>>> doubling (-17)
+-34
+```
+
+== Understanding through Types
+
+The @definition_of_currying_rule essentially allows us to view a function of type `A -> B -> C` as of type `A -> ( B -> C )`.
+
+This is due to the fact that as an @definition_of_infix_binary_operator, the `->` operator is @definition_of_right-associative.
+
+Recalling the definition of @definition_of_right-associative, this means that,\ for any `X`,`Y`,`Z` -
+```
+X -> Y -> Z
+```
+is actually equivalent to
+```
+X -> ( Y -> Z )
+```
+
+And thus the @definition_of_currying_rule is justified.
+
+== Proof of the Currying Theorem
+
+What follows is an *OPTIONAL* formal rigorous proof of the following statement - 
+#box(stroke:yellow, inset:0.7em, width:100%)[
+  In general, if a function $F : A times B -> C$
+
+  takes inputs of type $A$ and $B$ respectively, \ and gives an output of type $C$.
+
+  then it is equivalent to saying $F : A -> ( B -> C )$, which would make $F$ a function 
+
+  that takes an input from $A$, \ and gives as output a $B -> C$ function.
+
+]
+
+What we are going to prove is that \ there exists a bijection \ from 
+\ the set ${ F | F : A times B -> C }$
+\ to
+\ the set ${ G | G : A -> ( B -> C ), "or equivalently",  G : A -> C^B}$
+
+Note that the set ${ F | F : A times B -> C }$ can be expressed as $C^(A times B)$ \ and that the set ${ G | G : A -> C^B}$ can be expressed as $(C^B)^A$
+
+Therefore, we have to prove there exists a bijection $: C^(A times B) -> (C^B)^A$
+
+#exercise(sub:"finite currying")[Is there an easy way to prove the theorem in the case that $A,B,C$ are all finite sets?]
+
+#pagebreak()
+
+#proof(thm:[$exists$ a bijection $: C^(A times B) -> (C^B)^A$])[
+  Define the function $cal(C)$ as follows -
+
+  $
+    cal(C) : C^(A times B) &-> (C^B)^A\
+    cal(C)(F) &:= G\
+  &"where"\
+  &G : A -> C^B\
+  &" "G(a) := (b |-> F(a,b))
+  $
+  If we can prove that $cal(C)$ is bijective, we are done!
+  \ In order to do that, we will prove that $cal(C)$ is injective as well as a surjective.
+
+  *Claim : * $cal(C)$ is injective
+  \ *Proof : * 
+  $
+    &"                                        " cal(C)(F_1) &&== cal(C)(F_2)\
+    &=> "                                         "G_1 &&== G_2 "   , where " G_1(a) := ( b |-> F_1(a,b) ) " and " G_2(a) := ( b |-> F_2(a,b) ) \
+    &=> forall a in A,"                         " G_1(a) &&== G_2(a)", where " G_1(a) := ( b |-> F_1(a,b) ) " and " G_2(a) := ( b |-> F_2(a,b) ) \
+    &=> forall a in A,"              " ( b |-> F_1(a,b) ) &&== ( b |-> F_2(a,b) )\
+    &=> forall a in A, forall b in B, " " ( b |-> F_1(a,b) )(b) &&== ( b |-> F_2(a,b))(b)\
+    &=> forall a in A, forall b in B, "            " F_1(a,b) &&== F_2(a,b)\
+    &=> "  "forall p in A times B, "                 " F_1(p) &&==F_2(p)\
+    &=> "                                         "F_1 &&==F_2
+  $
+  \
+  *Claim : * $cal(C)$ is surjective
+  \ *Proof : * Take an arbitrary $H in (C^B)^A$ .
+  \ In other words, take an arbitrary function $H : A -> ( B -> C )$ .
+  \ Define a function $J$ as follows -
+  $
+    J : A times B &-> C
+    \ J(a,b) &:= (H(a))(b)
+  $
+  Now, 
+  $
+    cal(C)(J) &:= "  "G" , where " G(a) &&:= ( b |-> J(a,b) )
+    \ &== G" , where " G(a) &&:= ( b |-> (H(a))(b) )
+    \ &== G" , where " G(a) &&:= (H(a)) &&&[because (x|->f(x)) "is equivalent to just" f" "]
+    \ &== G" , where " G &&== H &&&[because f(x):=g(x) "means that" f == g" "]
+    \ &== H
+  $
+  That means we have proved that
+  $
+    forall H in (C^B)^A, exists J " such that " cal(C)(J) == H
+  $
+  Therefore, by the definition of surjectivity, we have proven that $cal(C)$ is surjective.
+  \ As a result, we are done with the overall proof as well!
+  \
+  \
+
+]

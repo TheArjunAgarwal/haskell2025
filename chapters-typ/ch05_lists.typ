@@ -21,13 +21,13 @@ is not allowed.
 If the elements of a list each have type `T`, then the list is given the type `[T]`.
 
 ```
->>> :t +d [1,2,3]
+>>> :type +d [1,2,3]
 [1,2,3] :: [Integer]
 
->>> :t +d ['a','Z','\STX']
+>>> :type +d ['a','Z','\STX']
 ['a','Z','\STX'] :: [Char]
 
->>> :t +d [True,False]
+>>> :type +d [True,False]
 [True,False] :: [Bool]
 ```
 
@@ -346,42 +346,6 @@ The `splitAt` function combines these two functionalities by returning both answ
 ([5,8,3],[2,0])
 ```
 
-== Elem
-
-The `elem` function takes a value and a list, and answers whether the value appears in the list or not, answering in either `True` or `False`.
-
-```
->>> elem 5 [5,8,3,2,0]
-True
->>> elem 8 [5,8,3,2,0] 
-True
->>> elem 3 [5,8,3,2,0]
-True
->>> elem 2 [5,8,3,2,0]
-True
->>> elem 0 [5,8,3,2,0]
-True
-```
-
-```
->>> elem 7 [5,8,3,2,0]
-False
->>> elem 6 [5,8,3,2,0]
-False
->>> elem 4 [5,8,3,2,0]
-False
-```
-
-And the definition - 
-```
-elem x []     = False
-elem x (y:ys) = x == y || elem x ys
-```
-This reads - "
-`x` does not appear in the empty list.\
-`x` appears in a list if and only if it is equal to the first element or it appears somewhere in the rest of the list.
-"
-
 == (!!)
 
 The `!!` (read as bang-bang) operator takes a list and a number `n::Int`, and returns the $n^"th"$ element of the list, counting from `0` onwards.
@@ -426,6 +390,112 @@ So, again, it is advised to avoid using the `!!` operator.
   Provide a definition for the `!!` operator.
 ]
 
+== List `-> Bool`
+
+Functions on lists that return `Bool` are used to check whether lists satisfy certain properties or not. For example - 
+
+=== Elem
+
+The `elem` function is used to determine whether a list contains a particular object.
+
+The `elem` function takes a value and a list, and answers whether the value appears in the list or not, answering in either `True` or `False`.
+
+```
+>>> elem 5 [5,8,3,2,0]
+True
+>>> elem 8 [5,8,3,2,0] 
+True
+>>> elem 3 [5,8,3,2,0]
+True
+>>> elem 2 [5,8,3,2,0]
+True
+>>> elem 0 [5,8,3,2,0]
+True
+```
+
+```
+>>> elem 7 [5,8,3,2,0]
+False
+>>> elem 6 [5,8,3,2,0]
+False
+>>> elem 4 [5,8,3,2,0]
+False
+```
+
+And the definition - 
+```
+elem x []     = False
+elem x (y:ys) = x == y || elem x ys
+```
+This reads - "
+`x` does not appear in the empty list.\
+`x` appears in a list if and only if it is equal to the first element or it appears somewhere in the rest of the list.
+"
+
+=== Generalized Logical Operators
+
+The binary ( taking 2 `Bool` inputs ) logical operators like `&&` and `||` can be be generalized to take a list of inputs `[Bool]`.
+
+```haskell
+-- | and
+and :: [Bool] -> Bool
+and (b:bs) = b && ( and bs )
+and [] = True
+```
+
+The `and` function takes as input a list of type `[Bool]` and answers whether ALL of the elements of the list are `True`.
+
+A few examples -
+
+```
+>>> and [True, True, True]
+True
+
+>>> and [True, False, True]
+False
+
+>>> and []
+True
+
+>>> and [False, False, False]
+False
+
+>>> and [True && False, True]
+False
+```
+
+Let's generalize `||` as well.
+
+```haskell
+-- | or
+or :: [Bool] -> Bool
+or (b:bs) = b || ( or bs )
+or [] = False
+```
+
+The `or` function takes as input a list of type `[Bool]` and answers whether ANY of the elements of the list is `True`.
+
+```
+>>> or [False, False, True]
+True
+
+>>> or [False, False, False]
+False
+
+>>> or []
+False
+
+>>> or [True, True, False]
+True
+
+>>> or [not True, not False]
+True
+```
+
+#exercise(sub:"base cases of list-ary logical operators")[
+  Try to justify why the definitions `and [] = True` and `or [] = False` are required. 
+]
+
 = Strings
 
 A string is how we represent text (like English sentences and words) in programming.
@@ -452,7 +522,7 @@ So, we can write -
 >>> "hello there!"
 "hello there!"
 
->>> :t +d "hello there!"
+>>> :type +d "hello there!"
 "hello there!" :: String
 ```
 
@@ -549,7 +619,176 @@ Let use this principle to prove that
     And `1 + n` obviously terminates.
 ]
 
+= Sorting
 
+#def(sub:"sorted list")[
+  A list is said to be *sorted* \ if and only if\ _its elements appear in ascending order of their values_.
+  \
+  \ OR EQUIVALENTLY
+  \
+  \ A list `[x1, x2, x3, ... , xn-1, xn]` is said to be *sorted*
+  \ if and only if 
+  \ `x1 <= x2 <= x3 <= ... <= xn-1 <= xn`
+  \
+  \ OR EQUIVALENTLY
+  \
+  \ A list `[x1, x2, x3, ... , xn-1, xn]` is said to be *sorted*
+  \ if and only if 
+  \ `( x1 <= x2 ) && ( x2 <= x3 ) && (x3 <= x4 ) && ... && ( xn-1 <= xn)`
+]
+
+Here are a few examples of @definition_of_sorted_list#[s] -
+```
+[1, 2, 3, 4, 5]
+
+[0, 10, 20, 30, 40]
+
+[-10, -5, 0, 5, 10]
+
+[2, 3, 5, 7, 11, 13, 17]
+
+[100, 200, 300, 400, 500]
+
+[-100, -50, -10, -1, 0, 1, 10]
+
+[1, 1, 2, 3, 5, 8, 13]
+
+```
+and here are few which are NOT @definition_of_sorted_list#[s] -
+```
+[5, 2, 4, 1, 3]
+
+[30, 10, 40, 0, 20]
+
+[10, -5, 0, -10, 5]
+
+[11, 2, 17, 5, 13, 3, 7]
+
+[500, 100, 300, 200, 400]
+
+[10, -1, -100, 0, -50, -10, 1]
+
+[8, 1, 13, 5, 3, 1, 2]
+```
+
+Let's write a function that takes a list of and answers whether it is a @definition_of_sorted_list or not -
+```haskell
+isSorted [] = True
+isSorted [x] = True
+isSorted (x:x':xs) = ( x <= x' ) && ( isSorted (x':xs) )
+```
+
+This reads - 
+"
+A list which contains nothing is a @definition_of_sorted_list.
+\ A list containing exactly one element is also a @definition_of_sorted_list.
+\ If the first two elements of the list are `x` and `x'` and the rest of the elements form a list `xs`, \ then the list is sorted if and only if \ `x <= x'` AND the list `x':xs` (i.e., the @code_of_tail_of_list `x:x':xs`, the given input) is sorted.
+"
+
+Now we introduce an infamous problem in computer science, "sorting"!
+
+#def(sub:"sorting")[
+  *Sorting* is the act of taking a given list and rearranging the contained elements so that it becomes a @definition_of_sorted_list.
+]
+
+In Haskell, we do this using the `sort` function.
+
+```
+>>> sort [5, 2, 4, 1, 3]
+[1,2,3,4,5]
+
+>>> sort [30, 10, 40, 0, 20]
+[0,10,20,30,40]
+
+>>> sort [10, -5, 0, -10, 5]
+[-10,-5,0,5,10]
+
+>>> sort [11, 2, 17, 5, 13, 3, 7]
+[2,3,5,7,11,13,17]
+
+>>> sort [500, 100, 300, 200, 400]
+[100,200,300,400,500]
+
+>>> sort [10, -1, -100, 0, -50, -10, 1]
+[-100,-50,-10,-1,0,1,10]
+
+>>> sort [8, 1, 13, 5, 3, 1, 2]
+[1,1,2,3,5,8,13]
+```
+
+Let us see whether we can define the `sort` function.
+
+Well, it is obvious that 
+```
+sort [] = []
+```
+So we are left with defining `sort (x:xs)`.
+
+In the style of recursive definitions, we can assume that we already have `sort xs` computed.
+
+i.e., let us define 
+```
+sortedTail = sort xs
+```
+and we can henceforth use `sortedTail` to refer to `sort xs`.
+
+Now, `sortedTail`, being `sort xs`, contains all the elements of `xs`, rearranged in ascending order.\
+But it doesn't contain `x`.
+
+*If we were able to include `x` in `sortedTail` without disturbing this ascending order, we would be done!*
+
+So let's do that -
+
+First we take those elements of `sortedTail` which should appear *before* `x` in the ascending order. (i.e., the elements `< x`)
+```
+[e | e <- sortedTail , e < x]
+```
+
+Then we follow that with `x` itself.
+```
+[e | e <- sortedTail , e < x] ++ [x]
+```
+
+And then we add the elements of `sortedTail` that should appear *after* `x` in the ascending order. (i.e., the elements `>= x`)
+```
+[e | e <- sortedTail , e < x] ++ [x] ++ [e | e <- sortedTail , e >= x]
+```
+
+And thus we obtain a list containing `x` as well as all the elements of `sortedTail`, arranged in ascending order, i.e., `sort (x:xs)`
+
+Putting it all together, we can write a definition for `sort` as follows -
+
+```
+-- | sort
+sort []     = []
+sort (x:xs) = let sortedTail = sort xs in
+ [e | e <- sortedTail , e < x] ++ [x] ++ [e | e <- sortedTail , e >= x]
+```
+
+Let's see an example computation -
+```
+   sort [5, 1, 13, 8, 3, 1, 2]
+
+== let sortedTail = sort [1, 13, 8, 3, 1, 2] in
+
+    [e | e <- sortedTail , e < 5] ++ [5] ++ [e | e <- sortedTail , e >= 5]
+
+== let sortedTail = [1,1,2,3,8,13] in
+
+    [e | e <- sortedTail , e < 5] ++ [5] ++ [e | e <- sortedTail , e >= 5]
+
+== let sortedTail = [1,1,2,3,8,13] in
+
+    [1,1,2,3] ++ [5] ++ [e | e <- sortedTail , e >= 5]
+
+== let sortedTail = [1,1,2,3,8,13] in
+
+    [1,1,2,3] ++ [5] ++ [8,13]
+
+== [1,1,2,3] ++ [5] ++ [8,13]
+
+== [1,1,2,3,5,8,13]
+```
 
 = Optimization
 
@@ -566,33 +805,33 @@ reverse []     = []
 reverse (x:xs) = ( reverse xs ) ++ [x]
 ```
 
-But this is not "optimal"?
+But this is not "optimal".
 
 What does this mean? Let's see -
 
 Let's apply the definitions of `reverse` and `(++)` to see how `reverse [5,8,3]` is computed - 
 ```
-reverse [5,8,3,2] == ( reverse [8,3]  ) ++ [5]
+reverse [5,8,3] == ( reverse [8,3]  ) ++ [5]
 
-                  == ( ( reverse [3]  ) ++ [8] ) ++ [5]
+                == ( ( reverse [3]  ) ++ [8] ) ++ [5]
 
-                  == ( ( ( reverse [] ) ++ [3] ) ++ [8] ) ++ [5]
+                == ( ( ( reverse [] ) ++ [3] ) ++ [8] ) ++ [5]
 
-                  == ( ( [] ++ [3] ) ++         [8]   ) ++         [5]
+                == ( ( [] ++ [3] ) ++         [8]   ) ++         [5]
                   
-                  == (         [3]   ++         [8]   ) ++         [5]
+                == (         [3]   ++         [8]   ) ++         [5]
                   
-                  == (          3    :  ( [] ++ [8] ) ) ++         [5]
+                == (          3    :  ( [] ++ [8] ) ) ++         [5]
                   
-                  == (          3    :          [8]   ) ++         [5]
+                == (          3    :          [8]   ) ++         [5]
                   
-                  == (          3    : (        [8]     ++         [5] )
+                == (          3    : (        [8]     ++         [5] )
  
-                  ==            3    : (         8      :  ( [] ++ [5] ) )
+                ==            3    : (         8      :  ( [] ++ [5] ) )
 
-                  ==            3    : (         8      :          [5]   )
+                ==            3    : (         8      :          [5]   )
 
-                  -- which finally is
+                -- which finally is
                         [3,8,5]
 
 ```
@@ -710,7 +949,7 @@ fibs = l 0 1 where l a b = a : l b (a+b)
 
 Since we obviously cannot view the entirety of an infinite list, it is advisable to use `take` to view an initial section of the list, rather than the whole thing.
 
-== Excercises
+== Exercises
 
 #exercise(sub : "Ballons")[
 In an ICPC contest, balloons are distributed as follows: 

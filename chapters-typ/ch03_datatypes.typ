@@ -825,7 +825,7 @@ A lot of mathematical functions are defined recursively. We have already seen a 
 
 We can use the recurrence 
 $
-  n! = n dot (n-1)!
+  n! := n dot (n-1)!
 $
 to define the factorial function.
 ```haskell
@@ -837,7 +837,7 @@ factorial n = n * factorial (n-1)
 
 We can use the standard Pascal's recurrence
 $
-  vec(n,r) = vec(n-1,r) + vec(n-1,r-1)
+  vec(n,r) := vec(n-1,r) + vec(n-1,r-1)
 $
 to define the binomial or "choose" function.
 
@@ -851,7 +851,7 @@ n `choose` r = (n-1) `choose` r + (n-1) `choose` (r-1)
 And we have already seen the recurrence relation for the fibonacci function in @math-recursion.
 ```haskell
 -- | naive fibonacci definition
-fib :: Int -> Int
+fib :: Integer -> Integer
 fib 0 = 1
 fib 1 = 1
 fib n = fib (n-1) + fib (n-2)
@@ -931,11 +931,41 @@ Another way to evaluate fibonacci will be seen in end of chapter exercises, wher
   ```
 ]
 
+
+#def(sub:"Integer and Int")[
+  *`Int`* and *`Integer`* are the types used to represent integers. 
+
+  `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least $-2^29$ to $2^29$). Going outside this range may give weird results. 
+
+  The reason for `Int` existing is historical. It was the only option at one point and continues to be available for backwards compatibility.
+
+  We will assume `Integer` wherever possible.
+]
+
+#def(sub:"Rational")[
+  *`Rational`* and *`Double`* are the types used to deal with non-integral numbers. The former is used for fractions or rationals while the latter for reals with varying amount of precision. 
+  
+  `Rational`s are declared using `%` as the viniculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`, which respectively correspond to $1/3,2/5,97/31$ .
+]  
+
+#def(sub:"Double")[
+  `Double` or Double Precision Floating Point are high-precision approximations of real numbers. For example, consider the "square root" function - 
+  ```
+  >>> sqrt 2 :: Double
+  1.4142135623730951
+  
+  >>> sqrt 99999 :: Double
+  316.226184874055
+  
+  >>> sqrt 999999999 :: Double
+  31622.776585872405
+  ```
+]
+
 A lot of numeric operators and functions come predefined in Haskell. Some natural ones are
 ```
 >>> 7 + 3
 10
-
 >>> 3 + 8
 11
 
