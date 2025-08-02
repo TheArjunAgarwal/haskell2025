@@ -811,7 +811,7 @@ numbers of good and bad batteries are equal.]
   Note: We know of atleast 5 ways to solve this. Some can be genralized to any number $k$ other than $100$, with $ceil(log_2(k))$ many tries, other are a bit less general. We hope you can find atleast $2$.
 ]
 
-#exercise(sub:"The best (trollest) codeforces question ever!")[
+#exercise(sub:"The best (trollest) codeforces question ever! (Codeforces 1028B)")[
 Let $s(k)$ be sum of digits in decimal representation of positive integer $k$. Given two integers $1 <= m, n <= 1129$ and $n$, find two integers $1 <= a, b <=10^2230$ such that
 - $s(a) >= n$
 - $s(b) >= n$
@@ -841,7 +841,7 @@ For Example
 #exercise(sub : "Divided by 5^n")[Prove that for every positive integer $n$, there exists an $n$-digit number divisible by $5^n$, all of whose
 digits are odd.]
 
-#exercise(sub:"This was rated 2100? (Timofey's Colourbook Problem, Codeforces)")[
+#exercise(sub:"This was rated 2100? (Codeforces 763B)")[
 
 One of Timofey's birthday presents is a colourbook in the shape of an infinite plane. On the plane, there are $n$ rectangles with sides parallel to the coordinate axes. All sides of the rectangles have odd lengths. The rectangles do not intersect, but they can touch each other.
 
