@@ -449,7 +449,110 @@ An algorithm is simply a series of logical instructions that show, from start to
 
 We will take Prof. Fry's defination as the gospel as trying to go into more details will open up questions which are more philosophical than we wish to be here.
 
-== Multiplication
+== Sorting
+A classic example in algorithm design is sorting. We have already seen some sorting algorithms, but here we will try to do an complete analysis of them.
+
+There are two clear naive algorithms one can think about:
+- We can repeatedly move through the list element by element, comparing the current element with the one after it, swapping their values if needed. Do these passes through the list are repeated until no swaps have to be performed in a pass, meaning that the list has become fully sorted. This is called Bubble Sort.
+- We can take the first element as sorted list and then keep inserting the succesive elements in a way that mantains the sorted property. This is called Insertion sort.
+
+We can implement these ideas as:
+```
+bubble [] = ([], False)
+bubble [x] = ([x], False)
+bubble (x:y:ys)
+    | x > y = (y : fst (bubble (x:ys)), True)
+    | otherwise = (x : fst (bubble (y:ys)), snd (bubble (y:ys)))
+bubblesort xs = let (a,b) = bubble xs in if b then bubblesort a else a
+
+insert x [] = [x]
+insert y (x:xs) = if x > y then y:x:xs else x : (insert y xs)
+
+insertSort :: Ord a => [a] -> [a]
+insertSort = foldr insert []
+```
+
+Bubble Sort is bsically keeping the last element to its place every pass. So the first pass takes $n$ comparisons and in the worst case, $n-1$ switches. Similerly, the second pass takes $n$ comparisons and at most $n-2$ switches.
+
+In the worst case, we will need to make $n$ passes (the last one to check if the list is sorted. Thus, $n^2$ comparisons and $((n-1)n)/2$ switches.
+
+This is a very weird way to express the speed of the algorithm but the time to compare and switch two elements is diffrent. So what do do? Simple, use the fact that they are constent and take them as $cal(O)(1)$. This assumption also makes our analysis easier by letting us remove some small factors and focus on large improvements.
+
+Thus, bubblesort is $cal(O)(n^2)$.
+
+Similerly, `insert` takes $cal(O)(k)$ time in the worst case to insert an element in a list of length $k$. Thus, `insertSort` takes $cal(O)(1) + dots + cal(O)(n) = cal(O)(n)$ time. (notice, we didn't talk about comparsions and switches as the big Oh allows us to think more simplistically).
+
+The algorithms for sorting we saw in chapter 7 wer merge sort and quick sort which worked as follows:
+```
+merge :: Ord a => [a] -> [a] -> [a]
+   merge [] [] = []
+   merge [] ys = ys
+   merge xs [] = xs
+   merge (x:xs) (y:ys) = if x < y
+     then x : merge xs (y:ys)
+     else y : merge (x:xs) ys
+
+
+quickSort :: Ord a => [a] -> [a]
+quickSort [] = []
+quickSort [x] = [x]
+quickSort (x:xs) = quickSort [l | l <- xs, l > x] ++ [x] ++ quickSort [r | r
+<- xs, r <= x]
+```
+
+We had shown, through an cumbersome computation, that `mergesort` takes less than $n log(n) + 3n + 1/2 log(n) + 1/2$ compatsions. Doing so with switches seems like a much sadder condition to be in. 
+
+But with the power of Big-Oh on our side, we just assume the worst case where every comparsion leads to a switch and get the number of operations as $cal(O)(n log(n))$.
+
+Similerly, we can use the results from there, to shown that the worst case for `quicksort` is $cal(O)(n^2)$ operations, but in the average case, it only takes `cal(O)(n log(n))` operations.
+
+But can we do better? Depends on how much you know about the elements of the list.
+
+Say you have a bunch of sphegatti and you want to sort them. Well, just level them across the table. Then move your hand from top towards the tops of the sphegatti till you hand touches the tallest sphegatti, pull it out and continue. This is a $cal(O)(n)$ algorithm. It even has a name Sphegatti Sort.
+
+But let's say I have to sort a bunch of spegatti sauces according to how much a distingushed person likes them and I can only ask them to compare two sauces at a time. In this case, we can prove that we can't do better than $cal(O)(n log(n))$.
+#proof(thm: [An Sorting algorothm when we can’t access the items’ values directly: only compare two items and find out which is bigger or smaller can't be better than $cal(O)(n log n)$ in the worst case.
+])[
+  In an $n$ element list, knowing that $a_1 > a_2$ reduces the possible sortings from $n!$ to $n!/2$.
+
+  Similerly, knowing any more comparisions will reduce the number of possible orders by $2$.
+
+  Thus, we need atleast $ceil(log(n!))$ comparisons.
+
+  We claim $ceil(log(n!)) = cal(O)(n log(n))$. This is true as:
+  $
+  ceil(log(n!))\
+  = ceil(log(n^n)) quad "as " n^n > n!\
+  = ceil(n log(n))\
+  = cal(O(n log(n))) quad "as " f(x) - 1 <= ceil(f(x)) <= f(x)+1
+  $
+]
+
+This bound holds for randomized algorithms as well (like say a quickSort picking random pivots). The theorem is that no randomized algorithm can do better than $cal(O)(n log n)$ operations in the average case. 
+
+While proving so formally will require us to define some terms like probability distribution and bit tapes, here is the basic idea.
+
+Given a list with infinite random numbers, our randomized algorithm uses these to do it's randomizition. Thus, given this list, we have a normal non-random algorithm. Thus, we can now find the expectation and get that it has the same lower bound of $cal(O)(n log n)$.
+
+Such proofs help us make sure we have achived optimality and make sure people don't waste time looking for faster algorithms. However, we just sorted spegatti in $cal(O)(n)$ time, how?
+
+The answer 'that was a stupid algorithm' is plain wrong as our proof never relied on dumbness or smartness. So what is at play?
+
+
+
+
+
+
+
+
+= What Big O doesn't want you to know?
+
+
+
+== Galactic Algorithms
+A galactic algorithm is one with an optimal theoretical asymptotic performance, but which is never used in practice. Typical reasons are that the performance gains only appear for problems that are so large they never occur, or the algorithm's complexity outweighs a relatively small gain in performance. Galactic algorithms were so named by Richard Lipton and Ken Regan,[1] because they will never be used on any data sets on Earth.
+
+= An Informal Survey of Multiplication Algorithms
 The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients, let's begin with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. Similerly, if a function calls some other function, we say this call takes $cal(O)(1)$ time.
 
 The naive way to do so would be to define multiplication as repeated addition. Something of the sort `multiply 1 b = b` and the reccurence. `multiply a b = b + multiply (a-1) b`. For two `n` digit numbers, this will take $cal(O)(10^n) dot cal(O)(n) = cal(O)(n 10^n)$ operations as $b < 10^n$ and we need to make $b$ function calls and as many additions with the smallest number of size $n$. That is very bad, we will see the quantitatatives in a moment. #footnote[
@@ -499,7 +602,8 @@ T(n) = 3 T(n/2) + cal(O)(n) + cal(O)(1)\
 $
 
 This is a lot better. The next improvement came just an year later in 1963 by Tooom and Cook, making it $cal(O)(n^(log_3(5)))$. Here is what we belive their research process looked like:
-#image("../images/multiplication-algo-meme.png")
+#figure(
+  image("../images/multiplication-algo-meme.png", height: 50%))
 
 If you are wondering, they showed that we can break the multiplication in five $n/3$ sized products. Actually, we can split in any number of parts we want. Karatsuba is Toom-2, the $cal(O)(n^(log_3(5)))$ algorithm is Toom-3.  When split in some $k$ parts, the complexity is $cal(O)(n^E)$ where $E = log_k(2k − 1))$.
 
@@ -507,8 +611,7 @@ This can in theory do $cal(O)(1)$ multiplication. As we will see in the upcoming
 
 Doing an exact complexity analysis can allow us to compute the exact speed of growth of the constent of $cal(O)(n^E)$ (hint: It is basically exponential).
 
-This leads us to the $cal(O)(n log(n) log(log(n)))$ Schönhage–Strassen algorithm (1971) which uses the Discrete Fast Fouries Transform algorithm described in chapter 8. The exact implementation is left as excercise to the morbidly curious. In this paper, Arnold Schönhage and Volker Strassen also conjectured a lower bound of $Omega(n log(n))$.
-
+This leads us to the $cal(O)(n log(n) log(log(n)))$ Schönhage–Strassen algorithm (1971) which uses the Discrete Fast Fouries Transform algorithm described in chapter 8. The exact implementation is left as excercise (to find and understand) to the morbidly curious. In this paper, Arnold Schönhage and Volker Strassen also conjectured a lower bound of $Omega(n log(n))$.
 
 This is about the end of multiplication algorithms I can hope to talk about with the material in this book. Also, the constents hidden by big-oh become so large that most implementations use Karatsuba or Toom-3 till some size and then switch to Schönhage–Strassen. So everything here onwards are just fun facts. 
 

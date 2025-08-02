@@ -738,7 +738,11 @@ This is known as the as an Abstract Syntax Tree, and this is (approximately) how
 
 == Exercises
 
-All the following exercises are optional, as they are not the most relevant for concept-building. They are just a collection of problems we found interesting and arguably solvable with the theory of this chapter. Have fun!
+All the following exercises are optional, as they are not the most relevant for concept-building. They are just a collection of problems we found interesting and arguably solvable with the theory of this chapter. Have fun!#footnote[
+  Atleast one author is of the opinion: 
+  
+  All questions are clearly compulsory and kids must write them on paper using quill made from flamingo feathers to hope to understand anything this chapter teaches.
+]
 
 #exercise(sub :"Turbo The Snail(IMO 2024, P5)")[
 Turbo the snail is in the top row of a grid with $s >= 4$ rows and $s-1$ columns and
