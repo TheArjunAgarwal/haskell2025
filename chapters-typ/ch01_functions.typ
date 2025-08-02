@@ -454,9 +454,10 @@ Here is a proof by induction that all people have the same height. We prove that
 ]
 
 #exercise(sub:"proving the principle of induction")[
-  We know that, any subset of the NN has a smallest element.\
-
-  Using the above fact, prove the @definition_of_principle_of_mathematical_induction
+  Prove that the following statements are equivalent - \
+  - every nonempty subset of $NN$ has a smallest element
+  - the @definition_of_principle_of_mathematical_induction
+  You can assume that $<$ is a linear order on $NN$\ such that there are no elements strictly between $n$ and $n+1$.
 ]
 
 === Proving Termination using Induction
@@ -773,7 +774,7 @@ Prove it is possible to draw red segments between red points and blue segments b
 in such a way that: all the red points are connected to each other, all the blue points are connected
 to each other, and no two segments cross.
 
-As a bonus, try to think of a recipie or a set of instructions one could follow to do so.
+As a bonus, try to think of a recipe or a set of instructions one could follow to do so.
 
 Hint: Try using the 'trick' you discovered in @exercise_of_Points_in_Triangle.
 ]
