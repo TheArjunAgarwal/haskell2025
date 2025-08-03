@@ -29,11 +29,9 @@
 
   + Close all open windows and running processes other than wherever you are reading this.
 
-  + Open the directory `haskellSupport/haskell/installation/Linux` in your text editor.\ (We have more support for Visual Studio Code, but any text editor should do)
+  + Open the directory `Haskell/installation/Linux` in your text editor.\ (We have more support for Visual Studio Code, but any text editor should do)
 
-  + Open the terminal of your text editor and ensure that current directory is `Linux`.
-
-  + Type in `installHaskell` in the terminal.
+  + Type in the commands in the `installHaskell` file into the terminal.
 
   + This may take a while.
 
@@ -47,15 +45,13 @@
 
   + Close all open windows and running processes other than wherever you are reading this.
 
-  + Open the directory `haskellSupport/haskell/installation/Linux` in your text editor.\ (We have more support for Visual Studio Code, but any text editor should do)
+  + Open the directory `Haskell/installation/Linux` in your text editor.\ (We have more support for Visual Studio Code, but any text editor should do)
 
-  + Open the terminal of your text editor and ensure that current directory is `Linux`.
-
-  + Type in `installHaskellSupport` in the terminal.
+  + Type in the commands in the `installHaskellSupport` file in the terminal.
 
   + This may take a while.
 
-  + You will know installation is complete at the point when it says `haskellSupport installation complete`.
+  + You will know installation is complete at the point when it says `Press any key to Exit`.
 
   + Restart (shut down and open again) your device.
 
@@ -66,10 +62,8 @@
   + Read the general instructions very carefully, and ensure that you have complied with all the requirements properly.
   
   + Close all open windows and running processes other than wherever you are reading this.
-  
-  + Open the folder `haskellSupport` in Finder.
-  
-  + Open the folder `haskell` in Finder .
+    
+  + Open the folder `Haskell` in Finder .
   
   + Open the folder `installation` in Finder.
   
@@ -97,10 +91,8 @@
   + Read the general instructions very carefully, and ensure that you have complied with all the requirements properly.
   
   + Close all open windows and running processes other than wherever you are reading this.
-  
-  + Open the folder `haskellSupport` in Finder.
-  
-  + Open the folder `haskell` in Finder .
+    
+  + Open the folder `Haskell` in Finder .
   
   + Open the folder `installation` in Finder.
   
@@ -116,7 +108,7 @@
   
   + This may take a while.
   
-  + You will know installation is complete if a new window pops up with `helloWorld` written in it.
+  + You will know installation is complete if a new window pops up asking whether you trust authors. Click on "Trust".
   
   + Restart (shut down and open again) your device.
 
@@ -128,9 +120,7 @@
   
   + Close all open windows and running processes other than wherever you are reading this.
   
-  + Open the folder `haskellSupport` in File Explorer.
-  
-  + Open the folder `haskell` in File Explorer .
+  + Open the folder `Haskell` in File Explorer .
   
   + Open the folder `installation` in File Explorer.
   
@@ -153,9 +143,7 @@
   
   + Close all open windows and running processes other than wherever you are reading this.
   
-  + Open the folder `haskellSupport` in File Explorer.
-  
-  + Open the folder `haskell` in File Explorer.
+  + Open the folder `Haskell` in File Explorer.
   
   + Open the folder `installation` in File Explorer.
   
@@ -165,8 +153,38 @@
   
   + This may take a while.
   
-  + You will know installation is complete if a new window pops up with `helloWorld` written in it.
+  + You will know installation is complete if a new window pops up asking whether you trust authors. Click on "Trust".
   
   + Restart (shut down and open again) your device.
 
 ]
+
+= Running Haskell
+
+Open VS Code. A window "Welcome" should be open right now. If you close that tab, then a tab with `helloWorld` written should pop up.
+
+If you right-click on `True`, a drop-down menu should appear, in which you should select "Run Code".
+
+You have launched GHCi. After some time, you should see the symbol `>>> `appear.
+
+Type in `helloWorld` after the `>>> `.
+
+It should reply `True`.
+
+= Fixing Errors
+
+If you see squiggly red, yellow, or blue lines under your text, that means there is an error, warning, or suggestion respectively.
+
+To explore your options to remedy the issue, put your text cursor at the text above the squiggly line and right-click.
+
+You have opened the QuickFix menu.
+
+You can now choose a suitable option.
+
+= Autocomplete
+
+Just like texting with your friends, VS Code also gives you useful auto-complete options while you are writing. 
+
+To navigate the auto-complete options menu, hold down the Ctrl key while navigating using the $arrow.t$ and $arrow.b$ keys.
+
+To accept a particular auto-complete suggestion, use Ctrl+Enter.
