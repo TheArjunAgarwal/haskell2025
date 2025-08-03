@@ -28,6 +28,8 @@ Book.copyright_declaration(title:title,author:author)
 
 Book.dedication([To someone])
 
+include "extra-typ/preface.typ"
+
 Contents.contents
 
 set page(numbering: "1") ; counter(page).update(1)
