@@ -587,15 +587,15 @@ We can suggest that a tree is very wide by applying ```typ #far_away()``` functi
 
 #c(i:i+"\n"+j,"#tree(
   (`(:)`,
-    `x1`,
+    `x₁`,
     (`(:)`,
-      `x2`,
+      `x₂`,
       (`(:)`,
-        `x3`,
+        `x₃`,
         (far_away(`(:)`),
-          `xn-1`,
+          `xₙ₋₁`,
           (`(:)`,
-            `xn`,
+            `xₙ`,
             `[]`
           )
         )

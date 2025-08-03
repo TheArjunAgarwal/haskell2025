@@ -502,15 +502,15 @@ Using trees, A list can be reprasented in the form
 
 #tree(
 (`(:)`,
-`x1`,
+`x₁`,
 (`(:)`,
-`x2`,
+`x₂`,
 (`(:)`,
-`x3`,
+`x₃`,
 (far_away(`(:)`),
-`xn-1`,
+`xₙ₋₁`,
 (`(:)`,
-`xn`,
+`xₙ`,
 `[]`
 )
 )
@@ -523,15 +523,15 @@ which is converted to:
 
 #tree(
 (`f`,
-`x1`,
+`x₁`,
 (`f`,
-`x2`,
+`x₂`,
 (`f`,
-`x3`,
+`x₃`,
 (far_away(`f`),
-`xn-1`,
+`xₙ₋₁`,
 (`f`,
-`xn`,
+`xₙ`,
 `v`
 )
 )
@@ -577,15 +577,15 @@ Or in tree form as
 
 #tree(
 (`(:)`,
-`x1`,
+`x₁`,
 (`(:)`,
-`x2`,
+`x₂`,
 (`(:)`,
-`x3`,
+`x₃`,
 (far_away(`(:)`),
-`xn-1`,
+`xₙ₋₁`,
 (`(:)`,
-`xn`,
+`xₙ`,
 `[]`
 )
 )
@@ -601,10 +601,10 @@ which is converted to:
   (`f`,
     (`f`,
     (far_away(`f`),
-      (`f`,`v`,`x1`),`x2`
-    ),`xn-2`
-    ),`xn-1`
-  ), `xn`
+      (`f`,`v`,`x₁`),`x₂`
+    ),`xₙ-2`
+    ),`xₙ₋₁`
+  ), `xₙ`
 )
 )
 
@@ -644,7 +644,7 @@ iterate :: (a -> a) -> a -> [a]
 -- outputs the infinite list [x, f x, f f x, ...]
 iterate f seed = unfold (\x -> Just (x, f x)) seed
 ```
-While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `unfoldr` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was litrally titled "The Under-Appreciated Unfold".
+While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was litrally titled "The Under-Appreciated Unfold".
 
 #exercise(sub : "Some more inbuilt functions")[
   Implement the following functions using fold and unfold.
@@ -949,19 +949,19 @@ We will now talk about folds lesser known cousing scans.
 While fold takes a list and compresses it to a single value, scan takes a list and makes a list of the partial compressions. Basically, 
 ```
 scanr :: (a -> b -> b) -> b -> [a] -> [b]
-scanr f v [x1, x2, x3, x4] 
+scanr f v [x₁, x₂, x₃, x₄] 
   = [
-      foldr f v [x1, x2, x3, x4],
-      foldr f v [x2, x3, x4],
-      foldr f v [x3, x4],
-      foldr f v [x4],
+      foldr f v [x₁, x₂, x₃, x₄],
+      foldr f v [x₂, x₃, x₄],
+      foldr f v [x₃, x₄],
+      foldr f v [x₄],
       foldr f v []
     ]
   = [
-      x1 `f` x2 `f` x3 `f` x4 `f` v,
-      x2 `f` x3 `f` x4 `f` v,
-      x3 `f` x4 `f` v,
-      x4 `f` v,
+      x₁ `f` x₂ `f` x₃ `f` x₄ `f` v,
+      x₂ `f` x₃ `f` x₄ `f` v,
+      x₃ `f` x₄ `f` v,
+      x₄ `f` v,
       v
     ] 
 ```
@@ -969,20 +969,20 @@ and very much similerly as
 
 ```
 scanl :: (b -> a -> b) -> b -> [a] -> [b]
-scanl f v [x1, x2, x3, x4] 
+scanl f v [x₁, x₂, x₃, x₄] 
   = [
       foldl f v [],
-      foldr f v [x1],
-      foldr f v [x1, x2],
-      foldr f v [x1, x2, x3],
-      foldr f v [x1, x2, x3, x4]
+      foldr f v [x₁],
+      foldr f v [x₁, x₂],
+      foldr f v [x₁, x₂, x₃],
+      foldr f v [x₁, x₂, x₃, x₄]
     ]
   = [
       v,
-      v `f` x1,
-      v `f` x1 `f` x2,
-      v `f` x1 `f` x2 `f` x3,
-      v `f` x1 `f` x2 `f` x3 `f` x4,
+      v `f` x₁,
+      v `f` x₁ `f` x₂,
+      v `f` x₁ `f` x₂ `f` x₃,
+      v `f` x₁ `f` x₂ `f` x₃ `f` x₄,
     ] 
 ```
 ]

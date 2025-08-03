@@ -37,13 +37,14 @@ There are several nice ways to create a list in Haskell.
 
 == Empty List
 
-The most basic approach is to create the empty list by writing `[]`.
+The most basic approach is to create the empty list (a list containing no elements) by writing `[]`.
 
 == Arithmetic Progression
 
 Haskell has some luxurious syntax for declaring lists containing arithmetic progressions -
 
 ```
+-- | arithmetic progression syntax
 >>> [1..6]
 [1,2,3,4,5,6]
 
@@ -60,6 +61,7 @@ Haskell has some luxurious syntax for declaring lists containing arithmetic prog
 But, very usefully, it just doesn't work for numbers, but other types as well.
 
 ```
+-- | non-number arithmetic progressions
 >>> [False ..True]
 [False,True]
 
@@ -626,15 +628,15 @@ Let use this principle to prove that
   \
   \ OR EQUIVALENTLY
   \
-  \ A list `[x1, x2, x3, ... , xn-1, xn]` is said to be *sorted*
+  \ A list `[x₁, x₂, x₃, ... , xₙ₋₁, xₙ]` is said to be *sorted*
   \ if and only if 
-  \ `x1 <= x2 <= x3 <= ... <= xn-1 <= xn`
+  \ `x₁ <= x₂ <= x₃ <= ... <= xₙ₋₁ <= xₙ`
   \
   \ OR EQUIVALENTLY
   \
-  \ A list `[x1, x2, x3, ... , xn-1, xn]` is said to be *sorted*
+  \ A list `[x₁, x₂, x₃, ... , xₙ₋₁, xₙ]` is said to be *sorted*
   \ if and only if 
-  \ `( x1 <= x2 ) && ( x2 <= x3 ) && (x3 <= x4 ) && ... && ( xn-1 <= xn)`
+  \ `( x₁ <= x₂ ) && ( x₂ <= x₃ ) && (x₃ <= x₄ ) && ... && ( xₙ₋₁ <= xₙ)`
 ]
 
 Here are a few examples of @definition_of_sorted_list#[s] -
@@ -902,8 +904,8 @@ $
   &== #t((`(:)`,`5`,(`(:)`,`8`,(`(:)`,`3`,`[]`))))
 $]
 
-In fact any list `[x1,x2,x3,...,xn]` can be represented as 
-$ #tree((`(:)`,`x1`,(`(:)`,`x2`,(`(:)`,`x3`,(far_away(`(:)`),`xn`,`[]`))))) $
+In fact any list `[x₁,x₂,x₃,...,xₙ]` can be represented as 
+$ #tree((`(:)`,`x₁`,(`(:)`,`x₂`,(`(:)`,`x₃`,(far_away(`(:)`),`xₙ`,`[]`))))) $
 
 This is the representation that Haskell actually uses to store lists.
 

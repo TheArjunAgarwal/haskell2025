@@ -1,3 +1,9 @@
+#metadata[
+```haskell
+module Book.Code.BasicSyntax where
+```
+]
+
 #import "../Modules/Definition.typ" : def
 #import "../Modules/Exercise.typ" : exercise
 
@@ -163,10 +169,6 @@ sumOf3 x y z = x + y + z
 sumOf4 :: Integer -> Integer -> Integer -> Integer -> Integer
 sumOf4 x y z w = x + y + z + w
 -- The above function has 4 inputs
-
-. 
-. 
-.
 ```
 
 So we can deduce that in general, \ if a function takes $n$ inputs of types `T1`,`T2`,`T3`,...,`Tn` respectively, \ and gives an output of type `T`, \ then the function itself will have type `T1 -> T2 -> T3 -> . . . -> Tn -> T` .
@@ -298,15 +300,15 @@ Observe that this issue is not solved by the BODMAS or PEMDAS convention.
 Haskell chooses `( a - b ) - c`, because `-` is "left-associative". 
 
 #def(sub:"left-associative")[
-  If an @definition_of_infix_binary_operator `#` is *left-associative*, it means that the expression 
-  ```
-  x1 # x2 # x3 # ... # xn
-  ```
+  If an @definition_of_infix_binary_operator `⨝` is *left-associative*, it means that the expression 
+```
+x₁ ⨝ x₂ ⨝ x₃ ⨝ ... ⨝ xₙ
+```
   is equivalent to 
-  ```
-  ( x1 # x2 ) # x3 # ... # xn
-  ```
-  which means that the leftmost `#` is evaluated first.
+```
+( x₁ ⨝ x₂ ) ⨝ x₃ ⨝ ... ⨝ xₙ
+```
+  which means that the leftmost `⨝` is evaluated first.
 ]
 
 Therefore `a - b - c` is equivalent to `( a - b ) - c` and not `a - ( b - c )`.
@@ -315,9 +317,9 @@ But what about `a - b - c - d`?
 
 ```
 a - b - c - d
--- take # as -, n as 4, x1 as a, x2 as b, x3 as c, x4 as d
+-- take ⨝ as -, n as 4, x₁ as a, x₂ as b, x₃ as c, x₄ as d
 == ( a - b ) - c - d 
--- take # as -, n as 3, x1 as ( a - b ), x2 as c, x3 as d
+-- take ⨝ as -, n as 3, x₁ as ( a - b ), x₂ as c, x₃ as d
 == ( ( a - b ) - c ) - d
 ```
 
@@ -328,15 +330,15 @@ a - b - c - d
 We also have the complementary notion of being "right-associative".
 
 #def(sub:"right-associative")[
-  If an @definition_of_infix_binary_operator `#` is *right-associative*, it means that the expression 
-  ```
-  x1 # x2 # x3 # ... # xn-2 # xn-1 # xn
-  ```
+  If an @definition_of_infix_binary_operator `⨝` is *right-associative*, it means that the expression 
+```
+x₁ ⨝ x₂ ⨝ x₃ ⨝ ... ⨝ xₙ₋₂ ⨝ xₙ₋₁ ⨝ xₙ
+```
   is equivalent to 
-  ```
-  x1 # x2 # x3 # ... # xn-2 # ( xn-1 # xn )
-  ```
-  which means that the rightmost `#` is evaluated first.
+```
+x₁ ⨝ x₂ ⨝ x₃ ⨝ ... ⨝ xₙ₋₂ ⨝ ( xₙ₋₁ ⨝ xₙ )
+```
+  which means that the rightmost `⨝` is evaluated first.
 ]
 
 // #def(sub:"associative")[
@@ -366,7 +368,7 @@ False :: Bool
 ```
 The `Bool` type means "true or false".
 
-The values `True` and `False` called `Bool`eans.
+The values `True` and `False` are called `Bool`eans.
 
 == Statements
 
@@ -471,7 +473,7 @@ We include the definition of `not` as it is quite simple -
 ```
 -- | not
 not :: Bool -> Bool
-not True = False
+not True  = False
 not False = True
 ```
 
@@ -491,7 +493,7 @@ Therefore ( ( A wins ) XOR ( B wins ) ) would be true.
 
 Also, ( false XOR false ) would be false, since at least one of the inputs need to be true.
 
-Finally, 7( true XOR true ) would be false, as both inputs are true.
+Finally, ( true XOR true ) would be false, as both inputs are true.
 
 = Function Definitions
 
@@ -537,13 +539,13 @@ Let's try to define @definition_of_XOR in Haskell -
 -- | xor
 xor :: Bool -> Bool -> Bool
 xor b1 b2 =
---    at least one of the inputs is True, but   not both
--- => b1 is True OR b2 is True          , but   not both
--- => ( b1 == True ) OR ( b2 == True )  , but   not both
--- => ( b1 == True ) OR ( b2 == True )  , but   not ( b1 AND b2 )
--- => ( b1 == True ) OR ( b2 == True )  , but ( not ( b1 AND b2 ) )
--- => ( b1 == True ) OR ( b2 == True )   AND  ( not ( b1 AND b2 ) )
-    ( ( b1 == True ) || ( b2 == True ) ) &&   ( not ( b1 &&  b2 ) )
+--     at least one of the inputs is True, but   not both
+-- <=> b1 is True OR b2 is True          , but   not both
+-- <=> ( b1 == True ) OR ( b2 == True )  , but   not both
+-- <=> ( b1 == True ) OR ( b2 == True )  , but   not ( b1 AND b2 )
+-- <=> ( b1 == True ) OR ( b2 == True )  , but ( not ( b1 AND b2 ) )
+-- <=> ( b1 == True ) OR ( b2 == True )   AND  ( not ( b1 AND b2 ) )
+     ( ( b1 == True ) || ( b2 == True ) ) &&   ( not ( b1 &&  b2 ) )
 ```
 
 == Some Conveniences
@@ -583,7 +585,7 @@ $
     )
 $
 can written in Haskell as
-```haskell
+```
 -- | basic usage of guards
 signum :: Double -> Double
 signum x
@@ -678,9 +680,9 @@ Another small pattern match equivalent to `xor1` -
 ```haskell
 -- | unused variables in pattern match
 xor5 :: Bool -> Bool -> Bool
-xor5 False False = True
-xor5 True True = True
-xor5 b1 b2 = False
+xor5 False False = False
+xor5 True True = False
+xor5 b1 b2 = True
 ```
 
 But since the variables `b1` and `b2` are not used in the right-hand side, \ we can replace them with `_` (read as "wildcard")
@@ -743,17 +745,21 @@ xor10 b1 b2 = case ( b1 , b2 ) of
 ```haskell
 -- | where
 xor11 :: Bool -> Bool -> Bool
-xor11 False b = b
-xor11 True b = b' 
-         where b' = not b
+xor11 b1 b2 = atLeastOne && (not both)
+    where
+        atLeastOne = b1 || b2
+        both = b1 && b2
 ```
 
 ```haskell
 -- | let
 xor12 :: Bool -> Bool -> Bool
-xor12 False b = b
-xor12 True b = let b' = not b in 
-               b'
+xor12 b1 b2 = 
+    let
+        atLeastOne = b1 || b2
+        both = b1 && b2
+    in
+        atLeastOne && (not both)
 ```
 
 === Without Inputs
@@ -765,23 +771,27 @@ Let us recall for a moment the definition for `xor2` (in @code_of_if-then-else_e
 We can see that this just equivalent to 
 
 ```haskell
+xor13 :: Bool -> Bool -> Bool
 xor13 b1 b2 = not ( b1 == b2 )
 ```
 
 which can be shortened even further
 
 ```haskell
+xor14 :: Bool -> Bool -> Bool
 xor14 b1 b2 = b1 /= b2
 ```
 , rewritten by @code_of_using_infix_operator_as_function
 
 ```haskell
-xor14 b1 b2 = (/=) b1 b2
+xor15 :: Bool -> Bool -> Bool
+xor15 b1 b2 = (/=) b1 b2
 ```
 and thus can finally be shortened to the extreme
 ```haskell
 -- | function definition without input variables
-xor14 = (/=) 
+xor16 :: Bool -> Bool -> Bool
+xor16 = (/=) 
 ```
 Notice the curious thing that the above function definition doesn't have any input variables. This ties into a fundamentally important concept called currying which we will explore later.
 
@@ -919,16 +929,16 @@ Another way to evaluate fibonacci will be seen in end of chapter exercises, wher
 
 #def(sub:"Double")[
   `Double` or Double Precision Floating Point are high-precision approximations of real numbers. For example, consider the "square root" function - 
-  ```
-  >>> sqrt 2 :: Double
-  1.4142135623730951
-  
-  >>> sqrt 99999 :: Double
-  316.226184874055
-  
-  >>> sqrt 999999999 :: Double
-  31622.776585872405
-  ```
+```
+>>> sqrt 2 :: Double
+1.4142135623730951
+
+>>> sqrt 99999 :: Double
+316.226184874055
+
+>>> sqrt 999999999 :: Double
+31622.776585872405
+```
 ]
 
 
@@ -950,16 +960,16 @@ Another way to evaluate fibonacci will be seen in end of chapter exercises, wher
 
 #def(sub:"Double")[
   `Double` or Double Precision Floating Point are high-precision approximations of real numbers. For example, consider the "square root" function - 
-  ```
-  >>> sqrt 2 :: Double
-  1.4142135623730951
-  
-  >>> sqrt 99999 :: Double
-  316.226184874055
-  
-  >>> sqrt 999999999 :: Double
-  31622.776585872405
-  ```
+```
+>>> sqrt 2 :: Double
+1.4142135623730951
+
+>>> sqrt 99999 :: Double
+316.226184874055
+
+>>> sqrt 999999999 :: Double
+31622.776585872405
+```
 ]
 
 A lot of numeric operators and functions come predefined in Haskell. Some natural ones are
@@ -1057,7 +1067,7 @@ One must wonder here that why would we have two functions doing the same thing? 
 
 #exercise(sub : "Div vs Quot")[
   From the given example, what is the difference between `div` and `quot`?
-  ```
+```
 >>> 8 `div` 3
 2
 
@@ -1086,7 +1096,7 @@ One must wonder here that why would we have two functions doing the same thing? 
 
 #exercise(sub : "Mod vs Rem")[
   From the given example, what is the difference between `mod` and `rem`?
-  ```
+```
 >>> 8 `mod` 3
 2
 
@@ -1162,7 +1172,7 @@ Haskell defines for us three exponentiation operators, namely `(^^), (^), (**)`.
 
 #exercise(sub : "Can you see the difference?")[
   What can we say about the three exponentiation operators?
-  ```
+```
   >>> a = 5 :: Int
   >>> b = 0.5 :: Float
   >>>
@@ -1207,7 +1217,7 @@ Haskell defines for us three exponentiation operators, namely `(^^), (^), (**)`.
   32.0
   >>> b**(-a)
   <interactive>:20:6: error: [GHC-83865]
-  ```
+```
 ]
 
 Unlike division, they have almost the same function. The difference here is in the type signature. While, inhering the exact type signature was not expected, we can notice:
@@ -1306,6 +1316,25 @@ We can see that this is much faster. The exact number of steps or time taken is 
 This algorithm predates computers by approximatly 2300 years. If was first decribed by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
 
 While we will see these class of algorithms, including checking if a number is prime or finding the prime factorization, these require some more weapons of attack we are yet to devlop.
+
+== Dealing with Characters
+We will now talk about characters. Haskell packs up all the functions relating to them in a module called `Data.Char`. We will explore some of the functions there.
+
+So if you are following along, feel free to enter `import Data.Char` in your GHCi or add it to the top of your haskell file.
+
+The most basic and importent functions here are `ord` and `chr`. Characters, like the ones you are reading now, are represented inside a computer using numbers. These numbers are part of a standard called ASCII (American Standard Code for Information Interchange), or more generally, Unicode.
+
+In Haskell, the function `ord :: Char -> Int` takes a character and returns its corresponding numeric code. The function `chr :: Int -> Char` does the inverse: it takes a number and returns the character it represents.
+```
+>>> ord 'g'
+103
+>>> ord 'G'
+71
+>>> chr 71
+'G'
+>>> chr 103
+'g'
+```
 
 = Mathematical Functions
 We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this oppurtunity to talk about real exponentiation. To begin, Haskell has a lot of pre-defined functions.
@@ -1509,7 +1538,7 @@ Now write a much more efficient (should be one line and has no recursion) functi
 ]
 
 #exercise(sub : "Squares and Rectangles on a chess grid")[
-  Write a function `squareCount :: Int -> Int` to count number of squares on a  $n times n$ grid. For example, `squareCount 1 = 1` and `squareCount 2 = 5` as four 1x1 squares and one 2x2 square.
+  Write a function `squareCount :: Int -> Int` to count number of squares on a  $n times n$ grid. For example, `squareCount 1 = 1` and `squareCount 2 = 5` as four 1 $times$ 1 squares and one 2x2 square.
 
   Furthermore, also make a function `rectCount :: Int -> Int` to count the number of rectangles on a $n times n$ grid.
 
