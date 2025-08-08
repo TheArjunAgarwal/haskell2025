@@ -40,26 +40,16 @@ let chapters = (
     [Basic Theory],
     author
   ),
-  // (
-  //   "ch02_setup.typ",
-  //   [Installing Haskell],
-  //   author
-  // ),
-  // // (
-  // //   "ch02_setup_mac.typ",
-  // //   [Haskell Setup on MacOS],
-  // //   A
-  // // ),
-  // // (
-  // //   "ch02_setup_win.typ",
-  // //   [Haskell Setup on Windows],
-  // //   R
-  // // ),
-  // (
-  //   "ch03_datatypes.typ",
-  //   [Basic Syntax],
-  //   A
-  // ),
+  (
+    "ch02_setup.typ",
+    [Installing Haskell],
+    author
+  ),
+  (
+    "ch03_datatypes.typ",
+    [Basic Syntax],
+    A
+  ),
   // (
   //   "ch04_tuples.typ",
   //   [Types as Sets],

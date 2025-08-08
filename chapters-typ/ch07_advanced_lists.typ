@@ -1271,7 +1271,7 @@ Note : We find it extreamly cool to know that so much of math goes on in simply 
 
   So we now need to find the $p$ and $q$ which satisfies this. Well, that can be done quite easily, right?
 
-Keeping in mind @exercise_of_Moduler_Exponation, what $n$ should we choose to be most optimal?
+Keeping in mind @exercise_of_Modular_Exponentiation, what $n$ should we choose to be most optimal?
 ]
 
 
