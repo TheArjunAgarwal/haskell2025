@@ -504,7 +504,7 @@ We had shown, through an cumbersome computation, that `mergesort` takes less tha
 
 But with the power of Big-Oh on our side, we just assume the worst case where every comparsion leads to a switch and get the number of operations as $cal(O)(n log(n))$.
 
-Similerly, we can use the results from there, to shown that the worst case for `quicksort` is $cal(O)(n^2)$ operations, but in the average case, it only takes `cal(O)(n log(n))` operations.
+Similerly, we can use the results from there, to shown that the worst case for `quicksort` is $cal(O)(n^2)$ operations, but in the average case, it only takes $cal(O)(n log(n))$ operations.
 
 But can we do better? Depends on how much you know about the elements of the list.
 
@@ -524,7 +524,7 @@ But let's say I have to sort a bunch of spegatti sauces according to how much a 
   ceil(log(n!))\
   = ceil(log(n^n)) quad "as " n^n > n!\
   = ceil(n log(n))\
-  = cal(O(n log(n))) quad "as " f(x) - 1 <= ceil(f(x)) <= f(x)+1
+  = cal(O)(n log(n))) quad "as " f(x) - 1 <= ceil(f(x)) <= f(x)+1
   $
 ]
 
@@ -537,6 +537,128 @@ Given a list with infinite random numbers, our randomized algorithm uses these t
 Such proofs help us make sure we have achived optimality and make sure people don't waste time looking for faster algorithms. However, we just sorted spegatti in $cal(O)(n)$ time, how?
 
 The answer 'that was a stupid algorithm' is plain wrong as our proof never relied on dumbness or smartness. So what is at play?
+
+As stated above, if we know more about what we are sorting, we could do better. For example, if they were sphegatti...
+
+Given that most sorting is of integers and strings, why would you ever so restrict yourself as to only use comparisons? You can do much more with these objects that. You can add them, you can multiply them, you can count with them!
+
+While it may seem unintutive, but we can use even these operations for sorting! We will talk mostly about integer sorting algorithms but faster algorithms for strings also exists (which we will mention).
+
+=== Counting Sort
+Let's say we want to sort a range of $0-k$ with some number of repeats. So what do we do? We can do this in $cal(O)(n k)$ time.#footnote[
+  If we had an array, we could do this in $cal(O)(n+k)$ time as we have random access. 
+]
+
+```
+-- | Counting Sort
+countingSort :: Int -> [Int] -> [Int]
+countingSort k lis = concat (go k lis []) where
+    go (-1) _ ans = ans
+    go k lis ans = go (k-1) lis (filter (==k) lis : ans)
+```
+
+For a fixed $k$, this is already an $cal(O)(n)$ algorithm; but it is easy to observe, that in practice this would behave $cal(O)(n^2)$-ish.
+
+And secondly, if we want to fix a large $k$, it better be `maxBound :: Int` atleast. That makes the algorithm insanly slow while still being $cal(O)(n)$.
+
+So why talk about it? Because it is a subroutine to 
+=== Radix Sort
+We begin by first making modefications to `countingSortWithKey :: Int -> [(Int, Int)] -> [(Int, Int)]` which will sort based on the key value of the pairs (the second value of the pair) keeping the list otherwise stable (we don't change the order from that prescribed by orignal list if key value is same).
+```
+-- | Counting Sort With Keys
+countingSortWithKey :: Int -> [(Int, Int)] -> [(Int, Int)]
+countingSortWithKey k lis = concat (go k lis []) where
+    go (-1) _ ans = ans
+    go k lis ans = go (k-1) lis (filter (\y -> k == snd y) lis : ans) -- The single change!
+```
+
+#definition(sub : "Radix Sort")[
+  Radix sort is a sorting algorithm which sorts a list of integers digit by digit, starting from the least significent digit; mantaining stablity in subsequent sorts.
+]
+For example, if we had to sort:
+$
+853, 872, 265, 238, 199, 772, 584, 204, 480, 173,\
+499, 349, 308, 314, 317, 186, 825, 398, 899, 161
+$
+By the described process, We would first sort using the one's digit.
+$
+48bold(0), 16bold(1), 87bold(2), 77bold(2), 85bold(3), 17bold(3), 58bold(4), 20bold(4), 31bold(4), 26bold(5),\
+82bold(5), 18bold(6), 31bold(7), 23bold(8), 30bold(8), 39bold(8), 19bold(9), 49bold(9), 34bold(9), 89bold(9)
+$
+We will now sort using the ten's digit, remember, we need to be stable that is for numbers that are tied on the middle digit, keep them in the current order.
+$
+2bold(0)underline(4), 3bold(0)underline(8), 3bold(1)underline(4), 3bold(1)underline(7), 8bold(2)5, 2bold(3)8, 3bold(4)9, 8bold(5)3, 1bold(6)underline(1), 2bold(6)underline(5),\
+8bold(7)underline(2), 7bold(7)underline(2), 1bold(7)underline(3), 4bold(8)underline(0), 5bold(8)underline(4), 1bold(8)underline(6), 3bold(9)underline(8), 1bold(9)underline(9), 4bold(9)underline(9), 8bold(9)underline(9)
+$
+Finally, we will sort using the hundered's number.
+$
+161, 173, 186, 199, 204, 238, 265, 308, 314, 317,\
+349, 398, 480, 499, 584, 772, 825, 853, 872, 899
+$
+
+#exercise(sub:"Proof of Correctness")[
+  Show that Radix Sort correctly sorts an input list of $n$ integers via induction of the length of longest number in the list.
+
+  Hint: You might want an induction hypothesis which looks more like the process. Something along the lines that the last $j$ places are sorted in $j$th pass.
+]
+So how do we quickly sort the numbers by the last places? Use it as a key and use `countingSortWithKey`. This would look like:
+```
+digit pos y = (y `mod` (10 ^ (pos + 1))) `div` (10 ^ pos)
+
+radixSort :: Int -> [Int] -> [Int]
+radixSort maxLength lis = go 0 lis where
+  go pos lis = if pos == maxLength then lis else go (pos + 1) newLis where
+    key = map (digit pos) lis
+    lisWithKey = zip lis key
+    newLis = map fst $ countingSortWithKey 9 lisWithKey
+```
+
+This is a rather nice implementation, of what can easily be a very cumbersome code. A lot of helpers are created for more clarity instead of going for a more concise but impenetratable version.
+
+Let's now compute the time complexity. We will take the number of digits in the base system to be $d$, the longest number be $l$ long and the list having $n$ numbers. 
+
+Thus, every pass through the list takes:
+- $Theta(n)$ time to get the digits.
+- $Theta(n)$ time to zip the key and numbers up.
+- $Theta(n d)$ time to counting sort with the given key.
+- $Theta(n)$ time to map `fst`.
+
+This will be a total of $Theta(n d)$ time. We will make $l$ passes through the list.
+
+Thus, the total time complexity is $Theta(n d l)$#footnote[
+  Again, as the time complexity for counting sort is different for arrays, the complexity of radix sort would also change.
+]. Setting $d = 9$, we would have $Theta(n log_d (M)) = Theta(n log(M))$ which would make it asymptotically faster for any list with the largest number less than number of elements.
+
+=== Survey of Sorting Algorithms
+In this survey, we will consider the optimal data structures. Design and Analysis of (some of) them is dicussed in ch11.
+
+We will let $w = log(M)$
+#table(
+  columns:4,
+  [Published], [Algorithm / Authors], [Data Structure], [Complexity],
+  [Since Antiquity], [Merge Sort], [List], [$cal(O)(n log(n))$],
+  [Since Antiquity], [Radix Sort], [Arrey, List], [$cal(O)(n w/log(n))$ and for list, $cal(O)(n w)$],
+  [1974], [van Emde Boas], [van Emde Boas Tree], [$cal(O)(n log(w/(log n)))$],
+  [1983],[Kirkpatrick, Reisch],[Trie],[$cal(O)(n + w/log(n))$],
+  [1995],[Andersson, Hagerup, Nilsson, Raman (called Signature Sort)],[Compressed Trie],[$cal(O)(n log log n)$ for $log^(2+epsilon)(w) >  n$],
+  [2002],[Han, Throup],[Too Weird],[$cal(O)(n sqrt(log log n))$ for some nice bound on $w$)#footnote[
+  The reason we don't describe Han-Throup Algorithm well as none of us are that very intrested in sorting algorithms and hence, don't have the level of knowledge of tree structures and algorithms needed to do a description of this justice.
+]]
+)
+
+An open question is if it is possible to do sorting in $cal(O)(n)$. For example, if $w = Omega (log(n)) => "Radix Sort is" cal(O)(n)$.
+
+What about smaller $w$? This was given by Andersson et. al. where $cal(O)(n)$ is achived for $w = cal(O)(n^(1/2 - epsilon))$.#footnote[One can also see the complexity when $log^(2+epsilon) w > n$ in the table. The middle cases are where a complex complexity (pun intended) form with $w$ and $n$ can be obtained.]
+
+Belazzougui et. al. in 2014 gave a way to sort in $cal(O)(n)$ for $w = Omega(log^2(n) log log n)$. Their algorithm, called Packed Sort, works normally close to $cal(O)(n log n)$ but in certain cases becomes much faster.
+
+A general proof or a single algorithm across $w$ is not yet known and not much progress has been made in the last decade. Same is true for randomized algorithms like quick Sort; while results are slightly better their, progress has slowed down considerably.
+
+
+
+
+
+
 
 
 
