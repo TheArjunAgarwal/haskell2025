@@ -879,8 +879,8 @@ PS: You will feel a little dumb once you solve it.
   And if you think it’s impossible, then prove it as Wupendra won't satisfy for anything less.
 ]
 
-#exercise(sub : "Yet some more Fibonnaci Identity")[
-  Fibonnaci sequence is defined as $F_0 = 0, F_1 = 1$ and $F_n = F_(n-1) + F_(n-2)$. 
+#exercise(sub : "Yet some more Fibonacci Identity")[
+  Fibonacci sequence is defined as $F_0 = 0, F_1 = 1$ and $F_n = F_(n-1) + F_(n-2)$. 
 
   (i) Prove that
   $

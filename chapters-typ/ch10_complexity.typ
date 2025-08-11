@@ -629,6 +629,16 @@ Thus, the total time complexity is $Theta(n d l)$#footnote[
   Again, as the time complexity for counting sort is different for arrays, the complexity of radix sort would also change.
 ]. Setting $d = 9$, we would have $Theta(n log_d (M)) = Theta(n log(M))$ which would make it asymptotically faster for any list with the largest number less than number of elements.
 
+#exercise(sub : "Complete Radix Sort")[
+  Modify the radix sort algortithm to make functions:
+  ```
+  radixSortWithBase :: Int -> Int [Int] -> [Int]
+  -- Radix sort with some other base.
+  radixSortPack :: [Int] -> [Int]
+  -- The packaged radixSort which just takes a list of ints and sorts it, hidding the bells and whistles.
+  ```
+]
+
 === Survey of Sorting Algorithms
 In this survey, we will consider the optimal data structures. Design and Analysis of (some of) them is dicussed in ch11.
 
@@ -654,36 +664,86 @@ Belazzougui et. al. in 2014 gave a way to sort in $cal(O)(n)$ for $w = Omega(log
 
 A general proof or a single algorithm across $w$ is not yet known and not much progress has been made in the last decade. Same is true for randomized algorithms like quick Sort; while results are slightly better their, progress has slowed down considerably.
 
+= RAM Model and Asymptotic Analysis
+A change in our approach in this chapter is the fact that we never told you what time algorithms took to run for us. 
 
+Radix sort was quite fast for whenever I ran it in my GHCI, it performed better than merge sort; but you needed neither my computer times nor took my word for it.
 
+The thing is computers become more powerful all the time. An empirical relation which has been true upto recently is:
 
+#quote(sub : "Moore's Law")[
+The number of transistors in an integrated circuit (IC) doubles about every two years.#footnote[- It is an observation, not a law.
+- It is argued to be slowing down, by some groups.]
+]
 
+So sometime in future, a mergesort on your computer would beat radix sort on mine. I need to argue that the radix sort will beat merge sort on your device; without seeing your device or the computer's proccessing paradigm then. Furthermore, algorithms almost always are faster in a low-level language like C or Assembly; and an algorithm is almost always slower in a high-level language like JavaScript or Python. Even worse, runtimes depend on how the compiler is optimizing your code, yes, some compilers do that.
 
+With so many considerations, evaluating algorithms is quite hard.
 
+This is quite a task and many methods have been proposed for a machine independent, language independent algorithm design. The first is to use a hypothetical machine called Random Access Machine or RAM (not to be confused with Random Access Memory which is a part of mordern computer architecture).
+#definition(sub:"Random Access Machine")[
+  Under this model of computation, we are confronted with a computer where:
+- Each simple operation ($+, *, –, =,$ `if` and calling a function) takes exactly one time step.
+- The called functions are not considered simple operations. Instead, they are the composition of many single-step operations. For example, if an algorithm calls `sort`, it should certainly take more than 1 time step.
+- Each memory access takes exactly one time step. Further, we have as much memory as we need. The RAM model takes no notice of whether an item is in cache or on the disk.
 
+Under the RAM model, we measure run time by counting up the number of steps an algorithm takes on a given problem instance.
+]
 
+The RAM is a simple model of how computers perform. Perhaps too simple. After all, multiplying two numbers takes more time than adding two numbers on most processors (and also is basically a sub-routine as we will see at the end of this chapter); violating the first assumption of the model. 
 
+The presence of multiple proccessors and threads, which fancy compilers use, may as well violate the second assumption as we can be running the subroutine and routine at once. 
 
+And certainly memory access times differ greatly depending on whether data sits in cache or on the disk. Finally, we don't have $oo$ memory.
 
+This makes the model wrong on every single front. But here is a thing, it is still a usefull model.
 
+Consider the model that light travels in straight lines. From a physics standpoint, we know this is fundamentally incorrect. Light exhibits wave properties, can be bent by gravity, and behaves according to complex electromagnetic principles. 
 
-= What Big O doesn't want you to know?
+But when designing the lighting for a theater stage, the straight-line model of light is not only sufficient but essential. A lighting designer doesn't need to consider quantum mechanics or gravitational lensing when positioning spotlights; they simply need to predict where shadows will fall and how bright different areas will be. The straight-line model makes these calculations trivial and intuitive. 
 
+However, when that same lighting designer needs to design a laser show with mirrors, they might need the more sophisticated model that accounts for reflection and refraction. And if they were designing equipment for their universities astronomy lab (explains the need for parttime working in theater) studying distant galaxies, they'd need to consider how gravity bends light around massive objects. Each level of complexity serves its purpose within the appropriate domain.
 
+This is the case with RAM as well. We use RAM machines to make our lives easier and as they are true when dealing with large inputs. The reason is that when dealing with large inputs, the cache-disk time, the addition-multiplication time etc doesn't matter. This is also why we normally use RAM along with asymptotic analysis; as we don't care if we can do better in small cases; we want to do better in large ones.
 
-== Galactic Algorithms
-A galactic algorithm is one with an optimal theoretical asymptotic performance, but which is never used in practice. Typical reasons are that the performance gains only appear for problems that are so large they never occur, or the algorithm's complexity outweighs a relatively small gain in performance. Galactic algorithms were so named by Richard Lipton and Ken Regan,[1] because they will never be used on any data sets on Earth.
+For dealing with memory, concurency, parllelism, cache-disk etc other models of computation are created#footnote[RAM is a model in the class of models called Register Machines which are equivalent to Turing Machines.]. You will possibly study them in your wider career.
+
+== What Big O doesn't want you to know?
+$cal(O)$ sweeps the constents under the rug. This works when the rug is large and heavy while the constents are mere dust specks. 
+
+But if, the constents are large: well then $10^(10^100) n$ is worse than $n^2$ for all values we could care about, irrespective of the fact the former is $cal(O)(n)$ while the latter is $cal(O)(n^2)$. This leads to something called Galectic Algorithms.
+
+#definition(sub:"Galactic Algorithms")[A galactic algorithm is one with an optimal theoretical asymptotic performance, but which is never used in practice. Typical reasons are that the performance gains only appear for problems that are so large they never occur, or the algorithm's complexity outweighs a relatively small gain in performance. Galactic algorithms were so named by Richard Lipton and Ken Regan, because they will never be used on any data sets on Earth.]
+
+This is of matter to us as at the end of all this theoretical work, we wish to use our algorithms or atleast know when to switch algorithms. For example, a lot a languages use insertion sort to sort till $n=5$ or $6$ before going to merge sort.
+
+Hence, sometimes one really does the grulling analysis with the constents we saw in chapter 7.
+
+This may make it seem useless. But the fact is, an algorithm, even if impractical, may create new techniques that may eventually be used to create practical algorithms.
+
+Also, an impractical algorithm can still demonstrate that conjectured bounds can be achieved, or that proposed bounds are wrong, and hence advance the theory of algorithms.
+#quote(sub : "Richard J. Lipton, Kenneth W. Regan")[
+This alone could be important and often is a great reason for finding such algorithms. For example, if tomorrow there were a discovery that showed there is a factoring algorithm with a huge but provably polynomial time bound, that would change our beliefs about factoring. The algorithm might never be used, but would certainly shape the future research into factoring.]
 
 = An Informal Survey of Multiplication Algorithms
-The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients, let's begin with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. Similerly, if a function calls some other function, we say this call takes $cal(O)(1)$ time.
+The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients in the excercise, let's end the main text with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). Our model of computation will be RAM but without the assumption. 
 
-The naive way to do so would be to define multiplication as repeated addition. Something of the sort `multiply 1 b = b` and the reccurence. `multiply a b = b + multiply (a-1) b`. For two `n` digit numbers, this will take $cal(O)(10^n) dot cal(O)(n) = cal(O)(n 10^n)$ operations as $b < 10^n$ and we need to make $b$ function calls and as many additions with the smallest number of size $n$. That is very bad, we will see the quantitatatives in a moment. #footnote[
+We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. This is realized by the school book carry method of additon and is optimal #footnote[The proof for the optimality is much harder. It was given by Emil Jerabek in 2023 using a technique we will see in ch 11 called Amortization].
+
+The naive way to multiply would be to define multiplication as repeated addition. Something of the sort `multiply 1 b = b` and the reccurence. `multiply a b = b + multiply (a-1) b`. For two `n` digit numbers, this will take $cal(O)(10^n) dot cal(O)(n) = cal(O)(n 10^n)$ operations. That is very bad, we will see the quantitatatives in a moment. #footnote[
   We obviously know that the function definition is not complete. We need to deal with negitives and zero, but all of that doesn't really change the time complexity.
 ]
 
-Notice, this is a departure from our usual method of counting every operation and we are instead taking the big-oh approximation. We will talk why this is a good idea most of the times in some while, but in this case, it is the only way to deal with the mix of operations we are using and reconciling number of operations.
+An improvement in the multiplication algorithm, we are already familier with, is the one taught in school. This was also the algorithm Al-Khwarizmi found. 
+```
+-- | School Book Multiplication
+-- Remember, we can still multiply single digit integers!
+singMul x num = foldl1 (\a b -> 10*a + b) (map (*x) num)
 
-An improvement in the multiplication algorithm, we are already familier with, is the one taught in school. This was also the algorithm Al-Khwarizmi found. The number of operations fort this algorithm is $cal(O)(n^2) + cal(O)(n) cal(O)(n-1) = cal(O)(n)$ as we multiply all the digits in the latter number with the digits in the former number and then add the results suitably one by one. That is in $32 * 45$, we will compute $32 * 5$ and $32 * 4$ and add them.
+schoolMul num1 num2 = foldl1 (\a b -> 10*a + b) (map (`singMul` num2) num1)
+```
+
+The number of operations fort this algorithm is $cal(O)(n^2)$ as we multiply all the digits in the latter number with the digits in the former number and then add the results suitably one by one. That is in $32 * 45$, we will compute $32 * 5$ and $32 * 4$ and add them.
 
 Doing a lot better than this took about a millenia, with the improvement comming from Anatoly Karatsuba in 1962. The idea used is the usual divide and conquor.
 
@@ -729,9 +789,7 @@ This is a lot better. The next improvement came just an year later in 1963 by To
 
 If you are wondering, they showed that we can break the multiplication in five $n/3$ sized products. Actually, we can split in any number of parts we want. Karatsuba is Toom-2, the $cal(O)(n^(log_3(5)))$ algorithm is Toom-3.  When split in some $k$ parts, the complexity is $cal(O)(n^E)$ where $E = log_k(2k − 1))$.
 
-This can in theory do $cal(O)(1)$ multiplication. As we will see in the upcoming section on the dark secrets of big-oh, $cal(O)$ sweeps the constents under the rug. This works when the rug is heavy, large and the constents tiny. But if, the constent is large: well then $Theta(10^(10^100) n)$ is worse than $ Theta(n^2)$ for all values we could care about, irrespective of the fact the former is $cal(O)(n)$ while the latter is $cal(O)(n^2)$.
-
-Doing an exact complexity analysis can allow us to compute the exact speed of growth of the constent of $cal(O)(n^E)$ (hint: It is basically exponential).
+This can in theory do $cal(O)(1)$ multiplication. As we have seen in the section about the dark secrets of big-oh, the constents will cause the problem. Doing an exact complexity analysis can allow us to compute the exact speed of growth of the constent of $cal(O)(n^E)$ (hint: It is basically exponential).
 
 This leads us to the $cal(O)(n log(n) log(log(n)))$ Schönhage–Strassen algorithm (1971) which uses the Discrete Fast Fouries Transform algorithm described in chapter 8. The exact implementation is left as excercise (to find and understand) to the morbidly curious. In this paper, Arnold Schönhage and Volker Strassen also conjectured a lower bound of $Omega(n log(n))$.
 

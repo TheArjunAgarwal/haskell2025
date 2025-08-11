@@ -1313,7 +1313,7 @@ lcm p q = (p * q) `div` (gcd p q)
 
 We can see that this is much faster. The exact number of steps or time taken is a slightlty involved and not very related to what we cover. Interested readers may find it and related citations #link("https://en.wikipedia.org/wiki/Euclidean_algorithm#Algorithmic_efficiency")[here].
 
-This algorithm predates computers by approximately 2300 years. If was first described by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
+This algorithm predates computers by approximately 2300 years. It was first described by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
 
 While we will see these class of algorithms, including checking if a number is prime or finding the prime factorization, these require some more weapons of attack we are yet to develop.
 
@@ -1436,7 +1436,7 @@ burgers (1,1,1) (1,1,1) (1,1,3)        1000000000000  = 200000000001
 
 This question may look like a combinatorics or recursion question, but any of those approaches will be very inefficient. 
 
-Let's try to algebraically compute how muh money is needed to make $x$ burgers. We can define this cost function as cost times the number of ingredient required minus the amount already in pantry. This will something like:
+Let's try to algebraically compute how much money is needed to make $x$ burgers. We can define this cost function as cost times the number of ingredient required minus the amount already in pantry. This will something like:
 $
   f(x) = p_b max(0, x dot B - n_b) + p_s max(0, x dot S - n_s) + p_c max(0, x dot C - n_c)
 $
