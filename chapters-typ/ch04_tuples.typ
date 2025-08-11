@@ -875,7 +875,7 @@ Prove that this is a commutative and associative operation.
     A binary operator $ast$ over a set $S$ is *Unital* if there exists $l, r in S op("s.t.") forall x in S, l ast x = x ast r = x$. (You can also prove $r = l$! This is why we normally label this $l = r = 1_S$ in abstract algebra.)
   ]
 
-  If a set `S` has two unital operations $star$ and $dot$ defined on it such that:
+  If a set $S$ has two unital operations $star$ and $dot$ defined on it such that:
   $
   (w dot x) star (y dot z) = (w star x) dot (y star z)
   $
@@ -891,21 +891,21 @@ Prove that this is a commutative and associative operation.
 ]
 #exercise(sub : "Feels Abstract")[
   #def(sub:"Shelf")[
-  A set with an binary operation $|>$ which left distributes over itself is called a left shelf, that is $forall x,y,z in S, x |> (y |> z) = (x |> y) |> (x |> z)$.
+  A set with an binary operation $gt.tri$ which left distributes over itself is called a left shelf, that is $forall x,y,z in S, x gt.tri (y gt.tri z) = (x gt.tri y) gt.tri (x gt.tri z)$.
 
-  A similar definition holds for right shelf and the symbol often used is $<|$.
+  A similar definition holds for right shelf and the symbol often used is $lt.tri$.
   ]
 
-  (i) Prove that a unital left shelf is associative. In other words: if there exists $1_S in S$ such that $1 |> x = x |> 1 = x$, then $|>$ is associative.
+  (i) Prove that a unital left shelf is associative. In other words: if there exists $1_S in S$ such that $1 gt.tri x = x gt.tri 1 = x$, then $gt.tri$ is associative.
 
   #def(sub:"Rack")[
-    A rack is a set $R$ with two operations $|>$ and $<|$, such that R is a left shelf over $|>$ and a right shelf over $<|$ satisfying $x |> (y <| x) = (x |> y) <| x = y$.
+    A rack is a set $R$ with two operations $gt.tri$ and $lt.tri$, such that R is a left shelf over $gt.tri$ and a right shelf over $lt.tri$ satisfying $x gt.tri (y lt.tri x) = (x gt.tri y) lt.tri x = y$.
   ]
-  (ii) Prove that in a rack $R$, $|>$ distributes over $<|$ and vice versa. That is, $forall x,y,z in R; x |> (y <| z) = (x |> y) <| (x |> z)$.
+  (ii) Prove that in a rack $R$, $gt.tri$ distributes over $lt.tri$ and vice versa. That is, $forall x,y,z in R; x gt.tri (y lt.tri z) = (x gt.tri y) lt.tri (x gt.tri z)$.
 
-  (iii) We call an operator $star$ *idempotent* if $x star x = x$. If for a rack, $|>$ is idempotent; prove that $<|$ is idempotent.
+  (iii) We call an operator $star$ *idempotent* if $x star x = x$. If for a rack, $gt.tri$ is idempotent; prove that $lt.tri$ is idempotent.
   #def(sub: "Quandle")[
-    A Quandle is a rack with $|>$ and $<|$ being idempotent.
+    A Quandle is a rack with $gt.tri$ and $lt.tri$ being idempotent.
   ]
 
   (iv) We call an operator $star$ *left involute* if $x star (x star y) = y$. Prove that an idempotent, left involutive, left shelf is a quandle (recall that the shelf only has one operator, we need to somehow suitably define the other operation. Maybe do problem (v) for a hint?)
@@ -914,7 +914,7 @@ Prove that this is a commutative and associative operation.
     An involutive quandle is called a *Kei*
   ]
 
-  (v) Prove that the set of points on the real plane with $x |> y$ being the reflection of $y$ over $x$ is a Kei.
+  (v) Prove that the set of points on the real plane with $x gt.tri y$ being the reflection of $y$ over $x$ is a Kei.
 
   Note: Shelves, Racks, Quandles and Kai's are slowly entering mainstream math as ways to work with operations on exotic sets like set of knots or set of colorings of primes etc. The theory of Kai in this regard was formalized very recently (2024) by Davis and Schlank in "Arithmetic Kei Theory". The main use is still Knot Theory, but we would not be surprised to see it used in a number theory proof. A reference for this, and a pre-req for Davis and Schlank, is "Quandles" by Mohamed Elhamdadi and Sam Nelson.
 ]
