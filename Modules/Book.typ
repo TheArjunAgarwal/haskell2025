@@ -42,6 +42,7 @@
   import datetime : *
   
   box( baseline: 0.1em )[ 
+    // $copyright$
     #circle( 
       inset : 0.07em , 
       align( 
@@ -101,7 +102,7 @@
   code_text_settings : ( 
     size : 1.3em, 
     font : "Fira Code" , 
-    stylistic-set: (3,4,5,9) , // 6 makes backslash super thin
+    stylistic-set: (3,4,5,8,9) , // 6 makes backslash super thin
     theme : auto, //"theme.tmTheme"
     features : ("cv24",)
   ) ,
