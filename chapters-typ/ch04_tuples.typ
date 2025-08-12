@@ -716,7 +716,9 @@ it behaves as such -
 -34
 ```
 
-== Understanding through Types
+== Understanding through Associativity
+
+=== Of `->`
 
 The @definition_of_currying_rule essentially allows us to view a function of type `A -> B -> C` as of type `A -> ( B -> C )`.
 
@@ -732,6 +734,105 @@ X -> ( Y -> Z )
 ```
 
 And thus the @definition_of_currying_rule is justified.
+
+=== Of Function Application
+
+Let us take the @definition_of_currying_rule
+```
+f x = \ y -> f x y
+```
+Applying a few transformations to both sides - 
+```
+( f x ) == ( \ y -> f x y )
+-- applying both sides to y
+( f x ) y == ( \ y -> f x y ) y
+-- simplifying
+( f x ) y == f x y
+-- exchanging LHS and RHS
+f x y == ( f x ) y
+```
+Thus we obtain the result that any time we write 
+```
+f x y
+```
+it is actually equivalent to
+```
+( f x ) y
+```
+
+This means that "function application" is @definition_of_left-associative. (Recall the definition of @definition_of_left-associative and see if this makes sense)
+
+That is, if we apply a function `f` to 2 inputs `x`
+and `y` in the form `f x y`, \
+then `f x` (the application on the *left*) is evaluated first (as seen in `( f x ) y`) and then the obtained `( f x )` is applied on `y`.
+
+=== Operator Currying Rule
+
+We have already seen the @definition_of_currying_rule. However it can be extended in a special way when the function is an @definition_of_infix_binary_operator.
+
+#def(sub:"operator currying rule")[
+  If we have an @definition_of_infix_binary_operator `⨝`, then we can assume the following due to the @definition_of_currying_rule - 
+  ```
+  (⨝) x = \ y -> (⨝) x y -- the normal currying rule
+  -- which is equivalent to
+  (⨝) x = \ y -> x ⨝ y
+  ```
+  But we may further assume
+  ```
+  (x⨝) = \ y -> x ⨝ y
+  ```
+  and also
+  ```
+  (⨝y) = \ x -> x ⨝ y
+  
+  ```
+  This means that while the @definition_of_currying_rule allowed us to give only the _first input_ (i.e.,`x`) and get a meaningful function out of it,\
+  the *operator currying rule* further allows to do something similar by only giving the _second input_ (i.e.,`y`).
+]
+
+For example, -
+
+```
+>>> :type +d (^)
+(^) :: Integer -> Integer -> Integer
+
+>>> :type +d (^2)
+(^2) :: Integer -> Integer
+```
+
+Meaning that when the @definition_of_infix_binary_operator `^` is given the `Integer` input `2` in place of its second input, it outputs the function `(^2)`, of type `Integer -> Integer`.
+
+More explicitly, by the @definition_of_operator_currying_rule -
+```
+(^2) = \ x -> x ^ 2
+```
+Thus, `(^2)` is a function that takes an `Integer` `x` and raises to to the power of `2`, i.e., *squares* it.
+
+So if we define - 
+```haskell
+-- | operator currying usage
+squaring :: Integer -> Integer
+squaring = (^2)
+```
+it will show the following behaviour - 
+```
+>>> squaring 0     
+0
+>>> squaring 1
+1
+>>> squaring 12
+144
+>>> squaring (-17)
+289
+```
+
+For another example, we can define
+```haskell
+-- | another operator currying usage
+cubing :: Integer -> Integer
+cubing = (^3)
+```
+which works quite similarly.
 
 == Proof of the Currying Theorem
 
