@@ -191,7 +191,7 @@ $1$ is a well-formed expression, as it is a @definition_of_mathematical_value.
 Done!
 
 #exercise(sub:"checking whether expression is well-formed")[
-  Suppose $a,b,v,f,g$ are @definition_of_mathematical_value#[s].\
+  Suppose $a,b,c,v,f,g$ are @definition_of_mathematical_value#[s].\
   Suppose $x,y,n,h$ are @definition_of_mathematical_variable#[s].
 
   Check whether the expression $ f(g(x,y),f(a,h(v),c),h(h(h(n)))) $ is well-formed or not.
@@ -457,7 +457,7 @@ Here is a proof by induction that all people have the same height. We prove that
   Prove that the following statements are equivalent - \
   - every nonempty subset of $NN$ has a smallest element
   - the @definition_of_principle_of_mathematical_induction
-  You can assume that $<$ is a linear order on $NN$\ such that there are no elements strictly between $n$ and $n+1$.
+  You can assume that $<$ is a linear order on $NN$ with $n-1 < n$\ and such that there are no elements strictly between $n - 1$ and $n$.
 ]
 
 === Proving Termination using Induction
@@ -659,7 +659,7 @@ Using @definition_of_structural_induction_for_trees, let us prove that \
 
     Now, $"size"(T) #d 1 + "size"(t_1) + "size"(t_2) + "size"(t_3) + ... + "size"(t_(n-1)) + "size"(t_n)$
     
-    Thus, we can see that each term in the right-hand side terminates.\ Therefore, the left-hand side "$"size"(T)$",\ being defined as an addition of these terms,\ must also terminate. \  (since addition of finitely many terms always terminates)
+    Thus, we can see that each term in the right-hand side terminates.\ Therefore, the left-hand side "$"size"(T)$",\ being defined as an addition of these terms,\ must also terminate. \  (since addition of finitely many terminating terms always terminates)
 
     Hence $phi_(T)$ is proved!
 
