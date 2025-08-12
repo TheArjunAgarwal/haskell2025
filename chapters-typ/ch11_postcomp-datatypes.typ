@@ -7,11 +7,10 @@
 #let definition = def
 #let example = it => [For example - \ #it]
 
-<ads>
 
-Till now our data is being stored in a few structures. There was a list 
+Till now our data is being stored in a few structures. There was a list
 
-= Stacks and Queues
+= Stacks and Queues <ads>
 
 
 
