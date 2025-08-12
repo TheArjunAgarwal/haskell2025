@@ -50,11 +50,11 @@ let chapters = (
     [Basic Syntax],
     A
   ),
-  // (
-  //   "ch04_tuples.typ",
-  //   [Types as Sets],
-  //   R
-  // ),
+  (
+    "ch04_tuples.typ",
+    [Types as Sets],
+    R
+  ),
   // (
   //   "ch05_lists.typ",
   //   [Introduction to Lists],

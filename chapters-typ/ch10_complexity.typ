@@ -726,21 +726,72 @@ Also, an impractical algorithm can still demonstrate that conjectured bounds can
 This alone could be important and often is a great reason for finding such algorithms. For example, if tomorrow there were a discovery that showed there is a factoring algorithm with a huge but provably polynomial time bound, that would change our beliefs about factoring. The algorithm might never be used, but would certainly shape the future research into factoring.]
 
 = An Informal Survey of Multiplication Algorithms
-The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients in the excercise, let's end the main text with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). Our model of computation will be RAM but without the assumption. 
+The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients in the excercise, let's end the main text with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). Our model of computation will be RAM but without the assumptions on addition and multiplication.
 
-We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. This is realized by the school book carry method of additon and is optimal #footnote[The proof for the optimality is much harder. It was given by Emil Jerabek in 2023 using a technique we will see in ch 11 called Amortization].
+We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. This is realized by the school book carry method of additon and is optimal #footnote[The proof for the optimality is much harder. It was given by Emil Jerabek in 2023 using a technique we will see in ch 11 called Amortization]. Similer proof holds for subtraction.
 
-The naive way to multiply would be to define multiplication as repeated addition. Something of the sort `multiply 1 b = b` and the reccurence. `multiply a b = b + multiply (a-1) b`. For two `n` digit numbers, this will take $cal(O)(10^n) dot cal(O)(n) = cal(O)(n 10^n)$ operations. That is very bad, we will see the quantitatatives in a moment. #footnote[
-  We obviously know that the function definition is not complete. We need to deal with negitives and zero, but all of that doesn't really change the time complexity.
-]
+```
+-- | Addition and Subtraction of two numbers
+-- Note, we are taking the numbers in reverse the usual order. That is Ones -> Tens -> Hundreds ...
+addNum num1 num2 = addNumCarry num1 num2 0 where
+  -- Both numbers exhausted : if carry is 0, end otherwise append the carry.
+  addNumCarry [] [] k = if k == 0 then [] else [k]
+  
+  -- First number exhausted: add carry to remaining digits of second number
+  addNumCarry [] (y:ys) k = 
+    let (a,b) = (k+y) `divMod` 10 
+    in if a == 0 then b:ys else a:b:ys
+  
+  -- Second number exhausted: add carry to remaining digits of first number
+  addNumCarry (x:xs) [] k = 
+    let (a,b) = (k+x) `divMod` 10 
+    in if a == 0 then b:xs else a:b:xs
+  
+  -- Main case: add corresponding digits plus carry, propagate new carry
+  addNumCarry (x:xs) (y:ys) k = 
+    b : addNumCarry xs ys a 
+    where (a,b) = (x+y+k) `divMod` 10  -- a is new carry, b is digit result
 
-An improvement in the multiplication algorithm, we are already familier with, is the one taught in school. This was also the algorithm Al-Khwarizmi found. 
+
+subNum :: [Int] -> [Int] -> [Int]
+subNum num1 num2 = subNumBorrow num1 num2 0 where
+  subNumBorrow [] [] b = if b == 0 then [] else error "Result would be negative"
+  subNumBorrow [] (y:ys) b = error "Result would be negative"
+  subNumBorrow (x:xs) [] b = 
+    let diff = x - b 
+    in if diff < 0 
+       then 9 : subNumBorrow xs [] 1  -- borrow from next digit
+       else if diff == 0 && xs == [] then []  -- remove leading zeros
+       else diff : xs
+  subNumBorrow (x:xs) (y:ys) b = 
+    let diff = x - y - b
+    in if diff < 0 
+       then (diff + 10) : subNumBorrow xs ys 1  -- borrow from next digit
+       else diff : subNumBorrow xs ys 0
+```
+
+The naive way to multiply would be to define multiplication as repeated addition. Something of the sort `multiply 1 b = b` and the reccurence. `multiply a b = b + multiply (a-1) b`. For two `n` digit numbers, this will take $cal(O)(10^n) dot cal(O)(n) = cal(O)(n 10^n)$ operations. We normally use this to define single digit multiplications (as writing the table by hand is too cumbersome and in one digit case, it works just fine).
+
+```
+-- | Singluar Digit Multiplication
+mulDig :: Int -> Int -> [Int]
+mulDig 0 _ = [0]
+mulDig _ 0 = [0]
+mulDig dig1 dig2 = [dig1] `addNum` mulDig dig1 (dig2-1)
+```
+
+
+An improvement in the multiplication algorithm, we are already familier with is the one taught in school. This was also the algorithm Al-Khwarizmi found. 
+
 ```
 -- | School Book Multiplication
--- Remember, we can still multiply single digit integers!
-singMul x num = foldl1 (\a b -> 10*a + b) (map (*x) num)
 
-schoolMul num1 num2 = foldl1 (\a b -> 10*a + b) (map (`singMul` num2) num1)
+-- Multipling a number with a digit
+mulNumDig :: [Int] -> Int -> [Int]
+mulNumDig num dig = foldl1 (\a b -> a `addNum`  (0:b)) (map (mulDig dig) num)
+
+schoolMul :: [Int] -> [Int] -> [Int]
+schoolMul num1 num2 = foldl1 (\a b -> a `addNum`  (0:b)) (map (mulNumDig num2) num1)
 ```
 
 The number of operations fort this algorithm is $cal(O)(n^2)$ as we multiply all the digits in the latter number with the digits in the former number and then add the results suitably one by one. That is in $32 * 45$, we will compute $32 * 5$ and $32 * 4$ and add them.
@@ -752,6 +803,25 @@ $
 x y = (a*10^(n/2) + b) * (c*10^(n/2) + d)\
 = a c * 10^n + b c * 10^(n/2) + a d * 10^(n/2) + b d
 $
+
+```
+-- | Naive Divide and Conquor defination
+divNcon :: [Int] -> [Int] -> [Int]
+divNcon [x] num = mulNumDig num x
+divNcon num [x] = mulNumDig num x
+divNcon num1 num2 = let
+  n = length num1
+  n2 = n `div` 2
+  (a,b) = splitAt n2 num1
+  (c,d) = splitAt n2 num2
+  ac = divNcon a c
+  ad = divNcon a d
+  bc = divNcon b c
+  bd = divNcon b d
+  n2zeros = replicate n2 0
+  nzeros = replicate n 0
+  in ac `addNum` (n2zeros ++ bc) `addNum` (n2zeros ++ ad) `addNum` (nzeros ++ bd)
+```
 
 Let's say it take $T(n)$ operations to multiply two $n$ digit numbers. Thus, our problem of multiplying two $n$ digit numbers can be reduced to multiplying two $n/2$ digit number $4$ times. 
 
@@ -783,6 +853,26 @@ T(n) = 3 T(n/2) + cal(O)(n) + cal(O)(1)\
 => T(n) = cal(O)(n^(log(3))) approx cal(O)(n^(1.6))
 $
 
+Here is an Haskell implementation of the same
+```
+-- | Karatsuba Multiplication algortithm
+karatsurba :: [Int] -> [Int] -> [Int]
+karatsurba [x] num = mulNumDig num x
+karatsurba num [x] = mulNumDig num x
+karatsurba num1 num2 = let
+  n = length num1
+  n2 = n `div` 2
+  (a,b) = splitAt n2 num1
+  (c,d) = splitAt n2 num2
+  ac = karatsurba a c
+  bd = karatsurba b d
+  abcd = karatsurba (a `addNum` b) (c `addNum` d)
+  adPlusbc = (abcd `subNum` ac) `subNum` bd
+  n2zeros = replicate n2 0
+  nzeros = replicate n 0
+  in ac `addNum` (n2zeros ++ adPlusbc) `addNum` (nzeros ++ bd)
+```
+
 This is a lot better. The next improvement came just an year later in 1963 by Tooom and Cook, making it $cal(O)(n^(log_3(5)))$. Here is what we belive their research process looked like:
 #figure(
   image("../images/multiplication-algo-meme.png", height: 50%))
@@ -791,27 +881,31 @@ If you are wondering, they showed that we can break the multiplication in five $
 
 This can in theory do $cal(O)(1)$ multiplication. As we have seen in the section about the dark secrets of big-oh, the constents will cause the problem. Doing an exact complexity analysis can allow us to compute the exact speed of growth of the constent of $cal(O)(n^E)$ (hint: It is basically exponential).
 
-This leads us to the $cal(O)(n log(n) log(log(n)))$ Schönhage–Strassen algorithm (1971) which uses the Discrete Fast Fouries Transform algorithm described in chapter 8. The exact implementation is left as excercise (to find and understand) to the morbidly curious. In this paper, Arnold Schönhage and Volker Strassen also conjectured a lower bound of $Omega(n log(n))$.
+#exercise(sub : "Toom-Cook")[
+  Making the required modefications to the haskell implementation of karatsurba, implement Toom-3 algorithm.
+]
 
-This is about the end of multiplication algorithms I can hope to talk about with the material in this book. Also, the constents hidden by big-oh become so large that most implementations use Karatsuba or Toom-3 till some size and then switch to Schönhage–Strassen. So everything here onwards are just fun facts. 
+This leads us to the $cal(O)(n log(n) log(log(n)))$ Schönhage–Strassen algorithm (1971) which uses the Discrete Fast Fouries Transform algorithm described in chapter 8. The exact implementation can be found in the appendix, if you are morbidly curious regarding the same. In this paper, Arnold Schönhage and Volker Strassen also conjectured a lower bound of $Omega(n log(n))$.
+
+This is about the end of multiplication algorithms I can hope to talk about with the material in this book. Also, the upcomming algortithms are @definition_of_Galactic_Algorithms which is why most implementations (even in the most complex matehamtical computation software) use Karatsuba or Toom-3 till some size and then switch to Schönhage–Strassen. So everything here onwards are just fun facts.
 
 The next leap came in 2007, when Martin Fürer improved the bound to $cal(O)(n log(n) 2^(cal(O)(log^*(n))))$ where the $log^*(n)$ denotes the number of times we must take $log(n)$ before we go below $1$. This leap was made possible due to half-DFT's, lots of ring theory and complex analysis and certain results about primes of form $p = 2^(2^k) + 1$ turining up true. This algorithm beats Schönhage–Strassen for integers with about $10^19$ digits.
 
-The next improvement came by using number theory inplace of complex analysis and other changes courtasy Anindya De, Piyush P Kurur, Chandan Saha and Ramprasad Saptharishi #footnote[] (2008) which beats this Fürer for numbers with about $10^4796$ digits.
+The next improvement came by using number theory inplace of complex analysis (bundled with other suitable changes) courtasy Anindya De, Piyush P Kurur, Chandan Saha and Ramprasad Saptharishi#footnote[Who was at the same institute (Chennai Mathematical Institute) as the authors when he made this algortithm. The other authors were from IIT Kanpur.] in 2008. Their algorithm beats this Fürer for numbers with about $10^4796$ digits.
 
-In 2015, David Harvey, Joris van der Hoeven and Grégoire Lecerf gave a new algorithm which replaced the $cal(O)(log^*(n))$ with $3 log^*(n)$. The only issue is that this paper used certain unproven conjuctures on Mersenne primes. 
+In 2015, David Harvey, Joris van der Hoeven and Grégoire Lecerf gave a new algorithm which replaced the $cal(O)(log^*(n))$ in Fürer with $3 log^*(n)$. The only issue is that this paper used certain unproven conjuctures on Mersenne primes.
 
 In 2015-16, in a series of two papers, Svyatoslav Covanov and Emmanuel Thomé first made a new algorithm with same complexity as Fürer and then, using unproven conjuctures on Fermat Primes and genralizations, produced an algorithm where $cal(O)(log^*(n))$ is replaced with $2 log^*(n)$.
 
-Not to be defeated so easily, Harvey and Hoevan snapped back in 2018 with an algorithm which acives the $2 log^*(n)$ complexity without any conjuctures. They use Minkowski's theorem (which funnily was proven in 1889).
+Not to be defeated so easily, Harvey and Hoevan snapped back in 2018 with an algorithm which acives the same complexity as Covanov and Thomé without any conjuctures. They insread used Minkowski's theorem (which funnily was proven in 1889).
 
-And to end this on a win, Harvey and Hoeveen publish the first $cal(O)(n log(n))$ in March 2019.
+And to seal the deal, Harvey and Hoeveen published the first $cal(O)(n log(n))$ multiplication algorithm in March 2019.
 
 #quote(sub : "David Harvey and Joris van der Hoeven")[...our work is expected to be the end of the road for this problem, although we don't know yet how to prove this rigorously.”]
 
 So well, can we do better is still an open question.
 
-Anyways, for this paper, they shared the de Bruijn medal in 2022. Well, we have come full circle I guess.
+Anyways, for this paper, they shared the de Bruijn medal in 2022. With that, we have come full circle I guess.
 
 
 // = Exercise
