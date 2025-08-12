@@ -47,16 +47,6 @@ let chapters = (
     [Installing Haskell],
     author
   ),
-  // (
-  //   "ch02_setup_mac.typ",
-  //   [Haskell Setup on MacOS],
-  //   A
-  // ),
-  // (
-  //   "ch02_setup_win.typ",
-  //   [Haskell Setup on Windows],
-  //   R
-  // ),
   (
     "ch03_datatypes.typ",
     [Basic Syntax],

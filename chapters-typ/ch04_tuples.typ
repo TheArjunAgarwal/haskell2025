@@ -913,3 +913,111 @@ Therefore, we have to prove there exists a bijection $: C^(A times B) -> (C^B)^A
   \
 
 ]
+= Exercises
+#exercise(sub : "Symmetric Difference")[
+(i) Define the symmetric difference of the sets $A$ and $B$ as $A Delta B = (A backslash B) union (B backslash A)$.
+
+Prove that this is a commutative and associative operation.
+
+(ii) The set $A_1 Delta A_2 Delta dots Delta A_n$ consists of those elements that belong to an odd number of the $A_i$’s.
+]
+#exercise(sub : "Set of Size")[
+  (i) Give a type with exactly $32$ elements.
+  (ii) Give a type with exactly $108$ elements.
+  (iii) Give a type with exactly $19$ elements.
+]
+#exercise(sub : "Unions and Intersections")[
+  Prove:
+  (i) $
+  forall i in I, x_i subset.eq y => union.big_(i in I) x_i in y
+  $
+
+  (ii) $
+  forall i in I, y subset.eq y => y in inter.big_(i in I) x_i
+  $
+
+  (iii) $
+  union.big_(i in I) (x_i union y_i) = (union.big_(i in I) x_i) union (union.big_(i in I) y_i) 
+  $
+
+  (iv) $
+  inter.big_(i in I) (x_i inter y_i) = (inter.big_(i in I) x_i) inter (inter.big_(i in I) y_i) 
+  $
+
+  (v) $
+  union.big_(i in I) (x_i inter y) = (union.big_(i in I) x_i) inter y 
+  $
+
+  (vi) $
+  inter.big_(i in I) (x_i union y) = (inter.big_(i in I) x_i) union y 
+  $
+]
+
+#exercise(sub : "Flavoured like Curry")[
+  $A tilde B$ means that there exists a bijection between $A$ and $B$.
+  
+  Prove:
+  
+  (i)$
+  A (B + C) tilde A B + A C
+  $
+
+  (ii) $
+  (B union C)^A tilde B^A times C^A$ provided $B inter C = emptyset
+  $
+  
+  (iii) $
+  C^(A times B) tilde C^A times C^B
+  $
+]
+
+#exercise(sub:"Eckman-Hilton Argument")[
+  #def(sub:"Unital Operator")[
+    A binary operator $ast$ over a set $S$ is *Unital* if there exists $l, r in S op("s.t.") forall x in S, l ast x = x ast r = x$. (You can also prove $r = l$! This is why we normally label this $l = r = 1_S$ in abstract algebra.)
+  ]
+
+  If a set $S$ has two unital operations $star$ and $dot$ defined on it such that:
+  $
+  (w dot x) star (y dot z) = (w star x) dot (y star z)
+  $
+  Prove that $star equiv dot$.
+]
+
+#exercise(sub: "Associative Operators")[
+  (i) How many different associative binary logical operators can be defined? (Formally, non-isomorphic associative binary logical operators. Informally, isomorphic means “same up to relabelling.”). Can you define all of them?
+
+  (ii) Suppose we have an associative binary operator on a set $S$ of size $0 < k < oo$. Prove that $exists x in S, x dot x = x$.
+
+  Note: A set with an associative binary operation is called a semi-group. The first question can also be posed for a set of general size, but we don't know the answer or an algorithm to get the answer beyond sets of size $9$.
+]
+#exercise(sub : "Feels Abstract")[
+  #def(sub:"Shelf")[
+  A set with an binary operation $gt.tri$ which left distributes over itself is called a left shelf, that is $forall x,y,z in S, x gt.tri (y gt.tri z) = (x gt.tri y) gt.tri (x gt.tri z)$.
+
+  A similar definition holds for right shelf and the symbol often used is $lt.tri$.
+  ]
+
+  (i) Prove that a unital left shelf is associative. In other words: if there exists $1_S in S$ such that $1 gt.tri x = x gt.tri 1 = x$, then $gt.tri$ is associative.
+
+  #def(sub:"Rack")[
+    A rack is a set $R$ with two operations $gt.tri$ and $lt.tri$, such that R is a left shelf over $gt.tri$ and a right shelf over $lt.tri$ satisfying $x gt.tri (y lt.tri x) = (x gt.tri y) lt.tri x = y$.
+  ]
+  (ii) Prove that in a rack $R$, $gt.tri$ distributes over $lt.tri$ and vice versa. That is, $forall x,y,z in R; x gt.tri (y lt.tri z) = (x gt.tri y) lt.tri (x gt.tri z)$.
+
+  (iii) We call an operator $star$ *idempotent* if $x star x = x$. If for a rack, $gt.tri$ is idempotent; prove that $lt.tri$ is idempotent.
+  #def(sub: "Quandle")[
+    A Quandle is a rack with $gt.tri$ and $lt.tri$ being idempotent.
+  ]
+
+  (iv) We call an operator $star$ *left involute* if $x star (x star y) = y$. Prove that an idempotent, left involutive, left shelf is a quandle (recall that the shelf only has one operator, we need to somehow suitably define the other operation. Maybe do problem (v) for a hint?)
+
+  #def(sub:"Kei")[
+    An involutive quandle is called a *Kei*
+  ]
+
+  (v) Prove that the set of points on the real plane with $x gt.tri y$ being the reflection of $y$ over $x$ is a Kei.
+
+  Note: Shelves, Racks, Quandles and Kai's are slowly entering mainstream math as ways to work with operations on exotic sets like set of knots or set of colorings of primes etc. The theory of Kai in this regard was formalized very recently (2024) by Davis and Schlank in "Arithmetic Kei Theory". The main use is still Knot Theory, but we would not be surprised to see it used in a number theory proof. A reference for this, and a pre-req for Davis and Schlank, is "Quandles" by Mohamed Elhamdadi and Sam Nelson.
+]
+
+

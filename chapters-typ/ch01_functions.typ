@@ -879,8 +879,8 @@ PS: You will feel a little dumb once you solve it.
   And if you think it’s impossible, then prove it as Wupendra won't satisfy for anything less.
 ]
 
-#exercise(sub : "Yet some more Fibonnaci Identity")[
-  Fibonnaci sequence is defined as $F_0 = 0, F_1 = 1$ and $F_n = F_(n-1) + F_(n-2)$. 
+#exercise(sub : "Yet some more Fibonacci Identity")[
+  Fibonacci sequence is defined as $F_0 = 0, F_1 = 1$ and $F_n = F_(n-1) + F_(n-2)$. 
 
   (i) Prove that
   $
@@ -935,24 +935,6 @@ exactly n points at some time in a sequence of n tosses is $(2 + (−1/2)^n)/3$
 (2) Choose a non-empty box $B_k$, $1 <= k <= 4$, remove one coin from $B_k$ and swap the contents (maybe empty) of the boxes $B_(k+1)$ and $B_(k+2)$.
 
 Determine if there exists a finite sequence of operations of the allowed types, such that the five boxes $B_1$, $B_2$, $B_3$, $B_4$, $B_5$ become empty, while box $B_6$ contains exactly $2010^(2010^2010)$ coins.
-]
-
-#exercise(sub : "Caves (IOI 2013, P4)")[
-While lost on the long walk from the college to the UQ Centre, you have stumbled across the entrance to a secret cave system running deep under the university. The entrance is blocked by a security system consisting of $N$ consecutive doors, each door behind the previous; and $N$ switches, with each switch connected to a different door.
-
-The doors are numbered $0, 1, dots, 4999$ in order, with door $0$ being closest to you. The switches are also numbered $0, 1, dots, 4999$, though you do not know which switch is connected to which door.
-
-The switches are all located at the entrance to the cave. Each switch can either be in an up or down position. Only one of these positions is correct for each switch. If a switch is in the correct position then the door it is connected to will be open, and if the switch is in the incorrect position then the door it is connected to will be closed. The correct position may be different for different switches, and you do not know which positions are the correct ones.
-
-You would like to understand this security system. To do this, you can set the switches to any combination, and then walk into the cave to see which is the first closed door. Doors are not transparent: once you encounter the first closed door, you cannot see any of the doors behind it. You have time to try $70,000$ combinations of switches, but no more. Your task is to determine the correct position for each switch, and also which door each switch is connected to.
-]
-
-#exercise(sub : "Carnivel (CEIO 2014)")[
-  Each of Peter’s $N$ friends (numbered from $1$ to $N$) bought exactly one carnival costume in order to wear it at this year’s carnival parties. There are $C$ different kinds of costumes,numbered from $1$ to $C$. Some of Peter’s friends, however, might have bought the same kind of costume. Peter would like to know which of his friends bought the same costume. For this purpose, he organizes some parties, to each of which he invites some of his friends. 
-  
-  Peter knows that on the morning after each party he will not be able to recall which costumes he will have seen the night before, but only how many different kinds of costumes he will have seen at the party. Peter wonders if he can nevertheless choose the guests of each party such that he will know in the end, which of his friends had the same kind of costume. Help Peter!
-
-  Peter has $N <= 60$ friends and we can not have more than $365$ parties(as we want to know the costumes by the end of the year).
 ]
 
 

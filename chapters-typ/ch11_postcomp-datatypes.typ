@@ -7,9 +7,13 @@
 #let definition = def
 #let example = it => [For example - \ #it]
 
-= post-complexity data types (feel free to change it) <ads>
+<ads>
 
-== Stacks and Queues
+Till now our data is being stored in a few structures. There was a list 
+
+= Stacks and Queues
+
+
 
 
 // - Queue
@@ -22,3 +26,4 @@
 // cite
 // citation 1
 // citation 2
+

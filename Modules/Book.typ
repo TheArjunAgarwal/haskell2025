@@ -118,6 +118,8 @@
       // #author
     ]
   )
+
+  set text(font:("Alegreya"))
   
   set raw( theme : code_text_settings.theme )
   

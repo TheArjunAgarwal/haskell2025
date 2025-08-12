@@ -924,38 +924,7 @@ Another way to evaluate fibonacci will be seen in end of chapter exercises, wher
 #def(sub:"Rational")[
   *`Rational`* and *`Double`* are the types used to deal with non-integral numbers. The former is used for fractions or rationals while the latter for reals with varying amount of precision. 
   
-  `Rational`s are declared using `%` as the viniculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`, which respectively correspond to $1/3,2/5,97/31$ .
-]  
-
-#def(sub:"Double")[
-  `Double` or Double Precision Floating Point are high-precision approximations of real numbers. For example, consider the "square root" function - 
-```
->>> sqrt 2 :: Double
-1.4142135623730951
-
->>> sqrt 99999 :: Double
-316.226184874055
-
->>> sqrt 999999999 :: Double
-31622.776585872405
-```
-]
-
-
-#def(sub:"Integer and Int")[
-  *`Int`* and *`Integer`* are the types used to represent integers. 
-
-  `Integer` can hold any number no matter how big, up to the limit of your machine's memory, while `Int` corresponds to the set of positive and negative integers that can be expressed in 32 or 64 bits(based on system) with the bounds changing depending on implementation (guaranteed at least $-2^29$ to $2^29$). Going outside this range may give weird results. 
-
-  The reason for `Int` existing is historical. It was the only option at one point and continues to be available for backwards compatibility.
-
-  We will assume `Integer` wherever possible.
-]
-
-#def(sub:"Rational")[
-  *`Rational`* and *`Double`* are the types used to deal with non-integral numbers. The former is used for fractions or rationals while the latter for reals with varying amount of precision. 
-  
-  `Rational`s are declared using `%` as the viniculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`, which respectively correspond to $1/3,2/5,97/31$ .
+  `Rational`s are declared using `%` as the vinculum(the dash between numerator and denominator). For example `1%3, 2%5, 97%31`, which respectively correspond to $1/3,2/5,97/31$ .
 ]  
 
 #def(sub:"Double")[
@@ -1131,7 +1100,7 @@ The issue is for any $- d < r < 0 => 0 < r < d$. This means we need to choose th
 
 In Haskell, `mod` takes the sign of the divisor (comes from floored division, same as Python's `%`), while `rem` takes the sign of the dividend (comes from truncated division, behaves the same way as Scheme's `remainder` or C's `%`.).
 
-Basically, `div` returns the floor of the true division value (recall $floor(-3.56) = -4$) while `quot` returns the truncated value of the true division (recall $op("trunicate")(-3.56) = -3$ as we are just truncating the decimal point off). The reason we keep both of them in Haskell is to be comfortable for people who come from either of these languages. 
+Basically, `div` returns the floor of the true division value (recall $floor(-3.56) = -4$) while `quot` returns the truncated value of the true division (recall $op("truncate")(-3.56) = -3$ as we are just truncating the decimal point off). The reason we keep both of them in Haskell is to be comfortable for people who come from either of these languages. 
 
 Also, The `div` function is often the more natural one to use, whereas the `quot` function corresponds to the machine instruction on modern machines, so it's somewhat more efficient (although not much, I had to go upto $10^100000$ to even get millisecond difference in the two).
 
@@ -1262,7 +1231,7 @@ However, we could do a bit better here. Notice, to evaluate $a^b$, we are making
 
 A fact, which we shall prove in chapter 10, is that multiplication of big numbers is faster when it is balanced, that is the numbers being multiplied have similar number of digits.
 
-So to do better, we could simply compute $a^(b/2)$ and then square it, given $b$ is even, or compute $a^((b-1)/2)$ and then square it and multiply by $a$ otherwise. This can be done recusrsivly till we have the solution. 
+So to do better, we could simply compute $a^(b/2)$ and then square it, given $b$ is even, or compute $a^((b-1)/2)$ and then square it and multiply by $a$ otherwise. This can be done recursively till we have the solution. 
 ```
 -- | A better exponentiation algorithm using divide and conquer
 exponentiation :: (Num a, Integral b) => a -> b -> a
@@ -1299,7 +1268,7 @@ lcm :: Integral a => a -> a -> a
 ```
 We will now try to define these functions ourselves.
 
-Let's say we want to find $g := gcd(p,q)$ and $p > q$. That would imply $p = d q + r$ for some $r < q$. This means $g | p, q => g | q, r$ and by the maximality of $g$, $gcd(p,q) = gcd(q,r)$. This helps us out a lot as we could eventually reduce our problem to a case where the larger term is a multiple of the smaller one and we could return the smaller term then and there. This can be implemented as:
+Let's say we want to find $g := gcd(p,q)$ and $p > q$. That would imply $p = d q + r$ for some $r < q$. This means $g | p, q => g | q, r$ and by the maximal-ity of $g$, $gcd(p,q) = gcd(q,r)$. This helps us out a lot as we could eventually reduce our problem to a case where the larger term is a multiple of the smaller one and we could return the smaller term then and there. This can be implemented as:
 ```
 -- | Fast GCD and LCM
 gcd :: Integer -> Integer -> Integer
@@ -1311,18 +1280,18 @@ lcm :: Integer -> Integer -> Integer
 lcm p q = (p * q) `div` (gcd p q)
 ```
 
-We can see that this is much faster. The exact number of steps or time taken is a slightlty involved and not very related to what we cover. Intrested readers may find it and related citrations #link("https://en.wikipedia.org/wiki/Euclidean_algorithm#Algorithmic_efficiency")[here].
+We can see that this is much faster. The exact number of steps or time taken is a slightlty involved and not very related to what we cover. Interested readers may find it and related citations #link("https://en.wikipedia.org/wiki/Euclidean_algorithm#Algorithmic_efficiency")[here].
 
-This algorithm predates computers by approximatly 2300 years. If was first decribed by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
+This algorithm predates computers by approximately 2300 years. It was first described by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
 
-While we will see these class of algorithms, including checking if a number is prime or finding the prime factorization, these require some more weapons of attack we are yet to devlop.
+While we will see these class of algorithms, including checking if a number is prime or finding the prime factorization, these require some more weapons of attack we are yet to develop.
 
 == Dealing with Characters
 We will now talk about characters. Haskell packs up all the functions relating to them in a module called `Data.Char`. We will explore some of the functions there.
 
 So if you are following along, feel free to enter `import Data.Char` in your GHCi or add it to the top of your haskell file.
 
-The most basic and importent functions here are `ord` and `chr`. Characters, like the ones you are reading now, are represented inside a computer using numbers. These numbers are part of a standard called ASCII (American Standard Code for Information Interchange), or more generally, Unicode.
+The most basic and important functions here are `ord` and `chr`. Characters, like the ones you are reading now, are represented inside a computer using numbers. These numbers are part of a standard called ASCII (American Standard Code for Information Interchange), or more generally, Unicode.
 
 In Haskell, the function `ord :: Char -> Int` takes a character and returns its corresponding numeric code. The function `chr :: Int -> Char` does the inverse: it takes a number and returns the character it represents.
 ```
@@ -1337,7 +1306,7 @@ In Haskell, the function `ord :: Char -> Int` takes a character and returns its 
 ```
 
 = Mathematical Functions
-We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this oppurtunity to talk about real exponentiation. To begin, Haskell has a lot of pre-defined functions.
+We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` etc. We will also take this opportunity to talk about real exponentiation. To begin, Haskell has a lot of pre-defined functions.
 
 ```
 >>> sqrt 81
@@ -1396,6 +1365,125 @@ We will now talk about mathematical functions like `log`, `sqrt`, `sin`, `asin` 
 3.141592653589793
 ```
 All the functions above have the type signature `Fractional a => a -> a ` or for our purposes `Float -> Float`. Also, notice the functions are not giving exact answers in some cases and instead are giving approximations. These functions are quite unnatural for a computer, so we surely know that the computer isn't processing them. So what is happening under the hood?
+== Binary Search
+#def(sub : "Hi-Lo game")[
+  You are playing a number guessing game with a friend. Your friend is thinking of a number between $1$ and $k$, and you have to guess it. After every guess, your friend will say whether your guess is too high, too low, or correct. Prove that you can always guess the number in $ceil(log_2(k))$ guesses.
+]
+
+This follows from choosing $k/2$ and then picking the middle element of this smaller range. This would allow us to find the number in $ceil(log_2(k))$ queries.
+
+This idea also works for slightly less direct questions:
+
+#exercise(sub : "Hamburgers (Codeforces 371C)")[
+Polycarpus have a fixed hamburger recipe using $B$ pieces of bread , $S$ pieces of sausage and $C$ pieces of cheese; per burger.
+
+At the current moment, in his pantry he has:
+
+- $n_b$ units of bread,
+- $n_s$ units of sausage,
+- $n_c$ units of cheese.
+
+And the market prices per unit is:
+
+- $p_b$ rubles per bread,
+- $p_s$ rubles per sausage,
+- $p_c$ rubles per cheese.
+
+Polycarpus's wallet has $r$ rubles.
+
+Each hamburger must be made exactly according to the recipe (ingredients cannot be split or substituted), and the store has an unlimited supply of each ingredient.
+
+Write function `burgers :: (Int, Int, Int) -> (Int, Int, Int) -> (Int, Int, Int) -> Int -> Int` which takes $(B,S,C)$, $(n_b, n_s, n_c)$, $(p_b, p_s, p_c)$ and $r$ and tells us how many burgers can Polycarpus make. 
+
+Examples
+```
+burgers (3,2,1) (6,4,1) (1,2,3)                    4  = 2
+burgers (2,0,1) (1,10,1) (1,10,1)                 21  = 7
+burgers (1,1,1) (1,1,1) (1,1,3)        1000000000000  = 200000000001
+```
+]
+
+This question may look like a combinatorics or recursion question, but any of those approaches will be very inefficient. 
+
+Let's try to algebraically compute how much money is needed to make $x$ burgers. We can define this cost function as cost times the number of ingredient required minus the amount already in pantry. This will something like:
+$
+  f(x) = p_b max(0, x dot B - n_b) + p_s max(0, x dot S - n_s) + p_c max(0, x dot C - n_c)
+$
+And now we want to look for maximal $x$ such that $f(x) <= r$. Well, that can be done using Binary search!
+```
+burgers (b, s, c) (nb, ns, nc) (pb, ps, pc) r = binarySearch 0 upperBound
+  where
+    -- Cost function f(x)
+    cost x = let needB = max 0 (x * b - nb)
+                 needS = max 0 (x * s - ns)
+                 needC = max 0 (x * c - nc)
+             in  needB *  pb +
+                 needS *  ps +
+                 needC *  pc
+
+    upperBound = maximum [b,s,c] + r
+
+    binarySearch low high
+      | low > high = high
+      | otherwise  =
+          let mid = (low + high) `div` 2
+          in if cost mid <= r
+                then binarySearch (mid + 1) high
+                else binarySearch low (mid - 1)
+```
+Here ia a similar exercise for your practice.
+
+#exercise(sub : "House of Cards (Codeforces 471C)")[
+- A house of cards consists of some non-zero number of floors.
+- Each floor consists of a non-zero number of rooms and the ceiling. A room is two cards that are leaned towards each other. The rooms are made in a row, each two adjoining rooms share a ceiling made by another card.
+- Each floor besides for the lowest one should contain less rooms than the floor below.
+
+Please note that the house may end by the floor with more than one room, and in this case they also must be covered by the ceiling. Also, the number of rooms on the adjoining floors doesn't have to differ by one, the difference may be more.
+
+The height of the house is the number of floors in it. 
+
+Given $n$ cards, it is possible that you can make a lot of different houses of different heights. Write a function `houses :: Integer -> Integer` to count the number of the distinct heights of the houses that they can make using exactly $n$ cards.
+
+Examples
+```
+count 13 = 1
+count 6 = 0
+```
+
+In the first sample you can build only these two houses (remember, you must use all the cards):
+
+#image("../images/cardHouses.png")
+
+Thus, 13 cards are enough only for two floor houses, so the answer is 1.
+
+The six cards in the second sample are not enough to build any house.
+]
+
+The reason we are interested in this methodology is as we could do this to find roots of polynomials, especially roots. How? 
+
+While using a raw binary search for roots would be impossible as the exact answer is seldom rational and hence, the algorithm would never terminate. So instead of searching for the exact root, we look for an approximation by keeping some tolerance. Here is what it looks like:
+
+```
+-- | Square root by binary search
+bsSqrt :: Float -> Float -> Float
+bsSqrt n tolerance
+  | n > 1     = binarySearch 1 n
+  | otherwise = binarySearch 0 1
+  where
+    binarySearch low high
+      | abs (guess * guess - n) <= tolerance        = guess
+      | guess * guess > n                           = binarySearch low guess
+      | otherwise                                   = binarySearch guess high
+      where
+        guess = (low + high) / 2
+```
+#exercise(sub : "Cube Root")[
+  Write a function `bsCbrt :: Float -> Float -> Float` which calculates the cube root of a number upto some tolerance using binary search.
+]
+
+The internal implementation sets the tolerance to some constant, defining, for example as `sqrt = bsSqrt 0.00001 `
+
+Furthermore, there is a faster method to compute square roots and cube roots(in general roots of polynomials), which uses a bit of analysis. You will find it defined and walked-through in the back exercise.
 
 == Taylor Series
 
@@ -1439,34 +1527,34 @@ cosTay tol x
   | otherwise            = (cosTay tol (x/2))**2 - (sinTay tol (x/2))**2  -- cos(x) = cos²(x/2) - sin²(x/2)
 ```
 
-As one might notice, this approximation is somewhat poorer in accuracy than `log`. This is due to the fact that the taylor approximation is much less truer on `sin` and `cos` in the neighbourhood of `0` than for `log`. 
+As one might notice, this approximation is somewhat poorer in accuracy than `log`. This is due to the fact that the taylor approximation is much less truer on `sin` and `cos` in the neighborhood of `0` than for `log`. 
 
 We will see a better approximation once we start using lists, using the power of the full Taylor expansion. 
 
-Finally, similer to our above things, we could simply set the tolerance and get a function that takes an input and gives an output, name it `sin` and `cos` and define `tan x = (sin x) / (cos x)`.
+Finally, similar to our above things, we could simply set the tolerance and get a function that takes an input and gives an output, name it `sin` and `cos` and define `tan x = (sin x) / (cos x)`.
 
 #exercise(sub : "Inverse Trig")[
-Use taylor approximation and trignometric identites to define inverse sin(`asin`), inverse cos(`acos`) and inverse tan(`atan`).
+Use taylor approximation and trigonometric identities to define inverse sin(`asin`), inverse cos(`acos`) and inverse tan(`atan`).
 ]
 
 = Exercises
 #exercise(sub: "Collatz")[
-  Collatz conjucture states that for any $n in NN$ exists a $k$ such that  $c^k(n) = 1$ where $c$ is the Collatz function which is $n/2$ for even $n$ and $3n + 1$ for odd $n$.
+  Collatz conjecture states that for any $n in NN$ exists a $k$ such that  $c^k(n) = 1$ where $c$ is the Collatz function which is $n/2$ for even $n$ and $3n + 1$ for odd $n$.
 
-  Write a functuon `col :: Integer -> Integer` which, given a $n$, finds the smalltest $k$  such that $c^k(n) = 1$, called the Collatz chain length of $n$.
+  Write a function `col :: Integer -> Integer` which, given a $n$, finds the smallest $k$  such that $c^k(n) = 1$, called the Collatz chain length of $n$.
 ]
 
 #exercise(sub: "Newton–Raphson method")[
 #def(sub: "Newton–Raphson method")[
   Newton–Raphson method is a method to find the roots of a function via subsequent approximations.
   
-  Given $f(x)$, we let $x_0$ be an inital guess. Then we get subsequent guesses using
+  Given $f(x)$, we let $x_0$ be an initial guess. Then we get subsequent guesses using
   $
     x_(n+1) = x_n - f(x_n)/(f'(x_n))
   $
   As $n -> oo$, $f(x_n) -> 0$.
 
-  The intution for why this works is: imagine standing on a curve and wanting to know where it hits the x-axis. You draw the tangent line at your 
+  The intuition for why this works is: imagine standing on a curve and wanting to know where it hits the x-axis. You draw the tangent line at your 
   current location and walk down it to where it intersects the x-axis. That’s your next guess. Repeat. If the curve behaves nicely, you converge quickly to the root.
   
   Limitations of Newton–Raphson method are
@@ -1477,7 +1565,7 @@ Use taylor approximation and trignometric identites to define inverse sin(`asin`
 ]
 Considering, $f(x) = x^2 - a$ and $f(x) = x^3 - a$ are well behaved for all $a$, implement `sqrtNR :: Float -> Float -> Float` and `cbrtNR :: Float -> Float -> Float` which finds the square root and cube root of a number upto a tolerance using the Newton–Raphson method.
 
-Hint: The number we are trying to get the root of is a sufficiently good guess for numbers absolutly greater than $1$. Otherwise, $1$ or $-1$ is a good guess. We leave it to your mathematical intution to figure out when to use what.
+Hint: The number we are trying to get the root of is a sufficiently good guess for numbers absolutely greater than $1$. Otherwise, $1$ or $-1$ is a good guess. We leave it to your mathematical intuition to figure out when to use what.
 ]
 
 #exercise(sub:"Digital Root")[
@@ -1486,14 +1574,14 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
   Implement the function `digitalRoot :: Int -> Int`.
   ]
 #exercise(sub: "AGM Log")[
-  A rather uncommon mathematical function is AGM or arthmatic-geometric mean. For given two numbers, 
+  A rather uncommon mathematical function is AGM or arithmetic-geometric mean. For given two numbers, 
   $
   op("AGM")(x,y) = cases(
     x & text("if") x = y\
     op("AGM") ((x+y)/2, sqrt(x y)) & text("otherwise")
   )
   $
-  Write a function `agm :: (Float, Float) -> Float -> Float` which takes two floats and returns the AGM within some tolerance(as getting to the exact one recusrsivly takes, about infinite steps).
+  Write a function `agm :: (Float, Float) -> Float -> Float` which takes two floats and returns the AGM within some tolerance(as getting to the exact one recursively takes, about infinite steps).
 
   Using AGM, we can define
   $
@@ -1501,9 +1589,9 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
   $
   which is precise upto $p$ bits where $x 2^m > 2^(p/2)$.
 
-  Using the above defined `agm` function, define `logAGM :: Int -> Float -> Float -> Float` which takes the number of bits of precision, the tolerance for `agm` and a number greater than $1$ and gives the natural logithrm of that number.
+  Using the above defined `agm` function, define `logAGM :: Int -> Float -> Float -> Float` which takes the number of bits of precision, the tolerance for `agm` and a number greater than $1$ and gives the natural logarithm of that number.
 
-  Hint: To simplify the question, we added the fact that the input will be greater than $1$. This means a simplification is taking `m = p/2` directly. While geting a better `m` is not hard, this is just simpler.
+  Hint: To simplify the question, we added the fact that the input will be greater than $1$. This means a simplification is taking `m = p/2` directly. While getting a better `m` is not hard, this is just simpler.
 ]
 #exercise(sub: "Multiplexer")[
   A multiplexer is a hardware element which chooses the input stream from a variety of streams.
@@ -1518,7 +1606,7 @@ Hint: The number we are trying to get the root of is a sufficiently good guess f
 
   Could you describe the general scheme to define `mux2^n` (a) using only boolean operations (b) using only `mux2^(n-1)` (c) using only `mux2`?
 ]
-#exercise(sub: "Moduler Exponation")[
+#exercise(sub: "Modular Exponentiation")[
   Implement modular exponentiation ($a^b mod m$) efficiently using the fast exponentiation method. The type signature should be `modExp :: Int -> Int -> Int -> Int`
 ]
 
@@ -1545,7 +1633,7 @@ Now write a much more efficient (should be one line and has no recursion) functi
   Finally, make `genSquareCount :: (Int, Int) -> Int` and `genRectCount :: (Int, Int) -> Int` to count number of squares and rectangle in a $a times b$ grid.
 ]
 
-#exercise(sub:"Knitting Baltik (COMPFEST 13, Codeforces)")[
+#exercise(sub:"Knitting Baltik (COMPFEST 13, Codeforces 1575K)")[
 Mr. Chanek wants to knit a batik, a traditional cloth from Indonesia. The cloth forms a grid with size $m times n$. There are $k$
 colors, and each cell in the grid can be one of the $k$ colors.
 
@@ -1565,7 +1653,7 @@ Write a function `countBaltik` of type \
 `countBaltik` takes as input:
 
 - The size of grid $(m, n)$
-- Numer of colors $k$
+- Number of colors $k$
 - Size of sub-rectangle $(r,c)$
 - $(a_x, a_y)$
 - $(b_x,b_y)$
@@ -1648,14 +1736,14 @@ Examples(Sequence is included for clarification)
 #exercise(sub: "Binet Formula")[
   Binet's formula is an explicit, closed form formula used to find the $n$th term of the Fibonacci sequence. It is so named because it was derived by mathematician Jacques Philippe Marie Binet, though it was already known by Abraham de Moivre.
 
-  Thr problem with this remarkable formula is that it is clutered with irrational numbers, specifically $sqrt(5)$.
+  Thr problem with this remarkable formula is that it is cluttered with irrational numbers, specifically $sqrt(5)$.
   $
     F_n = ((1+sqrt(5))^n - (1-sqrt(5))^n)/(2^n sqrt(5))
   $
 
-  While computing using the binet formula would only take $2 * log(n) + 2$ operations (exponentiation takes $log(n)$ time), doing so directly is out of the question as we can't reprasent $sqrt(5)$ exactly and the small errors in the approximation will accumalate due to the number of operations.
+  While computing using the Binet formula would only take $2 * log(n) + 2$ operations (exponentiation takes $log(n)$ time), doing so directly is out of the question as we can't represent $sqrt(5)$ exactly and the small errors in the approximation will accumulate due to the number of operations.
   
-  So an idea is to do all computations on a tuple $(a,b)$ which reprasents $a + b sqrt(5)$, We will need to define *addition, subtraction, multiplication and division* on these tuples as well as define a *fast exponentiation* here. 
+  So an idea is to do all computations on a tuple $(a,b)$ which represents $a + b sqrt(5)$, We will need to define *addition, subtraction, multiplication and division* on these tuples as well as define a *fast exponentiation* here. 
 
   With that in hand, Write a function `fibMod :: Integer -> Integer` which computes Fibonacci numbers using this method.
 ]
@@ -1725,6 +1813,24 @@ ratingCon 3500 = 27
   You can see the pattern as well as the extreme growth rate. Make a function `knuthArrow :: Integer -> Int -> Integer -> Integer` which takes the first argument, number of arrows and second argument and provides the answer.
 ]
 
+#exercise(sub : "Caves (IOI 2013, P4)")[
+While lost on the long walk from the college to the UQ Centre, you have stumbled across the entrance to a secret cave system running deep under the university. The entrance is blocked by a security system consisting of $N$ consecutive doors, each door behind the previous; and $N$ switches, with each switch connected to a different door.
+
+The doors are numbered $0, 1, dots, 4999$ in order, with door $0$ being closest to you. The switches are also numbered $0, 1, dots, 4999$, though you do not know which switch is connected to which door.
+
+The switches are all located at the entrance to the cave. Each switch can either be in an up or down position. Only one of these positions is correct for each switch. If a switch is in the correct position then the door it is connected to will be open, and if the switch is in the incorrect position then the door it is connected to will be closed. The correct position may be different for different switches, and you do not know which positions are the correct ones.
+
+You would like to understand this security system. To do this, you can set the switches to any combination, and then walk into the cave to see which is the first closed door. Doors are not transparent: once you encounter the first closed door, you cannot see any of the doors behind it. You have time to try $70,000$ combinations of switches, but no more. Your task is to determine the correct position for each switch, and also which door each switch is connected to.
+]
+
+#exercise(sub : "Carnivel (CEIO 2014)")[
+Each of Peter’s $N$ friends (numbered from $1$ to $N$) bought exactly one carnival costume in order to wear it at this year’s carnival parties. There are $C$ different kinds of costumes,numbered from $1$ to $C$. Some of Peter’s friends, however, might have bought the same kind of costume. Peter would like to know which of his friends bought the same costume. For this purpose, he organizes some parties, to each of which he invites some of his friends. 
+
+Peter knows that on the morning after each party he will not be able to recall which costumes he will have seen the night before, but only how many different kinds of costumes he will have seen at the party. Peter wonders if he can nevertheless choose the guests of each party such that he will know in the end, which of his friends had the same kind of costume. Help Peter!
+
+Peter has $N <= 60$ friends and we can not have more than $365$ parties(as we want to know the costumes by the end of the year).
+]
+
 // Suggest that we add a section about types and correctness of code.
 
 // cite
@@ -1738,5 +1844,3 @@ ratingCon 3500 = 27
 // 2. Idiotproof
 // 3. Define Stuff also Translate
 // 4. Float?
-
-//  Just a rando edit
