@@ -375,23 +375,244 @@ $
 Find $g_k mod 20092010$ for $k = 10^18$.
 ]
 
-= 
+= Binary Search Tree
+A common problem we have is finding things, say integers, in a list. This is quite a task as `elem` is $O(n)$. Similerly, deleting something from a list is also quite costly as we need to find it, delete it and then rejoin the list.
 
+Can we come up with a data structure which could allow us to do this faster? Consider the following data structure
+```
+data Btree t = Empty | Node t (Btree t) (Btree t)
+```
 
+This is called a binary tree. Now consider
+#definition(sub : "Binary Search Tree")[
+    A binary Search tree is a binary tree with the property:
+    - Every left descendant of a node has value less than that node.
+    - Every right descendant of a node has value larger than that node.
+]
+Thus, we can convert a list to a binary Search tree by simply doing almost a version of quick sort
+```
+lisToTree :: Ord a => [a] -> Btree a
+lisToTree []     = Empty
+lisToTree (x:xs) =
+  Node x (lisToTree [l | l <- xs, l < x])
+         (lisToTree [l | l <- xs, l >  x])
+```
+We can also talk about the height of the tree aka the number of levels in the tree.
+```
+height :: BTree a -> Integer
+height Empty = 0
+height (Node a left right) = 1 + max (height left) (height right)
+```
+This clearly takes time $O(h)$ where $h$ is equal to the height of the tree.
 
+Moving ahead, we can insert and search the tree as follow:
+```
 
+insert :: Ord a => a -> Btree a -> Btree a
+insert a Empty = Node a Empty Empty
+insert a (Node x left right)
+  | a == x    = Node x left right
+  | a < x     = Node x (insert a left) right
+  | otherwise = Node x left (insert a right)
 
-// - Queue
-// - Segment Tree
-// - BST
-// - Set
-// - Map
-// - Trie
-// - Array
+search :: Ord a => a -> Btree a -> Bool
+search a Empty = False
+search a (Node x left right)
+    | a == x    = True
+    | a < x     = search a left
+    | a > x     = search a right
+```
+Both these operations clearly take worst case $O(h)$ time where $h$ is the height of the tree. Another, intrsting function is `findMin` and `findMax` which return the minimum and maximum element of the tree.
+```
+findMin :: Ord a => BTree a -> a
+findMin Empty = error "empty tree"
+findMin (Node a Empty Empty) = a
+findMin (Node a Empty right) = a
+findMin (Node a left _) = min a (findMin left)
+```
+#exercise(sub : "findMax")[
+    implement the function `findMax` which find's the maximum element of a binary search tree.
+]
+
+It is again easy to see that worst case time complexity is $O(h)$. We are now finally ready to implement the delete.
+
+Deletion is somewhat trickier, because removing a node warrents appropriately linking its two descendant subtrees. We can be faced with three cases:
+- If the doomed node is childless, we delete it and replace the void with `Empty`.
+- If the doomed node has one child, we just move the child up the hierarchy.
+-  If the to-be-deleted node has two children, our solution is to relabel this node with the minimum element in it's right descendants. This works as all elements in the right tree are greater than the deleted node and this is the lowest such node, maintaining the rightness of the right tree.
+
+We implement this as:
+```
+delete :: Ord a => a -> Btree a -> Btree a
+delete a Empty = Empty
+delete a (Node x left right)
+    |a == x = join left right
+    |a > x = Node x left (delete a right)
+    |a < x = Node x (delete a left) right
+
+join :: Ord a => Btree a -> Btree a -> Btree a
+join Empty Empty = Empty
+join Empty r = r
+join l Empty = l
+join l r = let k = findMin r in Node k l (delete k r)
+```
+Note, we make 3 $O(h)$ operations. This makes delete also $O(h)$.
+
+This all seems jolly good, the only issue is that based on the initial order inseertions and deletions of the tree, the height could be of $O(n)$ and we end up doing no better.#footnote[From the quick sort analysis, remember the average height of tree is $O(log n)$, but the problem here is the worst case.] 
+
+The fact of the matter is, given $n$ elements, we can make a binary search tree with height $ceil(log_2 n) = ceil(log n)$ which would get all the complexities to $O(log n)$. This property is called balance.
+
+So can we modify our insertion and deletion operators to keep the tree balanced without adding too much of additional complexity? As it turns out, yes.
+
+The main idea is that we can rotate trees by choosing a different node and modifying the given tree to a binary tree. For example
+
+```
+Node x (Node y (Leaf a) (Leaf b)) (Leaf c)
+
+-> Node y (Leaf a) (Leaf b) (Node x Empty Leaf c) (not binary, sad)
+
+-> Node y (Leaf a) (Node x (Leaf b) Leaf c)
+```
+
+This is useful for say
+```
+Node 3 (Leaf 2) (Node 5 (Leaf 4) (Node 7 (Leaf 6) (Leaf 8)))
+-> Node 5 (Node 3 (Leaf 2) (Leaf 4)) (Node 7 (Leaf 6) (Leaf 8))
+```
+
+An auxillary idea is using a proxy for balence. Balence is a rather hard to mantain quality. Instead, we should choose some quantifiable way to say if a tree is balenced or not. It is especially nice if this proxy happens to be easy to compute and update.
+
+In ourcase, we take the proxy for balence to be the difference in height of left and right trees. Our balence proxy will be that the difference in these heights is atmost $1$. Such trees are called height-balenced trees.
+
+The rotation scheme we will was created by Georgy Adelson-Velsky and Evgenii Landis in 1962 and the subsequent tree is called AVL trees. To aid some of the things we will do, we declare the data as:
+```
+data AvlTree = Empty | Node t Int (AvlTree t) (AvlTree t)
+```
+where the `Int` is there to store the height of the tree. We will now define some functions which will make our life easier:
+```
+height :: AvlTree t -> Int
+height Empty = 0
+height (Node _ h _ _) = h
+
+imbalence :: AvlTree t -> Int
+imbalence Empty = 0
+imbalence (Node _ x tl tr) = height tl - height tr
+```
+
+We want `abs imbalence <= 1`.
+
+// Will need to include proofs of correctness!
+
+We will now define two rotations, one which takes the left child and makes it the parent the other that takes the right child and makes it the parent.
+
+```
+rotateLeft :: AvlTree a -> AvlTree a
+rotateLeft (Node h x tl (Node hr y trl trr))
+    = Node nh y (Node nhl x tl trl) trr where
+    nhl = 1 + max (height tl) (height trl)
+    nh = 1 + max nhl (height trr)
+
+rotateRight :: AvlTree a -> AvlTree a
+rotateRight (Node h x (Node hl y tll tlr) tr)
+    = Node nh y tll (Node nhr x tlr tr) where
+        nhr = 1 + max (height tlr) (height tr)
+        nh = 1 + max (height tll) nhr
+```
+
+We will now define a function rebalence which given a AVL tree with `abs imbalence == 2`, balence the tree. We only need this specific case as starting with a balenced tree, any operation can only increase the imbalence by $1$ in either direction.
+
+We will consider the following cases
+- `imbalence == 2` and both subtrees are balanced : rotate the entire tree right
+- `imbalence == 2` and imbalence of the left subtree is `-1` : left rotate the left subtree and then right rotate the tree
+- `imbalence == -2` and both subtrees are balenced :  rotate the entire tree left
+- `imbalence == -2` and imbalence of right subtree is `1` : right rotate the right subtree and then left rotate the tree
+
+This leads to
+```
+rebalance :: Ord a => AvlTree a -> AvlTree a
+rebalance t@(Node h x tl tr)
+    | abs st < 2 = t
+    | st == 2 = if stl == -1 then
+        rotateRight (Node h x (rotateLeft tl) tr)
+        else rotateRight t
+    | st == -2 = if str == 1 then
+        rotateLeft (Node h x tl (rotateRight tr))
+        else rotateLeft t
+    where 
+        (st, stl, str) = (imbalence t, imbalence tl, imbalence tr)
+```
+
+Notice that rebalance is $O(1)$ as we are just moving things around via pattern matching.
+
+```
+insertAVL :: Ord a => a -> AvlTree a -> AvlTree a
+insertAVL v Nil = Node 1 v Nil Nil
+insertAVL v t@(Node h x tl tr)
+    | v < x = rebalance (Node nhl x ntl tr)
+    | v > x = rebalance (Node nhr x tl ntr)
+    | v == x = t
+    where
+        ntl = insertAVL v tl
+        ntr = insertAVL v tr
+        nhl = 1 + max (height ntl) (height tr)
+        nhr = 1 + max (height tl) (height ntr)
+
+deleteMax :: Ord a => AvlTree a -> (a, AvlTree a)
+deleteMax (Node _ x tl Nil) = (x, tl)
+deleteMax (Node h x tl tr) = (y, rebalance (Node nh x tl ty))
+    where
+        (y, ty) = deleteMax tr
+        nh = 1 + max (height tl) (height ty)
+
+deleteAVL :: Ord a => a -> AvlTree a -> AvlTree a
+deleteAVL v Nil = Nil
+deleteAVL v t@(Node h x tl tr)
+    | v < x = rebalance (Node nhl x ntl tr)
+    | v > x = rebalance (Node nhr x tl ntr)
+    | v == x = if isEmpty tl then tr
+               else rebalance (Node nhy y ty tr)
+    where
+        (y, ty) = deleteMax tl
+        (ntl, ntr) = (deleteAVL v tl, deleteAVL v tr)
+        nhl = 1 + max (height ntl) (height tr)
+        nhr = 1 + max (height tl) (height ntr)
+        nhy = 1 + max (height ty) (height tr)
+```
+
+We will not see any specific problems using the `BTree` or `AvlTree`, these are commonly used as precursors to more powerful data structures.
+
+#exercise(sub : "Traversals and Sort")[
+    Write a function `traverse :: Ord a => AvlTree a -> [a]` which traverses the tree genrating a increasing function. 
+
+    Write a function `listToAVL :: Ord a => [a] -> AvlTree a` which converts a list to an AVL tree.
+
+    Write a function `treeSort :: Ord a => [a] -> [a]` which sorts a list using the avl tree. What is the time complexity of this?
+]
+
+= Sets and Maps
+#definition(sub : "Sets")[
+    A set is a data structure that can store unique values, without any particular order.
+]
+Notice that using a list as a set is suboptimal as insertion is $O(n)$ due to needing to check if the element is unique. But we can instead use an AVL tree to reprasent a set. This imposes the need for the elements to be `Ord`, circumventing it is beyond the scope of this book.
+
+```
+data Set a = Set (AvlTree a)
+```
+
+= Array & Hashing
+
+= Trie
+
+= Graphs : A short introduction
+
+= Hash based data structures
+
+// Chapter content goes here
+
+= Exercise
 // - Leftist Heap
 // - Priority Queues
-// - Graph
-// Chapter content goes here
+
 
 // cite
 // citation 1
