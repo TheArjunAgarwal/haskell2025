@@ -1020,4 +1020,28 @@ Prove that this is a commutative and associative operation.
   Note: Shelves, Racks, Quandles and Kai's are slowly entering mainstream math as ways to work with operations on exotic sets like set of knots or set of colorings of primes etc. The theory of Kai in this regard was formalized very recently (2024) by Davis and Schlank in "Arithmetic Kei Theory". The main use is still Knot Theory, but we would not be surprised to see it used in a number theory proof. A reference for this, and a pre-req for Davis and Schlank, is "Quandles" by Mohamed Elhamdadi and Sam Nelson.
 ]
 
+#exercise(sub : "Enumerating the Rationals")[
+  (i) Prove that $ZZ$ is countable, that is there is a surjection from $NN -> ZZ$. #footnote[This may seem counterintuitive as the integers feel twice as large but they really are not]
+
+  (ii) Now write functions : `natToInt :: Integer -> Integer` and `intToNat :: Integer -> Integer` which takes a natural number and gives the corresponding integer and vice versa.
+
+  (iii) Prove that $NN times NN$ is countable, that is there is a bijection between $NN -> NN times NN$. While other arguments exist, we are big fans of enumerating in the order $(0,0) -> (0,1) -> (1,0) -> (0,2) -> (1,1) -> (2,0) -> dots$. What is the pattern?
+
+  (iv) Now write a function `intToPair :: Int -> (Int, Int)` which takes an integer and gives the corresponding rational and a function `pairToInt :: (Int, Int) -> Int` which takes a pair and returns the corresponding integer.
+]
+
+#exercise(sub : "Calkin-Wilf Tree")[
+    Using the above excercise,  we can see that $NN times NN$ is 'larger' #footnote[It is not as you will see in a moment,] than $QQ^+$, so we can claim that rationals are countable. We will attempt to prove that as well as enumerate the rationals.
+
+    (i) Prove that if $p/q$ is reduced, then $(p+q)/q$ and $p/(p+q)$ are reduced.
+
+    (ii) Prove that starting with $1/1$ and making the following tree by applying the above transformmation will contain every rational:
+    #figure(image("../images/cwt.png"))
+
+    (iii) Labeling the tree level by level, write a function `natToRat :: Int -> (Int, Int)` which takes an natural number and gives the positive rational enumerates. (An approach could be to notice that we can reprasent the path one takes down the tree in binary)
+
+    (iv) Write a function `ratToNat :: (Int, Int) -> Int` which takes a positive rational number and gives its position in the naturals. 
+]
+
+
 
