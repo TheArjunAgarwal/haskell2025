@@ -599,13 +599,9 @@ Notice that using a list as a set is suboptimal as insertion is $O(n)$ due to ne
 data Set a = Set (AvlTree a)
 ```
 
-= Array & Hashing
+= Maybe Trie (not sure really)
 
-= Trie
-
-= Graphs : A short introduction
-
-= Hash based data structures
+= Hash Based Data structures
 
 // Chapter content goes here
 
