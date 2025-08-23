@@ -55,11 +55,11 @@ let chapters = (
     [Types as Sets],
     R
   ),
-  // (
-  //   "ch05_lists.typ",
-  //   [Introduction to Lists],
-  //   R
-  // ),
+  (
+    "ch05_lists.typ",
+    [Introduction to Lists],
+    R
+  ),
   // (
   //   "ch06_polymorphism.typ",
   //   [Polymorphism and Higher Order Functions],

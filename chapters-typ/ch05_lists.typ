@@ -953,7 +953,7 @@ Since we obviously cannot view the entirety of an infinite list, it is advisable
 
 == Exercises
 
-#exercise(sub : "Ballons")[
+#exercise(sub : "Balloons")[
 In an ICPC contest, balloons are distributed as follows: 
 - Whenever a team solves a problem, that team gets a balloon.
 - The first team to solve a problem gets an additional balloon.
@@ -978,7 +978,7 @@ balloons "HASKELL" = 13
 
 #exercise(sub : "Neq Array (INOI 2025 P1)")[
 Given a list $A$ of length $N$, we call a list of integers $B$ of length $N$ such that:
-- All elemeents of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
+- All elements of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
 - $B$ is non-decreasing, ie $B_1 <= B_2 <= dots <= B_N$
 - $forall 1 <= i <= N, B_i = A_i$
 
@@ -1012,9 +1012,9 @@ For example 3: The permutation (1, 2, 3, 4, 5) itself is the longest monotone su
 ]
 
 #exercise(sub : "Putnik (COCI 2013")[
-  Chances are that you have probably already heard of the travelling salesman problem. If you have, then you are aware that it is an NP-hard problem because it lacks an efficient solution. Well, this task is an uncommon version of the famous problem! Its uncommonness derives from the fact that this version is, actually, solvable.
+  Chances are that you have probably already heard of the traveling salesman problem. If you have, then you are aware that it is an NP-hard problem because it lacks an efficient solution. Well, this task is an uncommon version of the famous problem! Its uncommonness derives from the fact that this version is, actually, solvable.
 
-  Our vacationing mathematician is on a mission to visit $N$ cities, each exactly once. The cities are represented by numbers $1, 2, dots, N$. What we know is the direct flight duration between each pair of cities. The mathematician, being the efficient woaman that she is, wants to modify the city visiting sequence so that the total flight duration is the minimum possible.
+  Our vacationing mathematician is on a mission to visit $N$ cities, each exactly once. The cities are represented by numbers $1, 2, dots, N$. What we know is the direct flight duration between each pair of cities. The mathematician, being the efficient woman that she is, wants to modify the city visiting sequence so that the total flight duration is the minimum possible.
 
   Alas, all is not so simple. In addition, the mathematician has a peculiar condition regarding the sequence. For each city labeled $K$ must apply: either all cities with labels smaller than $K$ have been visited before the city labeled $K$ or they will all be visited after the city labeled $K$. In other words, the situation when one of such cities is visited before, and the other after is not allowed.
   
@@ -1052,7 +1052,7 @@ For example:
 Write function `lookNsay :: Int -> Int` which takes an number and generates the next number in its look and say sequence.
 ]
 
-#exercise(sub : "Triangles (Codeforces)")[
+#exercise(sub : "Triangles (Codeforces 1119E)")[
   Pavel has several sticks with lengths equal to powers of two. He has $a_0$ sticks of length $2^0=1$, $a_1$ sticks of length $2^1 = 2$, ..., $a_n$ sticks of length $2^n$.
   
   Pavel wants to make the maximum possible number of triangles using these sticks. The triangles should have strictly positive area, each stick can be used in at most one triangle.
@@ -1072,7 +1072,7 @@ In the second example, Pavel cannot make a single triangle.
 In the third example, Pavel can, for example, create this set of triangles (the lengths of the sides of the triangles are listed): $(2^0,2^0,2^0), (2^1,2^1,2^1), (2^2,2^2,2^2)$.
 ]
 
-#exercise(sub : "Thanos Sort (Codeforces)")[
+#exercise(sub : "Thanos Sort (Codeforces 1145A)")[
   Thanos sort is a supervillain sorting algorithm, which works as follows: if the array is not sorted, snap your fingers\* to remove the first or the second half of the items, and repeat the process.
   
   Given an input list, what is the size of the longest sorted list you can obtain from it using Thanos sort? Write function `thanos :: Ord a => [a] -> Int` to determine that.
@@ -1089,7 +1089,7 @@ thanos [7,6,5,4] = 1
 
 In the first example the list is already sorted, so no finger snaps are required.
 
-In the second example the list actually has a subarray of 4 sorted elements, but you can not remove elements from different sides of the list in one finger snap. Each time you have to remove either the whole first half or the whole second half, so you'll have to snap your fingers twice to get to a 2-element sorted list.
+In the second example the list actually has a sub-array of 4 sorted elements, but you can not remove elements from different sides of the list in one finger snap. Each time you have to remove either the whole first half or the whole second half, so you'll have to snap your fingers twice to get to a 2-element sorted list.
 
 In the third example the list is sorted in decreasing order, so you can only save one element from the ultimate destruction.
 ]
@@ -1122,7 +1122,7 @@ Extra Rules:
 - Ignore spaces, newlines, and tabs in the code.
 - Other characters (not commands) work differently depending on the subtask.
 
-While you can do the whole exercise in one go, we reccomend doing the following subtasks in order.
+While you can do the whole exercise in one go, we recommend doing the following subtasks in order.
 
 1. Basic (x, k, c, d only)
 `run "xxcxkdk" = "54"`
@@ -1139,7 +1139,7 @@ Ignore content inside curly braces.
 *Hint*: Don't be afraid to use tuples!
 ]
 
-#exercise(sub : "Weakness and Poorness (Codeforces)")[
+#exercise(sub : "Weakness and Poorness (Codeforces 578C)")[
 You are given a sequence of $n$ integers $a_1, a_2,dots, a_n$.
 
 Write a function `solve :: [Int] -> Float` to determine a real number $x$ such that the weakness of the sequence $a_1 - x, a_2 - x, dots , a_n - x$ is as small as possible.

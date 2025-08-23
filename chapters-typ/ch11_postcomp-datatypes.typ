@@ -480,7 +480,7 @@ Node 3 (Leaf 2) (Node 5 (Leaf 4) (Node 7 (Leaf 6) (Leaf 8)))
 -> Node 5 (Node 3 (Leaf 2) (Leaf 4)) (Node 7 (Leaf 6) (Leaf 8))
 ```
 
-An auxillary idea is using a proxy for balence. Balence is a rather hard to mantain quality. Instead, we should choose some quantifiable way to say if a tree is balenced or not. It is especially nice if this proxy happens to be easy to compute and update.
+An auxiliary idea is using a proxy for balence. Balence is a rather hard to mantain quality. Instead, we should choose some quantifiable way to say if a tree is balenced or not. It is especially nice if this proxy happens to be easy to compute and update.
 
 In ourcase, we take the proxy for balence to be the difference in height of left and right trees. Our balence proxy will be that the difference in these heights is atmost $1$. Such trees are called height-balenced trees.
 
@@ -489,95 +489,111 @@ The rotation scheme we will was created by Georgy Adelson-Velsky and Evgenii Lan
 data AvlTree = Empty | Node t Int (AvlTree t) (AvlTree t)
 ```
 where the `Int` is there to store the height of the tree. We will now define some functions which will make our life easier:
-```
-height :: AvlTree t -> Int
-height Empty = 0
-height (Node _ h _ _) = h
-
-imbalence :: AvlTree t -> Int
-imbalence Empty = 0
-imbalence (Node _ x tl tr) = height tl - height tr
-```
-
-We want `abs imbalence <= 1`.
-
-// Will need to include proofs of correctness!
-
-We will now define two rotations, one which takes the left child and makes it the parent the other that takes the right child and makes it the parent.
 
 ```
-rotateLeft :: AvlTree a -> AvlTree a
-rotateLeft (Node h x tl (Node hr y trl trr))
-    = Node nh y (Node nhl x tl trl) trr where
-    nhl = 1 + max (height tl) (height trl)
-    nh = 1 + max nhl (height trr)
+height :: AVL t -> Int
+height Empty              = -1   -- convention: empty tree has height -1
+height (Node _ h _ _)     = h
 
-rotateRight :: AvlTree a -> AvlTree a
-rotateRight (Node h x (Node hl y tll tlr) tr)
-    = Node nh y tll (Node nhr x tlr tr) where
-        nhr = 1 + max (height tlr) (height tr)
-        nh = 1 + max (height tll) nhr
+imbalance :: AVL t -> Int
+imbalance Empty          = 0
+imbalance (Node _ _ l r) = height l - height r
 ```
 
-We will now define a function rebalence which given a AVL tree with `abs imbalence == 2`, balence the tree. We only need this specific case as starting with a balenced tree, any operation can only increase the imbalence by $1$ in either direction.
+We want `abs imbalance <= 1`.
+
+#exercise(sub : "findMin")[
+    Write a function `findMin :: Ord t => AVL t -> t` which finds the minimum element in the AVL tree.
+]
+#exercise(sub : "mkNode")[
+    Write a function `mkNode :: Ord t => t -> AVL t -> AVL t -> AVL t` which takes a node `x` and two trees `tl` and `tr` and makes a tree `Node x h tl tr` with an appropriate value of `h`. 
+]
+
+We could have given this as a completely as an excercise, but as it is an important component of the upcomming tree making, we are providing the solution.
+
+#footnote[
+    #rotate(180deg)[
+```
+mkNode :: Ord t => t -> AVL t -> AVL t -> AVL t
+mkNode x l r = Node x (1 + max (height l) (height r)) l r
+```]
+]
+
+Notice that `height, imbalance, mkNode` are all $O(1)$ as we are pattern matching against the definition.
+
+As we want to do everything via rotations, we will now define two rotations, one which takes the left child and makes it the parent (`rotateRight` as the original parent moves to the right) and another that takes the right child and makes it the parent (`rotateLeft`).
+
+We will also setup the notation that, given the initial parent `x`, it's left tree is `tl` and right tree `tr`. If we look into say the left tree, it is of the form `Node lc _ tll tlr` and similerly, the right subtree is of the form `Node rc _ trl trr` where `lc` stands for the left child, `rc` for the right child and the subtrees are `t` followed by the branches we took from `x` to reach there. That is `tll` means subtree after traversing left branch followed by a left branch.
+
+This will allow us to define rotations as:
+
+```
+rotateRight :: AVL t -> AVL t
+rotateRight (Node x _ (Node lc _ tll tlr) tr) =
+  mkNode y tll (mkNode x tlr tr)
+rotateRight t = t -- Catchall for trees with no left child
+
+rotateLeft :: AVL t -> AVL t
+rotateLeft (Node x _ tl (Node rc _ trl trr)) =
+  mkNode rc (mkNode x tl trl) trr
+rotateLeft t = t -- Catchall for trees with no right child
+```
+Notice, we are using the @definition_of_Binary_Search_Tree properties only. We are yet to see what is happening to the balance.
+
+We will now define a function rebalance which given a AVL tree with `abs imbalance == 2`, balances the tree. We only need this specific case as starting with a balanced tree, any operation can only increase the imbalance by $1$ in either direction as an insertion or deletion can increase or decrease height by atmost 1 respectively.
 
 We will consider the following cases
-- `imbalence == 2` and both subtrees are balanced : rotate the entire tree right
+// Will need a proof of correctness...
 - `imbalence == 2` and imbalence of the left subtree is `-1` : left rotate the left subtree and then right rotate the tree
+- `imbalance == 2` and both subtrees are balanced : rotate the entire tree right
 - `imbalence == -2` and both subtrees are balenced :  rotate the entire tree left
 - `imbalence == -2` and imbalence of right subtree is `1` : right rotate the right subtree and then left rotate the tree
 
 This leads to
 ```
-rebalance :: Ord a => AvlTree a -> AvlTree a
-rebalance t@(Node h x tl tr)
-    | abs st < 2 = t
-    | st == 2 = if stl == -1 then
-        rotateRight (Node h x (rotateLeft tl) tr)
-        else rotateRight t
-    | st == -2 = if str == 1 then
-        rotateLeft (Node h x tl (rotateRight tr))
-        else rotateLeft t
-    where 
-        (st, stl, str) = (imbalence t, imbalence tl, imbalence tr)
+balance :: Ord t => AVL t -> AVL t
+balance t@(Node x _ tl tr)
+  | bf == 2 && bfl >= 0             = rotateRight t
+  | bf == 2                         = rotateRight (mkNode x (rotateLeft tl) tr)
+  | bf == -2 && bfr <= 0            = rotateLeft t
+  | bf == -2                        = rotateLeft (mkNode x tl (rotateRight tr))
+  | otherwise = mkNode x tl tr
+  where 
+  (bf, bfl, bfr) = (imbalance t, imbalance tl, imbalance tr)
+balance t = t
 ```
-
 Notice that rebalance is $O(1)$ as we are just moving things around via pattern matching.
 
-```
-insertAVL :: Ord a => a -> AvlTree a -> AvlTree a
-insertAVL v Nil = Node 1 v Nil Nil
-insertAVL v t@(Node h x tl tr)
-    | v < x = rebalance (Node nhl x ntl tr)
-    | v > x = rebalance (Node nhr x tl ntr)
-    | v == x = t
-    where
-        ntl = insertAVL v tl
-        ntr = insertAVL v tr
-        nhl = 1 + max (height ntl) (height tr)
-        nhr = 1 + max (height tl) (height ntr)
+We can now finally define `insert`, `contains` and `delete`
 
-deleteMax :: Ord a => AvlTree a -> (a, AvlTree a)
-deleteMax (Node _ x tl Nil) = (x, tl)
-deleteMax (Node h x tl tr) = (y, rebalance (Node nh x tl ty))
-    where
-        (y, ty) = deleteMax tr
-        nh = 1 + max (height tl) (height ty)
-
-deleteAVL :: Ord a => a -> AvlTree a -> AvlTree a
-deleteAVL v Nil = Nil
-deleteAVL v t@(Node h x tl tr)
-    | v < x = rebalance (Node nhl x ntl tr)
-    | v > x = rebalance (Node nhr x tl ntr)
-    | v == x = if isEmpty tl then tr
-               else rebalance (Node nhy y ty tr)
-    where
-        (y, ty) = deleteMax tl
-        (ntl, ntr) = (deleteAVL v tl, deleteAVL v tr)
-        nhl = 1 + max (height ntl) (height tr)
-        nhr = 1 + max (height tl) (height ntr)
-        nhy = 1 + max (height ty) (height tr)
 ```
+insert :: Ord t => AVL t -> t -> AVL t
+insert Empty x = Node x 0 Empty Empty
+insert (Node y _ l r) x
+  | x < y     = balance (mkNode y (insert l x) r)
+  | x > y     = balance (mkNode y l (insert r x))
+  | otherwise = Node y (height (Node y (height l) l r)) l r  -- no duplicates
+
+
+search :: Ord t => AVL t -> t -> Bool
+search Empty _ = False
+search (Node y _ l r) x
+  | x < y     = search l x
+  | x > y     = search r x
+  | otherwise = True
+
+delete :: Ord t => AVL t -> t -> AVL t
+delete Empty _ = Empty
+delete (Node y _ l r) x
+  | x < y     = balance (mkNode y (delete l x) r)
+  | x > y     = balance (mkNode y l (delete r x))
+  | otherwise =
+      case r of
+        Empty -> l
+        _     -> let s = smallest r
+                 in balance (mkNode s l (delete r s))
+```
+One cam clearly see that we only make 1 balencing per `insert` or `delete` and hence, still mantain the $O(h) = O(log n)$ complexity. 
 
 We will not see any specific problems using the `BTree` or `AvlTree`, these are commonly used as precursors to more powerful data structures.
 
