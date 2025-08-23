@@ -13,25 +13,25 @@
 = Asymptotics
 == Big El
 #definition(sub : "Big Ell notation")[
-  The symbol $cal(L)$ means absolutly atmost. For example, $cal(L)(4)$ refers to a value whoose absolute value is less than or equal to $4$. For example, $pi = cal(L)(4)$. 
+  The symbol $cal(L)$ means absolutely atmost. For example, $cal(L)(4)$ refers to a value whoose absolute value is less than or equal to $4$. For example, $pi = cal(L)(4)$. 
 ]
 
-Note, the $=$ sign is not trasitive in this regard. The reason for this is because the notation came from math and unlike Computer scientists, mathematicains have a small vocabulary and couldn't think of another symbol. As a Mathematician once put in words(quite surprising),
+Note, the $=$ sign is not transitive in this regard. The reason for this is because the notation came from math and unlike Computer scientists, mathematicians have a small vocabulary and couldn't think of another symbol. As a Mathematician once put in words(quite surprising),
 
 #quote(sub : "De Bruijn")[Mathematicians customarily use the $=$ sign as they use the word “is” in English: Aristotle is a man, but a man isn’t necessarily Aristotle.]
 
-You can also see this by the story, let's say a textbook author's typewriter doesn't have $>$ sign. So they start using $ 5 = cal(L)(3)$ to reprasent that $3$ is lesser than $5$. They can also write $cal(L)(3) = cal(L)(5)$ but not $cal(L)(5) = cal(L)(3)$
+You can also see this by the story, let's say a textbook author's typewriter doesn't have $>$ sign. So they start using $ 5 = cal(L)(3)$ to represent that $3$ is lesser than $5$. They can also write $cal(L)(3) = cal(L)(5)$ but not $cal(L)(5) = cal(L)(3)$
 
-Comming back to mathematics, Big-A notation is very compatible with arithmatic.
+Coming back to mathematics, Big-A notation is very compatible with arithmetic.
 #proof(thm : [
   + $pi = 3.14 + cal(L)(0.005)$
   + $10^(cal(L)(2)) = cal(L)(100)$
 ])[
-  We will just use the defination of $-k <= A(k) <= k$.
+  We will just use the definition of $-k <= A(k) <= k$.
 
   Thus, $pi = 3.14 + cal(L)(0.005) <==> pi in [3.14 - 0.05, 3.14 + 0.05]$ which is true as $3.140 < pi = 3.1415926 dots < 3.142$.
 
-  Similerly, $10^(cal(L)(2)) = cal(L)(100) <==> [10^(-2), 10^(2)] subset.eq [-100, 100]$ which is true.
+  Similarly, $10^(cal(L)(2)) = cal(L)(100) <==> [10^(-2), 10^(2)] subset.eq [-100, 100]$ which is true.
 ]
 
 #proof(thm: [$cal(L)(x) dot cal(L)(y) = cal(L)(x y)$])[
@@ -45,7 +45,7 @@ We can use the notation for variables as well,
 + $cal(L)(x)+cal(L)(y) =cal(L)(x+y) $, where$ x, y >= 0$;
 + $(1+cal(L)(t))^2 =1+3cal(L)(t)$, where $t=A(1)$.
 ])[
-Left as an excercise to reader.
+Left as an exercise to reader.
 ]
 
 #exercise(sub : "Big Ell Analysis")[
@@ -66,7 +66,7 @@ f(n) prec g(n) <==> limsup_(n -> oo) (|f(n)|)/(|g(n)|) = 0
 $
 Furthermore, $f(n) asymp g(n) <==> limsup_(n -> oo) (|f(n)|)/(|g(n)|) = k$ where $0 < k < oo$ is constent.
 ]
-#proof(thm : [Asymptotic dominence is transistive.])[
+#proof(thm : [Asymptotic dominance is transitive.])[
   Let $f(n) prec g(n)$ and $g(n) prec h(n)$. We wish to show $f(n) prec h(n)$.
   $
   limsup_(n -> oo) (|f(n)|)/(|h(n)|) = limsup_(n -> oo) (|f(n)|)/(|g(n)|) dot (|g(n)|)/(|h(n)|) = 0 dot 0 = 0
@@ -74,10 +74,10 @@ Furthermore, $f(n) asymp g(n) <==> limsup_(n -> oo) (|f(n)|)/(|g(n)|) = k$ where
 ]
 
 #proof(thm : [If $alpha < beta$ then $x^(alpha) prec x^(beta)$])[
-Left as an excercise to reader.
+Left as an exercise to reader.
 ]
 #proof(thm: [$f(n) prec g(n) <==> 1/(f(n)) succ 1/(g(n))$])[
-  Left as an excercise to reader.
+  Left as an exercise to reader.
 ]
 #proof(thm: [$e^(f(n)) prec e^(g(n)) <==> limsup_(n -> oo) (f(n) - g(n)) = - oo $])[
   Using the definition, we will get:
@@ -90,26 +90,26 @@ Left as an excercise to reader.
   $
 ]
 #proof(thm:[Let $f(x) = k * g(x)$ for some real $k != 0$, then $f(x) asymp g(x)$])[
-Left as an excercise to reader.
+Left as an exercise to reader.
 ]
-#proof(thm:[Let $f(x) succ g(x)$ and $f(x) asymp h(x)$ thebm $f(x) asymp h(x) + g(x)$])[
-  Left as an excercise to reader.
+#proof(thm:[Let $f(x) succ g(x)$ and $f(x) asymp h(x)$ then $f(x) asymp h(x) + g(x)$])[
+  Left as an exercise to reader.
 ]
 
-This previous last two theorems tells us that the equivalence induced by @definition_of_Asymptotic_Dominance is invarient under scaling and translation by dominated functions. That is, in a sum of functions, we only need to consider the most dominent function when comparing asymptotic dominence. This allows us to talk about a group of functions using a single 'reprasentative' function.
+This previous last two theorems tells us that the equivalence induced by @definition_of_Asymptotic_Dominance is invariant under scaling and translation by dominated functions. That is, in a sum of functions, we only need to consider the most dominant function when comparing asymptotic dominence. This allows us to talk about a group of functions using a single 'representative' function.
 
-#definition(sub: "Reprasentive Function wrt asymptotic dominance")[
+#definition(sub: "Representee Function wrt asymptotic dominance")[
 The representative function of a set of asymptotically equivalent functions is the simplest form of the equivalence class, defined as:
 
 - A function with a leading coefficient of $1$,
 - No additive subdominant terms (i.e., no terms in addition that are asymptotically dominated by others in the class).
 ]
-For example $x^2$ is the reprasentative function of the equivalence class of quadratic functions, $a x^2 + b x + c$.
+For example $x^2$ is the representative function of the equivalence class of quadratic functions, $a x^2 + b x + c$.
 
-#proof(thm: [If $f(x),g(x)$ are the reprasentative functions of the equivalence class $F,G$; then show that $f(x) succ g(x) <==> hat(f)(x) succ hat(g)(x)$ for all $hat(f) in F$ and $hat(g) in G$])[
-  ($==>$) Using the fact $f, hat(f) in F$, we get $f(x) asymp hat(f)(x) <==> lim_(x -> oo) (f(x))/(hat(f)(x)) = c_1$ where $c_1 != 0$ is a constent.
+#proof(thm: [If $f(x),g(x)$ are the representative functions of the equivalence class $F,G$; then show that $f(x) succ g(x) <==> hat(f)(x) succ hat(g)(x)$ for all $hat(f) in F$ and $hat(g) in G$])[
+  ($==>$) Using the fact $f, hat(f) in F$, we get $f(x) asymp hat(f)(x) <==> lim_(x -> oo) (f(x))/(hat(f)(x)) = c_1$ where $c_1 != 0$ is a constant.
 
-  Similerly, $g(x) asymp hat(g)(x) <==> lim_(x -> oo) (g(x))/(hat(g)(x)) = c_2$ where $c_2 != 0$ is a constent.
+  Similarly, $g(x) asymp hat(g)(x) <==> lim_(x -> oo) (g(x))/(hat(g)(x)) = c_2$ where $c_2 != 0$ is a constant.
 
   Using $f(x) succ g(x) <==> lim_(x -> oo) (g(x))/(f(x)) = 0$
 
@@ -122,7 +122,7 @@ For example $x^2$ is the reprasentative function of the equivalence class of qua
   => hat(f)(x) succ hat(g)(x)
   $
 
-  ($<==$) $f in F$ and $g in g$ implies $f(x) succ g(x)$ as this is true for all functions in the equivalence clases.#footnote[We could just say this part was trivial.]
+  ($<==$) $f in F$ and $g in g$ implies $f(x) succ g(x)$ as this is true for all functions in the equivalence classes.#footnote[We could just say this part was trivial.]
 ]
 
 #exercise(sub : "An Hieraarchy of Common Functions")[
@@ -133,7 +133,7 @@ For example $x^2$ is the reprasentative function of the equivalence class of qua
 ]
 
 == Big Oh notation
-These topics seem disconected, right? Let's fix that.
+These topics seem disconnected, right? Let's fix that.
 #definition(sub : "Big Oh (from Big Ell)")[
   $f(x) = o (g(x)) (n -> oo) <==> exists k, n_0 op("s.t.") forall n >= n_0 f(n) = k cal(L)(g(n))$ 
 ]
@@ -142,10 +142,10 @@ These topics seem disconected, right? Let's fix that.
   $f(n) o (g(n)) (n -> oo) <=> f(n) prec.eq g(n)$
 ]
 
-#proof(thm : [The above definations are equivalent.])[
+#proof(thm : [The above definition are equivalent.])[
   *Lemma:* Both the definitions are equivalent to $limsup_(n -> oo) (|f(n)|)/(|g(n)|) < oo$.
 
-  From the first definiton, there exists an $k, n_0$ such that $forall n_0 <= n$:
+  From the first definition, there exists an $k, n_0$ such that $forall n_0 <= n$:
   $
   f(n) = k cal(L)(g(n))\
   <=> |f(n)| <= k |g(n)|\
@@ -156,24 +156,24 @@ These topics seem disconected, right? Let's fix that.
   limsup_(n -> oo) (|f(n)|)/(|g(n)|) < oo
   $
 
-  The equivalence from the second defination follows from the definition of asymptotic dominance.
+  The equivalence from the second definition follows from the definition of asymptotic dominance.
 ]
 
-We also allow this lemma to also be a defination of $o $.
+We also allow this lemma to also be a definition of $o $.
 #definition(sub : "Big Oh (limit)")[
   $f(n) o (g(n)) (n -> oo) <==> limsup_(n -> oo) (|f(n)|)/(|g(n)|) < oo$.
 ]
 
-We also give the classical defination.
+We also give the classical definition.
 #definition(sub : "Big Oh (Classical)")[
   $f(n) = o (g(n)) (n -> oo) <==> exists c, n_0 op("s.t.") forall n >= n_0, |f(n)| <= c dot |g(n)|$
   ]
 
-#proof(thm : [The above definations are equivalent.])[
-  Left as excercise.
+#proof(thm : [The above definitions are equivalent.])[
+  Left as exercise.
 ]
 
-While we have used $limsup$ here, it is only to deal with the cases where the limit is not gurenteed to exist. We can use $lim$ in place for all the definations till here in most cases we will be concerned with.
+While we have used $limsup$ here, it is only to deal with the cases where the limit is not guaranteed to exist. We can use $lim$ in place for all the definitions till here in most cases we will be concerned with.
 
 In the family of big oh, we also have some more notations one must be aware of. This is called the Bachmann–Landau family, with contributions from Hardy and Knuth.
 #definition(sub : "Bachman-Landau Notation")[
@@ -185,7 +185,7 @@ In the family of big oh, we also have some more notations one must be aware of. 
   [$f(n) = Omega(g(n))$], [Big Omega], [$exists k, n_0 op(s.t.) forall n >= n_0, |f(n)| >= k g(n)$], [$
   liminf_(n -> oo) (|f(n)|)/(g(n)) = 0
   $],
-  [$f(n) tilde g(n)$],[Total Asymptotic Equivalence (diffrent for asymptotic eqivalende defined using $asymp$.)],[],[$
+  [$f(n) tilde g(n)$],[Total Asymptotic Equivalence (different for asymptotic equivalence defined using $asymp$.)],[],[$
   lim_(n -> oo) (f(n))/(g(n)) = 1
   $],
   [$f(n) = o (g(n))$], [Small Oh], [$exists k, n_0 op(s.t.) forall n >= n_0, f(n) <= k g(n)$], [$
@@ -196,11 +196,11 @@ In the family of big oh, we also have some more notations one must be aware of. 
   $]
   )
 ]
-#proof(thm: [If $f in F$ evivalence class and $hat(f)$ is the reprasentative of the class, then $f(x) = Theta(hat(f)(x))$])[
-  Follows trivially from defination.
+#proof(thm: [If $f in F$ equivalence class and $hat(f)$ is the representative of the class, then $f(x) = Theta(hat(f)(x))$])[
+  Follows trivially from definition.
 ]
 
-Here is an example to illustrate the diffrence between the notations.
+Here is an example to illustrate the difference between the notations.
 
 - $3n^2 − 100n + 6 = o (n^2)$, because I choose $c = 3, n_0 = 6/100$;
 - $3n^2 − 100n + 6 = o (n^3)$, because I choose $c = 1, n_0 = 7/100$;
@@ -218,7 +218,7 @@ Also note, $3n^2 - 100n + 6 tilde 3n^2$ by taking the limit.
 
 Finally, note that $o , omega$ are equal to $o , Omega$ here as our limits exist.
 
-#exercise(sub : "Big Oh Arithematic")[
+#exercise(sub : "Big Oh Arithmetic")[
   Prove the following:
   + $n^m = o (n^(m')) quad m <= m'$
   + $o (f(n)) + o (g(n)) = o (|f(n)| + |g(n)|)$
@@ -231,9 +231,9 @@ Finally, note that $o , omega$ are equal to $o , Omega$ here as our limits exist
 
 
 = Asymptotic Mathematics
-Notice that Hardy was involoved in devloping some of this notation. What has an analytical number theory got to do with a tool for algorithmic analysis?
+Notice that Hardy was involved in developing some of this notation. What has an analytical number theory got to do with a tool for algorithmic analysis?
 
-We wrote $n -> oo$ next to $o $ in the definitions as we are consider the limits approaching $oo$. We can also define similerly for $n -> 0$ and $n -> k$. These definitions are more common in math than CS, as mathematicains care about behavior of functions at a lot of places other than $oo$. As this is a CS book, in absence of clarification, assume $n -> oo$.
+We wrote $n -> oo$ next to $o $ in the definitions as we are consider the limits approaching $oo$. We can also define similarly for $n -> 0$ and $n -> k$. These definitions are more common in math than CS, as mathematicians care about behavior of functions at a lot of places other than $oo$. As this is a CS book, in absence of clarification, assume $n -> oo$.
 
 This allows us to write taylor series in big-oh notation, for example as $sin(x) = x - x^3/3! + o (x^5) (x -> 0)$.
 
@@ -280,9 +280,9 @@ sum_(x = 1)^(n) x^k = (n^(k+1) + (k+1)n^k + o (1) - o (n))/(k+1)\
 sum_(x = 1)^(n) x^k = o (n^(k+1))
 $
 
-We can also use this notion to reprasent some mathematics results. For example:
+We can also use this notion to represent some mathematics results. For example:
 #definition(sub : "Prime Number Theorem")[
-  Let $pi(n)$ reprasent the number of primes less then $n$. Then:
+  Let $pi(n)$ represent the number of primes less then $n$. Then:
   $
   pi(n) tilde n/(ln(n))
   $
@@ -290,7 +290,7 @@ We can also use this notion to reprasent some mathematics results. For example:
 #definition(sub : "Stirling Approximation")[
   $
   n! = sqrt(2 pi n) (n/e)^n (1+ 1/(12n) + o (1/n^2))
-  $ #footnote[More terms can be obtained by using the Bernolli numbers. We have gone for this form as the proof follows from probability theory and doesn't involve results from complex analysis.]
+  $ #footnote[More terms can be obtained by using the Bernoulli numbers. We have gone for this form as the proof follows from probability theory and doesn't involve results from complex analysis.]
   Also note,
   $
   n! tilde  sqrt(2 pi n) (n/e)^n\
@@ -350,7 +350,7 @@ This implies $A = e^(o(1)) = o(1) => binom(n, k) = o(1) dot n^k/k! = o(n^k/k!)$.
 
 (ii) Here the $c$ being specified gives us $A = e^(-c^2/2) => binom(n,k) = e^(-c^2/2) n^k/k!$.
 
-*Hint for (iii), (iv), (v):* We were able to disolve the $cal(O)(k^3 n^(-2))$ term as if $k = o(sqrt(n))$, the term would be $cal(O)(1/sqrt(k))$ and goes to zero, rapidly.
+*Hint for (iii), (iv), (v):* We were able to dissolve the $cal(O)(k^3 n^(-2))$ term as if $k = o(sqrt(n))$, the term would be $cal(O)(1/sqrt(k))$ and goes to zero, rapidly.
 
 We can 'fix' this by having a slightly bigger $k = o(n^(2/3))$. The same happens in *(iv)* as we take a more and more accurate Taylor exapansion for $ln(1-i/n)$. Can we get some sort of a limiting case and solve for $k = o(n)$?
 
@@ -361,9 +361,9 @@ We can 'fix' this by having a slightly bigger $k = o(n^(2/3))$. The same happens
   $
   as $t -> oo$
 ]
-The idea here is to begin with a weak bound and progressivle make it stronger.
+The idea here is to begin with a weak bound and progressively make it stronger.
 
-Here we start by simplyfying the equation:
+Here we start by simplifying the equation:
 $
 ln(f(t)) + f(t) = ln(t) quad (t -> oo)\
 $
@@ -383,7 +383,7 @@ ln(ln(t) ( 1 - Theta((ln(ln(t)))/(ln(t))))) + f(t) = ln(t)\
 ln(ln(t)) + ln(1 - Theta((ln(ln(t)))/(ln(t)))) + f(t) = ln(t)\
 f(t) = ln(t) - ln(ln(t)) + Theta((ln(ln(t)))/(ln(t)))
 $
-And one can continue getting more and more terms by this process. We stop here as getting the logitherm now will be much harder.
+And one can continue getting more and more terms by this process. We stop here as getting the logarithm now will be much harder.
 
 #exercise(sub : "A Weird Condition")[
   Prove that there are infinitely many integers $n$ such that the sum of digits of $n$ in base $p < n$ exceeds $2025$ for every prime p.
@@ -391,14 +391,14 @@ And one can continue getting more and more terms by this process. We stop here a
 
 This question is incredibly hard to answer through regular means of construction of contradiction. 
 
-We will try to set up an asymptotic bound on number of integers violating the condition and show that their density is less than $1$, hence, showing that the condition is true for infinitly many numbers.
+We will try to set up an asymptotic bound on number of integers violating the condition and show that their density is less than $1$, hence, showing that the condition is true for infinity many numbers.
 
-Let's say $x < N$ integrs violate these condition for some large $N$. Notice,
+Let's say $x < N$ integers violate these condition for some large $N$. Notice,
 $
 forall "primes" p <= n, exists k in NN op(s.t.) n^(1/(k+1)) < p <= n^(1/k)
 $
 
-Thus, given a $p$, any number from $1..N$ has atmost $k+1$ digits in base $p$. Thus, a violation can only occcur if the sum of digits: $d_1, d_2, dots, d_(k+1) < p$ is less than $2025$.
+Thus, given a $p$, any number from $1..N$ has atmost $k+1$ digits in base $p$. Thus, a violation can only occur if the sum of digits: $d_1, d_2, dots, d_(k+1) < p$ is less than $2025$.
 
 We can (grossly) overcount the number of violaters using the sum:
 $
@@ -433,10 +433,10 @@ $
 
 Thus, $x < (2N)/3$ for some $n$. Thus, atleast $N/3$  integers exist satisfying our property for some large $N$.
 
-= Analysis of Algoritms
-With the (damn scary) math out of the way, we will now move to algoritms and the real reason we are concerned with asymptotics. Take a deep breath, relax; the scary part is beyond us.
+= Analysis of Algorithms
+With the (damn scary) math out of the way, we will now move to algorithms and the real reason we are concerned with asymptotics. Take a deep breath, relax; the scary part is beyond us.
 
-Before we get to designing and analyzing algorithms, let's pause and breifly question what ‘algorithm’ actually means. To quote Hannah Fry,
+Before we get to designing and analyzing algorithms, let's pause and briefly question what ‘algorithm’ actually means. To quote Hannah Fry,
 
 #quote(sub : "Hannah Fry")[
 It’s a term that, although used frequently,
@@ -447,14 +447,14 @@ _algorithm (noun): A step-by-step procedure for solving a problem or accomplishi
 An algorithm is simply a series of logical instructions that show, from start to finish, how to accomplish a task. By this broad definition, a cake recipe counts as an algorithm. So does a list of directions you might give to a lost stranger. IKEA manuals, YouTube troubleshooting videos, even self-help books – in theory, any self-contained list of instructions for achieving a specific, defined objective could be described as an algorithm. But that’s not quite how the term is used. Usually, algorithms refer to something a little more specific. They still boil down to a list of step-by-step instructions, but these algorithms are almost always mathematical objects. They take a sequence of mathematical operations – using equations, arithmetic, algebra, calculus, logic and probability – and translate them into computer code. They are fed with data from the real world, given an objective and set to work crunching through the calculations to achieve their aim. They are what makes computer science an actual science, and in the process have fuelled many of the most miraculous modern achievements made by machines.
 ]
 
-We will take Prof. Fry's defination as the gospel as trying to go into more details will open up questions which are more philosophical than we wish to be here.
+We will take Prof. Fry's definition as the gospel as trying to go into more details will open up questions which are more philosophical than we wish to be here.
 
 == Sorting
 A classic example in algorithm design is sorting. We have already seen some sorting algorithms, but here we will try to do an complete analysis of them.
 
 There are two clear naive algorithms one can think about:
 - We can repeatedly move through the list element by element, comparing the current element with the one after it, swapping their values if needed. Do these passes through the list are repeated until no swaps have to be performed in a pass, meaning that the list has become fully sorted. This is called Bubble Sort.
-- We can take the first element as sorted list and then keep inserting the succesive elements in a way that mantains the sorted property. This is called Insertion sort.
+- We can take the first element as sorted list and then keep inserting the successive elements in a way that mantains the sorted property. This is called Insertion sort.
 
 We can implement these ideas as:
 ```
@@ -472,15 +472,15 @@ insertSort :: Ord a => [a] -> [a]
 insertSort = foldr insert []
 ```
 
-Bubble Sort is bsically keeping the last element to its place every pass. So the first pass takes $n$ comparisons and in the worst case, $n-1$ switches. Similerly, the second pass takes $n$ comparisons and at most $n-2$ switches.
+Bubble Sort is bsically keeping the last element to its place every pass. So the first pass takes $n$ comparisons and in the worst case, $n-1$ switches. Similarly, the second pass takes $n$ comparisons and at most $n-2$ switches.
 
 In the worst case, we will need to make $n$ passes (the last one to check if the list is sorted. Thus, $n^2$ comparisons and $((n-1)n)/2$ switches.
 
-This is a very weird way to express the speed of the algorithm but the time to compare and switch two elements is diffrent. So what do do? Simple, use the fact that they are constent and take them as $cal(O)(1)$. This assumption also makes our analysis easier by letting us remove some small factors and focus on large improvements.
+This is a very weird way to express the speed of the algorithm but the time to compare and switch two elements is different. So what do do? Simple, use the fact that they are constent and take them as $cal(O)(1)$. This assumption also makes our analysis easier by letting us remove some small factors and focus on large improvements.
 
-Thus, bubblesort is $cal(O)(n^2)$.
+Thus, `bubblesort` is $cal(O)(n^2)$.
 
-Similerly, `insert` takes $cal(O)(k)$ time in the worst case to insert an element in a list of length $k$. Thus, `insertSort` takes $cal(O)(1) + dots + cal(O)(n) = cal(O)(n)$ time. (notice, we didn't talk about comparsions and switches as the big Oh allows us to think more simplistically).
+Similarly, `insert` takes $cal(O)(k)$ time in the worst case to insert an element in a list of length $k$. Thus, `insertSort` takes $cal(O)(1) + dots + cal(O)(n) = cal(O)(n)$ time. (notice, we didn't talk about comparisons and switches as the big Oh allows us to think more simplistically).
 
 The algorithms for sorting we saw in chapter 7 wer merge sort and quick sort which worked as follows:
 ```
@@ -500,22 +500,23 @@ quickSort (x:xs) = quickSort [l | l <- xs, l > x] ++ [x] ++ quickSort [r | r
 <- xs, r <= x]
 ```
 
-We had shown, through an cumbersome computation, that `mergesort` takes less than $n log(n) + 3n + 1/2 log(n) + 1/2$ compatsions. Doing so with switches seems like a much sadder condition to be in. 
+We had shown, through an cumbersome computation, that `mergesort` takes less than $n log(n) + 3n + 1/2 log(n) + 1/2$ comparisons. Doing so with switches seems like a much sadder condition to be in. 
 
 But with the power of Big-Oh on our side, we just assume the worst case where every comparsion leads to a switch and get the number of operations as $cal(O)(n log(n))$.
 
-Similerly, we can use the results from there, to shown that the worst case for `quicksort` is $cal(O)(n^2)$ operations, but in the average case, it only takes $cal(O)(n log(n))$ operations.
+Similarly, we can use the results from there, to shown that the worst case for `quicksort` is $cal(O)(n^2)$ operations, but in the average case, it only takes $cal(O)(n log(n))$ operations.
 
 But can we do better? Depends on how much you know about the elements of the list.
 
-Say you have a bunch of sphegatti and you want to sort them. Well, just level them across the table. Then move your hand from top towards the tops of the sphegatti till you hand touches the tallest sphegatti, pull it out and continue. This is a $cal(O)(n)$ algorithm. It even has a name Sphegatti Sort.
+Say you have a bunch of spaghetti and you want to sort them. Well, just level them across the table. Then move your hand from top towards the tops of the spaghetti till you hand touches the tallest spaghetti, pull it out and continue. This is a $cal(O)(n)$ algorithm. It even has a name spaghetti Sort.
 
-But let's say I have to sort a bunch of spegatti sauces according to how much a distingushed person likes them and I can only ask them to compare two sauces at a time. In this case, we can prove that we can't do better than $cal(O)(n log(n))$.
-#proof(thm: [An Sorting algorothm when we can’t access the items’ values directly: only compare two items and find out which is bigger or smaller can't be better than $cal(O)(n log n)$ in the worst case.
+But let's say I have to sort a bunch of spaghetti sauces according to how much a distinguished person likes them and I can only ask them to compare two sauces at a time. In this case, we can prove that we can't do better than $cal(O)(n log(n))$.
+
+#proof(thm: [An Sorting algorithm when we can’t access the items’ values directly: only compare two items and find out which is bigger or smaller can't be better than $cal(O)(n log n)$ in the worst case.
 ])[
   In an $n$ element list, knowing that $a_1 > a_2$ reduces the possible sortings from $n!$ to $n!/2$.
 
-  Similerly, knowing any more comparisions will reduce the number of possible orders by $2$.
+  Similarly, knowing any more comparisons will reduce the number of possible orders by $2$.
 
   Thus, we need atleast $ceil(log(n!))$ comparisons.
 
@@ -532,17 +533,17 @@ This bound holds for randomized algorithms as well (like say a quickSort picking
 
 While proving so formally will require us to define some terms like probability distribution and bit tapes, here is the basic idea.
 
-Given a list with infinite random numbers, our randomized algorithm uses these to do it's randomizition. Thus, given this list, we have a normal non-random algorithm. Thus, we can now find the expectation and get that it has the same lower bound of $cal(O)(n log n)$.
+Given a list with infinite random numbers, our randomized algorithm uses these to do it's randomization. Thus, given this list, we have a normal non-random algorithm. Thus, we can now find the expectation and get that it has the same lower bound of $cal(O)(n log n)$.
 
-Such proofs help us make sure we have achived optimality and make sure people don't waste time looking for faster algorithms. However, we just sorted spegatti in $cal(O)(n)$ time, how?
+Such proofs help us make sure we have achieved optimality and make sure people don't waste time looking for faster algorithms. However, we just sorted spaghetti in $cal(O)(n)$ time, how?
 
 The answer 'that was a stupid algorithm' is plain wrong as our proof never relied on dumbness or smartness. So what is at play?
 
-As stated above, if we know more about what we are sorting, we could do better. For example, if they were sphegatti...
+As stated above, if we know more about what we are sorting, we could do better. For example, if they were spaghetti...
 
 Given that most sorting is of integers and strings, why would you ever so restrict yourself as to only use comparisons? You can do much more with these objects that. You can add them, you can multiply them, you can count with them!
 
-While it may seem unintutive, but we can use even these operations for sorting! We will talk mostly about integer sorting algorithms but faster algorithms for strings also exists (which we will mention).
+While it may seem unintuitive, but we can use even these operations for sorting! We will talk mostly about integer sorting algorithms but faster algorithms for strings also exists (which we will mention).
 
 === Counting Sort
 Let's say we want to sort a range of $0-k$ with some number of repeats. So what do we do? We can do this in $cal(O)(n k)$ time.#footnote[
@@ -559,11 +560,11 @@ countingSort k lis = concat (go k lis []) where
 
 For a fixed $k$, this is already an $cal(O)(n)$ algorithm; but it is easy to observe, that in practice this would behave $cal(O)(n^2)$-ish.
 
-And secondly, if we want to fix a large $k$, it better be `maxBound :: Int` atleast. That makes the algorithm insanly slow while still being $cal(O)(n)$.
+And secondly, if we want to fix a large $k$, it better be `maxBound :: Int` atleast. That makes the algorithm insanely slow while still being $cal(O)(n)$.
 
 So why talk about it? Because it is a subroutine to 
 === Radix Sort
-We begin by first making modefications to `countingSortWithKey :: Int -> [(Int, Int)] -> [(Int, Int)]` which will sort based on the key value of the pairs (the second value of the pair) keeping the list otherwise stable (we don't change the order from that prescribed by orignal list if key value is same).
+We begin by first making modifications to `countingSortWithKey :: Int -> [(Int, Int)] -> [(Int, Int)]` which will sort based on the key value of the pairs (the second value of the pair) keeping the list otherwise stable (we don't change the order from that prescribed by original list if key value is same).
 ```
 -- | Counting Sort With Keys
 countingSortWithKey :: Int -> [(Int, Int)] -> [(Int, Int)]
@@ -573,7 +574,7 @@ countingSortWithKey k lis = concat (go k lis []) where
 ```
 
 #definition(sub : "Radix Sort")[
-  Radix sort is a sorting algorithm which sorts a list of integers digit by digit, starting from the least significent digit; mantaining stablity in subsequent sorts.
+  Radix sort is a sorting algorithm which sorts a list of integers digit by digit, starting from the least significant digit; maintaining stability in subsequent sorts.
 ]
 For example, if we had to sort:
 $
@@ -590,7 +591,7 @@ $
 2bold(0)underline(4), 3bold(0)underline(8), 3bold(1)underline(4), 3bold(1)underline(7), 8bold(2)5, 2bold(3)8, 3bold(4)9, 8bold(5)3, 1bold(6)underline(1), 2bold(6)underline(5),\
 8bold(7)underline(2), 7bold(7)underline(2), 1bold(7)underline(3), 4bold(8)underline(0), 5bold(8)underline(4), 1bold(8)underline(6), 3bold(9)underline(8), 1bold(9)underline(9), 4bold(9)underline(9), 8bold(9)underline(9)
 $
-Finally, we will sort using the hundered's number.
+Finally, we will sort using the hundred's number.
 $
 161, 173, 186, 199, 204, 238, 265, 308, 314, 317,\
 349, 398, 480, 499, 584, 772, 825, 853, 872, 899
@@ -613,7 +614,7 @@ radixSort maxLength lis = go 0 lis where
     newLis = map fst $ countingSortWithKey 9 lisWithKey
 ```
 
-This is a rather nice implementation, of what can easily be a very cumbersome code. A lot of helpers are created for more clarity instead of going for a more concise but impenetratable version.
+This is a rather nice implementation, of what can easily be a very cumbersome code. A lot of helpers are created for more clarity instead of going for a more concise but impenetrable version.
 
 Let's now compute the time complexity. We will take the number of digits in the base system to be $d$, the longest number be $l$ long and the list having $n$ numbers. 
 
@@ -630,7 +631,7 @@ Thus, the total time complexity is $Theta(n d l)$#footnote[
 ]. Setting $d = 9$, we would have $Theta(n log_d (M)) = Theta(n log(M))$ which would make it asymptotically faster for any list with the largest number less than number of elements.
 
 #exercise(sub : "Complete Radix Sort")[
-  Modify the radix sort algortithm to make functions:
+  Modify the radix sort algorithm to make functions:
   ```
   radixSortWithBase :: Int -> Int [Int] -> [Int]
   -- Radix sort with some other base.
@@ -640,7 +641,7 @@ Thus, the total time complexity is $Theta(n d l)$#footnote[
 ]
 
 === Survey of Sorting Algorithms
-In this survey, we will consider the optimal data structures. Design and Analysis of (some of) them is dicussed in ch11.
+In this survey, we will consider the optimal data structures. Design and Analysis of (some of) them is discussed in ch11.
 
 We will let $w = log(M)$
 #table(
@@ -726,7 +727,7 @@ Also, an impractical algorithm can still demonstrate that conjectured bounds can
 This alone could be important and often is a great reason for finding such algorithms. For example, if tomorrow there were a discovery that showed there is a factoring algorithm with a huge but provably polynomial time bound, that would change our beliefs about factoring. The algorithm might never be used, but would certainly shape the future research into factoring.]
 
 = An Informal Survey of Multiplication Algorithms
-The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients in the excercise, let's end the main text with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). Our model of computation will be RAM but without the assumptions on addition and multiplication.
+The word Algorithm orignates from French where it was the mistranslated name of the 9th Century Arabic scholer Al-Khwarizmi, who was born in present day Uzbekistan, who studied and worked in Baghdad. His text on multiplying indo-arabic numerals travelled to Europe and his name was mis translated to "Algorisme" which later evolved into algorithm. While we will see other algorithms of the ancients in the exercise, let's end the main text with the OG multiplication. We will consider the multiplication of two $n$ digit numbers, given it takes a single operation to solve for $n=1$ (base cases). Our model of computation will be RAM but without the assumptions on addition and multiplication.
 
 We assume additions of sigle digit takes $cal(O)(1)$ (constent) time, and hence, adding a $m, n$ digit number takes $cal(O)(min(m,n))$ time. This is realized by the school book carry method of additon and is optimal #footnote[The proof for the optimality is much harder. It was given by Emil Jerabek in 2023 using a technique we will see in ch 11 called Amortization]. Similer proof holds for subtraction.
 
@@ -805,7 +806,7 @@ x y = (a*10^(n/2) + b) * (c*10^(n/2) + d)\
 $
 
 ```
--- | Naive Divide and Conquor defination
+-- | Naive Divide and Conquor definition
 divNcon :: [Int] -> [Int] -> [Int]
 divNcon [x] num = mulNumDig num x
 divNcon num [x] = mulNumDig num x
