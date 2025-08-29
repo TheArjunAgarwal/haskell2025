@@ -171,11 +171,16 @@ Type in `helloWorld` after the `>>> `.
 
 It should reply `True`.
 
+#set raw(lang:"os")
+#show raw.where(lang:"os") : it => {
+  text(fill:blue,it)
+}
+
 = Fixing Errors
 
 If you see squiggly red, yellow, or blue lines under your text, that means there is an error, warning, or suggestion respectively.
 
-To explore your options to remedy the issue, put your text cursor at the text above the squiggly line and right-click.
+To explore your options to remedy the issue, put your text cursor at the text and click `Ctrl`+`.` .
 
 You have opened the QuickFix menu.
 
@@ -185,6 +190,6 @@ You can now choose a suitable option.
 
 Just like texting with your friends, VS Code also gives you useful auto-complete options while you are writing. 
 
-To navigate the auto-complete options menu, hold down the Ctrl key while navigating using the $arrow.t$ and $arrow.b$ keys.
+To navigate the auto-complete options menu, hold down the `Ctrl` key while navigating using the #text(fill:blue,$arrow.t$) and #text(fill:blue,$arrow.b$) keys.
 
-To accept a particular auto-complete suggestion, use Ctrl+Enter.
+To accept a particular auto-complete suggestion, use `Ctrl`+`Enter`.
