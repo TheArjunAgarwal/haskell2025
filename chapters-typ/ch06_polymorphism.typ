@@ -508,6 +508,56 @@ Define and `(>=>)` and see how both of then are used in programs, and compare th
 
 *Note* The symbol `(>=>)` is written as #unligate([`(>=>)`]).
 
+= Exercise
+#exercise(sub: "Guard Idiom")[
+(i) Sometimes we have a boolean check that decides whether the return value is a failure or success. Write a function `ensure :: Bool -> a -> Maybe a` which returns `Nothing` if the boolean is `False` and `Just inp` when the boolean is `True` and `inp` is the other input.
+
+(ii) Write a function `guard :: Bool -> Maybe ()` which gives `Nothing` when the boolean is `False` and `Just ()` when it is `True`
+
+(iii) Write an operator `($>) :: Maybe a -> b -> Maybe b` which is a no-op on `Nothing` values, but replaces whatever is inside a `Just` value on the left with the value on the right.
+
+(iv) Can you now write `ensure` using only `guard` and `$>`? This is called the Guard-Sequence idiom and is extremely common in production level Haskell code.
+
+(v) While we don't use it here, could you define `(*>) :: Maybe a -> Maybe b -> Maybe b` which returns `Nothing` and returns the second argument if the first argument is `Nothing` or a `Just` value respectively. This is also used in tandem with `guard`.
+
+#footnote[The `$>` and `*>` are part of the `Data.Functors` module and `guard` is part of the `Control.Monad` module. Their actual type signatures work for any functor, not just `Maybe`. We will see what functors are in later chapters.]
+]
+
+#exercise(sub : "Some List Functions")[
+  (i) Define `filter :: (a -> Bool) -> [a] -> [a]` which given a predicate and list of elements, returns the list of elements satisfying the predicate.
+
+  (ii) Define `map :: (a -> b) -> [a] -> [b]` which given a function and a list of elements, applies the function to each element and returns the new list.
+
+  (iii) Define `concatMap :: (a -> [b]) -> [a] -> [b]` which maps a function over all the elements of a list and concatenate the resulting lists. Do not use `map` in your definition.
+
+  (iv) Define `groupBy :: (a -> a -> Bool) -> [a] -> [[a]]` which groups adjacent elements according to some relation. In last chapter, we have seen `group` which is nothing but `groupBy (==)`. We could also have `groupBy (<=)` to get the consecutive increasing subsequences.
+]
+
+
+#exercise(sub:"Conditional Apply")[
+  (i) Write a function `applyWhen :: Bool -> (a-> a) -> a -> a` which applies a function to a value if a condition is true, otherwise, it returns the value unchanged.
+
+  (ii) Define `on :: (b -> b -> c) -> (a -> b) -> a -> a -> c` such that `on b u x y` runs the binary function `b` on the results of applying unary function `u` to two arguments `x` and `y`.
+
+  (iii) Prove that
+  ```
+  applyWhen True = id
+  applyWhen False f = id
+  ```
+
+  (iv) Prove that
+  ```
+  (*) `on` id = (*)
+  ((*) `on` f) `on` g = (*) `on` (f . g)
+  flip `on` f . flip `on` g = flip `on` (g . f)
+  ```
+
+  (v) Write a function `cartesianSize :: [a] -> [a] -> Int` which takes two lists and gives the product of their length using `on`.
+]
+
+
+
+
 // cite 
 // citation 1
 // citation 2

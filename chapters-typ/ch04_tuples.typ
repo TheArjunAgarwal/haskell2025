@@ -1031,14 +1031,14 @@ Prove that this is a commutative and associative operation.
 ]
 
 #exercise(sub : "Calkin-Wilf Tree")[
-    Using the above excercise,  we can see that $NN times NN$ is 'larger' #footnote[It is not as you will see in a moment,] than $QQ^+$, so we can claim that rationals are countable. We will attempt to prove that as well as enumerate the rationals.
+    Using the above exercise,  we can see that $NN times NN$ is 'larger' #footnote[It is not as you will see in a moment,] than $QQ^+$, so we can claim that rationals are countable. We will attempt to prove that as well as enumerate the rationals.
 
     (i) Prove that if $p/q$ is reduced, then $(p+q)/q$ and $p/(p+q)$ are reduced.
 
-    (ii) Prove that starting with $1/1$ and making the following tree by applying the above transformmation will contain every rational:
+    (ii) Prove that starting with $1/1$ and making the following tree by applying the above transformation will contain every rational:
     #figure(image("../images/cwt.png"))
 
-    (iii) Labeling the tree level by level, write a function `natToRat :: Int -> (Int, Int)` which takes an natural number and gives the positive rational enumerates. (An approach could be to notice that we can reprasent the path one takes down the tree in binary)
+    (iii) Labeling the tree level by level, write a function `natToRat :: Int -> (Int, Int)` which takes an natural number and gives the positive rational enumerates. (An approach could be to notice that we can represent the path one takes down the tree in binary)
 
     (iv) Write a function `ratToNat :: (Int, Int) -> Int` which takes a positive rational number and gives its position in the naturals. 
 ]
