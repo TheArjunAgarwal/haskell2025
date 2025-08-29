@@ -73,7 +73,7 @@ But, very usefully, it just doesn't work for numbers, but other types as well.
 
 Now that we know how to create a list, how do we manipulate them into the data that we would want?
 
-= List Comprehension
+== List Comprehension
 
 Well, the way we achieve this in sets is through *set comprehension*.
 
@@ -140,7 +140,7 @@ When we use the pattern `(x:xs)` to refer to a list,
 and `xs` refers to the list containing the rest of the elements.
 
 
-= Length
+== Length
 
 One of the most basic questions we could ask about lists is the number of elements they contain.\
 The `length` function gives us that answers, counting repetitions as separate.
@@ -426,6 +426,7 @@ False
 
 And the definition - 
 ```
+-- | elem
 elem x []     = False
 elem x (y:ys) = x == y || elem x ys
 ```
@@ -874,7 +875,7 @@ splitAt n l = ( take n l , drop n l )
 ```
 ```
 -- | optimized splitAt 
-splitAt n []     = []
+splitAt n []     = ( []   , [] )
 splitAt n (x:xs) = ( x:ys , zs ) where
     (ys,zs) = splitAt (n-1) xs
 ```
@@ -949,7 +950,7 @@ fibs = l 0 1 where l a b = a : l b (a+b)
 [0,1,1,2,3,5,8,13,21,34,...]
 ```
 
-Since we obviously cannot view the entirety of an infinite list, it is advisable to use `take` to view an initial section of the list, rather than the whole thing.
+Since we obviously cannot view the entirety of an infinite list, it is advisable to use the @code_of_take_from_list function `take` to view an initial section of the list, rather than the whole thing.
 
 == Exercises
 

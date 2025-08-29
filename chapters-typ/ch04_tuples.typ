@@ -402,7 +402,7 @@ As `Bool` and `Char` occurs on the left and right of each other in the expressio
 
 If the input to `representAsNumber` is of the form `Left bool`, we know that `bool` must have type `Bool` (as `Left` refers to `Bool`). So if the `bool` is `True`, we will represent it as `1`, else if it is `False`, we will represent it as `0`.
 
-If the input to `representAsNumber` is of the form `Right char`, we know that `char` must have type `Bool` (as `Right` refers to `Char`). So we will represent `char` as `ord char`.
+If the input to `representAsNumber` is of the form `Right char`, we know that `char` must have type `Char` (as `Right` refers to `Char`). So we will represent `char` as `ord char`.
 
 "
 

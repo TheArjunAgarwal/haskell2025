@@ -46,6 +46,10 @@ That means that once you learn Haskell, you will be able to apply all these conc
 
 Haskell has a thing called "types" which is purely logical, but eliminates nearly all possible bugs even before the first time that you run the program.
 
+=== Parallelism
+
+tbd
+
 === Builds Safety-Critical Software
 
 In military systems, spaceflight, and financial systems, making sure that code works as intended and that there are no bugs is a strict and extremely important necessity.
@@ -127,7 +131,9 @@ For example, one can define a list of ALL the prime numbers.
 
 If you follow this book, you will see that Haskell follows a mathematical style as closely as it can. So, if you can learn to express a few mathematical ideas precisely enough, Haskell _should_ become child's play. 
 
-In order to test your knowledge and be sure that you are learning the correct meanings of things, it is encouraged that you try coding all the assignments, graded or otherwise.
+In order to test your knowledge and be sure that you are learning the correct meanings of things, it is encouraged that you try coding all the assignments, graded or otherwise. Also, it should be helpful to practice programming by getting problems from other sources as well. 
+
+The beauty of practicing programming is that anyone can check their own solution by _running_ a few examples, so you can get lots of practice and _verify it by yourself_ too.
 
 But most importantly, remember to have fun!
 
