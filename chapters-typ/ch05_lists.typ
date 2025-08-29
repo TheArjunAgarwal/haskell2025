@@ -981,7 +981,7 @@ balloons "HASKELL" = 13
 Given a list $A$ of length $N$, we call a list of integers $B$ of length $N$ such that:
 - All elements of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
 - $B$ is non-decreasing, ie $B_1 <= B_2 <= dots <= B_N$
-- $forall 1 <= i <= N, B_i = A_i$
+- $forall 1 <= i <= N, B_i != A_i$
 
 Let $op("neq") (A)$ denote the minimum possible value of the last element of $B$ for a valid array $B$.
 
@@ -1158,5 +1158,13 @@ Note
 For the first case, the optimal value of $x$ is $2$ so the sequence becomes  $- 1, 0, 1$ and the max poorness occurs at the segment $-1$ or segment $1$.
 
 For the second sample the optimal value of $x$ is $2.5$ so the sequence becomes  $- 1.5,  - 0.5, 0.5, 1.5$ and the max poorness occurs on segment $-1.5, -0.5$ or $0.5, 1.5$.
+]
+
+#exercise(sub:"Group")[
+  Write function `group :: [a] -> [[a]]` which groups adjacent equal elements. For example:
+  ```
+  group [1,1,1,2,4,8,8,8,8,10,10] = [[1,1,1],[2],[4],[8,8,8,8],[10,10]]
+  group "haskell" = ["h","a","s","k","e","ll"]
+  ```
 ]
 

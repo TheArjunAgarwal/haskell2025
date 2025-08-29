@@ -1280,7 +1280,7 @@ lcm :: Integer -> Integer -> Integer
 lcm p q = (p * q) `div` (gcd p q)
 ```
 
-We can see that this is much faster. The exact number of steps or time taken is a slightlty involved and not very related to what we cover. Interested readers may find it and related citations #link("https://en.wikipedia.org/wiki/Euclidean_algorithm#Algorithmic_efficiency")[here].
+We can see that this is much faster. The exact number of steps or time taken is a slightly involved and not very related to what we cover. Interested readers may find it and related citations #link("https://en.wikipedia.org/wiki/Euclidean_algorithm#Algorithmic_efficiency")[here].
 
 This algorithm predates computers by approximately 2300 years. It was first described by Euclid and hence is called the Euclidean Algorithm. While, faster algorithms do exist, the ease of implementation and the fact that the optimizations are not very dramatic in speeding it up make Euclid the most commonly used algorithm.
 
@@ -1496,7 +1496,7 @@ logTay tol n
   | abs(n - 1) <= tol           = n - 1  -- using log(1 + x) ≈ x
   | otherwise                   = 2 * logTay tol (sqrt n)
 ```
-This is a very efficient algorithm for approximating `log`. Doing better requires the use of either pre-computed lookup tables(which would make the programme heavier) or use more sophisticated mathematical methods which while more accurate would slow the programme down. There is an exercise in the back, where you will implement a state of the art algorithm to compute `log` accurately upto 400-1000 decimal places.
+This is a very efficient algorithm for approximating `log`. Doing better requires the use of either pre-computed lookup tables(which would make the program heavier) or use more sophisticated mathematical methods which while more accurate would slow the program down. There is an exercise in the back, where you will implement a state of the art algorithm to compute `log` accurately upto 400-1000 decimal places.
 
 Finally, now that we have `log = logTay 0.0001`, we can easily define some other functions.
 ```

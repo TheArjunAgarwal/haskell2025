@@ -809,7 +809,7 @@ numbers of good and bad batteries are equal.]
 #exercise(sub:"Seven Tries (Russia 2000)")[
   Tanya chose a natural number $X <= 100$, and Sasha is trying to guess this number. He can select two natural numbers $M$ and $N$ less than $100$ and ask about $gcd(X+M,N)$. Show that Sasha can determine Tanya's number with at most seven questions.
 
-  Note: We know of atleast 5 ways to solve this. Some can be genralized to any number $k$ other than $100$, with $ceil(log_2(k))$ many tries, other are a bit less general. We hope you can find atleast $2$.
+  Note: We know of atleast 5 ways to solve this. Some can be generalized to any number $k$ other than $100$, with $ceil(log_2(k))$ many tries, other are a bit less general. We hope you can find atleast $2$.
 ]
 
 #exercise(sub:"The best (trollest) codeforces question ever! (Codeforces 1028B)")[
@@ -833,7 +833,7 @@ For Example
   Given a $r times c$ grid with $0 <= n <= r * c$ painted cells, we have to arrange ropes to cover the grid. Here are the rules through example:
   #image("../images/rope.png")
 
-  Figure out an algorithm/recipie to covering the grid using $n+1$ ropes leagally.
+  Figure out an algorithm/recipe to covering the grid using $n+1$ ropes legally.
 
   Hint: Try to first do the $n=0$ case. Then $r = 1$ case, with arbitrary $n$. Does this help?
 ]
