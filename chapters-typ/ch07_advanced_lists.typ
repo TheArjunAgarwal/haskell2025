@@ -27,7 +27,7 @@ map _ [] = []
 map f (x:xs) = (f x) : (map f xs)
 
 -- and much more clearly and concisely as
-map f ls = [f l | l <- ls]
+map f xs = [f x | l <- xs]
 ```
 Similarly, we had seen `filter :: (a -> Bool) -> [a] -> [a] ` which used to take a boolean function, some predicate to satisfy, and return the list of elements satisfying this predicate. We can define this as:
 ```
@@ -37,7 +37,7 @@ filter p (x:xs) = let rest = p xs in
   if p x then x : rest else rest
 
 -- and much more cleanly as
-filter p ls = [l | l <- ls, p l]
+filter p xs = [x | x <- xs, p x]
 ```
  Another operation we can consider, though not explicitly defined in Haskell, is cartesian product. Hopefully, you can see where we are going with this right?
  ```
@@ -73,7 +73,8 @@ pythMid n = [(x, y, z) |
     y <- [1..n],
     let z2 = x^2 + y^2,
     let z = floor (sqrt (fromIntegral z2)),
-    z * z == z2]
+    z * z == z2,
+    z <= 1000]
 ```
 This is clearly better as we will be only considering some $1000^2$ triplets.
 Continuing with our example, for `n = 1000`, we finish in 1.32 seconds. As we expected, that is already much, much better than the previous case.
@@ -89,6 +90,7 @@ pythOpt n = [t|
     let z2 = x^2 + y^2,
     let z = floor (sqrt (fromIntegral z2)),
     z * z == z2,
+    z <= 1000,
     t <- [(x,y,z), (y,x,z)]
     ]
 ```
@@ -293,7 +295,9 @@ zipWith f (x:xs) (y:ys) = (x `f` y) : zipWith f xs ys
 
 #exercise(sub : "Alternate definitions")[
   While we have defined `zip` and `zipWith` independently here, can you:
+
   (i) Define `zip` using `zipWith`?
+  
   (ii) Define `zipWith` using `zip`?
 ]
 Now one might feel there is nothing special about `zipWith` as well, but they would be wrong. First, it saves us form defining a lot of things: `zipWith (+) [0,2,5] [1,3,3] = [1,5,8]` is a common enough use. And then, it leads to a lot of absolutely mindblowing pieces of code.
@@ -303,13 +307,10 @@ fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 ```
 Believe it or not, this should output the fibonacci sequence. The idea is that Haskell is lazy! This means lists are computed one element at a time, starting from the first. Tracing the computation of the elements of `fibs`:
 
-1. Since by definition `fibs = 0: 1: (something)`, the first element is `0`.
-
-2. This is again easy, since `fibs = 0 : 1 : (something)`, so the second element is `1`.
-
-3. This is going to be the first element of `something`, i.e. the part that comes after the `0 : 1 :`. So, we need to compute the first element of `zipWith (+) fibs (tail fibs)`. How do we do this? We compute the first element of `fibs` and the first element of `tail fibs` and add them. We know already, that the first element of `fibs` is `0`. And we also know that the first element of `tail fibs` is the second element of `fibs`, which is `1` So, the first element of `zipWith (+) fibs (tail fibs)` is `0 + 1 = 1`.
-
-4.It is going to be the fourth element of `fibs` and the `second of zipWith (+) fibs (tail fibs)`. Again, we do this by taking the second elements of `fibs` and `tail fibs` and adding them together. We know that the second element of `fibs` is `1`. The second element of `tail fibs` is the third element of `fibs`. But we just computed the third element of `fibs`, so we know it is `1`. Adding them together we get that the fourth element of fibs is `1 + 1 = 2`.
++ Since by definition `fibs = 0: 1: (something)`, the first element is `0`.
++ This is again easy, since `fibs = 0 : 1 : (something)`, so the second element is `1`.
++ This is going to be the first element of `something`, i.e. the part that comes after the `0 : 1 :`. So, we need to compute the first element of `zipWith (+) fibs (tail fibs)`. How do we do this? We compute the first element of `fibs` and the first element of `tail fibs` and add them. We know already, that the first element of `fibs` is `0`. And we also know that the first element of `tail fibs` is the second element of `fibs`, which is `1` So, the first element of `zipWith (+) fibs (tail fibs)` is `0 + 1 = 1`.
++ It is going to be the fourth element of `fibs` and the `second of zipWith (+) fibs (tail fibs)`. Again, we do this by taking the second elements of `fibs` and `tail fibs` and adding them together. We know that the second element of `fibs` is `1`. The second element of `tail fibs` is the third element of `fibs`. But we just computed the third element of `fibs`, so we know it is `1`. Adding them together we get that the fourth element of fibs is `1 + 1 = 2`.
 
 This goes on and one to generate the fibonacci sequence. To recall, the naive
 ```
@@ -361,9 +362,8 @@ The solution revolves around the fact $f(x) = f(x-3) or f(x-5)$. A naive impleme
 ```
 possiblePizzaGo :: Int -> Bool
 possiblePizzaGo x
+  | x < 0     = False
   | x == 0    = True
-  | x < 3     = False
-  | x == 5    = True
   | otherwise = possiblePizzaGo (x - 3) || possiblePizzaGo (x - 5)
 
 possiblePizza = [possiblePizzaGo x | x <- [0..]]
@@ -371,7 +371,7 @@ possiblePizza = [possiblePizzaGo x | x <- [0..]]
 This is slow for the same reason as `fibNaive`. So what can we do? Well, use zipWith.
 
 ```
-possiblePizza = True : False : False : True : False : zipWith (||) (possiblePizza) (drop 3 possiblePizza)
+possiblePizza = True : False : False : True : False : zipWith (||) (possiblePizza) (drop 2 possiblePizza)
 ```
 Note, we need to define till the 5th place as otherwise the code has no way to know we can do 5 slices.
 
@@ -408,7 +408,7 @@ Haskell predefines till `zip7` and `zipWith7`. We are yet to see anything beyond
 Another idea of dimension would be something that could join together two grids, something with type signature `zip2d :: [[a]] -> [[b]] -> [[(a,b)]]` and `zipWith2d :: (a -> b -> c) -> [[a]] -> [[b]] -> [[c]]`.
 ```
 zip2d :: [[a]] -> [[b]] -> [[(a,b)]]
-zip2d = map zip
+zip2d = zipWith zip
 
 zipWith2d :: (a -> b -> c) -> [[a]] -> [[b]] -> [[c]]
 zipWith2d = zipWith . zipWith
@@ -425,7 +425,7 @@ zipWith . zipWith $ (a -> b -> c) [[a]]  [[b]]
 = [[c1], [c2], ...]
 = [[c]]
 ```
-This also implies `zip2d = zipWith.zipWith $ (\x y -> (x,y))` is also a correct definition. Also surprisingly, `zipWith . zipWith . zipWith` has the type signature `(a -> b -> c) -> [[[a]]] -> [[[b]]] -> [[[c]]]`. You can see where we are going with this...
+Also surprisingly, `zipWith . zipWith . zipWith` has the type signature `(a -> b -> c) -> [[[a]]] -> [[[b]]] -> [[[c]]]`. You can see where we are going with this...
 #exercise(sub : "Composing zipWith's")[
   What should the type signature and behavior of `zipWith . zipWith . <n times> . zipWith` be? Prove it.
 ]
@@ -553,7 +553,7 @@ is abstracted to `foldl` and `foldl1` respectively.
 -- | Definition of foldl and foldl1
 foldl :: (b -> a -> b) -> b -> [a] -> b
 foldl _ v [] = v
-foldl f v (x:xs) = foldl (f v x) xs
+foldl f v (x:xs) = foldl f (f v x) xs
 
 foldl1 :: (a -> a -> a) -> [a] -> a
 foldl1 f (x:xs) = foldl f x xs 
@@ -641,7 +641,7 @@ iterate :: (a -> a) -> a -> [a]
 -- outputs the infinite list [x, f x, f f x, ...]
 iterate f seed = unfold (\x -> Just (x, f x)) seed
 ```
-While `foldr` and `foldl` are some of the most common favorite function of haskell programers;  `` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was literally titled "The Under-Appreciated Unfold".
+While `foldr` and `foldl` are some of the most common favorite function of haskell programers;  `` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an egregious case where Haskell's own website ignored it. One of the paper we referred was literally titled "The Under-Appreciated Unfold".
 
 #exercise(sub : "Some more inbuilt functions")[
   Implement the following functions using fold and unfold.
@@ -703,7 +703,7 @@ primes = unfoldr sieve [2..]
 
   Try to use the fact that a sublist either contains an element or not. Second, the fact that sublists correspond nicely to binery numerals may also help.
 
-  You function must be compatable with infinite lists, that is `take 10 $ sublists [1..] = [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3], [4], [1,4]]` should work.
+  You function must be compatible with infinite lists, that is `take 10 $ sublists [1..] = [[], [1], [2], [1,2], [3], [1,3], [2,3], [1,2,3], [4], [1,4]]` should work.
 ]
 *Please fill in the blanks below*
 
