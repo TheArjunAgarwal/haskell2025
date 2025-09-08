@@ -36,7 +36,7 @@
 
       heading(
         depth:element.depth,
-        outlined:element.outlined,
+        outlined:false,
         bookmarked:element.bookmarked,
         element.body
       )

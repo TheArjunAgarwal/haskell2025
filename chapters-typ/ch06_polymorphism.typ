@@ -3,6 +3,7 @@
 #import "../Modules/Quote.typ" : quote
 #import "../Modules/Proof.typ" : proof
 #import "../Modules/Code.typ" : unligate
+#import "@preview/commute:0.3.0": node, arr, commutative-diagram
 
 #let definition = def
 #let example = it => [For example - \ #it]
@@ -214,7 +215,6 @@ elem :: a -> [a] -> Bool
 
 we will encounter the same issue as we did in @code_of_Function_Extensionality, because of `(==)`. We need to find a way to say that `a` belongs to the collection `Eq`, and this leads to the correct type:
 ```
--- | elem
 elem :: Eq a => a -> [a] -> Bool
 elem _ []       = False
 elem e (x : xs) = e == x || elem e xs
@@ -552,8 +552,62 @@ Define and `(>=>)` and see how both of then are used in programs, and compare th
   flip `on` f . flip `on` g = flip `on` (g . f)
   ```
 
-  (v) Write a function `cartesianSize :: [a] -> [a] -> Int` which takes two lists and gives the product of their length using `on`.
+  // (v) Write a function `cartesianSize :: [a] -> [a] -> Int` which takes two lists and gives the product of their length using `on`.
 ]
+
+#exercise(sub : "Theorems for Free")[
+  We will talk about some of the theorems in Wadler's iconic paper "Theorems for Free". From the type of a polymorphic function, we can derive a theorem which all such functions will follow.
+
+  (i) Given `f :: a1 -> b1` and `g :: a2 ->  b2`, prove that `const (f a1) (g a2) = f (const a1 a2)`
+
+  (ii) Given `r :: [a] -> [a]` and `f :: b -> c`, prove that `map f . r = r . map f` 
+
+  (iii) Define `prodMap :: (a -> a1) -> (b -> b1) -> (a,b) -> (a1, b1)` and `coProdMap :: (a -> a1) -> (b -> b1) -> Either a b -> Either a1 b1` which apply two given functions to the elements of a tuple or an `Either`.
+
+  (iv) Given `r :: (a,b) -> (a,b)` and `f :: a -> a1, g :: b -> b1`, prove that `r . prodMap f g = prodMap f g . r`
+
+  (v) Given `r :: Either a b -> Either a b` and `f :: a -> a1, g :: b -> b1`, prove that `r . coProdMap f g = coProdMap f g . r`
+
+  Can you guess the general scheme for the theorem we can get for free? Could you prove your hypothesis?
+]
+
+#exercise(sub : "Product and Co-Products")[
+
+  (i) Define the function `product :: (a -> b) -> (a -> c) -> a -> (b, c)` which takes two functions $f : x |-> f x$ and $g: x |-> g x$ and returns a function $f times g : x |-> (f x, g x)$.
+
+  (ii) Define a function `coProduct :: (b -> a) -> (c -> a) -> Either b c -> a` which takes two functions $f'$, $g'$ from different domains but same co-domain and combines them.
+
+  One can make a commutative diagram for these functions as follows:
+  
+  #align(center, commutative-diagram(
+  node((0, 0), [$A$]),
+  node((0, 2), [$B$]),
+  node((2, 0), [$C$]),
+  node((1, 1), [$B times C$]),
+  arr((0, 0), (1, 1), [`product f g`], "dashed"),
+  arr((0, 0), (0, 2), [$f$]),
+  arr((0, 0), (2, 0), [$g$]),
+  arr((1, 1), (2, 0), [`snd`]),
+  arr((1, 1), (0, 2), [`fst`]),
+))
+
+#align(center, commutative-diagram(
+  node((0, 0), [$A$]),
+  node((0, 2), [$B$]),
+  node((2, 0), [$C$]),
+  node((1, 1), [`Either B C`]),
+  arr((1, 1), (0, 0), [`coProduct f' g'`], "dashed"),
+  arr((0, 2), (0, 0), [$f^(-1)$]),
+  arr((2, 0), (0, 0), [$g^(-1)$]),
+  arr((2, 0), (1, 1), [`Right`]),
+  arr((0, 2), (1, 1), [`Left`]),
+))
+
+Considering the 'co' prefix is used to define a talk about the duel of a function, could you guess what a duel means? A hint could be the fact that `Either` can be called a co-tuple as well as $f^(-1)$ can be called co-$f$.
+]
+
+
+
 
 
 
