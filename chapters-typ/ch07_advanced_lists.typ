@@ -8,9 +8,9 @@
 #let isom = $tilde.equiv$
 
 = List Comprehensions
-As we have talked about before, Haskell tries to make it's syntax look as similer as possible to math notation. This is reprasented in one of the most powerful syntactic sugers in Haskell, list comprehension.
+As we have talked about before, Haskell tries to make it's syntax look as similar as possible to math notation. This is represented in one of the most powerful syntactic sugars in Haskell, list comprehension.
 
-If we want to talk about all pythagorian triplets using integers from $1-n$, we could express it mathematically as 
+If we want to talk about all pythagorean triplets using integers from $1-n$, we could express it mathematically as 
 $
   {(x,y,z) | x,y,z in {1,2,dots,n}, x^2 + y^2 = z^2}
 $
@@ -29,7 +29,7 @@ map f (x:xs) = (f x) : (map f xs)
 -- and much more clearly and concisely as
 map f ls = [f l | l <- ls]
 ```
-Similerly, we had seen `filter :: (a -> Bool) -> [a] -> [a] ` which used to take a boolean function, some predicate to satisfy, and return the list of elements satisfying this predicate. We can define this as:
+Similarly, we had seen `filter :: (a -> Bool) -> [a] -> [a] ` which used to take a boolean function, some predicate to satisfy, and return the list of elements satisfying this predicate. We can define this as:
 ```
 -- | Defining filter using pattern matching and list comprehension
 filter _ [] = []
@@ -39,7 +39,7 @@ filter p (x:xs) = let rest = p xs in
 -- and much more cleanly as
 filter p ls = [l | l <- ls, p l]
 ```
- Another operation we can consider, though not explictly defined in Haskell, is cartesian product. Hopefully, you can see where we are going with this right?
+ Another operation we can consider, though not explicitly defined in Haskell, is cartesian product. Hopefully, you can see where we are going with this right?
  ```
 -- | Defining cartesian product using pattern matching and list comprehension
  cart :: [a] -> [b] -> [(a,b)]
@@ -53,9 +53,9 @@ cart (x:xs) ys = (go x ys) ++ (cart xs ys) where
   go l (m:ms) = (l,m) : (go l ms)
 ```
 
-Finally, let's talk a bit more about our pythagorian triplets example at the start of this section.
+Finally, let's talk a bit more about our pythagorean triplets example at the start of this section.
 ```
--- | A naive way to get pythagorian triplets
+-- | A naive way to get pythagorean triplets
 pythNaive :: Int -> [(Int, Int, Int)]
 pythNaive n = [(x,y,z) | 
           x <- [1..n], 
@@ -63,11 +63,11 @@ pythNaive n = [(x,y,z) |
           z <- [1..n], 
           x^2 + y^2 == z^2]
 ```
-For `n = 1000`, we get the answer is some 13 minutes, which makes sense as our code is basically considering the $1000^3$ triplets and then culling the ones which are not pythagorian. But could we do better?
+For `n = 1000`, we get the answer is some 13 minutes, which makes sense as our code is basically considering the $1000^3$ triplets and then culling the ones which are not pythagorean. But could we do better?
 
 A simple idea would be to not check for `z` as it is implied by the choice of `x` and `y` and instead set the condition as
 ```
--- | A mid way to get pythagorian triplets
+-- | A mid way to get pythagorean triplets
 pythMid n = [(x, y, z) |
     x <- [1..n],
     y <- [1..n],
@@ -80,9 +80,9 @@ Continuing with our example, for `n = 1000`, we finish in 1.32 seconds. As we ex
 
 Also notice that we can define variables inside the comprehension by using the `let` syntax.
 
- However, there is one final optimization we can do. The idea is that $x > y$ or $ x < y$ for pythagorian triplets as $sqrt 2$ is irrational. So if we can somehow, only evaluate only the cases where $x < y$ and then just genrate $(x,y,z)$ and $(y,x,z)$; we almost half the number of cases we check. This means, our final optimized code would look like:
+ However, there is one final optimization we can do. The idea is that $x > y$ or $ x < y$ for pythagorean triplets as $sqrt 2$ is irrational. So if we can somehow, only evaluate only the cases where $x < y$ and then just generate $(x,y,z)$ and $(y,x,z)$; we almost half the number of cases we check. This means, our final optimized code would look like:
 ```
--- | The optimal way to get pythagorian triplets
+-- | The optimal way to get pythagorean triplets
 pythOpt n = [t|
     x <- [1..n],
     y <- [(x+1)..n],
@@ -94,13 +94,13 @@ pythOpt n = [t|
 ```
 This should only make some $(1000 * 999)/2$ triplets and cull the list from there. This makes it about twice as fast, which we can see as for $n=1000$, we finish in $0.68$ seconds.
 
-Notice, we can't return two things in a list comprehension. That is, `pythOpt n = [(x,y,z), (y,x,z) | <blah blah>]` will given an error. Intead, we have to use `pythOpt n = [ t | <blah blah>, t <- [(x,y,z), (y,x,z)]]`.
+Notice, we can't return two things in a list comprehension. That is, `pythOpt n = [(x,y,z), (y,x,z) | <blah blah>]` will given an error. Instead, we have to use `pythOpt n = [ t | <blah blah>, t <- [(x,y,z), (y,x,z)]]`.
 
-Another intresting thing we can do using list comprehension is sorting. While further sorting methods and their speed is discussed in chapter 10, we will focus on a two methods of sorting: Merge Sort and Quick Sort.
+Another interesting thing we can do using list comprehension is sorting. While further sorting methods and their speed is discussed in chapter 10, we will focus on a two methods of sorting: Merge Sort and Quick Sort.
 
-We have seen the idea of divide and conquor before. If we can divide the problem in smaller parts and combine them, without wasting too much time in the spliting or combining, we can solve the problem. Both these methods work on this idea.
+We have seen the idea of divide and conquer before. If we can divide the problem in smaller parts and combine them, without wasting too much time in the splitting or combining, we can solve the problem. Both these methods work on this idea.
 
-Merge Sort divides the list in two parts, sorts them and then merges these sorted lists by comparing element to elemeent.
+Merge Sort divides the list in two parts, sorts them and then merges these sorted lists by comparing element to element.
 We can do this recursion with peace of mind as once we reach 1 element lists, we just say they are sorted. That is `mergeSort [x] = [x]`.
 
 Just to illustrate, the merging would work as follows: `merge [1,2,6] [3,4,5]` would take the smaller of the two heads till both lists are empty. This works as as both the lists are sorted. The complete evaluation is something like:
@@ -143,7 +143,7 @@ mergeSort xs = merge (mergeSort left) (mergeSort right) where
 #exercise(sub : "MergeSort Works?")[
   Prove that merge sort indeed works. A road map is given
 
-  (i) Prove that `merge` defined by taking the smaller of the heads of the lists recursively, produces a sorted list given the two input lists were sorted. The idea is that the first element choosen has to be the smallest. Use induction of the sum of lengths of the lists.
+  (i) Prove that `merge` defined by taking the smaller of the heads of the lists recursively, produces a sorted list given the two input lists were sorted. The idea is that the first element chosen has to be the smallest. Use induction of the sum of lengths of the lists.
 
   (ii) Prove that `mergeSort` works using induction on the size of list to be sorted.
 ]
@@ -165,9 +165,9 @@ Two things to note are that the above computation was a bit cumbersome. We will 
 The second, for sufficiently large $n$, $n log(n)$ dominates the equation. That is $
 exists m op(s.t.) forall n > m : n log(n) > 3n > 1/2log(n) > 1/2
 $
-This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elemeents in the list is such that they can be compared, we can't do much better. The dominating term, in the number of comparisins, will be $n log(n)$ times some constant. This later refers to chapter 10.
+This means that as $n$ becomes large, we can sort of ignore the other terms. We will later prove, that given no more information other than the fact that the shape of the elements in the list is such that they can be compared, we can't do much better. The dominating term, in the number of comparisons, will be $n log(n)$ times some constant. This later refers to chapter 10.
 
-In practice, we waste some amount of operations dividing the list in 2. What if we take our chances and approximatly divide the list into two parts?
+In practice, we waste some amount of operations dividing the list in 2. What if we take our chances and approximately divide the list into two parts?
 
 This is the idea of quick sort. If we take a random element in the list, we expect half the elements to be lesser than it and half to be greater. We can use this fact to define quickSort by splitting the list on the basis of the first element and keep going. This can be implemented as:
 ```
@@ -186,9 +186,9 @@ Clearly, With $n$ being the length of list, $C(n)$ is a random variable dependen
 
 Let $l$ be the number of elements less than the first elements and $r = n-l-1$. This means $C(n) = C(l) + C(r) + 2(n - 1)$ where the $n-1$ comes from the list comprehension.
 
-In the worst case scenario, our algoritm could keep spliting the list into a length $0$ and a length $n-1$ list. This would screw us very badly.
+In the worst case scenario, our algorithm could keep splitting the list into a length $0$ and a length $n-1$ list. This would screw us very badly.
 
-As $C(n) = C(0) + C(n-1) + 2(n - 1)$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the concatination.
+As $C(n) = C(0) + C(n-1) + 2(n - 1)$ where the $n-1$ comes from the list comprehension and the $(n-1)+1$ from the contamination.
 Using $C(0) = 0$ as we don't make any comparisons, This evaluates to
 $
   C(n) &= C(n-1) + 2(n-1)\
@@ -201,7 +201,7 @@ Which is quite bad as it grows quadratically. Furthermore, the above case is als
 Prove $2^(n-1) <= n!$
 ]
 
-Then why are we intrested in Quick Sort? and why is named quick?
+Then why are we interested in Quick Sort? and why is named quick?
 
 Let's look at the average or expected number of comparison we would need to make!
 
@@ -210,15 +210,15 @@ probability that $x_i$ and $x_j$ are compared. Then, $EE(X_(i,j)) = 1 * p + 0 * 
 
 Using the linearity of expectation (remember $EE(sum X) = sum EE(x)$?), we can say $EE(C(n)) = sum_(i, j) EE(X_(i,j)) = sum_(i,j) p_(i,j)$.
 
-Using the same idea we used to reduce the number of pythogoream triplets we need to check, we rewrite this summation as
+Using the same idea we used to reduce the number of pythagorean triplets we need to check, we rewrite this summation as
 $
   EE(C(n)) &= sum_(i,j) p_(i,j)\
   &= sum_(i=1)^n sum_(j=i+1)^n p_(i,j)\
 $
-Despite a toothy appearence, this is rather easy and elegent way to actually compute $p_(i,j)$.\
+Despite a toothy appearance, this is rather easy and elegant way to actually compute $p_(i,j)$.\
 
 Notice that each element in the array (except the pivot) is compared only to the pivot at each level of the recurrence. To compute $p_(i,j)$, 
-we shift our focus to the elemenents $[x_i, x_(i+1), dots, x_j]$. If this is split into two parts, $x_i$ and $x_j$ can no longer be compared.
+we shift our focus to the elements $[x_i, x_(i+1), dots, x_j]$. If this is split into two parts, $x_i$ and $x_j$ can no longer be compared.
 Hence, $x_i$ and $x_j$ are compared only when from the first pivot from the range $[x_i, x_(i+1), dots, x_j]$ is either $x_i$ or $x_j$.
 
 This clearly has probability $p_(i,j) = 1/(j-i+1) + 1/(j-i+1) = 2/(j-i+1)$. Thus,
@@ -233,30 +233,30 @@ $
 Considering the number of cases where the comparisons with $n^2 - n$ operations is $2^(n-1)$, 
 Quick Sort's expected number of operations is still less than $2 n log(n)$ which, as we discussed, is optimal.
 
-This implies that there are some lists where Quick Sort is extreamly efficient and as one might expect there are many such lists. 
-This is why languages which can keep states (C++, C, Rust etc) etc use something called Introsort which uses 
+This implies that there are some lists where Quick Sort is extremely efficient and as one might expect there are many such lists. 
+This is why languages which can keep states (C++, C, Rust etc) etc use something called Intro Sort which uses 
 Quick Sort till the depth of recursion reaches $log(n)$ (at which point it is safe to say we are in one of the not nice cases); 
 then we fallback to Merge Sort or a Heap/Tree Sort(which we will see in chapter 11).
 
 Haskell has an inbuilt `sort` function you can use by putting `import Data.List` at the top of your code. 
 This used to use quickSort as the default but in 2002, 
 Ian Lynagh changed it to Merge Sort. This was motivated by the fact that 
-Merge Sort gurentees sorting in $n log(n) + dots$ comparisons while Quick Sort will sometimes finish much quicker (pun not intended) 
+Merge Sort guarantees sorting in $n log(n) + dots$ comparisons while Quick Sort will sometimes finish much quicker (pun not intended) 
 and other times, just suffer.
 
-As a dinal remark, our implementation of the Quick Sort is not the most optimal as we go through the list twice, 
+As a final remark, our implementation of the Quick Sort is not the most optimal as we go through the list twice, 
 but it is the most aesthetically pleasing and concise.
 #exercise(sub : "Faster Quick Sort")[
-  A slight improvment can be made to the implementation by not using list comprehension and instead using a helper function, to traverse the list only once.
+  A slight improvement can be made to the implementation by not using list comprehension and instead using a helper function, to traverse the list only once.
 
   Try to figure out this implementation.
 ]
 
 = Zip it up!
-Have you ever suffered through a conversation with a very dry person with the goal of getting the contact information of a person you are actually intrested in? If you haven't well, that is what you will have to do now.
+Have you ever suffered through a conversation with a very dry person with the goal of getting the contact information of a person you are actually interested in? If you haven't well, that is what you will have to do now.
 
 #exercise(sub : "The boring zip")[
-  Haskell has an inbuilt function called `zip`. It's behaviour is as follows
+  Haskell has an inbuilt function called `zip`. It's behavior is as follows
   ```
   >>> zip [1,2,3] [4,5,6]
   [(1,4),(2,5),(3,6)]
@@ -296,12 +296,12 @@ zipWith f (x:xs) (y:ys) = (x `f` y) : zipWith f xs ys
   (i) Define `zip` using `zipWith`?
   (ii) Define `zipWith` using `zip`?
 ]
-Now one might feel there is nothing special about `zipWith` as well, but they would be wrong. First, it saves us form defining a lot of things: `zipWith (+) [0,2,5] [1,3,3] = [1,5,8]` is a common enough use. And then, it leads to a lot of absolutly mindblowing pieces of code.
+Now one might feel there is nothing special about `zipWith` as well, but they would be wrong. First, it saves us form defining a lot of things: `zipWith (+) [0,2,5] [1,3,3] = [1,5,8]` is a common enough use. And then, it leads to a lot of absolutely mindblowing pieces of code.
 ```
--- | The zipWith fibonnaci
+-- | The zipWith fibonacci
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 ```
-Belive it or not, this should output the fibonnaci sequence. The idea is that Haskell is lazy! This means lists are computed one element at a time, starting from the first. Tracing the computation of the elements of `fibs`:
+Believe it or not, this should output the fibonacci sequence. The idea is that Haskell is lazy! This means lists are computed one element at a time, starting from the first. Tracing the computation of the elements of `fibs`:
 
 1. Since by definition `fibs = 0: 1: (something)`, the first element is `0`.
 
@@ -311,13 +311,13 @@ Belive it or not, this should output the fibonnaci sequence. The idea is that Ha
 
 4.It is going to be the fourth element of `fibs` and the `second of zipWith (+) fibs (tail fibs)`. Again, we do this by taking the second elements of `fibs` and `tail fibs` and adding them together. We know that the second element of `fibs` is `1`. The second element of `tail fibs` is the third element of `fibs`. But we just computed the third element of `fibs`, so we know it is `1`. Adding them together we get that the fourth element of fibs is `1 + 1 = 2`.
 
-This goes on and one to generate the fibonnaci sequence. To recall, the naive
+This goes on and one to generate the fibonacci sequence. To recall, the naive
 ```
 fibNaive 0 = 0
 fibNaive 1 = 1
 fibNaive n = fibNaive (n-1) + fibNaive (n-2)
 ```
-is much slower. This is becuase the  computation tree for say `fib 5` looks something like:
+is much slower. This is because the  computation tree for say `fib 5` looks something like:
 
 #tree(spread : 2.3, (
   [`fibNaive 5`],
@@ -349,7 +349,7 @@ is much slower. This is becuase the  computation tree for say `fib 5` looks some
   )
 ))
 
-And one can easily see that we make a bunch of unneccesary recomputations, and thus a lot of unneccesary additions. On the other hand, using our `zipWith` method, only computes things once, and hence makes only as many additions as required.
+And one can easily see that we make a bunch of unnecessary recomputation, and thus a lot of unnecessary additions. On the other hand, using our `zipWith` method, only computes things once, and hence makes only as many additions as required.
 #exercise[
   Try to trace the computation of `fib !! 5` and make a tree.
 ]
@@ -376,12 +376,12 @@ possiblePizza = True : False : False : True : False : zipWith (||) (possiblePizz
 Note, we need to define till the 5th place as otherwise the code has no way to know we can do 5 slices.
 
 #exercise(sub: "Tromino's Pizza II")[
-  Tromino's has started to charge a box fees. So now given a number of slices, we want to know the minimum number of boxes we can achive the order in. Create a list `minBoxPizza` such that if we can buy exactly `n` slices, the list displays `Just` the minimum number of boxes the order can be achived in, and `Nothing` otherwise. The list is hence of type `[Maybe Int]`.
+  Tromino's has started to charge a box fees. So now given a number of slices, we want to know the minimum number of boxes we can achieve the order in. Create a list `minBoxPizza` such that if we can buy exactly `n` slices, the list displays `Just` the minimum number of boxes the order can be achieved in, and `Nothing` otherwise. The list is hence of type `[Maybe Int]`.
 
   Hint : Create a helper function to use with the `zipWith` expression.
 ]
 
-One more intresting thing we can talk about is higher dimensional `zip` and `zipWith`. One way to talk about them is `zip3 :: [a] -> [b] -> [c] -> [(a,b,c)]` and `zipWith3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]`.  These are defined exactly how might expect them to be.
+One more interesting thing we can talk about is higher dimensional `zip` and `zipWith`. One way to talk about them is `zip3 :: [a] -> [b] -> [c] -> [(a,b,c)]` and `zipWith3 :: (a -> b -> c -> d) -> [a] -> [b] -> [c] -> [d]`.  These are defined exactly how might expect them to be.
 ```
 zip3 :: [a] -> [b] -> [c] -> [(a,b,c)]
 zip3 [] _ _ = []
@@ -401,7 +401,7 @@ zipWith3 f (x:xs) (y:ys) (z:zs) = (f x y z) : zipWith3 f xs ys zs
 Haskell predefines till `zip7` and `zipWith7`. We are yet to see anything beyond `zipWith3` used in code, so this is more than enough. Also, if you truly need it, `zip8` and `zipWith8` are not that hard to define.
 
 #exercise(sub : "Tromino's Pizza III")[
-  Tromino's has introduced a new box of size 7 slices. Now they sell $3,5,7$ slice boxes. They still charge the box fees. So now given a number of slices, we still want to know the minimum number of boxes we can achive the order in. Create a list `minBoxPizza` such that if we can buy exactly `n` slices, the list displays  `Just` the minimum number of boxes the order can be achived in, and `Nothing` otherwise. The list is hence of type `[Maybe Int]`.
+  Tromino's has introduced a new box of size 7 slices. Now they sell $3,5,7$ slice boxes. They still charge the box fees. So now given a number of slices, we still want to know the minimum number of boxes we can achieve the order in. Create a list `minBoxPizza` such that if we can buy exactly `n` slices, the list displays  `Just` the minimum number of boxes the order can be achieved in, and `Nothing` otherwise. The list is hence of type `[Maybe Int]`.
 
 ]
 
@@ -427,7 +427,7 @@ zipWith . zipWith $ (a -> b -> c) [[a]]  [[b]]
 ```
 This also implies `zip2d = zipWith.zipWith $ (\x y -> (x,y))` is also a correct definition. Also surprisingly, `zipWith . zipWith . zipWith` has the type signature `(a -> b -> c) -> [[[a]]] -> [[[b]]] -> [[[c]]]`. You can see where we are going with this...
 #exercise(sub : "Composing zipWith's")[
-  What should the type signature and behaviour of `zipWith . zipWith . <n times> . zipWith` be? Prove it.
+  What should the type signature and behavior of `zipWith . zipWith . <n times> . zipWith` be? Prove it.
 ]
 #exercise(sub : "Unzip")[
 Haskell has an inbuilt function called `unzip :: [(a,b)] -> ([a],[b])` which takes a list of pairs and provides a pair of list in the manner inverse of `zip`.
@@ -435,16 +435,16 @@ Haskell has an inbuilt function called `unzip :: [(a,b)] -> ([a],[b])` which tak
 Try to figure out the implementation of `unzip`.
 ]
 
-= Folding, Scaning and The Gate to True Powers
-== Orgami of Code!
-A lot of reccursion on lists has the following structure
+= Folding, Scanning and The Gate to True Powers
+== Origami of Code!
+A lot of recursion on lists has the following structure
 ```
 g [] = v -- The vacuous case
 g (x:xs) = x `f` (g xs)
 ```
 That is, the function `g :: [a] -> b` maps the empty list to a value `v`, of say type `b`, and for non-empty lists, the head of the list and the result of recursively processing the tail are combined using a function or operator `f :: a -> b -> b`.
 
-Some commone examples from the inbuilt functions are:
+Some common examples from the inbuilt functions are:
 ```
 sum :: [Int] -> Int
 sum [] = 0
@@ -472,7 +472,7 @@ foldr _ v [] = v
 foldr f v (x:xs) = x `f` (foldr f v xs)
 ```
 
-This shortens our definitons to
+This shortens our definitions to
 ```
 sum = foldr (+) 0
 product = foldr (*) 1
@@ -490,15 +490,15 @@ foldr1 f (x:xs) = x `f` (foldr f xs)
 
 Like we could now define `product = foldr1 (*)` which is much more clean as we don't have to define a weird vacous case.
 
-Let's now discuss the naming of the pattern. Recall, `[1,2,3,4]` is syntactic suger for `1 : 2 : 3 : 4 : []`. We are just allowed to write the former as it is more aesthetic and convinient. One could immidietly see that 
+Let's now discuss the naming of the pattern. Recall, `[1,2,3,4]` is syntactic sugar for `1 : 2 : 3 : 4 : []`. We are just allowed to write the former as it is more aesthetic and convenient. One could immediately see that 
 ```
 foldr v f [1,2,3,4] = 1 `f` (2 `f` (3 `f` (4 `f` v)))
 -- and if f is right associative
 = 1 `f` 2 `f` 3 `f` 4 `f` v
 ```
-We have basically changed the cons (`:`) into the function and the empyy list (`[]`) into `v`. But notice the brackets, the evaluation is going from right to left.
+We have basically changed the cons (`:`) into the function and the empty list (`[]`) into `v`. But notice the brackets, the evaluation is going from right to left.
 
-Using trees, A list can be reprasented in the form
+Using trees, A list can be represented in the form
 
 #tree(
 (`(:)`,
@@ -608,10 +608,7 @@ which is converted to:
 )
 )
 
-Another very cute picture to summerize the diffrences is:
-#image("../images/image.png")
-
-Similer to how `unzip` was for `zip`, could we define `unfoldr`, something that takes a generator function and a seed value and genrates a list out of it.
+Similar to how `unzip` was for `zip`, could we define `unfoldr`, something that takes a generator function and a seed value and generates a list out of it.
 
 What could the type of such a function be? Well, like with every design problem; let's see what our requirements are:
 - The list should not just be one element over and over. Thus, we need to be able to update the seed after every unfolding.
@@ -644,7 +641,7 @@ iterate :: (a -> a) -> a -> [a]
 -- outputs the infinite list [x, f x, f f x, ...]
 iterate f seed = unfold (\x -> Just (x, f x)) seed
 ```
-While `foldr` and `foldl` are some of the most common favorite function of haskell proggramers;  `` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was litrally titled "The Under-Appreciated Unfold".
+While `foldr` and `foldl` are some of the most common favorite function of haskell programers;  `` remains mostly ignored. It is so ignored that to get the inbuilt version, one has to`import Data.List`. We will soon see an eggregious case where Haskell's own website ignored it. One of the paper we referred was literally titled "The Under-Appreciated Unfold".
 
 #exercise(sub : "Some more inbuilt functions")[
   Implement the following functions using fold and unfold.
@@ -661,11 +658,11 @@ While `foldr` and `foldl` are some of the most common favorite function of haske
 ]
 
 #exercise(sub : "Base Conversion")[
-  (i) Comvert list of digits in base `k` to a number. That is `lis2num :: Int -> [Int] -> Int` with the usage `lis2num base [digits]`.
+  (i) Convert list of digits in base `k` to a number. That is `lis2num :: Int -> [Int] -> Int` with the usage `lis2num base [digits]`.
 
   (ii) Given a number in base 10, convert to a list of digits in base `k`. `num2lis :: Int -> Int -> [Int]` with the usage `num2list base numberInBase10`
 ]
-Let's go part by part. The idea of the first question is simply to understand that `[4,2,3]` in base `k` reprasents $4 * k^2 + 2 * k + 3 * k^0 = ((0 * k + 4) * k + 2)*k + 3$; doesn't this smell like `foldl`?
+Let's go part by part. The idea of the first question is simply to understand that `[4,2,3]` in base `k` represents $4 * k^2 + 2 * k + 3 * k^0 = ((0 * k + 4) * k + 2)*k + 3$; doesn't this smell like `foldl`?
 
 ```
 lis2num :: [Int] -> Int -> Int
@@ -678,7 +675,7 @@ For part two, the idea is that we can base convert using repeated division. That
 42 `divMod` 10 = (4, 2)
 4 `divMod` 10 = (0, 4)
 ```
-It is clear that we terminate when the quotient reaces $0$ and then just take the remainders. Does this sound like `unfoldr`?
+It is clear that we terminate when the quotient reaches $0$ and then just take the remainders. Does this sound like `unfoldr`?
 ```
 num2lis :: Int -> Int -> [Int]
 num2lis k = reverse . unfoldr gen where
@@ -687,7 +684,7 @@ num2lis k = reverse . unfoldr gen where
 ```
 
 #exercise(sub : "A list of Primes")[
-  This is the time when Haskell itself forgot that the `unfoldr` function exists. The website offers the following method to make a list of primes in Haskell as an advertisment for the language.
+  This is the time when Haskell itself forgot that the `unfoldr` function exists. The website offers the following method to make a list of primes in Haskell as an advertisement for the language.
   ```
   primes = filterPrime [2..] where
   filterPrime (p:xs) =
@@ -695,7 +692,7 @@ num2lis k = reverse . unfoldr gen where
   ```
   Understand this code (write a para explaining exactly what is happening!) and try to define a shorter (and more aesthetic) version using `unfoldr`.
 ]
-The answer is litrally doing what one would do on paper. Like describing it would be a disservice to the code.
+The answer is literally doing what one would do on paper. Like describing it would be a disservice to the code.
 ```
 -- | list of primes using unfoldr
 sieve (x:xs) = Just (x, filter (\y -> y `mod` x /= 0) xs)
@@ -710,7 +707,7 @@ primes = unfoldr sieve [2..]
 ]
 *Please fill in the blanks below*
 
-A naive, non-infinite compatable definiton is:
+A naive, non-infinite compatible definition is:
 ```
 sublists [] = ______
 subslists (x:xs) = concatMap (\ys -> ______) (sublists xs)
@@ -746,10 +743,10 @@ It can be verified that there are $23$ positive integers less than $1000$ that a
 
 Find how many positive integers less than $10^16$ are divisible by at least four distinct primes less than $100$.
 
-Hint : Thik about PIE but not $pi$.
+Hint : Think about PIE but not $pi$.
 ]
 
-Something we mentioned was that `foldr` and `unfoldr` are inverse (or more accutately duel) of each other. But their types seem so different. How do we reconcile this?
+Something we mentioned was that `foldr` and `unfoldr` are inverse (or more accurately duel) of each other. But their types seem so different. How do we reconcile this?
 
 $
   op("foldr") &:: (a -> b -> b) -> b &-> [a] -> b\
@@ -1349,7 +1346,7 @@ As it turns out, de Polignac numbers are not uncommon, in fact, there are an inf
 - Find and display the ten thousandth de Polignac number.
 ]
 
-#exercise(sub : "")[
+#exercise(sub : "Bifid cipher")[
   The Bifid cipher is a polygraphic substitution cipher which was invented by Félix Delastelle in around 1901. It uses a 5 x 5 Polybius square combined with transposition and fractionation to encrypt a message. Any 5 x 5 Polybius square can be used but, as it only has 25 cells and there are 26 letters of the (English) alphabet, one cell needs to represent two letters - I and J being a common choice.
 
 Operation
