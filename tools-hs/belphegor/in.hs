@@ -1,23 +1,24 @@
 import Prelude(Int,undefined)
 
-(+) :: Int -> Int -> Int
-(+) 1 0 = 1
-(+) 1 1 = 2
-(+) 2 1 = 3
-(+) 3 2 = 5
+naturals = l 0 
 
-(-) :: Int -> Int -> Int
-(-) 2 1 = 1
-(-) 2 2 = 0
-(-) 3 1 = 2
-(-) 3 2 = 1
-(-) 4 1 = 3
-(-) 4 2 = 2
+l n = (:) n (l (succ n))
 
-fib :: Int -> Int
-fib 0 = 0
-fib 1 = 1 
-fib n = (+) (fib ((-) n 1)) (fib ((-) n 2))
+succ 0 = 1
+succ 1 = 2
+succ 2 = 3
+succ 3 = 4 
+succ 4 = 5
+succ 5 = 6
 
-belphegorsExpression :: Int
-belphegorsExpression = fib 4
+belphegorsExpression = take 5 naturals
+
+take 0 l = []
+take n [] = []
+take n ((:) x xs) = (:) x (take (pred n) xs)
+
+pred 5 = 4
+pred 4 = 3
+pred 3 = 2
+pred 2 = 1
+pred 1 = 0

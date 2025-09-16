@@ -27,7 +27,7 @@ map _ [] = []
 map f (x:xs) = (f x) : (map f xs)
 
 -- and much more clearly and concisely as
-map f xs = [f x | l <- xs]
+map f xs = [f x | x <- xs]
 ```
 Similarly, we had seen `filter :: (a -> Bool) -> [a] -> [a] ` which used to take a boolean function, some predicate to satisfy, and return the list of elements satisfying this predicate. We can define this as:
 ```

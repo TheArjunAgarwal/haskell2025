@@ -12,7 +12,7 @@ import Data.Bifunctor (bimap)
 
 main :: IO ()
 main = do
-    exeDir <- takeDirectory <$> getExecutablePath
+    exeDir <- getCurrentDirectory
     withCurrentDirectory exeDir $ do
         funDefs <-                                           M.map ( map $ bimap ( map $ fmap ( toContent . Raw ) ) ( fmap ( toContent . Raw ) )  ) . M.mapKeysMonotonic ( toContent . Raw ).
             parseFunDefs <$> readFile' "in.hs"
