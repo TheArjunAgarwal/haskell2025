@@ -537,7 +537,7 @@ Define and `(>=>)` and see how both of then are used in programs, and compare th
 #exercise(sub:"Conditional Apply")[
   (i) Write a function `applyWhen :: Bool -> (a-> a) -> a -> a` which applies a function to a value if a condition is true, otherwise, it returns the value unchanged.
 
-  (ii) Define `on :: (b -> b -> c) -> (a -> b) -> a -> a -> c` such that `on b u x y` runs the binary function `b` on the results of applying unary function `u` to two arguments `x` and `y`.
+  (ii) Define `on :: (b -> b -> c) -> (a -> b) -> a -> a -> c` such that `on b u x y` runs the binary function `b` on the results of applying unary function `u` to two arguments `x` and `y`. This is again quite common in production level code as it avoids rewriting the same function over and over.
 
   (iii) Prove that
   ```
@@ -603,7 +603,14 @@ Define and `(>=>)` and see how both of then are used in programs, and compare th
   arr((0, 2), (1, 1), [`Left`]),
 ))
 
-Considering the 'co' prefix is used to define a talk about the duel of a function, could you guess what a duel means? A hint could be the fact that `Either` can be called a co-tuple as well as $f^(-1)$ can be called co-$f$.
+Considering the 'co' prefix is used to define a talk about the dual of a function, could you guess what a dual means? A hint could be the fact that `Either` can be called a co-tuple as well as $f^(-1)$ can be called co-$f$.
+]
+
+#exercise(sub : "Composing Compose")[
+  (i) Infer the type of `(.).(.)` manually. Can you see the use case? This is often defined in production level Haskell as `.: = (.).(.)` and is called the Blackbird Combinator (It also has another name but as it is much more explicit, we leave it upto your curiosity).
+
+  (ii) Can you guess the type of `(.).(.).(.)`? Now by induction, what is the type of a similar expression with $n$ many `(.)`?
+
 ]
 
 

@@ -60,11 +60,11 @@ let chapters = (
     [Introduction to Lists],
     R
   ),
-  // (
-  //   "ch06_polymorphism.typ",
-  //   [Polymorphism and Higher Order Functions],
-  //   S
-  // ),
+  (
+    "ch06_polymorphism.typ",
+    [Polymorphism and Higher Order Functions],
+    S
+  ),
   // (
   //   "ch07_advanced_lists.typ",
   //   [Advanced List Operations],
