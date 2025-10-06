@@ -584,6 +584,138 @@ newtype Depth = Depth Integer
 
 This just tells Haskell that your datatype has only 1 constructor with exacty 1 field which will allow Haskell to apply some optimizations. It otherwise behaves just like `data` except for the above mentioned restrictions.
 
+= Exercise
+#exercise(sub : "JSON")[
+The JSON (JavaScript Object Notation) data format consists of strings, numbers, booleans, null, arrays (lists), and objects (key-value maps).
+
+(a) Define a recursive Haskell datatype `JsonValue` that can represent any valid JSON structure.
+
+(b) Using your new datatype, represent the following JSON object in Haskell:
+```
+{
+  "name": "Alan Turing",
+  "born": 1912,
+  "is_alive": false,
+  "contributions": ["Turing Machine", "Turing Test"]
+}
+```
+]
+#exercise(sub : "File System")[
+(a) Design a datatype `FileSystemItem` to represent a hierarchical file system. A file system consists of two types of items:
+- A `File`, which has a name (String) and content (String).
+- A `Directory` or Folder, which has a name (String) and contains a list of other `FileSystemItems`.
+
+(b) Implement a function `find :: String -> FileSystemItem -> Maybe String` that searches for a file by name within a directory (and all its subdirectories) and returns its content if found.
+]
+
+#exercise(sub : "Folding a Tree")[
+    (a) For the `Tree a` defined in this chapter, implement `foldTree :: (a -> [b] -> b) -> Tree a -> b` which takes a node's value (`a`) and the list of folded results from its children (`[b]`) and produces a new result (`b`). 
+    
+    (b) Use `foldTree` to implement `size`, `depth`, and `sum` for the `Tree` type.
+]
+
+#exercise(sub : "Git")[
+    At its core, Git is just a content-addressed filesystem built on a few simple object types.
+        - Blob: Represents the content of a file. It's just a chunk of data.
+        - Tree: Represents a directory. It contains a list of pointers to Blobs (for files) and other Trees (for subdirectories). Each pointer includes the item's name, type (blob/tree), and its hash.
+        - Commit: Represents a snapshot in time. It contains a pointer to a single top-level Tree, pointer(s) to parent Commit(s), an author, a committer, and a message.
+
+    Model these three object types in Haskell. Use `String` to represent SHA-1 hashes (the "pointers"). Then, define a function `findFileInCommit :: Commit -> FilePath -> Maybe Blob` that, given a commit and a path like "src/main/core.hs", traverses the tree structure to find the corresponding blob.
+]
+
+#exercise(sub : "Matrix")[
+    Define `Matrix` as a type alias for `[[a]]` where `a` is number. We want you to implement
+
+    (i) `check :: Matrix a -> Bool` to check if the matrix is valid (all rows have the same number of elements, all columns have the same number of elements).
+
+    (ii) `transpose :: Matrix a -> Matrix a` to take the transpose of the matrix
+
+    (iii) `addMat :: Matrix a -> Matrix a -> Matrix a` and `subMat :: Matrix a -> Matrix a -> Matrix a` to add and subtract matrices.
+
+    (iv) `det :: Matrix a -> Double` to find the determinent of the matrices.
+]
+
+#exercise(sub : "Polynomial")[
+    Define `Polynomial` as a type alias for `[a]` where `a` is a number. Here $[2,3,1] |-> 2 + 3x +  x^2$, the reason for this will become evident soon.
+    
+    We want you to implement
+
+    (i) `evaluateAt :: Polynomial a -> a -> a` which takes a polynomial and evaluates it at a given value.
+
+    (ii) `addPoly :: Polynomial a -> Polynomial a -> Polynomial a` and `subPoly :: Polynomial a -> Polynomial a -> Polynomial a`.
+
+    (iii) `degree :: Polynomial a -> Int` which returns the degree of the polynomial.
+
+    (iii) `diffrentiate :: Polynomial a -> Polynomial a` which diffrentiates the polynomial and `integrate :: Polynomial a -> Polynomial a` which integrates the polynomial.
+
+    (iv) `interpolate :: [Int] -> Polynomial Int` which takes a list of length $n$ say $l$ and outputs a degree $n-1$ polynomial $p$ such that $[p(0), p(1), dots, p(n-1)] = l$.
+]
+
+#exercise(sub : "Complex")[
+    Define `Complex a` as a type alias for `(a,a)` where `a` is a number. We want you to evaluate
+
+    (i) `addComp :: Complex a -> Complex a -> Complex a` which takes two complex numbers and adds them. Similerly, define `subComp ::  Complex a -> Complex a -> Complex a`.
+
+    (ii) Define `mulComp :: Complex a -> Complex a -> Complex a` and `divComp :: (Fractional a) => Complex a -> Complex a -> Complex a`
+
+    (iii) Using binary exponentiation, define `expComp :: Complex a -> Int -> Complex a` which takes a complex number and raises it to some integral power.
+
+    (iv) Finally define `omegaTor :: Int -> Int -> Complex Double` which takes two integers $n,r$ and gives $omega^r$ where $omega$ is the $n$-th root of $1$.
+]
+
+#exercise(sub : "FFT")[
+    To end this chapter will tackle one of the most famous and somewhat complicated algorithms of all time. You are expected to have implemented `Matrix`, `Polynomial` and `Complex`.
+
+    The main use of FFT is to multiply polynomials. If we multiply polynomials naivly, we will end up making $binom(n,2)$ multiplications and then some additions. The idea is that a $n$ degree polynomial is determined by what value it takes for some $n+1$ inputs. 
+    
+    What if we choose some special input which the polynomial can evaluate quickly, evaluate the polynomials at thoose inputs and multiply the corresponding inputs? We just need to choose these special inputs carefully.
+
+    #def(sub : "DFT")[
+        The discrete fourier transform of a polynomial $p$ of degree $m-1$,
+        $
+        "DFT"(p) = [p(omega^0), p(omega^1), dots, p(omega^(m-1))]
+        $
+        where $omega$ is the $m$-th root of unity.
+    ]
+    As we can represent the polynomial as $a_0 + a_1 x + a_2 x^2 + dots + a_(m-1) x^(m-1)$, therefore we could represent the DFT as
+    $
+    mat(
+        omega^0, omega^0, omega^0, dots, omega^0;
+        omega^0, omega^1, omega^2, dots, omega^(m-1);
+        omega^0, omega^2, omega^4, dots, omega^2(m-1);
+        \u{22EE}, \u{22EE}, \u{22EE}, \u{22F1}, \u{22EE};
+        omega^0, omega^(m-1), omega^(2(m-1)), dots, omega^((m-1)(m-1))
+    )
+    mat(
+        a_0;
+        a_1;
+        a_2;
+        \u{22EE};
+        a_(m-1)
+    )
+    $
+    This multiplication can be simplified by taking modulo $m$ of every exponent as $omega^m = 1 = omega^0$ by definition. We will now present an example for $m= 8$ and hope you will be able to generalize the strategy.
+    #image("../images/FFT/8matrix.png")
+    We can reorder the columns of matrix and the corresponding rows in the vector to bring the even-numbered columns to the left and the odd-numbered columns to the right.
+    #image("../images/FFT/8matrixReordered.png")
+    As the quadrents on the left are identical, we now only need to compute three products.
+    #image("../images/FFT/8matrix3product.png")
+    Here, the first product is litrally $"DFT"([a_0, a_2, a_4, a_6])$. We can calculate the other products by noticing
+    #image("../images/FFT/8matrixObservation.png")
+    Which means we only need to compute $"DFT"([a_1, a_3, a_5, a_7])$ and multiplying the respective values.
+
+    Implement `dft :: Polynomial a -> [Complex Double]`. Keep in mind that as we are multiplying two polynomials of degree $m-1$, the output will be of degree atmost $2m - 2$. So we must choose which root of unity to take with that in mind.
+
+    (ii) Now to implement `mulPoly :: Polynomial a -> Polynomial a -> Polynomial a`, we need a way to convert back from values at $omega^0, omega^1, dots omega^(n-1)$ to a polynomial of degree $n-1$.
+
+    Prove $"DFT"("DFT"([a_0, a_1, dots, a_(m-1)])) = [m a_0, m a_(m-1), m a_(m-2), dots, m a_1]$
+
+    (iii) Using the above fact, finally implement `mulPoly :: Polynomial a -> Polynomial a -> Polynomial a`.
+
+    If you did this, pat yourself on the back. You are one of the few people in the world who will have ever hand written a FFT implementation.
+]
+
+
 
 // cite
 // Haskell Mooc

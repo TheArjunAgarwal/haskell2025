@@ -65,11 +65,11 @@ let chapters = (
     [Polymorphism and Higher Order Functions],
     S
   ),
-  // (
-  //   "ch07_advanced_lists.typ",
-  //   [Advanced List Operations],
-  //   A
-  // ),
+  (
+    "ch07_advanced_lists.typ",
+    [Advanced List Operations],
+    A
+  ),
   // (
   //   "ch08_precomp-datatypes.typ",
   //   [Introduction to Datatypes],
