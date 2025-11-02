@@ -17,7 +17,7 @@ let author = R+[, ]+S+[, ]+A
 show: Book.settings.with(title:title,author:author)
 show: Box.settings
 show: Code.settings
-show: Contents.settings
+// show: Contents.settings
 show: Prelude.settings
 
 Book.title_page(title:title,author:author)
@@ -70,11 +70,11 @@ let chapters = (
     [Advanced List Operations],
     A
   ),
-  // (
-  //   "ch08_precomp-datatypes.typ",
-  //   [Introduction to Datatypes],
-  //   S
-  // ),
+  (
+    "ch08_precomp-datatypes.typ",
+    [Introduction to Datatypes],
+    S
+  ),
   // (
   //   "ch09_computation.typ",
   //   [Computation as Reduction],

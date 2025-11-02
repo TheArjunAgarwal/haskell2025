@@ -461,7 +461,7 @@ bex = BNode (BNode 7 Leaf Leaf)
 Define all of the @exercise_of_Tree_Functions for binary trees.
 ]
 
-We will see how these datatypes are used in #ref(<ads>).
+We will see how these datatypes are used later.
 
 #exercise(sub: "All trees are Binary Trees")[
 There is a way to convert a (not necessarily binary) tree into a binary tree without losing any information (that is, in a way that one can reconstruct the original tree back from the binary tree).
@@ -663,7 +663,7 @@ The JSON (JavaScript Object Notation) data format consists of strings, numbers, 
     (iv) Finally define `omegaTor :: Int -> Int -> Complex Double` which takes two integers $n,r$ and gives $omega^r$ where $omega$ is the $n$-th root of $1$.
 ]
 
-#exercise(sub : "FFT")[
+== Extended Exercise: Fast Fourier Transform
     To end this chapter will tackle one of the most famous and somewhat complicated algorithms of all time. You are expected to have implemented `Matrix`, `Polynomial` and `Complex`.
 
     The main use of FFT is to multiply polynomials. If we multiply polynomials naivly, we will end up making $binom(n,2)$ multiplications and then some additions. The idea is that a $n$ degree polynomial is determined by what value it takes for some $n+1$ inputs. 
@@ -682,7 +682,7 @@ The JSON (JavaScript Object Notation) data format consists of strings, numbers, 
     mat(
         omega^0, omega^0, omega^0, dots, omega^0;
         omega^0, omega^1, omega^2, dots, omega^(m-1);
-        omega^0, omega^2, omega^4, dots, omega^2(m-1);
+        omega^0, omega^2, omega^4, dots, omega^(2(m-1));
         \u{22EE}, \u{22EE}, \u{22EE}, \u{22F1}, \u{22EE};
         omega^0, omega^(m-1), omega^(2(m-1)), dots, omega^((m-1)(m-1))
     )
@@ -695,16 +695,17 @@ The JSON (JavaScript Object Notation) data format consists of strings, numbers, 
     )
     $
     This multiplication can be simplified by taking modulo $m$ of every exponent as $omega^m = 1 = omega^0$ by definition. We will now present an example for $m= 8$ and hope you will be able to generalize the strategy.
-    #image("../images/FFT/8matrix.png")
+    #image("../images/FFT/8matrix.png", width: 80%)
+
     We can reorder the columns of matrix and the corresponding rows in the vector to bring the even-numbered columns to the left and the odd-numbered columns to the right.
-    #image("../images/FFT/8matrixReordered.png")
+    #image("../images/FFT/8matrixReordered.png", width: 80%)
     As the quadrents on the left are identical, we now only need to compute three products.
     #image("../images/FFT/8matrix3product.png")
     Here, the first product is litrally $"DFT"([a_0, a_2, a_4, a_6])$. We can calculate the other products by noticing
     #image("../images/FFT/8matrixObservation.png")
     Which means we only need to compute $"DFT"([a_1, a_3, a_5, a_7])$ and multiplying the respective values.
-
-    Implement `dft :: Polynomial a -> [Complex Double]`. Keep in mind that as we are multiplying two polynomials of degree $m-1$, the output will be of degree atmost $2m - 2$. So we must choose which root of unity to take with that in mind.
+#exercise(sub: "FFT")[
+    (i) Implement `dft :: Polynomial a -> [Complex Double]`. Keep in mind that as we are multiplying two polynomials of degree $m-1$, the output will be of degree atmost $2m - 2$. So we must choose which root of unity to take with that in mind.
 
     (ii) Now to implement `mulPoly :: Polynomial a -> Polynomial a -> Polynomial a`, we need a way to convert back from values at $omega^0, omega^1, dots omega^(n-1)$ to a polynomial of degree $n-1$.
 
