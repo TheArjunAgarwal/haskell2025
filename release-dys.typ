@@ -17,7 +17,7 @@ let author = R+[, ]+S+[, ]+A
 show: Book-Dys.settings.with(title:title,author:author)
 show: Box.settings
 show: Code.settings
-// show: Contents-Dys.settings
+show: Contents-Dys.settings
 show: Prelude.settings
 
 Book-Dys.title_page(title:title,author:author)
