@@ -602,18 +602,98 @@ We will not see any specific problems using the `BTree` or `AvlTree`, these are 
 
     Write a function `listToAVL :: Ord a => [a] -> AvlTree a` which converts a list to an AVL tree.
 
-    Write a function `treeSort :: Ord a => [a] -> [a]` which sorts a list using the avl tree. What is the time complexity of this?
+    Write a function `treeSort :: Ord a => [a] -> [a]` which sorts a list using the AVL tree. What is the time complexity of this?
 ]
 
 = Sets and Maps
+=== Sets
 #definition(sub : "Sets")[
     A set is a data structure that can store unique values, without any particular order.
 ]
-Notice that using a list as a set is suboptimal as insertion is $O(n)$ due to needing to check if the element is unique. But we can instead use an AVL tree to reprasent a set. This imposes the need for the elements to be `Ord`, circumventing it is beyond the scope of this book.
+A set normally has the operations `search`, `insert` and `delete`. We shall also show that these operations are enough to implement `union` and `intersection`. Often, `empty` and `isEmpty` are also provided to create an empty set and check if a set is empty respectively.
+
+#exercise(sub : "Naive List Set")[
+    Complete the following implementation of set using lists.
+    ```
+    newtype Set a = Setof [a]
+    
+    empty :: Set a
+    isEmpty :: Set a -> Bool
+    search :: Set a -> a -> Bool
+    insert :: Set a -> a -> Set a
+    delete :: Set a -> a -> Set a
+    ```
+]
+
+Implementing `union` and `inter` is quite easy and direct. 
+```
+union :: Eq a => Set a -> Set a -> Set a
+union (Setof xs) (Setof []) = Setof xs
+union (Setof xs) (Setof (y:ys) = union (insert (Setof xs) y) (Setof ys)
+
+intersect :: Eq a => Set a -> Set a -> Set a
+intersect (Setof xs) (Setof ys) = Setof [y | y <- ys, elem y xs]
+```
+
+However, as we might notice, these are quite slow as `search`, `insert` and `delete` are $O(n)$ due to needing to check if the element is unique. 
+
+We can circumvent this by instead using an AVL tree as the underlying data structure. Note, this imposes the need for the elements to have the property `Ord`. While we can circumvent it by using more general trees, doing so is beyond the scope of this book.
 
 ```
-data Set a = Set (AvlTree a)
+import qualified AVLTree as AVL 
+-- This allows us to distinguish between the AVL Tree functions and the ones we define here, given we package AVL tree as a module.
+newtype Set a = Setof (AVLTree a)
+
+empty = Setof Nil
+isEmpty (Setof t) = t == Empty
+search (Setof t) x = AVL.search t x
+insert (Setof t) x = Setof (AVL.insert t x)
+delete (Setof t) x = Setof (AVL.delete t x)
 ```
+
+Notice, `search`, `insert` and `delete` are $O(log(n))$. Translating the definition of `union` and `intersect` from above is somewhat tricky. The recursive list structure did make the process quite a breeze. So what if we bring it back?
+
+```
+treeToLis :: AVLTree a -> [a]
+treeToLis Empty = []
+treeToLis (Node x _ lt rt) = (treeToLis lt) ++ [x] ++ (treeToLis rt) 
+```
+
+The above algorihtm clearly runs in $O(n log n)$. We can optimize to do so in $O(n)$, the idea being something we have used quite a few times.
+```
+treeToLis :: AVLTree a -> [a]
+treeToLis t = go t [] where
+    go Empty l = l
+    go (Node x _ lt rt) l = go lt (x: go rt l)
+```
+
+We will now just combine these sorted lists.
+```
+unionMerge :: Ord a => [a] -> [a] -> [a]
+unionMerge xs [] = xs
+unionMerge [] ys = ys
+unionMerge (x:xs) (y:ys)
+    |x == y = x: (unionMerge xs ys)
+    |x < y  = x : y : (unionMerge xs ys)
+    |x > y  = y : x : (unionMerge xs ys) 
+
+union :: Set a -> Set a -> Set a
+union (Setof t1) (Setof t2) = Setof t where
+    t = unionMerge (treeToLis t1) (treeToLis t2)
+```
+Notice, `unionMerge` is $O(m+n)$ where $m,n$ is the length of lists. This makes `union` $O(m + n)$ where $m,n$ are the cardinalities of the sets.
+
+#exercise(sub: "Intersect")[
+    Write `interMerge` and `intersection` to implement intersection of sets in $O(m+n)$ time where $m,n$ are the cardinalities of the sets.
+]
+
+Set is often the underlying data structure for a lot of more advanced data structures. You will see some of them in the excercise.
+
+=== Maps
+#def(sub: "Map")[
+3
+]
+
 
 = Maybe Trie (not sure really)
 
@@ -624,6 +704,45 @@ data Set a = Set (AvlTree a)
 = Exercise
 // - Leftist Heap
 // - Priority Queues
+#exercise(sub : "Old Driver Trees")[
+Design and Implement a data structure to maintain an array of length $n$, supporting the following operations:
+1. `add`: Add $x$ to the value in the interval $[l, r]$.
+2. `cover`: Set the value in the interval $[l, r]$ to $x$.
+3. `sum`: Calculate the sum of the values ​​in the interval $[l, r]$.
+
+You are given that the types of operations, $l$ and $r$ are independent and uniformly random within their respective ranges.
+
+We want the expected complexity to be linear (proving this is rather difficult although).
+
+Hint: Given the array $a_1, a_2, dots, a_n$, We want to mantain a set of $(l,r,x)$ such that $a_l, a_(l+1), dots, a_r$ are equal to $x$. Can you take it from here? These are called Old Driver Trees or Chtholly trees.
+]
+
+#exercise(sub : "Color the Axis (Luogo P1840)")[
+There are $n$ points on a number line, located at $1, 2, dots, n$. Initially, all points are colored black. Then we perform $m$ operations. In the $i$-th operation, all points in the interval $[l_i, r_i]$ (inclusive) are colored white. After each operation, output the number of points that are still black.
+
+Implement a function `white :: Int -> [(Int, Int)] -> [Int]` which takes $n$ and the operations as a list of form $(l_i, r_i)$ and returns a list of outputs at every step.
+
+*Example*
+
+```
+white 10 [(3,3),(5,7),(2,8)] = [9,6,3]
+```
+]
+
+#exercise(sub : "Willem, Chtholly and Seniorious (Codeforces 897E)")[
+After years of wear and tear, Seniorious the sword is in bad condition. Willem is following an old manual to try to restore it. 
+
+The sword can be reprasented by a line of $n$ talisman pieces, each with an integer value $a_i$.
+
+To restore it, Willem must perform $m$ operations of the following $4$ types:
++ `1 l r x` - For all $i$ in $[l, r]$, set $a_i = a_i + x$.
++ `2 l r x` - For all $i$ in $[l, r]$, set $a_i = x$.
++ `3 l r x` - Output the $x$-th smallest element among $a_l, a_(l+1), dots, a_r$.
++ `4 l r x` - Output the $sum_(i in [l,r]) a_i^x$.
+
+Write a function `restore :: [Int] -> [(Int, Int, Int, Int)] -> [Int]` which takes in the talisman values, the list of instructions and gives the outputs produced in the order they are produced in.
+]
+
 
 
 // cite
