@@ -691,7 +691,6 @@ Set is often the underlying data structure for a lot of more advanced data struc
 
 === Maps
 #def(sub: "Map")[
-3
 ]
 
 
@@ -704,6 +703,7 @@ Set is often the underlying data structure for a lot of more advanced data struc
 = Exercise
 // - Leftist Heap
 // - Priority Queues
+// - Old Driver Trees
 #exercise(sub : "Old Driver Trees")[
 Design and Implement a data structure to maintain an array of length $n$, supporting the following operations:
 1. `add`: Add $x$ to the value in the interval $[l, r]$.
@@ -712,9 +712,9 @@ Design and Implement a data structure to maintain an array of length $n$, suppor
 
 You are given that the types of operations, $l$ and $r$ are independent and uniformly random within their respective ranges.
 
-We want the expected complexity to be linear (proving this is rather difficult although).
+We want the expected complexity to be $O(n log log n)$ (proving this is rather difficult although).
 
-Hint: Given the array $a_1, a_2, dots, a_n$, We want to mantain a set of $(l,r,x)$ such that $a_l, a_(l+1), dots, a_r$ are equal to $x$. Can you take it from here? These are called Old Driver Trees or Chtholly trees.
+Hint: Given the array $a_1, a_2, dots, a_n$, We want to mantain a set of $(l,r,x)$ such that $a_l, a_(l+1), dots, a_r$ are equal to $x$. Now make two operations on this tree `split :: ODT a -> (Int, Int) -> Int -> ODT a` which given a tree, an intervel $(l,r)$ in the tree and some $x$; splits the intervel into $(l,x-1)$ and $(x,r)$ and adds them to the tree.Can you take it from here? These are called Old Driver Trees or Chtholly trees.
 ]
 
 #exercise(sub : "Color the Axis (Luogo P1840)")[
