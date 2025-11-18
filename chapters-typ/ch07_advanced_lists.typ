@@ -1273,7 +1273,7 @@ Keeping in mind @exercise_of_Modular_Exponentiation, what $n$ should we choose t
 
 
 #exercise(sub : "A very cool DP (Codeforces)")[
-  Giant chess is quite common in Geraldion. We will not delve into the rules of the game, we'll just say that the game takes place on an h × w field, and it is painted in two colors, but not like in chess. Almost all cells of the field are white and only some of them are black. Currently Gerald is finishing a game of giant chess against his friend Pollard. Gerald has almost won, and the only thing he needs to win is to bring the pawn from the upper left corner of the board, where it is now standing, to the lower right corner. Gerald is so confident of victory that he became interested, in how many ways can he win?
+  Giant chess is quite common in Geraldion. We will not delve into the rules of the game, we'll just say that the game takes place on an $h times w$ field, and it is painted in two colors, but not like in chess. Almost all cells of the field are white and only some of them are black. Currently Gerald is finishing a game of giant chess against his friend Pollard. Gerald has almost won, and the only thing he needs to win is to bring the pawn from the upper left corner of the board, where it is now standing, to the lower right corner. Gerald is so confident of victory that he became interested, in how many ways can he win?
 
   The pawn, which Gerald has got left can go in two ways: one cell down or one cell to the right. In addition, it can not go to the black cells, otherwise the Gerald still loses. There are no other pawns or pieces left on the field, so that, according to the rules of giant chess Gerald moves his pawn until the game is over, and Pollard is just watching this process.
 
@@ -1449,13 +1449,13 @@ Note: When the problem came in IOI, no one found the optimal solution. Furthermo
 ]
 
 #exercise(sub : "Broken Device (JOI 2016, Spring Training Camp)")[
-   Anna wants to send a $60$-bit integer to Bruno. She has a device that can send a sequence of $150$ numbers that are either $0$ or $1$. The twist is that $L$ ($0 <= L <= 40$) of the positions of the device are broken and can only send $0$. Bruno receives the sequence Anna sent, but the does not know the broken positions.
+  Anna wants to send a $60$-bit integer to Bruno. She has a device that can send a sequence of $150$ numbers that are either $0$ or $1$. The twist is that $L$ ($0 <= L <= 40$) of the positions of the device are broken and can only send $0$. Bruno receives the sequence Anna sent, but the does not know the broken positions.
 
    Anna knows the broken positions but Bruno doesn’t. Write functions `encode :: Int -> [Int] -> [Int]` which given the integer and the broken position encodes the message and function `decode :: [Int] -> Int` which decodes the message and recovers the integer sent.
 
-   Subtask 1: $K = 0$, This should be very simple as you are just converting to binery. 
+   Subtask 1: $K = 0$, This should be very simple as you are just converting to binary. 
 
-   Subtask 2: $K = 1$, We will have one broken position. If we can somehow indicate the start of out 60 bit sequence, can we find a continous $61$ bit sequence?
+   Subtask 2: $K = 1$, We will have one broken position. If we can somehow indicate the start of out 60 bit sequence, can we find a continuous $61$ bit sequence?
 
    Subtask 3: $K = 15$, This is where one needs to be creative. Note $150/2 = 75$ and $75 - 15 =60$. Can you think of something now?
    
@@ -1477,7 +1477,7 @@ Note: When the problem came in IOI, no one found the optimal solution. Furthermo
 
    Subtask 2: $K= 6$, Using our friend binery.
 
-   Subtask 3: $K=1$, Note that bitwise Xor $\^$ has some very useful properties. One of these is the fact that it is extreamly easy to change and second is that for numbers between $1-64$, taking bitwise xor of some set of numbers will result in a number between $0-63$. How can we abuse it?
+   Subtask 3: $K=1$, Note that bitwise Xor $xor$ has some very useful properties. One of these is the fact that it is extreamly easy to change and second is that for numbers between $1-64$, taking bitwise xor of some set of numbers will result in a number between $0-63$. How can we abuse it?
 ]
 
 #exercise(sub : "Holes (Singapore 2007)")[
@@ -1488,7 +1488,10 @@ To conduct this simulation, a function `hole :: [Bool] -> Int` is required that,
 Example:
 We will use a matrix of one's and zero's to reprasent the input for convenience.
 $ op("hole")
-  mat(
+  mat(rpus participates in a competition for hacking into a new secure messenger. He's almost won.
+
+Having carefully studied the interaction protocol, Polycarpus came to the conclusion that the secret key can be obtained if he properly cuts the public key of the application into two parts. The public key is a long integer which may consist of even a million digits!
+
 0, 0, 0, 0, 0, 1, 0, 0;
 0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
 0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
@@ -1498,7 +1501,10 @@ $ op("hole")
 0, 0, 0, 0, 1, 0, 0, 0;
 1, 0, 0, 0, 0, 0, 0, 0
   ) = 5
-$
+$rpus participates in a competition for hacking into a new secure messenger. He's almost won.
+
+Having carefully studied the interaction protocol, Polycarpus came to the conclusion that the secret key can be obtained if he properly cuts the public key of the application into two parts. The public key is a long integer which may consist of even a million digits!
+
 as we have a $5 times 5$ grid of $0$'s, made bold. 
 ]
 
@@ -1606,7 +1612,7 @@ miku 3 8 = 5.2
 miku 10 98 = 37.721155173329
 ```
 Note
-In the first example, the optimal assignment of beauty is 𝑎=[1,2,5]. The expected number of days Mohak needs to get his fufu back is 5.2.
+In the first example, the optimal assignment of beauty is $a=[1,2,5]$. The expected number of days Mohak needs to get his fufu back is 5.2.
 
 Hint: Let's say you are given the beauty list $a$. Now, how will you compute the expected number of days? Consider $f(i)$ to be expected number of days to reach the $i$-th city. Can you find these recursivly? What about $g(i) = f(i) - f(i-1)$? Can you find a form in terms of $a$, can you use `zipWith` to compute these?
 

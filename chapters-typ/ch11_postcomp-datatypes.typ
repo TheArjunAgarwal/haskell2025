@@ -691,12 +691,34 @@ Set is often the underlying data structure for a lot of more advanced data struc
 
 === Maps
 #def(sub: "Map")[
+    Map is an abstract data type that stores a collection of key/value pairs, such that each possible key appears at most once in the collection.
+]
+For all practical purposes, `Map k a` where the keys are of type `k` and values are of type `a` is just a `Set (k,a)` with the ordering on `k`. Notice, we don't need `a` to have an ordering!
+
+#exercise(sub : "Map")[
+    Implement `Map` with the following operations in $O(log n)$:
+
+    (a) `(!) :: Ord k => Map k a -> k -> a` which takes a map and a key and finds the associated value (or gives error if there is no associated value with that key).
+
+    (b) `member :: Ord k => k -> Map k a -> Bool` which takes a map and a key and returns `True` if there is a value associated with the key and false otherwise.
+
+    (c) `insert :: Ord k => k -> a -> Map k a -> Map k a` which takes in a key, a value and a map and inserts the key-value pair in the map and returns the new map.
+
+    (d) `delete :: Ord k => k -> Map k a -> Map k a` which takes in a key and deletes it's key-value pair from the map and returns the new map. When the key is not a member of the map, the original map is returned.
+
+    (e) `adjust :: Ord k => (a -> a) -> k -> Map k a -> Map k a` which updates a value at a specific key with the result of the provided function and returns the new map. When the key is not a member of the map, the original map is returned.
+]
+
+The reason we are concerned about maps is that combined with a concept called @definition_of_Hashing, we can implement a variety of extremely optimal data structures. We will talk about them in a moment.
+
+= Hash Based Data structures
+#definition(sub: "Hash Function")[
+    A function that maps variable sized input to fixed size values is called a Hash Function#footnote[Wikipedia has told me that there exist varaible sized hash functions but I have no idea what their use case is.]
 ]
 
 
-= Maybe Trie (not sure really)
 
-= Hash Based Data structures
+= Maybe Trie (not sure really)
 
 // Chapter content goes here
 
