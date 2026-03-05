@@ -27,7 +27,7 @@ map _ [] = []
 map f (x:xs) = (f x) : (map f xs)
 
 -- and much more clearly and concisely as
-map f xs = [f x | x <- xs]
+map f xs = [f x | l <- xs]
 ```
 Similarly, we had seen `filter :: (a -> Bool) -> [a] -> [a] ` which used to take a boolean function, some predicate to satisfy, and return the list of elements satisfying this predicate. We can define this as:
 ```
@@ -312,6 +312,9 @@ Believe it or not, this should output the fibonacci sequence. The idea is that H
 + This is going to be the first element of `something`, i.e. the part that comes after the `0 : 1 :`. So, we need to compute the first element of `zipWith (+) fibs (tail fibs)`. How do we do this? We compute the first element of `fibs` and the first element of `tail fibs` and add them. We know already, that the first element of `fibs` is `0`. And we also know that the first element of `tail fibs` is the second element of `fibs`, which is `1` So, the first element of `zipWith (+) fibs (tail fibs)` is `0 + 1 = 1`.
 + It is going to be the fourth element of `fibs` and the `second of zipWith (+) fibs (tail fibs)`. Again, we do this by taking the second elements of `fibs` and `tail fibs` and adding them together. We know that the second element of `fibs` is `1`. The second element of `tail fibs` is the third element of `fibs`. But we just computed the third element of `fibs`, so we know it is `1`. Adding them together we get that the fourth element of fibs is `1 + 1 = 2`.
 
+
+
+
 This goes on and one to generate the fibonacci sequence. To recall, the naive
 ```
 fibNaive 0 = 0
@@ -364,6 +367,8 @@ possiblePizzaGo :: Int -> Bool
 possiblePizzaGo x
   | x < 0     = False
   | x == 0    = True
+
+
   | otherwise = possiblePizzaGo (x - 3) || possiblePizzaGo (x - 5)
 
 possiblePizza = [possiblePizzaGo x | x <- [0..]]
@@ -1209,7 +1214,7 @@ $
 ]
 #exercise(sub : "Garner's Algorithm")[
 A consequence of the Chinese Remainder Theorem is, that we can represent big numbers using an array of small integers. For example, let   $p$  be the product of the first   $1000$  primes.  $p$  has around  $3000$  digits.
-  
+
 Any number  $a$  less than  $p$  can be represented as a list  $a_1, dots, a_k$ , where  $a_i equiv a mod(p_i)$ .  But to do this we obviously need to know how to get back the number  $a$  from its representation (which we will call the CRT form).
 
 Another form for numbers is called the mixed radix form.
@@ -1273,7 +1278,7 @@ Keeping in mind @exercise_of_Modular_Exponentiation, what $n$ should we choose t
 
 
 #exercise(sub : "A very cool DP (Codeforces)")[
-  Giant chess is quite common in Geraldion. We will not delve into the rules of the game, we'll just say that the game takes place on an $h times w$ field, and it is painted in two colors, but not like in chess. Almost all cells of the field are white and only some of them are black. Currently Gerald is finishing a game of giant chess against his friend Pollard. Gerald has almost won, and the only thing he needs to win is to bring the pawn from the upper left corner of the board, where it is now standing, to the lower right corner. Gerald is so confident of victory that he became interested, in how many ways can he win?
+  Giant chess is quite common in Geraldion. We will not delve into the rules of the game, we'll just say that the game takes place on an h × w field, and it is painted in two colors, but not like in chess. Almost all cells of the field are white and only some of them are black. Currently Gerald is finishing a game of giant chess against his friend Pollard. Gerald has almost won, and the only thing he needs to win is to bring the pawn from the upper left corner of the board, where it is now standing, to the lower right corner. Gerald is so confident of victory that he became interested, in how many ways can he win?
 
   The pawn, which Gerald has got left can go in two ways: one cell down or one cell to the right. In addition, it can not go to the black cells, otherwise the Gerald still loses. There are no other pawns or pieces left on the field, so that, according to the rules of giant chess Gerald moves his pawn until the game is over, and Pollard is just watching this process.
 
@@ -1299,15 +1304,15 @@ Also try defining a function `paths :: (Int, Int) -> (Int, Int) -> Int` which co
   The rover will operate on the grid consisting of n rows and m columns. We will define as $(r, c)$ the cell located in the row $r$ and column $c$. From each cell the rover is able to move to any cell that share a side with the current one.
 
   The rover is currently located at cell $(1, 1)$ and has to move to the cell $(n, m)$. It will randomly follow some shortest path between these two cells. Each possible way is chosen equiprobably.
-  
+
   The cargo section of the rover contains the battery required to conduct the research. Initially, the battery charge is equal to $s$ units of energy.
-  
+
   Some of the cells contain anomaly. Each time the rover gets to the cell with anomaly, the battery looses half of its charge rounded down. Formally, if the charge was equal to $x$ before the rover gets to the cell with anomaly, the charge will change to $ceil (x/2)$.
-  
+
   While the rover picks a random shortest path to proceed, write function `charge :: (Int, Int) -> [(Int, Int)] -> Int -> Float` to compute the expected value of the battery charge after it reaches cell $(n, m)$, with the anomalies at some positions $[(x_1,y_1),(x_2,y_2), dots, (x_n,y_n)]$ if we started with some $c$ charge. 
-  
+
   Note: If the cells $(1, 1)$ and $(n, m)$ contain anomaly, they also affect the charge of the battery.
-  
+
 
 Examples
 ```
@@ -1449,26 +1454,26 @@ Note: When the problem came in IOI, no one found the optimal solution. Furthermo
 ]
 
 #exercise(sub : "Broken Device (JOI 2016, Spring Training Camp)")[
-  Anna wants to send a $60$-bit integer to Bruno. She has a device that can send a sequence of $150$ numbers that are either $0$ or $1$. The twist is that $L$ ($0 <= L <= 40$) of the positions of the device are broken and can only send $0$. Bruno receives the sequence Anna sent, but the does not know the broken positions.
+   Anna wants to send a $60$-bit integer to Bruno. She has a device that can send a sequence of $150$ numbers that are either $0$ or $1$. The twist is that $L$ ($0 <= L <= 40$) of the positions of the device are broken and can only send $0$. Bruno receives the sequence Anna sent, but the does not know the broken positions.
 
    Anna knows the broken positions but Bruno doesn’t. Write functions `encode :: Int -> [Int] -> [Int]` which given the integer and the broken position encodes the message and function `decode :: [Int] -> Int` which decodes the message and recovers the integer sent.
 
-   Subtask 1: $K = 0$, This should be very simple as you are just converting to binary. 
+   Subtask 1: $K = 0$, This should be very simple as you are just converting to binery. 
 
-   Subtask 2: $K = 1$, We will have one broken position. If we can somehow indicate the start of out 60 bit sequence, can we find a continuous $61$ bit sequence?
+   Subtask 2: $K = 1$, We will have one broken position. If we can somehow indicate the start of out 60 bit sequence, can we find a continous $61$ bit sequence?
 
    Subtask 3: $K = 15$, This is where one needs to be creative. Note $150/2 = 75$ and $75 - 15 =60$. Can you think of something now?
-   
+
    Subtask 4: $K = 40$, The last question had $2$, now try with $3$ but have some sequences encode more than $1$ bit.
 ]
 
 #exercise(sub : "Coins (IOI 2017 Practice)")[
    You have a number $C$ ($0 <= C < 63$) and an line of $64$ coins that are either heads or tails. 
-   
+
    As an secret agent, you want to communicate your number to your handler by flipping some of the coins. To avoid being caught, you want to use as few flips as needed. To make the handler aware that you are communicating, you wish to flip atleast one coin. (The handler doesn't know the initial sequence of coins).
 
    In the encoding part, you may flip at least one coins and at most $K$ coins of the line. 
-   
+
    In the decoding part, you receive the coins already with the changes, in a line, and you must recover the number $C$.
 
    Write functions `encode :: Int -> [Bool] -> [Bool]` which takes a number and a list of coins (`True` is heads and `False` is tails) and returns a list of bools with atleast $1$ and atmost $K$ of them flipped. Write a function `decode :: [Bool] -> Int` to recover the number. 
@@ -1477,7 +1482,7 @@ Note: When the problem came in IOI, no one found the optimal solution. Furthermo
 
    Subtask 2: $K= 6$, Using our friend binery.
 
-   Subtask 3: $K=1$, Note that bitwise Xor $xor$ has some very useful properties. One of these is the fact that it is extreamly easy to change and second is that for numbers between $1-64$, taking bitwise xor of some set of numbers will result in a number between $0-63$. How can we abuse it?
+   Subtask 3: $K=1$, Note that bitwise Xor $\^$ has some very useful properties. One of these is the fact that it is extreamly easy to change and second is that for numbers between $1-64$, taking bitwise xor of some set of numbers will result in a number between $0-63$. How can we abuse it?
 ]
 
 #exercise(sub : "Holes (Singapore 2007)")[
@@ -1488,10 +1493,7 @@ To conduct this simulation, a function `hole :: [Bool] -> Int` is required that,
 Example:
 We will use a matrix of one's and zero's to reprasent the input for convenience.
 $ op("hole")
-  mat(rpus participates in a competition for hacking into a new secure messenger. He's almost won.
-
-Having carefully studied the interaction protocol, Polycarpus came to the conclusion that the secret key can be obtained if he properly cuts the public key of the application into two parts. The public key is a long integer which may consist of even a million digits!
-
+  mat(
 0, 0, 0, 0, 0, 1, 0, 0;
 0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
 0, 0, bold(0), bold(0), bold(0), bold(0), bold(0), 0;
@@ -1501,10 +1503,7 @@ Having carefully studied the interaction protocol, Polycarpus came to the conclu
 0, 0, 0, 0, 1, 0, 0, 0;
 1, 0, 0, 0, 0, 0, 0, 0
   ) = 5
-$rpus participates in a competition for hacking into a new secure messenger. He's almost won.
-
-Having carefully studied the interaction protocol, Polycarpus came to the conclusion that the secret key can be obtained if he properly cuts the public key of the application into two parts. The public key is a long integer which may consist of even a million digits!
-
+$
 as we have a $5 times 5$ grid of $0$'s, made bold. 
 ]
 
@@ -1553,7 +1552,7 @@ cost 1 2 2 [5,5,3,6,5] = 3
 
 #exercise(sub : "Cutting Grass")[
   After attempting to program in Grass for the entire morning, you decide to go outside and mow some real grass. The grass can be viewed as a string consisting exclusively of the following characters: `wWv`. `w` denotes tall grass which takes $1$ unit of energy to mow. `W` denotes extremely tall grass which takes $2$ units of energy to mow. Lastly $v$ denotes short grass which does not need to be mowed.
-  
+
   You decide to mow the grass from left to right (beginning to the end of the string). However, every time you encouter a $v$ (short grass), you stop to take a break to replenish your energy, before carrying on with the mowing. Your task is to calculate the maximum amount of energy expended while mowing. In other words, write a function `energy :: String -> Int` to find the maximum total energy of mowing a patch of grass, that of which does not contain $v$. 
 
   Examples
@@ -1612,7 +1611,7 @@ miku 3 8 = 5.2
 miku 10 98 = 37.721155173329
 ```
 Note
-In the first example, the optimal assignment of beauty is $a=[1,2,5]$. The expected number of days Mohak needs to get his fufu back is 5.2.
+In the first example, the optimal assignment of beauty is 𝑎=[1,2,5]. The expected number of days Mohak needs to get his fufu back is 5.2.
 
 Hint: Let's say you are given the beauty list $a$. Now, how will you compute the expected number of days? Consider $f(i)$ to be expected number of days to reach the $i$-th city. Can you find these recursivly? What about $g(i) = f(i) - f(i-1)$? Can you find a form in terms of $a$, can you use `zipWith` to compute these?
 
@@ -1740,4 +1739,3 @@ Now, can you make a function to make lists that sum up to $m$ and are of length 
 // 	year = {1999},
 // 	pages = {355--372},
 // 	file = {PDF:/Users/deepthought/Zotero/storage/V2YXXW7E/Hutton - 1999 - A tutorial on the universality and expressiveness of fold.pdf:application/pdf},
-

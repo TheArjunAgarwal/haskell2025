@@ -12,6 +12,7 @@ Thumbs.db
 !tools-hs/**
 *.hi
 *.o
+*.py
 !main.pdf
 !guide.pdf
 !taco-card/taco-cards.pdf

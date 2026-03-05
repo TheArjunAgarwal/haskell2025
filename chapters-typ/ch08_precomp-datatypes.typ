@@ -663,6 +663,27 @@ The JSON (JavaScript Object Notation) data format consists of strings, numbers, 
     (iv) Finally define `omegaTor :: Int -> Int -> Complex Double` which takes two integers $n,r$ and gives $omega^r$ where $omega$ is the $n$-th root of $1$.
 ]
 
+#exercise(sub : "Counting Triangles")[
+We can represent a graph as 
+  ```
+  type GraphPair = [(Int,Int)]
+  type GraphList = [(Int,[Int])]
+  ```
+  
+  Create functions `pairToList :: GraphPair -> GraphList` and `listToPair :: GraphList -> GraphPair` which work in $O(E log E)$ and $O(E)$ respectively. (Hint: $sum_(v in V) deg(v) = 2 E$)
+  
+Using the above definitions of `GraphPair` and `GraphList`
+
+  (a) What is the time complexity of the following algorithm
+  ```
+  countTriangles :: GraphPair -> Int
+  countTriangles es = length [ () | (a,b) <- es, (b',c) <- es, b' == b,
+                                    (c',a') <- es, c' == c, a' == a]
+  ```
+
+  (b) Implement a $O(E log E + E sum_(v in V) deg(v)^2)$ algorithm `countTriangles :: GraphPair -> Int` (Hint: Why have I introduced `GraphList`?)
+]
+
 == Extended Exercise: Fast Fourier Transform
     To end this chapter will tackle one of the most famous and somewhat complicated algorithms of all time. You are expected to have implemented `Matrix`, `Polynomial` and `Complex`.
 

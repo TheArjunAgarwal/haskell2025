@@ -1664,6 +1664,17 @@ For example: `countBaltik (3,3) 2 (2,2) (1,1) (2,2) = 32`. The following are all
 #image("../images/baltik.png")
 ]
 
+#exercise(sub : "Prime")[
+  Write a function `isPrime :: Integer -> Bool` which when given a positive natural number determines if it is prime or not.
+
+  Example:
+  ```
+  isPrime 13 = True
+  isPrime 253 = False
+  isPrime 104801 = True
+  ```
+]
+
 #exercise(sub: "Modulo Inverse")[
   Given a prime modulus   $p > a$  , according to Euclidean Division $p = k a + r$ where 
 $

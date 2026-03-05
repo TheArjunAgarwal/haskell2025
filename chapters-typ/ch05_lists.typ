@@ -977,6 +977,48 @@ balloons "HASKELL" = 13
 ```
 ]
 
+#exercise(sub: "Next Permutation")[
+A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
+
+For example, for `[1,2,3]`, the following are all the permutations in lexigraphic order: `[1,2,3], [1,3,2], [2,1,3], [2,3,1], [3,1,2], [3,2,1]`.
+
+The next permutation of list of integers is the next lexicographically greater permutation. For the sake of avoiding errors, if you are given the greatest permutation; that is the numbers in descending order, return the smallest permutation.
+
+Define `next :: [Integer] -> [Integer]` such that
+```
+next [1,2,3] = [1,3,2]
+next [2,3,1] = [3,1,2]
+next [3,2,1] = [1,2,3]
+next [2,3,2,4] = [2,3,4,2]
+```
+]
+
+#exercise(sub:"Composing Functions")[
+  A function can be represented as a list of pairs. For example, $
+  f: {1,2,3} |-> {1,2,3}; \
+  x |-> x +1 mod 3
+  $ can be represented as `[(1,2),(2,3)(3,1)]`.
+
+  Given the list representation of two functions $f,g$, write a function 
+  ```
+  comp :: [(a,b)] -> [(b,c)] -> [(a,c)]
+  ``` 
+  which gives the list representation of $g compose f$.
+
+  *Examples:*
+  ```
+  comp [(1,2),(2,3),(3,1)] [(1,1),(2,2),(3,3)] = [(1,2),(2,3),(3,1)]
+
+  comp [(1,2),(2,3),(3,1)] [(1,2),(2,3),(3,1)] = [(1,3),(2,1),(3,2)]
+
+  comp [(1,2),(2,3),(3,1)] [(1,3),(2,1),(3,2)] = [(1,1),(2,2),(3,3)]
+
+  comp [(1,'a'),(2,'b')] [('a',"foo"),('b',"bar")] = [(1,"foo"),(2,"bar")]
+
+  comp [(1,'a'),(2,'b')] [('b',10),('c',20)] = [(2,10)]
+  ```
+]
+
 #exercise(sub : "Neq Array (INOI 2025 P1)")[
 Given a list $A$ of length $N$, we call a list of integers $B$ of length $N$ such that:
 - All elements of $B$ are positive, ie $forall 1 <= i <= N, B_i > 0$
@@ -1168,3 +1210,20 @@ For the second sample the optimal value of $x$ is $2.5$ so the sequence becomes 
   ```
 ]
 
+#exercise(sub:"Stacking Cups (ICPC Finals 2025, J)")[
+You have a collection of $n$ cylindrical cups, where the $i$th cup is $2i−1$ cm tall. The cups have increasing diameters, such that cup $i$ fits inside cup $j$ if and only if $i < j$. The base of each cup is $1$ cm thick (which makes the smallest cup rather useless as it is only $1$ cm tall, but you keep it for sentimental reasons).
+
+After washing all the cups, you stack them in a tower. Each cup is placed upright (in other words, with the opening at the top) and with the centers of all the cups aligned vertically. The height of the tower is defined as the vertical distance from the lowest point on any of the cups to the highest. You would like to know in what order to place the cups such that the final height (in cm) is your favorite number.
+
+Note that all $n$ cups must be used.
+For example, suppose $n = 4$ and your favorite number is $9$. If you place the cups of heights $7, 3, 5, 1$, in
+that order, the tower will have a total height of $9$. 
+
+Write a function `stack :: Integer -> Integer -> Maybe [Integer]` which given the number of cups you own $n$ and your favorite number $k$, outputs `Nothing` if it is not possible to achieve the given height and `Just` followed by the stacking otherwise.
+
+*Example*
+```
+stack 4 9 = Just [7,3,5,1]
+stack 4 100 = Nothing
+```
+]

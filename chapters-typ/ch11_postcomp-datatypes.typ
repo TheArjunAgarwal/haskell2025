@@ -715,7 +715,9 @@ The reason we are concerned about maps is that combined with a concept called @d
 #definition(sub: "Hash Function")[
     A function that maps variable sized input to fixed size values is called a Hash Function#footnote[Wikipedia has told me that there exist varaible sized hash functions but I have no idea what their use case is.]
 ]
-
+#definition(sub:"Hashing")[
+    Storing data using a hash function duh! (this is a placeholder...)
+]
 
 
 = Maybe Trie (not sure really)
@@ -765,7 +767,62 @@ To restore it, Willem must perform $m$ operations of the following $4$ types:
 Write a function `restore :: [Int] -> [(Int, Int, Int, Int)] -> [Int]` which takes in the talisman values, the list of instructions and gives the outputs produced in the order they are produced in.
 ]
 
+#exercise(sub:"Skew Heap")[
+You are given the following description of an *skew heap*. A skew heap is a binary tree where each node stores an element, and every node satisfies the heap property: the value in the node is *less than or equal to* the values stored in its children. The tree does *not* need to be complete; either child may be empty.
 
+Insertion of a value `x` into a skew heap `H` is defined recursively:
+
+1. If `H` is empty, return a new heap containing only the node `x`.
+2. Otherwise, let `y` be the value in the root of `H`:
+   - If `y < x`:
+     Swap the left and right children of the root, then recursively insert `x` into the *new left subtree*.
+   - If `y >= x`:
+     Create a new node with value `x` and make the existing heap `H` the *left subtree* of the new root.
+
+#image("../images/skew-heap.png")
+     
+*Implement the skew heap data structure in Haskell.* 
+
+(a) Define an appropriate algebraic data type `data SkewHeap a = `.
+
+(b) Implement `findMin :: Ord a => SkewHeap a -> a` which returns the minimum element of a skew heap.
+
+(c) Implement `find :: Ord a => a -> SkewHeap a -> Bool` that returns `True` if the given element is in the heap and `False` otherwise.
+
+(d) Implement `insert :: Ord a => a -> SkewHeap a -> SkewHeap a` that inserts a given element into the skew heap.
+
+(e) Implement `deleteMin :: Ord a => SkewHeap a -> SkewHeap a` that deletes the minimum element of the skew heap.
+
+(f) Implement `meld :: Ord a => SkewHeap a -> SkewHeap a -> SkewHeap a` that merges two disjoint heaps.
+
+(g) Implement `delete :: Ord a => a -> SkewHeap a -> SkewHeap a` that deletes an element from a skew heap, if it is in the heap, and returns the new heap.
+]
+#exercise(sub : "Triple Copy")[
+Given access to a `Queue` data structure, Write a programme to recognize if a string $x$ is in
+  $
+  L = {w w w | w in Sigma^*}
+  $
+  where $Sigma^*$ refers to set of all valid strings.
+]
+
+#exercise(sub : "Decorating A Binary Tree")[
+Consider the following definition of a binary tree which stores values only at the leaves.
+  ```
+  data BTree = Leaf Int | Fork BTree BTree
+  ```
+  
+  Suppose we want to compute the minimum and maximum value of each subtree and store it at the `Fork`. That leads us to the following definition of a decorated binary tree.
+  ```
+  data DBTree = DLeaf Int | DFork DBTree (Int, Int) DBTree
+  ```
+  The idea is that in `DFork dtl (y,z) dtr`, `y` is the minimum value among all the leaves of `dtl` and `dtr`, whereas `z` is the maximum value among all the leaves of `dtl` and `dtr`.
+  
+  (a) Define a function `decorate :: BTree -> DBTree` that computes the decorated binary tree corresponding to a binary tree in $O(n)$ time.
+  
+  (b) Now, define a function `buildBTree :: [Int] -> BTree` such that `leaves . builBTree = id`.
+  
+  The function should take $O(n)$ time and produce a tree of height $O(log n)$.
+]
 
 // cite
 // citation 1

@@ -449,6 +449,16 @@ the circles and chords exists.
   Hint: We recommend using induction. Given $(a,a+1)$ are square-full, can we generate another?
 ]
 
+#exercise(sub : "Palindromic Sum")[
+  A palindromic number (acc. Wikipedia) is a number (such as 16361) that remains the same when its digits are reversed. In other words, it has reflectional symmetry across a vertical axis. 
+  
+  For a given $N$, find out sum of all distinct $N$-digit Palindromic Numbers
+]
+
+#exercise(sub : "Non-Consecutive Subsets (India TST)")[
+  Consider all possible subsets of ${1, 2, . . . , N}$ which contain no neighboring elements. Prove that the sum of the squares of the products of all numbers in these subsets is $(N + 1)! − 1$.
+]
+
 #exercise(sub : "Same Height?")[
 Here is a proof by induction that all people have the same height. We prove that for any positive integer $n$, any group of $n$ people all have the same height. This is clearly true for $n = 1$. Now assume it for $n$, and suppose we have a group of $n + 1$ persons, say $P_1, P_2,dots, P_(n+1)$. By the induction hypothesis, the $n$ people $P_1, P_2, dots, P_n$ all have the same height. Similarly the $n$ people $P_2, P_3, dots, P_(n+1)$ all have the same height. Both groups of people contain $P_2, P_3, dots, P_n$, so $P_1$ and $P_(n+1)$ have the same height as $P_2, P_3, dots, P_n$. Thus all of $P_1, P_2,dots, P_(n+1)$ have the same height. Hence by induction, for any $n$ any group of $n$ people have the same height. Letting $n$ be the total number of people in the world, we conclude that all people have the same height. Is there a flaw in this argument?
 ]
