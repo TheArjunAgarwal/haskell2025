@@ -9,10 +9,12 @@ import "/Modules/Prelude.typ"
 
 let title = [Haskell for CMI]
 
+let A = [Arjun Maneesh Agarwal]
 let R = [Ryan Hota]
 let S = [Shubh Sharma]
-let A = [Arjun Maneesh Agarwal]
-let author = R+[, ]+S+[, ]+A
+let author = A+[, ]+R+[, ]+S
+
+// Arjun - Please refer to contri-graph1.png and contri-graph2.png for why the order of authors has been changed. 
 
 show: Book.settings.with(title:title,author:author)
 show: Box.settings
@@ -26,7 +28,7 @@ set page(numbering: "i") ; counter(page).update(1)
 
 Book.copyright_declaration(title:title,author:author)
 
-Book.dedication([To someone])
+Book.dedication([])
 
 Contents.contents
 

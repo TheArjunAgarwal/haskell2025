@@ -32,7 +32,7 @@
   text_license : [CC-by-SA-4.0] , 
   code_license : [AGPL-3.0] ,
   draft : true , 
-  feedback_host : [feedback_host\@mailthing.com] 
+  feedback_host : [arjunatcmi\@gmail.com]
 ) = {
 
   pagebreak()

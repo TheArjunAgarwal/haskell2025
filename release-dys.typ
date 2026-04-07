@@ -9,9 +9,9 @@ import "/Modules/Prelude.typ"
 
 let title = [Haskell for CMI]
 
+let A = [Arjun Maneesh Agarwal]
 let R = [Ryan Hota]
 let S = [Shubh Sharma]
-let A = [Arjun Maneesh Agarwal]
 let author = A+[, ]+R+[, ]+S
 
 // Arjun - Please refer to contri-graph1.png and contri-graph2.png for why the order of authors has been changed. 
@@ -28,10 +28,7 @@ set page(numbering: "i") ; counter(page).update(1)
 
 Book-Dys.copyright_declaration(title:title,author:author)
 
-Book-Dys.dedication([
-  To Aditya 'Adie' Vashisht. Our interactions, no matter how short, were extremely educational. You were a remarkable and brilliant person; and it is an shame that our time was this limited.
-  ])
-// Arjun - This is my dedication. If any of you have an issue with it, well, I don't really care.
+Book-Dys.dedication([])
 
 Contents-Dys.contents
 
