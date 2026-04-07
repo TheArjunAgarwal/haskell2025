@@ -1,4 +1,3 @@
-*.sh
 *.DS_Store
 *.DS_Store?
 ._*
@@ -12,10 +11,8 @@ Thumbs.db
 !tools-hs/**
 *.hi
 *.o
-*.py
 !main.pdf
 !guide.pdf
 !taco-card/taco-cards.pdf
 !release.pdf
 !release-dys.pdf
-!count_exercises.sh
